@@ -215,11 +215,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1 data-number="1"><span class="header-section-number">1</span> Overview</h1>
 <table class="table">
 <colgroup>
-<col style="width: 25%">
-<col style="width: 18%">
-<col style="width: 18%">
-<col style="width: 18%">
-<col style="width: 18%">
+<col style="width: 30%">
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 23%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -227,7 +226,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th>Categorical</th>
 <th>Continuous</th>
 <th>Continuous and Categorical</th>
-<th></th>
 </tr>
 </thead>
 <tbody>
@@ -236,14 +234,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Analysis of Variance</td>
 <td>Ordinary Least Squares Regression</td>
 <td>Analysis of Covariance</td>
-<td></td>
 </tr>
 <tr class="even">
 <td>Categorical</td>
 <td>Tests of Association</td>
 <td>Logistic Regression</td>
 <td>Logistic Regression</td>
-<td></td>
 </tr>
 </tbody>
 </table>
@@ -300,20 +296,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>How much of a change is required to believe there is actually a difference in manager mood based on weather?</li>
 </ul>
 <p><strong>Hypothesis Statements:</strong></p>
-<p><span class="math display">\[
-H_0: \text{There is no association between Mood and Weather}
-\]</span></p>
-<p><span class="math display">\[
-H_a: \text{There is an association between Mood and Weather}
-\]</span></p>
+<div class="text-center">
+<p><span class="math inline">\(H_0\)</span>: There is no association between Mood and Weather</p>
+<p><span class="math inline">\(H_a\)</span>: There is an association between Mood and Weather</p>
+</div>
 <section id="chi-square-tests" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="chi-square-tests"><span class="header-section-number">3.1</span> Chi-Square Tests</h2>
-<p><span class="math display">\[
-\begin{align*}
-H_0&amp;: \text{No Association} &amp;\text{Observed freq = Expected freq.} \\
-H_a&amp;: \text{Association} &amp;\text{Observed freq.} \neq \text{Expected freq.}
-\end{align*}
-\]</span></p>
+<div class="text-center">
+<p><span class="math inline">\(H_0\)</span>: No Association</p>
+<p>Observed freq <span class="math inline">\(=\)</span> Expected freq.</p>
+<p><span class="math inline">\(H_a\)</span>: Association</p>
+<p>Observed freq. <span class="math inline">\(\neq\)</span> Expected freq.</p>
+</div>
 <p>Expected freq. are calculated by the formula</p>
 <p><span class="math display">\[
 \frac{\text{Row Total} \times \text{Column Total}}{\text{Sample Size}}
@@ -396,7 +390,7 @@ d.f. = (\#\text{Rows} - 1)(\#\text{Columns} - 1)
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    df_cars[<span class="st">'no'</span>].<span class="bu">sum</span>() <span class="op">/</span> df_cars[<span class="st">'total'</span>].<span class="bu">sum</span>()</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>df_cars.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="172">
 <div>
 
 
@@ -492,12 +486,10 @@ d.f. = (\#\text{Rows} - 1)(\#\text{Columns} - 1)
 <li>Can test for even more with ordinal vars. against other ordinal vars.–whether two ordinal vars. have a linear relationship as compared to just a general one</li>
 </ul>
 <p><strong>Hypothesis Statements:</strong></p>
-<p><span class="math display">\[
-\begin{align*}
-H_0&amp;: \text{No Linear Association} \\
-H_a&amp;: \text{Linear Association} \\
-\end{align*}
-\]</span></p>
+<div class="text-center">
+<p><span class="math inline">\(H_0\)</span>: No Linear Association</p>
+<p><span class="math inline">\(H_a\)</span>: Linear Association</p>
+</div>
 </section>
 <section id="mantel-haenszel-chi2-test" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="mantel-haenszel-chi2-test"><span class="header-section-number">3.4</span> Mantel-Haenszel <span class="math inline">\(\chi^2\)</span> Test</h2>
@@ -595,7 +587,7 @@ V = \sqrt{\frac{(\frac{Q_P}{n})}{\min(\#\text{Rows} - 1, \#\text{Columns} - 1)}}
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>cramer_v <span class="op">=</span> np.sqrt((q_pearson <span class="op">/</span> n) <span class="op">/</span> np.<span class="bu">min</span>([rows <span class="op">-</span> <span class="dv">1</span>, cols <span class="op">-</span> <span class="dv">1</span>]))</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">round</span>(cramer_v, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="175">
 <pre><code>0.216</code></pre>
 </div>
 </div>
