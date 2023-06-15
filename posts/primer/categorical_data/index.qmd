@@ -14,10 +14,10 @@ date: 06/14/2023
 ---
 
 # Overview
-<!-- | Type of Predictors \| Type of Response | Categorical | Continuous | Continuous and Categorical 
----- | --- | --- | --- | --- 
-Continuous | Analysis of Variance | Ordinary Least Squares Regression | Analysis of Covariance
-Categorical | Tests of Association | Logistic Regression | Logistic Regression -->
+| Type of Predictors \| Type of Response | Categorical | Continuous | Continuous and Categorical |
+---- | --- | --- | --- | 
+Continuous | Analysis of Variance | Ordinary Least Squares Regression | Analysis of Covariance |
+Categorical | Tests of Association | Logistic Regression | Logistic Regression |
 
 # Describing Categorical Data
 
