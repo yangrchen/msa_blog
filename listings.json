@@ -1,6 +1,6 @@
 [
   {
-    "listing": "/notes.html",
+    "listing": "/notes/index.html",
     "items": [
       "/posts/primer/categorical_data/index.html",
       "/posts/primer/anova/index.html"

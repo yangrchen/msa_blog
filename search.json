@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "notes.html",
-    "href": "notes.html",
-    "title": "Notes",
-    "section": "",
-    "text": "Categorical Data Analysis\n\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
-  },
-  {
     "objectID": "posts/primer/categorical_data/index.html",
     "href": "posts/primer/categorical_data/index.html",
     "title": "Categorical Data Analysis",
@@ -278,5 +271,12 @@
     "title": "Yang Chen",
     "section": "",
     "text": "Hiya, I’m Yang!\nI’m a data science Master’s student who’s passionate about AI, deep learning, and explainable data science. This is an open repository of notes, projects, and musings that I am gathering through my Master’s at the Institute for Advanced Analytics.\nI’m excited to share what I learn and hope you can join me for the ride! You can find me on LinkedIn, Github or through my main website"
+  },
+  {
+    "objectID": "notes/index.html",
+    "href": "notes/index.html",
+    "title": "Notes",
+    "section": "",
+    "text": "Categorical Data Analysis\n\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
   }
 ]
