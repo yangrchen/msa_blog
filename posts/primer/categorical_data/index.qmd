@@ -6,6 +6,7 @@ format:
         toc: true
         number-sections: true
         default-image-extension: png
+        page-layout: article
 editor:
     render-on-save: true
 author: Yang Chen
@@ -13,10 +14,10 @@ date: 06/14/2023
 ---
 
 # Overview
-| Type of Predictors \| Type of Response | Categorical | Continuous | Continuous and Categorical 
+<!-- | Type of Predictors \| Type of Response | Categorical | Continuous | Continuous and Categorical 
 ---- | --- | --- | --- | --- 
 Continuous | Analysis of Variance | Ordinary Least Squares Regression | Analysis of Covariance
-Categorical | Tests of Association | Logistic Regression | Logistic Regression
+Categorical | Tests of Association | Logistic Regression | Logistic Regression -->
 
 # Describing Categorical Data
 
@@ -54,22 +55,23 @@ Stormy | 40% | 60%
 
 **Hypothesis Statements:**
 
-$$
-H_0: \text{There is no association between Mood and Weather}
-$$
+::: {.text-center}
+$H_0$: There is no association between Mood and Weather
 
-$$
-H_a: \text{There is an association between Mood and Weather}
-$$
+$H_a$: There is an association between Mood and Weather
+:::
 
 ## Chi-Square Tests
 
-$$
-\begin{align*}
-H_0&: \text{No Association} &\text{Observed freq = Expected freq.} \\
-H_a&: \text{Association} &\text{Observed freq.} \neq \text{Expected freq.}
-\end{align*}
-$$
+::: {.text-center}
+$H_0$: No Association 
+
+Observed freq $=$ Expected freq. 
+
+$H_a$: Association
+
+Observed freq. $\neq$ Expected freq.
+:::
 
 Expected freq. are calculated by the formula 
 
@@ -173,12 +175,11 @@ print(f'Q_p: {q_pearson}, Q_LR: {likelihood}')
 
 **Hypothesis Statements:**
 
-$$
-\begin{align*}
-H_0&: \text{No Linear Association} \\
-H_a&: \text{Linear Association} \\
-\end{align*}
-$$
+::: {.text-center}
+$H_0$: No Linear Association
+
+$H_a$: Linear Association
+:::
 
 ## Mantel-Haenszel $\chi^2$ Test
 
