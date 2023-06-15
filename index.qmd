@@ -1,0 +1,23 @@
+---
+title: "Yang Chen"
+image: profile.png
+about:
+  template: trestles 
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://linkedin.com
+    - icon: github
+      text: Github
+      href: https://github.com
+    - icon: person-circle
+      text: Website
+      href: https://yangrchen.com
+
+---
+
+# Hiya, I'm Yang!
+
+I'm a data science Master's student who's passionate about AI, deep learning, and explainable data science. This is an open repository of notes, projects, and musings that I am gathering through my Master's at the [Institute for Advanced Analytics](https://analytics.ncsu.edu/).
+
+I'm excited to share what I learn and hope you can join me for the ride! You can find me on [LinkedIn](https://www.linkedin.com/in/yangrchen/), [Github](https://github.com/yangrchen) or through my [main website](https://yangrchen.com)

@@ -1,0 +1,253 @@
+---
+title: Categorical Data Analysis
+format: 
+    html:
+        code-fold: show
+        toc: true
+        number-sections: true
+        default-image-extension: png
+editor:
+    render-on-save: true
+author: Yang Chen
+date: 06/14/2023
+---
+
+# Overview
+| Type of Predictors \| Type of Response | Categorical | Continuous | Continuous and Categorical 
+---- | --- | --- | --- | --- 
+Continuous | Analysis of Variance | Ordinary Least Squares Regression | Analysis of Covariance
+Categorical | Tests of Association | Logistic Regression | Logistic Regression
+
+# Describing Categorical Data
+
+In categorical data analysis, we use qualitative data types which describes data whose measurement scale is by categorical.
+
+## Qualitative Data Types
+
+**Nominal**
+
+-   Categories with no logical ordering
+
+**Ordinal**
+
+-   Categories with a logical order / only two ways to order the categories (binary is ordinal)
+
+## Examining Categorical Variables
+
+By examining distributions of categorical variables we can
+
+1.   Determine the frequencies of data values
+2.   Recognize possible associations among variables
+
+Association exists between two categorical variables if distribution of one variable changes when the level of the other variable changes.
+
+If there is no association, distribution of first variable is the same regardless of the level of the other.
+
+# Tests of Association
+
+|  | Happy | Sad 
+| --- | --: | --: |
+Sunny | 87% | 13%
+Stormy | 40% | 60%
+
+-   How much of a change is required to believe there is actually a difference in manager mood based on weather?
+
+**Hypothesis Statements:**
+
+$$
+H_0: \text{There is no association between Mood and Weather}
+$$
+
+$$
+H_a: \text{There is an association between Mood and Weather}
+$$
+
+## Chi-Square Tests
+
+$$
+\begin{align*}
+H_0&: \text{No Association} &\text{Observed freq = Expected freq.} \\
+H_a&: \text{Association} &\text{Observed freq.} \neq \text{Expected freq.}
+\end{align*}
+$$
+
+Expected freq. are calculated by the formula 
+
+$$
+\frac{\text{Row Total} \times \text{Column Total}}{\text{Sample Size}}
+$$
+
+### $\chi^2$ Distribution
+
+-   Bounded below by zero
+-   Right skewed
+-   One set of degrees of freedom
+
+```{python}
+# | code-fold: true
+# | label: fig-chi-square
+# | fig-cap: Plot of a $\chi^2$ distribution with d.f. 4
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import chi2
+
+x = np.arange(0, 20, 0.001)
+
+plt.plot(x, chi2.pdf(x, df=4))
+```
+
+### Pearson $\chi^2$ Test
+
+$$
+Q_P = \sum_{i=1}^{R} \sum_{j=1}^{C} \frac{(Obs_{i,j} - Exp_{i,j})^2}{Exp_{i,j}}
+$$
+
+$$
+d.f. = (\#\text{Rows} - 1)(\#\text{Columns} - 1)
+$$
+
+### Likelihood Ratio $\chi^2$ Test
+
+$$
+Q_{LR} = 2 \times \sum_{i=1}^{R}\sum_{j=1}^{C} Obs_{i,j} \times \log{(\frac{Obs_{i,j}}{Exp_{i,j}})}
+$$
+
+$$
+d.f. = (\#\text{Rows} - 1)(\#\text{Columns} - 1)
+$$
+
+## Example
+
+> A manager of a major car dealership wants to determine if the membership of a client in the loyalty program is associated with the color of car that they buy. With this knowledge, it potentially could help the sales staff show different cars to different clients to help improve the likelihood of a sale. The manager pull information from the previous years sales.
+
+> 1. Calculate the expected counts in the right table
+
+![](images/chi_square_example_1_table.png)
+
+Recall that expected frequency is given by the the product of row total and column total over sample size.
+
+```{python}
+
+d = {
+    'black': {'yes': 149, 'no': 101},
+    'white': {'yes': 101, 'no': 66},
+    'blue': {'yes': 72, 'no': 108},
+    'red': {'yes': 96, 'no': 161},
+    'green': {'yes': 39, 'no': 65}
+}
+df_cars = pd.DataFrame(d).T
+df_cars['total'] = df_cars['yes'] + df_cars['no']
+df_cars['exp_y'] = df_cars['total'] * \
+    df_cars['yes'].sum() / df_cars['total'].sum()
+df_cars['exp_n'] = df_cars['total'] * \
+    df_cars['no'].sum() / df_cars['total'].sum()
+df_cars.head()
+```
+
+> 2. Compute $Q_P$ and $Q_{LR}$ and summarize results.
+
+```{python}
+
+
+def calculate_pearson(row):
+    return (row['yes'] - row['exp_y']) ** 2 / row['exp_y'] + (row['no'] - row['exp_n']) ** 2 / row['exp_n']
+
+
+def calculate_likelihood(row):
+    return 2 * ((row['yes'] * np.log(row['yes'] / row['exp_y'])) + (row['no'] * np.log(row['no'] / row['exp_n'])))
+
+
+q_pearson = df_cars.apply(calculate_pearson, axis=1).sum()
+likelihood = df_cars.apply(calculate_likelihood, axis=1).sum()
+
+print(f'Q_p: {q_pearson}, Q_LR: {likelihood}')
+```
+
+## Ordinal Compared to Nominal Tests
+
+-   Pearson and Likelihood Ratio $\chi^2$ tests can handle any type of categorical variable
+-   Ordinal variables provide extra information since order of the categories matters compared to nominal
+-   Can test for even more with ordinal vars. against other ordinal vars.--whether two ordinal vars. have a linear relationship as compared to just a general one
+
+**Hypothesis Statements:**
+
+$$
+\begin{align*}
+H_0&: \text{No Linear Association} \\
+H_a&: \text{Linear Association} \\
+\end{align*}
+$$
+
+## Mantel-Haenszel $\chi^2$ Test
+
+$$
+Q_{MH} = (n - 1)r^2
+$$
+
+-   $r^2$ is the Pearson correlation between row and column variables
+
+# Measures of Association
+
+$\chi^2$ deteremines whether an association exists but it *does not* measure strength of association.
+
+Measures of association do not measure whether an association exists. Some different measures of association include:
+
+-   Odds Ratio (Only for 2x2 tables, binary vs. binary)
+-   Cramer's V (Any size table)
+
+## Odds Ratio
+
+Odds ratio measure how much more likely, with respect to **odds**, a certain event occurs in one group relative to its occurrence in another group.
+
+Odds of an event occurring is **not** the same as the probability that an event occurs.
+
+$$
+\text{Odds} = \frac{p}{1 - p}
+$$
+
+### Probability vs. Odds of an Outcome
+
+|  | Yes | No |
+| :-: | --: | --: |
+| Loyal | 20 | 60 |
+| Non-Loyal | 10 | 90 |
+
+```{python}
+d = {'yes': [20, 10], 'no': [60, 90]}
+df_loyalty = pd.DataFrame(d, index=['Loyal', 'Non-Loyal'])
+
+df_loyalty['prob_y'] = df_loyalty['yes'] / df_loyalty.iloc[:, :2].sum(axis=1)
+df_loyalty['prob_n'] = df_loyalty['no'] / df_loyalty.iloc[:, :2].sum(axis=1)
+df_loyalty['odds_y'] = (df_loyalty['prob_y'] / df_loyalty['prob_n']).round(3)
+df_loyalty['odds_n'] = df_loyalty['prob_n'] / df_loyalty['prob_y']
+
+df_loyalty.head()
+print(
+    f'Odds Ratio, Loyal to Non-Loyal: {df_loyalty.loc["Loyal", "odds_y"] / df_loyalty.loc["Non-Loyal", "odds_y"]}')
+```
+
+-   Loyal program customers have **3 times the odds** of buying the product as compared to customers not in the loyalty program.
+
+## Cramer's V
+
+When you have more than >2 categories in one or both variables we use Cramer's V.
+
+$$
+V = \sqrt{\frac{(\frac{Q_P}{n})}{\min(\#\text{Rows} - 1, \#\text{Columns} - 1)}}
+$$
+
+-   Bounded between 0 and 1 (-1 and 1 for 2x2 scenario) where closer to 0 the weaker the relationship
+
+## Example
+
+> The same manager as the previous example now wants to know the strength of the relationship between the color of car and loyalty program. Use the appropriate measure of association to calculate this.
+
+```{python}
+n = df_cars['total'].sum()
+rows, cols = df_cars.iloc[:, :2].shape
+
+cramer_v = np.sqrt((q_pearson / n) / np.min([rows - 1, cols - 1]))
+np.round(cramer_v, 3)
+```
