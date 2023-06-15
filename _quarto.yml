@@ -3,12 +3,12 @@ project:
 
 execute: 
   freeze: auto
-  
+
 website:
   title: "Yang MSA"
   navbar:
     right:
-      - notes.qmd
+      - notes/index.qmd
       - icon: github
         href: https://github.com/yangrchen
 format:
