@@ -1,5 +1,47 @@
 [
   {
+    "objectID": "posts/primer/fundamental/index.html",
+    "href": "posts/primer/fundamental/index.html",
+    "title": "Fundamental Statistical Concepts",
+    "section": "",
+    "text": "There are three main pieces to statistics:"
+  },
+  {
+    "objectID": "posts/primer/fundamental/index.html#common-types-of-bias",
+    "href": "posts/primer/fundamental/index.html#common-types-of-bias",
+    "title": "Fundamental Statistical Concepts",
+    "section": "2.1 Common Types of Bias",
+    "text": "2.1 Common Types of Bias\n\nSelection Bias\n\nUndercoverage: frame and population are not equal\nNonresponse: subject in sample cannot / will not respond or be measured\n\nSampling Bias\n\nConvenience Sampling: selecting subjects based on accessibility and ease\nVoluntary sampling: subjects volunteer themselves–may not be representative"
+  },
+  {
+    "objectID": "posts/primer/fundamental/index.html#common-sampling-techniques",
+    "href": "posts/primer/fundamental/index.html#common-sampling-techniques",
+    "title": "Fundamental Statistical Concepts",
+    "section": "2.2 Common Sampling Techniques",
+    "text": "2.2 Common Sampling Techniques\n\n2.2.1 Simple Random Sampling (SRS)\nSample items from population such that every possible sample of specified sizes has an equal chance of being selected\n\n\n\nSimple Random Sampling\n\n\nAdvantages\n\nNo statistical bias\nNo prev. info about sample needed ahead of time\n\nDisadvantages\n\nExpensive\nHard to implement\nNeed list of population\n\n\n\n2.2.2 Stratified Random Sampling (STS)\nPopulation is divided into subgroups, called strata, so that each member in the population belongs to only one strata.\nSample items from every strata. The sample size between groups does not need to be the same (e.g. if we know groups in pop. are in a 20:80 ratio)\n\n\n\nStratified Random Sampling\n\n\nAdvantages\n\nSmaller sample sizes can achieve same accuracy as SRS\nMore info about parts of population\n\nDisadvantages\n\nNeed info about population ahead of time to split on\n\n\n\n2.2.3 Cluster Sampling\nSimilar to stratified where you group members of population into subgroups called clusters. You only talk to a sample of \\(m\\) clusters selected randomly.\nIn cluster sampling, you don’t necessarily believe there are differences between clusters.\n\n\n\nCluster Sampling\n\n\nAdvantages\n\nOvercome issues with travel, time, expense\nEasier to implement than SRS or STS\n\nDisadvantages\n\nNeed info about population ahead of time to split on–but not total list.\nMay have slight bias if random clusters aren’t representative\n\n\n\n2.2.4 Systematic Sampling\nSelect every \\(k^{th}\\) item in the populatino after randomly selecting a starting point between 1 and \\(k\\).\n\\(k\\) is determined as a ratio of population size over desired sample size.\n\n\n\nSystematic Sampling Starting Point Selection\n\n\n\n\n\nSystematic Sampling\n\n\nAdvantages\n\nVery easy to get sample\n\nDisadvantages\n\nMay be biased especialy if order of list of population matters"
+  },
+  {
+    "objectID": "posts/primer/fundamental/index.html#example",
+    "href": "posts/primer/fundamental/index.html#example",
+    "title": "Fundamental Statistical Concepts",
+    "section": "2.3 Example",
+    "text": "2.3 Example\n\nA large worldwide financial company wnats to develop a new retirement plan for the company. They want to survey different managers of branches around the world to find out the most important strategies the new retirement plan should contain. They have 5000 branches worldwide and want to personally interview these branch managers. They have information about the banch size (small, medium, large) and the state/province location of the branch. They want to talk to 50 branch managers.\nDevelop four separate strategies to sample these branch managers based on the four different statistical sampling techniques discussed previously.\n\n\nSRS: Randomly sample 50 branches to interview the managers of\nSTS: Stratify by size and select random samples from every strata\nCluster: Randomly select sample of states/provinces, then select branches at random from those states/provinces\nSystematic: Select every 100th branch in list of branches starting from a random starting point between 1 and 100\n\n\n\nCode\n# Example of systematic sampling in Python\n\nimport numpy as np\nindexes = np.arange(5000)\nsample_size = 50\nk = len(indexes) // sample_size\n\nprint(f'k: {k}')\nprint(f'Sample Size: {sample_size}')\n\nstart = np.random.randint(k + 1)\nselected = indexes[start::k]\n\nprint(f'Length of selected: {len(selected)}')\nindexes[start::k]\n\n\nk: 100\nSample Size: 50\nLength of selected: 50\n\n\narray([   5,  105,  205,  305,  405,  505,  605,  705,  805,  905, 1005,\n       1105, 1205, 1305, 1405, 1505, 1605, 1705, 1805, 1905, 2005, 2105,\n       2205, 2305, 2405, 2505, 2605, 2705, 2805, 2905, 3005, 3105, 3205,\n       3305, 3405, 3505, 3605, 3705, 3805, 3905, 4005, 4105, 4205, 4305,\n       4405, 4505, 4605, 4705, 4805, 4905])"
+  },
+  {
+    "objectID": "posts/primer/fundamental/index.html#qualitative-vs.-quantitative",
+    "href": "posts/primer/fundamental/index.html#qualitative-vs.-quantitative",
+    "title": "Fundamental Statistical Concepts",
+    "section": "3.1 Qualitative vs. Quantitative",
+    "text": "3.1 Qualitative vs. Quantitative\nQuantitative data are numeric data that define value of quantity.\nQualitative data are data whose measurement scale is inherently categorical.\n\nNominal data are categories with no logical ordering\nOrdinal data are categories with a logical order / only two ways to order the categories (binary is ordinal)"
+  },
+  {
+    "objectID": "posts/primer/fundamental/index.html#time-series-vs.-cross-sectional",
+    "href": "posts/primer/fundamental/index.html#time-series-vs.-cross-sectional",
+    "title": "Fundamental Statistical Concepts",
+    "section": "3.2 Time Series vs. Cross-sectional",
+    "text": "3.2 Time Series vs. Cross-sectional\nTime series is a set of ordered data values observed at successive point in times. Each row might be indexed by time referring to a dependence in time.\nCross-sectional is a set of data values observed at a fixed point in time or where time is of no significance (could have time as a variable just that the response does not depend on it)."
+  },
+  {
     "objectID": "posts/primer/categorical_data/index.html",
     "href": "posts/primer/categorical_data/index.html",
     "title": "Categorical Data Analysis",
@@ -277,6 +319,6 @@
     "href": "notes/index.html",
     "title": "Notes",
     "section": "",
-    "text": "Categorical Data Analysis\n\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
+    "text": "Categorical Data Analysis\n\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nFundamental Statistical Concepts\n\n\n\n\n\n\n\n\n\n\n\n\nMay 22, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
   }
 ]

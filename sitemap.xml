@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://yangrchen.github.io/msa_blog/posts/primer/fundamental/index.html</loc>
+    <lastmod>2023-06-16T15:49:04.955Z</lastmod>
+  </url>
+  <url>
     <loc>https://yangrchen.github.io/msa_blog/posts/primer/categorical_data/index.html</loc>
-    <lastmod>2023-06-15T18:25:47.385Z</lastmod>
+    <lastmod>2023-06-16T15:49:05.432Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/posts/primer/anova/index.html</loc>
-    <lastmod>2023-06-15T18:25:48.301Z</lastmod>
+    <lastmod>2023-06-16T15:49:06.310Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/index.html</loc>
-    <lastmod>2023-06-15T18:25:48.522Z</lastmod>
+    <lastmod>2023-06-16T15:49:06.536Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/notes/index.html</loc>
-    <lastmod>2023-06-15T18:25:48.797Z</lastmod>
+    <lastmod>2023-06-16T15:49:06.841Z</lastmod>
   </url>
 </urlset>
