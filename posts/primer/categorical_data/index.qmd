@@ -1,15 +1,5 @@
 ---
 title: Categorical Data Analysis
-format: 
-    html:
-        code-fold: show
-        toc: true
-        number-sections: true
-        default-image-extension: png
-        page-layout: article
-editor:
-    render-on-save: true
-author: Yang Chen
 date: 06/14/2023
 ---
 

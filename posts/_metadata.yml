@@ -1,4 +1,12 @@
 # options specified here will apply to all posts in this folder
+format: 
+    html:
+        code-fold: show
+        toc: true
+        number-sections: true
+        default-image-extension: png
+editor:
+    render-on-save: true
 
 # freeze computational output
 # (see https://quarto.org/docs/projects/code-execution.html#freeze)

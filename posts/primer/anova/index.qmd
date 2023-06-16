@@ -1,12 +1,5 @@
 ---
 title: Analysis of Variance
-format: 
-    html:
-        code-fold: show
-        toc: true
-        number-sections: true
-        default-image-extension: png
-author: Yang Chen
 date: 06/12/2023
 ---
 
