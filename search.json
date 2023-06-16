@@ -21,6 +21,20 @@
     "text": "2.1 Conditional vs. Marginal Probabilities\nMarginal probabilities are considered unconditional probabilities–they are probabilities of events without any condition.\n\n2.1.1 Example\n\nLet’s take a look at promotion of people at a company with advanced degrees vs. those who don’t have them.\n\n\n\nCode\nimport pandas as pd\n\nd = {'yes': {'promoted': 288, 'not_promoted': 672},\n     'no': {'promoted': 36, 'not_promoted': 204}}\n\ndf = pd.DataFrame(d)\ndf\n\n\n\n\n\n\n\n\n\nyes\nno\n\n\n\n\npromoted\n288\n36\n\n\nnot_promoted\n672\n204\n\n\n\n\n\n\n\nOne marginal probability is the probability of an advanced degree:\n\n\nCode\nprob_adv_deg = df['yes'].sum() / (df['yes'].sum() + df['no'].sum())\nprob_adv_deg\n\n\n0.8\n\n\nOn the other hand, a conditional probability might be the probability of a promotion given that the employee has no advanced degree:\n\n\nCode\ncond_prob = df.loc['promoted', 'no'] / df['no'].sum()\ncond_prob\n\n\n0.15"
   },
   {
+    "objectID": "posts/primer/confidence_intervals/index.html",
+    "href": "posts/primer/confidence_intervals/index.html",
+    "title": "Confidence Intervals",
+    "section": "",
+    "text": "Point estimators cannot be expected to provide exact values of population parameters. Intervals provide information about how close the point estimate is to the value of the parameter.\nConfidence intervals are interval estimates where we have a certain level of confidence in the interval.\nWhat does it mean when we are 95% confidence that the population mean is between 20 and 30?"
+  },
+  {
+    "objectID": "posts/primer/confidence_intervals/index.html#student-t-distribution",
+    "href": "posts/primer/confidence_intervals/index.html#student-t-distribution",
+    "title": "Confidence Intervals",
+    "section": "3.1 Student t Distribution",
+    "text": "3.1 Student t Distribution\nThe t distribution is also symmetric, but has thicker tails than the Normal distribution.\nIt has \\(n - 1\\) degrees of freedom where the degrees of freedom are the number of independent pieces of information that go into the computation of \\(s\\).\nFor larger samples, the t distribution is approximately the standard Normal distribution.\n\n\nCode\nx = np.linspace(-4, 4, 100)\n\npdf = t.pdf(x, df=19)\nplt.plot(x, pdf)\n\n\n\n\n\nPlot of a t distribution with d.f. 19\n\n\n\n\nThe confidence interval for \\(\\bar{x}\\) is calculated as:\n\\[\n\\bar{x} \\pm t_{\\alpha/2} \\cdot \\frac{s}{\\sqrt{n}}\n\\]\nFor large samples (\\(n \\geq 50\\)) we can calculate the confidence interval for the mean from any population.\nFor small samples (\\(n &lt; 50\\)) we need to assume the population follows a Normal distribution."
+  },
+  {
     "objectID": "posts/primer/fundamental/index.html",
     "href": "posts/primer/fundamental/index.html",
     "title": "Fundamental Statistical Concepts",
@@ -340,6 +354,6 @@
     "href": "notes/index.html",
     "title": "Notes",
     "section": "",
-    "text": "Categorical Data Analysis\n\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nProbability\n\n\n\n\n\n\n\n\n\n\n\n\nMay 23, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nFundamental Statistical Concepts\n\n\n\n\n\n\n\n\n\n\n\n\nMay 22, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
+    "text": "Categorical Data Analysis\n\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nConfidence Intervals\n\n\n\n\n\n\n\nprimer\n\n\nstatistics\n\n\n\n\n\n\n\n\n\n\n\nMay 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nProbability\n\n\n\n\n\n\n\nprimer\n\n\nprobability\n\n\n\n\n\n\n\n\n\n\n\nMay 23, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nFundamental Statistical Concepts\n\n\n\n\n\n\n\n\n\n\n\n\nMay 22, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
   }
 ]

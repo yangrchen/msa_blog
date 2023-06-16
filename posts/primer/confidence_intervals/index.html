@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="dcterms.date" content="2023-05-23">
+<meta name="dcterms.date" content="2023-05-30">
 
-<title>Yang MSA - Probability</title>
+<title>Yang MSA - Confidence Intervals</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -95,9 +95,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -142,10 +139,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Probability</h1>
+      <h1 class="title">Confidence Intervals</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">primer</div>
-                <div class="quarto-category">probability</div>
+                <div class="quarto-category">statistics</div>
               </div>
                   </div>
   </div>
@@ -163,7 +160,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">May 23, 2023</p>
+        <p class="date">May 30, 2023</p>
       </div>
     </div>
     
@@ -179,27 +176,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#basics-of-probability" id="toc-basics-of-probability" class="nav-link active" data-scroll-target="#basics-of-probability"><span class="header-section-number">1</span> Basics of Probability</a>
+  <li><a href="#margin-of-error" id="toc-margin-of-error" class="nav-link active" data-scroll-target="#margin-of-error"><span class="header-section-number">1</span> Margin of Error</a></li>
+  <li><a href="#interval-estimation-of-hatp" id="toc-interval-estimation-of-hatp" class="nav-link" data-scroll-target="#interval-estimation-of-hatp"><span class="header-section-number">2</span> Interval Estimation of <span class="math inline">\(\hat{p}\)</span></a></li>
+  <li><a href="#interval-estimation-of-barx" id="toc-interval-estimation-of-barx" class="nav-link" data-scroll-target="#interval-estimation-of-barx"><span class="header-section-number">3</span> Interval Estimation of <span class="math inline">\(\bar{x}\)</span></a>
   <ul class="collapse">
-  <li><a href="#basic-relationships" id="toc-basic-relationships" class="nav-link" data-scroll-target="#basic-relationships"><span class="header-section-number">1.1</span> Basic Relationships</a>
-  <ul class="collapse">
-  <li><a href="#complement" id="toc-complement" class="nav-link" data-scroll-target="#complement"><span class="header-section-number">1.1.1</span> Complement</a></li>
-  <li><a href="#union" id="toc-union" class="nav-link" data-scroll-target="#union"><span class="header-section-number">1.1.2</span> Union</a></li>
-  <li><a href="#intersection" id="toc-intersection" class="nav-link" data-scroll-target="#intersection"><span class="header-section-number">1.1.3</span> Intersection</a></li>
-  <li><a href="#addition-law" id="toc-addition-law" class="nav-link" data-scroll-target="#addition-law"><span class="header-section-number">1.1.4</span> Addition Law</a></li>
-  <li><a href="#mutually-exclusive" id="toc-mutually-exclusive" class="nav-link" data-scroll-target="#mutually-exclusive"><span class="header-section-number">1.1.5</span> Mutually Exclusive</a></li>
-  <li><a href="#conditional-properties" id="toc-conditional-properties" class="nav-link" data-scroll-target="#conditional-properties"><span class="header-section-number">1.1.6</span> Conditional Properties</a></li>
-  <li><a href="#multiplication-law" id="toc-multiplication-law" class="nav-link" data-scroll-target="#multiplication-law"><span class="header-section-number">1.1.7</span> Multiplication Law</a></li>
+  <li><a href="#student-t-distribution" id="toc-student-t-distribution" class="nav-link" data-scroll-target="#student-t-distribution"><span class="header-section-number">3.1</span> Student t Distribution</a></li>
   </ul></li>
-  </ul></li>
-  <li><a href="#independent-and-dependent-events" id="toc-independent-and-dependent-events" class="nav-link" data-scroll-target="#independent-and-dependent-events"><span class="header-section-number">2</span> Independent and Dependent Events</a>
-  <ul class="collapse">
-  <li><a href="#conditional-vs.-marginal-probabilities" id="toc-conditional-vs.-marginal-probabilities" class="nav-link" data-scroll-target="#conditional-vs.-marginal-probabilities"><span class="header-section-number">2.1</span> Conditional vs.&nbsp;Marginal Probabilities</a>
-  <ul class="collapse">
-  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">2.1.1</span> Example</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#distributions" id="toc-distributions" class="nav-link" data-scroll-target="#distributions"><span class="header-section-number">3</span> Distributions</a></li>
+  <li><a href="#sample-size-calculation" id="toc-sample-size-calculation" class="nav-link" data-scroll-target="#sample-size-calculation"><span class="header-section-number">4</span> Sample Size Calculation</a></li>
   </ul>
 </nav>
     </div>
@@ -209,158 +192,134 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="basics-of-probability" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Basics of Probability</h1>
-<p><strong>Probability</strong> is a numerical measure of the likelihood of that event’s occurrence. It takes on a value in the interval <span class="math inline">\([0, 1]\)</span>.</p>
-<p>A <strong>sample space</strong> is a collection of all possible outcomes in a random process. The sum of all probabilities in the sample space must sum to 1.</p>
-<p>An <strong>event</strong> is a collection of one or more outcomes from a process whose result cannot be predicted. The probability of event <span class="math inline">\(X\)</span> is expressed as <span class="math inline">\(P(X)\)</span></p>
-<section id="basic-relationships" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="basic-relationships"><span class="header-section-number">1.1</span> Basic Relationships</h2>
-<section id="complement" class="level3" data-number="1.1.1">
-<h3 data-number="1.1.1" class="anchored" data-anchor-id="complement"><span class="header-section-number">1.1.1</span> Complement</h3>
-<p>Event consisting of all sample points that are not in <span class="math inline">\(A\)</span>.</p>
-<p><span class="math display">\[
-P(\bar{A}) = 1 - P(A)
-\]</span></p>
-</section>
-<section id="union" class="level3" data-number="1.1.2">
-<h3 data-number="1.1.2" class="anchored" data-anchor-id="union"><span class="header-section-number">1.1.2</span> Union</h3>
-<p>The union of an event <span class="math inline">\(A\)</span> and event <span class="math inline">\(B\)</span> is the event containing all sample points in <span class="math inline">\(A\)</span> or <span class="math inline">\(B\)</span> or both.</p>
-<p><span class="math display">\[
-A \cup B
-\]</span></p>
-</section>
-<section id="intersection" class="level3" data-number="1.1.3">
-<h3 data-number="1.1.3" class="anchored" data-anchor-id="intersection"><span class="header-section-number">1.1.3</span> Intersection</h3>
-<p>All sample points that are in <strong>both</strong> <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>.</p>
-<p><span class="math display">\[
-A \cap B
-\]</span></p>
-</section>
-<section id="addition-law" class="level3" data-number="1.1.4">
-<h3 data-number="1.1.4" class="anchored" data-anchor-id="addition-law"><span class="header-section-number">1.1.4</span> Addition Law</h3>
-<p><span class="math display">\[
-P(A \cup B) = P(A) + P(B) - P(A \cap B)
-\]</span></p>
-</section>
-<section id="mutually-exclusive" class="level3" data-number="1.1.5">
-<h3 data-number="1.1.5" class="anchored" data-anchor-id="mutually-exclusive"><span class="header-section-number">1.1.5</span> Mutually Exclusive</h3>
-<p>Mutually exclusive meants that events have no sample points in common–they do not intersect.</p>
-<p>The events cannot both occur which turns the addition law into</p>
-<p><span class="math display">\[
-P(A \cup B) = P(A) + P(B)
-\]</span></p>
-</section>
-<section id="conditional-properties" class="level3" data-number="1.1.6">
-<h3 data-number="1.1.6" class="anchored" data-anchor-id="conditional-properties"><span class="header-section-number">1.1.6</span> Conditional Properties</h3>
-<p>Probability of an event given that another event has occurred.</p>
-<p><span class="math display">\[
-P(A | B) = \frac{P(A \cap B)}{P(B)}
-\]</span></p>
-</section>
-<section id="multiplication-law" class="level3" data-number="1.1.7">
-<h3 data-number="1.1.7" class="anchored" data-anchor-id="multiplication-law"><span class="header-section-number">1.1.7</span> Multiplication Law</h3>
-<p>We derive this from the conditional property which expresses the intersection as a multiplication:</p>
-<p><span class="math display">\[
-\begin{align*}
-P(A \cap B) &amp;= P(A | B) \cdot P(B) \\
-&amp;= P(B | A) \cdot P(A)
-\end{align*}
-\]</span></p>
-<p>If events are independent then this becomes</p>
-<p><span class="math display">\[
-P(A \cap B) = P(A) \cdot P(B)
-\]</span></p>
-</section>
-</section>
-</section>
-<section id="independent-and-dependent-events" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Independent and Dependent Events</h1>
-<p>An <strong>independent event</strong> means that the occurrence of one event doesn’t influence the probability of the other.</p>
-<p><span class="math display">\[
-\begin{align*}
-P(A | B) &amp;= P(A) \\
-P(B | A) &amp;= P(B)
-\end{align*}
-\]</span></p>
+<p>Point estimators cannot be expected to provide exact values of population parameters. <strong>Intervals</strong> provide information about how close the point estimate is to the value of the parameter.</p>
+<p><strong>Confidence intervals</strong> are interval estimates where we have a certain level of confidence in the interval.</p>
+<p>What does it mean when we are 95% confidence that the population mean is between 20 and 30?</p>
 <ul>
-<li>Event B has no bearing on the occurence of event A and vice versa</li>
+<li>If we were to take many samples with the same sample size that each produced different confidence intervals, then 95% of them contain the true parameter</li>
+<li>This <strong>DOES NOT</strong> mean we have a 95% chance the population parameter falls inside our single confidence interval
+<ul>
+<li>The population parameter is not guaranteed to be contained within the interval</li>
+</ul></li>
 </ul>
-<section id="conditional-vs.-marginal-probabilities" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="conditional-vs.-marginal-probabilities"><span class="header-section-number">2.1</span> Conditional vs.&nbsp;Marginal Probabilities</h2>
-<p><strong>Marginal probabilities</strong> are considered unconditional probabilities–they are probabilities of events without any condition.</p>
-<section id="example" class="level3" data-number="2.1.1">
-<h3 data-number="2.1.1" class="anchored" data-anchor-id="example"><span class="header-section-number">2.1.1</span> Example</h3>
-<blockquote class="blockquote">
-<p>Let’s take a look at promotion of people at a company with advanced degrees vs.&nbsp;those who don’t have them.</p>
-</blockquote>
+<section id="margin-of-error" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Margin of Error</h1>
+<p>Confidence intervals are computed by adding a margin of error to our point estimate:</p>
+<p><span class="math display">\[
+\text{Point Est.} \pm \text{Margin of Err.}
+\]</span></p>
+<p><strong>Margin of error</strong> is the largest possible sampling error at the specified level of confidence:</p>
+<p><span class="math display">\[
+\text{Margin of Err.} = \text{Critical Val.} \pm \text{Std. Error}
+\]</span></p>
+<p><strong>Standard error</strong> is the estimated value of the standard deviation of the sampling error. Keep in mind that standard errors are calculated on statistics while standard deviation is calculated on raw data.</p>
+</section>
+<section id="interval-estimation-of-hatp" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Interval Estimation of <span class="math inline">\(\hat{p}\)</span></h1>
+<p>Sampling distribution of <span class="math inline">\(\hat{p}\)</span> plays a key role in computing the margin of error for the proportion interval estimate.</p>
+<p>Sampling dist. of <span class="math inline">\(\hat{p}\)</span> is approximately Normal whenever <span class="math inline">\(np \geq 5\)</span> and <span class="math inline">\(n(1 - p) \geq 5\)</span>.</p>
 <div class="cell" data-execution_count="1">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {<span class="st">'yes'</span>: {<span class="st">'promoted'</span>: <span class="dv">288</span>, <span class="st">'not_promoted'</span>: <span class="dv">672</span>},</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>     <span class="st">'no'</span>: {<span class="st">'promoted'</span>: <span class="dv">36</span>, <span class="st">'not_promoted'</span>: <span class="dv">204</span>}}</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> t</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(d)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>mean <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>sd <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1000</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>crit_value <span class="op">=</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> alpha <span class="op">/</span> <span class="dv">2</span>, loc<span class="op">=</span>mean, scale<span class="op">=</span>sd)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>pdf <span class="op">=</span> norm.pdf(x, loc<span class="op">=</span>mean, scale<span class="op">=</span>sd)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>plt.fill_between(x, pdf, where<span class="op">=</span>(</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    x <span class="op">&gt;</span> crit_value), color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>plt.fill_between(x, pdf, where<span class="op">=</span>(</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    x <span class="op">&lt;</span> <span class="op">-</span><span class="dv">1</span> <span class="op">*</span> crit_value), color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>plt.plot(x, pdf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="22">
-<div>
-
-
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">yes</th>
-<th data-quarto-table-cell-role="th">no</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">promoted</td>
-<td>288</td>
-<td>36</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">not_promoted</td>
-<td>672</td>
-<td>204</td>
-</tr>
-</tbody>
-</table>
-
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-2-output-1.png" width="579" height="411" class="figure-img"></p>
+<figcaption class="figure-caption">Interval Estimation Critical Regions on Standard Normal, <span class="math inline">\(\alpha = 0.05\)</span></figcaption>
+</figure>
 </div>
 </div>
 </div>
-<p>One marginal probability is the probability of an advanced degree:</p>
+<p>We can obtain our critical z-value through a two-tailed test computation which helps us calculate the confidence interval for <span class="math inline">\(\hat{p}\)</span>:</p>
+<p><span class="math display">\[
+\hat{p} \pm z_{\alpha/2} \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}}
+\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Using the Standard Normal Table or Python
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can calculate the z-value needed through the Standard Normal table with the <span class="math inline">\(\alpha/2\)</span> level of probability or in Python using <span class="math inline">\(1 - \frac{\alpha}{2}\)</span> and <code>norm.ppf</code> from <code>scipy</code></p>
+</div>
+</div>
+<p>If we look at the formula, then an increase in he sample size would result in a narrower confidence interval. Meanwhile, if we increase our confidence interval the confidence interval becomes wider.</p>
+</section>
+<section id="interval-estimation-of-barx" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Interval Estimation of <span class="math inline">\(\bar{x}\)</span></h1>
+<p>In interval estimations of <span class="math inline">\(\bar{x}\)</span> we don’t know the standard deviation so we need to estimate with the sample standard deviation, <span class="math inline">\(s\)</span>.</p>
+<p>We are now estimating both <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> so we have extra error. Normal distribution is no longer a good approximation so we need to use another distribution.</p>
+<section id="student-t-distribution" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="student-t-distribution"><span class="header-section-number">3.1</span> Student t Distribution</h2>
+<p>The t distribution is also symmetric, but has thicker tails than the Normal distribution.</p>
+<p>It has <span class="math inline">\(n - 1\)</span> degrees of freedom where the degrees of freedom are the number of independent pieces of information that go into the computation of <span class="math inline">\(s\)</span>.</p>
+<p>For larger samples, the t distribution is approximately the standard Normal distribution.</p>
 <div class="cell" data-execution_count="2">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>prob_adv_deg <span class="op">=</span> df[<span class="st">'yes'</span>].<span class="bu">sum</span>() <span class="op">/</span> (df[<span class="st">'yes'</span>].<span class="bu">sum</span>() <span class="op">+</span> df[<span class="st">'no'</span>].<span class="bu">sum</span>())</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>prob_adv_deg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">100</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pdf <span class="op">=</span> t.pdf(x, df<span class="op">=</span><span class="dv">19</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>plt.plot(x, pdf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="23">
-<pre><code>0.8</code></pre>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-3-output-1.png" width="579" height="411" class="figure-img"></p>
+<figcaption class="figure-caption">Plot of a t distribution with d.f. 19</figcaption>
+</figure>
 </div>
 </div>
-<p>On the other hand, a conditional probability might be the probability of a promotion given that the employee has no advanced degree:</p>
-<div class="cell" data-execution_count="3">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cond_prob <span class="op">=</span> df.loc[<span class="st">'promoted'</span>, <span class="st">'no'</span>] <span class="op">/</span> df[<span class="st">'no'</span>].<span class="bu">sum</span>()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cond_prob</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="24">
-<pre><code>0.15</code></pre>
 </div>
-</div>
+<p>The confidence interval for <span class="math inline">\(\bar{x}\)</span> is calculated as:</p>
+<p><span class="math display">\[
+\bar{x} \pm t_{\alpha/2} \cdot \frac{s}{\sqrt{n}}
+\]</span></p>
+<p>For large samples (<span class="math inline">\(n \geq 50\)</span>) we can calculate the confidence interval for the mean from any population.</p>
+<p>For small samples (<span class="math inline">\(n &lt; 50\)</span>) we need to assume the population follows a Normal distribution.</p>
 </section>
 </section>
-</section>
-<section id="distributions" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Distributions</h1>
+<section id="sample-size-calculation" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Sample Size Calculation</h1>
+<p>To calculate the sample size needed for a desired margin of error, we can calculate <span class="math inline">\(n\)</span> from the confidence interval formulas.</p>
+<p><span class="math display">\[
+\begin{align*}
+E &amp;= z_{\alpha/2} \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}} \\
+\ \\
+n &amp;= \frac{(z_{\alpha/2}^2)\hat{p}(1 - \hat{p})}{E^2}
+\end{align*}
+\]</span></p>
+<p>Since <span class="math inline">\(\hat{p}\)</span> depends on sample size, we typically use an estimate <span class="math inline">\(p^* = 0.5\)</span> as that will provide us the largest sample size for any true value of <span class="math inline">\(\hat{p}\)</span>.</p>
+<p>What about for sample mean <span class="math inline">\(\bar{x}\)</span>?</p>
+<p><span class="math display">\[
+n = \frac{(z_{\alpha/2}^2)s^{*2}}{E^2}
+\]</span></p>
+<p>We don’t know <span class="math inline">\(s^2\)</span> or the t-value ahead of sampling so we substitute with z-score and <span class="math inline">\(s^{*2}\)</span> using a pilot sample or previous information to get the value.</p>
 
 
 </section>
