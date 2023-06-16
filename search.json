@@ -1,5 +1,26 @@
 [
   {
+    "objectID": "posts/primer/probability/index.html",
+    "href": "posts/primer/probability/index.html",
+    "title": "Probability",
+    "section": "",
+    "text": "Probability is a numerical measure of the likelihood of that event’s occurrence. It takes on a value in the interval \\([0, 1]\\).\nA sample space is a collection of all possible outcomes in a random process. The sum of all probabilities in the sample space must sum to 1.\nAn event is a collection of one or more outcomes from a process whose result cannot be predicted. The probability of event \\(X\\) is expressed as \\(P(X)\\)\n\n\n\n\nEvent consisting of all sample points that are not in \\(A\\).\n\\[\nP(\\bar{A}) = 1 - P(A)\n\\]\n\n\n\nThe union of an event \\(A\\) and event \\(B\\) is the event containing all sample points in \\(A\\) or \\(B\\) or both.\n\\[\nA \\cup B\n\\]\n\n\n\nAll sample points that are in both \\(A\\) and \\(B\\).\n\\[\nA \\cap B\n\\]\n\n\n\n\\[\nP(A \\cup B) = P(A) + P(B) - P(A \\cap B)\n\\]\n\n\n\nMutually exclusive meants that events have no sample points in common–they do not intersect.\nThe events cannot both occur which turns the addition law into\n\\[\nP(A \\cup B) = P(A) + P(B)\n\\]\n\n\n\nProbability of an event given that another event has occurred.\n\\[\nP(A | B) = \\frac{P(A \\cap B)}{P(B)}\n\\]\n\n\n\nWe derive this from the conditional property which expresses the intersection as a multiplication:\n\\[\n\\begin{align*}\nP(A \\cap B) &= P(A | B) \\cdot P(B) \\\\\n&= P(B | A) \\cdot P(A)\n\\end{align*}\n\\]\nIf events are independent then this becomes\n\\[\nP(A \\cap B) = P(A) \\cdot P(B)\n\\]"
+  },
+  {
+    "objectID": "posts/primer/probability/index.html#basic-relationships",
+    "href": "posts/primer/probability/index.html#basic-relationships",
+    "title": "Probability",
+    "section": "",
+    "text": "Event consisting of all sample points that are not in \\(A\\).\n\\[\nP(\\bar{A}) = 1 - P(A)\n\\]\n\n\n\nThe union of an event \\(A\\) and event \\(B\\) is the event containing all sample points in \\(A\\) or \\(B\\) or both.\n\\[\nA \\cup B\n\\]\n\n\n\nAll sample points that are in both \\(A\\) and \\(B\\).\n\\[\nA \\cap B\n\\]\n\n\n\n\\[\nP(A \\cup B) = P(A) + P(B) - P(A \\cap B)\n\\]\n\n\n\nMutually exclusive meants that events have no sample points in common–they do not intersect.\nThe events cannot both occur which turns the addition law into\n\\[\nP(A \\cup B) = P(A) + P(B)\n\\]\n\n\n\nProbability of an event given that another event has occurred.\n\\[\nP(A | B) = \\frac{P(A \\cap B)}{P(B)}\n\\]\n\n\n\nWe derive this from the conditional property which expresses the intersection as a multiplication:\n\\[\n\\begin{align*}\nP(A \\cap B) &= P(A | B) \\cdot P(B) \\\\\n&= P(B | A) \\cdot P(A)\n\\end{align*}\n\\]\nIf events are independent then this becomes\n\\[\nP(A \\cap B) = P(A) \\cdot P(B)\n\\]"
+  },
+  {
+    "objectID": "posts/primer/probability/index.html#conditional-vs.-marginal-probabilities",
+    "href": "posts/primer/probability/index.html#conditional-vs.-marginal-probabilities",
+    "title": "Probability",
+    "section": "2.1 Conditional vs. Marginal Probabilities",
+    "text": "2.1 Conditional vs. Marginal Probabilities\nMarginal probabilities are considered unconditional probabilities–they are probabilities of events without any condition.\n\n2.1.1 Example\n\nLet’s take a look at promotion of people at a company with advanced degrees vs. those who don’t have them.\n\n\n\nCode\nimport pandas as pd\n\nd = {'yes': {'promoted': 288, 'not_promoted': 672},\n     'no': {'promoted': 36, 'not_promoted': 204}}\n\ndf = pd.DataFrame(d)\ndf\n\n\n\n\n\n\n\n\n\nyes\nno\n\n\n\n\npromoted\n288\n36\n\n\nnot_promoted\n672\n204\n\n\n\n\n\n\n\nOne marginal probability is the probability of an advanced degree:\n\n\nCode\nprob_adv_deg = df['yes'].sum() / (df['yes'].sum() + df['no'].sum())\nprob_adv_deg\n\n\n0.8\n\n\nOn the other hand, a conditional probability might be the probability of a promotion given that the employee has no advanced degree:\n\n\nCode\ncond_prob = df.loc['promoted', 'no'] / df['no'].sum()\ncond_prob\n\n\n0.15"
+  },
+  {
     "objectID": "posts/primer/fundamental/index.html",
     "href": "posts/primer/fundamental/index.html",
     "title": "Fundamental Statistical Concepts",
@@ -319,6 +340,6 @@
     "href": "notes/index.html",
     "title": "Notes",
     "section": "",
-    "text": "Categorical Data Analysis\n\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nFundamental Statistical Concepts\n\n\n\n\n\n\n\n\n\n\n\n\nMay 22, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
+    "text": "Categorical Data Analysis\n\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nProbability\n\n\n\n\n\n\n\n\n\n\n\n\nMay 23, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nFundamental Statistical Concepts\n\n\n\n\n\n\n\n\n\n\n\n\nMay 22, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
   }
 ]
