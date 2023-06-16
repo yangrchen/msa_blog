@@ -1,0 +1,126 @@
+---
+title: "Probability"
+date: 05/23/2023
+---
+# Basics of Probability
+
+**Probability** is a numerical measure of the likelihood of that event's occurrence. It takes on a value in the interval $[0, 1]$.
+
+A **sample space** is a collection of all possible outcomes in a random process. The sum of all probabilities in the sample space must sum to 1.
+
+An **event** is a collection of one or more outcomes from a process whose result cannot be predicted. The probability of event $X$ is expressed as $P(X)$
+
+## Basic Relationships
+
+### Complement
+
+Event consisting of all sample points that are not in $A$.
+
+$$
+P(\bar{A}) = 1 - P(A)
+$$
+
+### Union
+
+The union of an event $A$ and event $B$ is the event containing all sample points in $A$ or $B$ or both.
+
+$$
+A \cup B
+$$
+
+### Intersection
+
+All sample points that are in **both** $A$ and $B$.
+
+$$
+A \cap B
+$$
+
+### Addition Law
+
+$$
+P(A \cup B) = P(A) + P(B) - P(A \cap B)
+$$
+
+### Mutually Exclusive
+
+Mutually exclusive meants that events have no sample points in common--they do not intersect.
+
+The events cannot both occur which turns the addition law into
+
+$$
+P(A \cup B) = P(A) + P(B)
+$$
+
+### Conditional Properties
+
+Probability of an event given that another event has occurred.
+
+$$
+P(A | B) = \frac{P(A \cap B)}{P(B)}
+$$
+
+### Multiplication Law
+
+We derive this from the conditional property which expresses the intersection as a multiplication:
+
+$$
+\begin{align*}
+P(A \cap B) &= P(A | B) \cdot P(B) \\
+&= P(B | A) \cdot P(A)
+\end{align*}
+$$
+
+If events are independent then this becomes
+
+$$
+P(A \cap B) = P(A) \cdot P(B)
+$$
+
+# Independent and Dependent Events
+
+An **independent event** means that the occurrence of one event doesn't influence the probability of the other.
+
+$$
+\begin{align*}
+P(A | B) &= P(A) \\
+P(B | A) &= P(B)
+\end{align*}
+$$
+
+-   Event B has no bearing on the occurence of event A and vice versa
+
+## Conditional vs. Marginal Probabilities
+
+**Marginal probabilities** are considered unconditional probabilities--they are probabilities of events without any condition.
+
+### Example
+
+> Let's take a look at promotion of people at a company with advanced degrees vs. those who don't have them.
+
+```{python}
+import pandas as pd
+
+d = {'yes': {'promoted': 288, 'not_promoted': 672},
+     'no': {'promoted': 36, 'not_promoted': 204}}
+
+df = pd.DataFrame(d)
+df
+```
+
+One marginal probability is the probability of an advanced degree:
+
+```{python}
+prob_adv_deg = df['yes'].sum() / (df['yes'].sum() + df['no'].sum())
+prob_adv_deg
+```
+
+On the other hand, a conditional probability might be the probability of a promotion given that the employee has no advanced degree:
+
+```{python}
+cond_prob = df.loc['promoted', 'no'] / df['no'].sum()
+cond_prob
+```
+
+# Distributions
+
