@@ -1,5 +1,8 @@
 ---
 title: "Probability"
+categories:
+    - primer
+    - probability
 date: 05/23/2023
 ---
 # Basics of Probability
