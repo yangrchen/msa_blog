@@ -77,6 +77,34 @@
     "text": "3.2 Time Series vs. Cross-sectional\nTime series is a set of ordered data values observed at successive point in times. Each row might be indexed by time referring to a dependence in time.\nCross-sectional is a set of data values observed at a fixed point in time or where time is of no significance (could have time as a variable just that the response does not depend on it)."
   },
   {
+    "objectID": "posts/primer/hypothesis_testing/index.html",
+    "href": "posts/primer/hypothesis_testing/index.html",
+    "title": "Hypothesis Testing",
+    "section": "",
+    "text": "According to the CLT, the the mean has a sampling distribution that follows a Normal distribution as long as the sample size is large enough.\nLet’s take the average age of our customers as an example. Initially, we believe that the average age of our customers is \\(\\mu = 25\\) years old with standard deviation \\(\\sigma = 10\\).\nWe sample 100 customers and collect their age.\n\n\nCode\nfrom scipy.stats import t\nimport numpy as np\nfrom scipy.stats import norm\nimport matplotlib.pyplot as plt\n\nmean = 25\nsd = 1\nalpha = 0.05\n\nx = np.linspace(20, 35, 1000)\n\ncrit_value = norm.ppf(1 - alpha / 2, loc=mean, scale=sd)\npdf = norm.pdf(x, loc=mean, scale=sd)\nplt.axvline(31, color='r')\n\nplt.plot(x, pdf)\n\n\n\n\n\nWhat is the probability we see a sample mean \\(\\bar{x} = 31\\) under our original assumption that the mean is 25?\nIt’s very low! \\(&lt; 0.0001\\) so we have to strongly question our original hypothesis. We may no longer think it is true given the data."
+  },
+  {
+    "objectID": "posts/primer/hypothesis_testing/index.html#type-i-error",
+    "href": "posts/primer/hypothesis_testing/index.html#type-i-error",
+    "title": "Hypothesis Testing",
+    "section": "7.1 Type I Error",
+    "text": "7.1 Type I Error\n\nReject the null hypothesis when the null hypothesis was actually true (False rejection)\nProbability of making a Type I error in a hypothesis test is called the significance level"
+  },
+  {
+    "objectID": "posts/primer/hypothesis_testing/index.html#type-ii-error",
+    "href": "posts/primer/hypothesis_testing/index.html#type-ii-error",
+    "title": "Hypothesis Testing",
+    "section": "7.2 Type II Error",
+    "text": "7.2 Type II Error\n\nAccepting the null hypothesis when the null hypothesis was actually false (False acceptance)\nProbability of not making a Type II error in a hypothesis test is called the power\nDifficult to control Type II error\nCan only control for Type I or Type II at a time"
+  },
+  {
+    "objectID": "posts/primer/hypothesis_testing/index.html#conditions",
+    "href": "posts/primer/hypothesis_testing/index.html#conditions",
+    "title": "Hypothesis Testing",
+    "section": "9.1 Conditions",
+    "text": "9.1 Conditions\n\nThe hypothesis test is two-sided\n\\(C = 1 - \\alpha\\) where \\(C\\) is the confidence level and \\(\\alpha\\) is the significance level"
+  },
+  {
     "objectID": "posts/primer/categorical_data/index.html",
     "href": "posts/primer/categorical_data/index.html",
     "title": "Categorical Data Analysis",
@@ -354,6 +382,6 @@
     "href": "notes/index.html",
     "title": "Notes",
     "section": "",
-    "text": "Categorical Data Analysis\n\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nConfidence Intervals\n\n\n\n\n\n\n\nprimer\n\n\nstatistics\n\n\n\n\n\n\n\n\n\n\n\nMay 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nProbability\n\n\n\n\n\n\n\nprimer\n\n\nprobability\n\n\n\n\n\n\n\n\n\n\n\nMay 23, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nFundamental Statistical Concepts\n\n\n\n\n\n\n\n\n\n\n\n\nMay 22, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
+    "text": "Categorical Data Analysis\n\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nHypothesis Testing\n\n\n\n\n\n\n\nhypothesis testing\n\n\nstatistics\n\n\n\n\n\n\n\n\n\n\n\nJun 7, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nConfidence Intervals\n\n\n\n\n\n\n\nprimer\n\n\nstatistics\n\n\n\n\n\n\n\n\n\n\n\nMay 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nProbability\n\n\n\n\n\n\n\nprimer\n\n\nprobability\n\n\n\n\n\n\n\n\n\n\n\nMay 23, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nFundamental Statistical Concepts\n\n\n\n\n\n\n\n\n\n\n\n\nMay 22, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
   }
 ]

@@ -2,30 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://yangrchen.github.io/msa_blog/posts/primer/probability/index.html</loc>
-    <lastmod>2023-06-16T20:42:56.199Z</lastmod>
+    <lastmod>2023-06-20T18:41:56.736Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/posts/primer/confidence_intervals/index.html</loc>
-    <lastmod>2023-06-16T20:42:56.547Z</lastmod>
+    <lastmod>2023-06-20T18:41:57.087Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/posts/primer/fundamental/index.html</loc>
-    <lastmod>2023-06-16T20:42:56.936Z</lastmod>
+    <lastmod>2023-06-20T18:41:57.489Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/posts/primer/hypothesis_testing/index.html</loc>
+    <lastmod>2023-06-20T18:41:57.886Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/posts/primer/categorical_data/index.html</loc>
-    <lastmod>2023-06-16T20:42:57.358Z</lastmod>
+    <lastmod>2023-06-20T18:41:58.331Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/posts/primer/anova/index.html</loc>
-    <lastmod>2023-06-16T20:42:58.180Z</lastmod>
+    <lastmod>2023-06-20T18:41:59.201Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/index.html</loc>
-    <lastmod>2023-06-16T20:42:58.412Z</lastmod>
+    <lastmod>2023-06-20T18:41:59.417Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/notes/index.html</loc>
-    <lastmod>2023-06-16T20:42:58.763Z</lastmod>
+    <lastmod>2023-06-20T18:41:59.826Z</lastmod>
   </url>
 </urlset>
