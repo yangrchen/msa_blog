@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.427">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yang Chen">
+<meta name="dcterms.date" content="2023-06-14">
+
+<title>Yang MSA - Categorical Data Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../index.html">
+    <span class="navbar-title">Yang MSA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../notes/index.html" rel="" target="">
+ <span class="menu-text">Notes</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/yangrchen" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Categorical Data Analysis</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Yang Chen </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 14, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a></li>
+  <li><a href="#describing-categorical-data" id="toc-describing-categorical-data" class="nav-link" data-scroll-target="#describing-categorical-data"><span class="header-section-number">2</span> Describing Categorical Data</a>
+  <ul class="collapse">
+  <li><a href="#qualitative-data-types" id="toc-qualitative-data-types" class="nav-link" data-scroll-target="#qualitative-data-types"><span class="header-section-number">2.1</span> Qualitative Data Types</a></li>
+  <li><a href="#examining-categorical-variables" id="toc-examining-categorical-variables" class="nav-link" data-scroll-target="#examining-categorical-variables"><span class="header-section-number">2.2</span> Examining Categorical Variables</a></li>
+  </ul></li>
+  <li><a href="#tests-of-association" id="toc-tests-of-association" class="nav-link" data-scroll-target="#tests-of-association"><span class="header-section-number">3</span> Tests of Association</a>
+  <ul class="collapse">
+  <li><a href="#chi-square-tests" id="toc-chi-square-tests" class="nav-link" data-scroll-target="#chi-square-tests"><span class="header-section-number">3.1</span> Chi-Square Tests</a>
+  <ul class="collapse">
+  <li><a href="#chi2-distribution" id="toc-chi2-distribution" class="nav-link" data-scroll-target="#chi2-distribution"><span class="header-section-number">3.1.1</span> <span class="math inline">\(\chi^2\)</span> Distribution</a></li>
+  <li><a href="#pearson-chi2-test" id="toc-pearson-chi2-test" class="nav-link" data-scroll-target="#pearson-chi2-test"><span class="header-section-number">3.1.2</span> Pearson <span class="math inline">\(\chi^2\)</span> Test</a></li>
+  <li><a href="#likelihood-ratio-chi2-test" id="toc-likelihood-ratio-chi2-test" class="nav-link" data-scroll-target="#likelihood-ratio-chi2-test"><span class="header-section-number">3.1.3</span> Likelihood Ratio <span class="math inline">\(\chi^2\)</span> Test</a></li>
+  </ul></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">3.2</span> Example</a></li>
+  <li><a href="#ordinal-compared-to-nominal-tests" id="toc-ordinal-compared-to-nominal-tests" class="nav-link" data-scroll-target="#ordinal-compared-to-nominal-tests"><span class="header-section-number">3.3</span> Ordinal Compared to Nominal Tests</a></li>
+  <li><a href="#mantel-haenszel-chi2-test" id="toc-mantel-haenszel-chi2-test" class="nav-link" data-scroll-target="#mantel-haenszel-chi2-test"><span class="header-section-number">3.4</span> Mantel-Haenszel <span class="math inline">\(\chi^2\)</span> Test</a></li>
+  </ul></li>
+  <li><a href="#measures-of-association" id="toc-measures-of-association" class="nav-link" data-scroll-target="#measures-of-association"><span class="header-section-number">4</span> Measures of Association</a>
+  <ul class="collapse">
+  <li><a href="#odds-ratio" id="toc-odds-ratio" class="nav-link" data-scroll-target="#odds-ratio"><span class="header-section-number">4.1</span> Odds Ratio</a>
+  <ul class="collapse">
+  <li><a href="#probability-vs.-odds-of-an-outcome" id="toc-probability-vs.-odds-of-an-outcome" class="nav-link" data-scroll-target="#probability-vs.-odds-of-an-outcome"><span class="header-section-number">4.1.1</span> Probability vs.&nbsp;Odds of an Outcome</a></li>
+  </ul></li>
+  <li><a href="#cramers-v" id="toc-cramers-v" class="nav-link" data-scroll-target="#cramers-v"><span class="header-section-number">4.2</span> Cramer’s V</a></li>
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1"><span class="header-section-number">4.3</span> Example</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="overview" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Overview</h1>
+<table class="table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type of Predictors | Type of Response</th>
+<th>Categorical</th>
+<th>Continuous</th>
+<th>Continuous and Categorical</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Continuous</td>
+<td>Analysis of Variance</td>
+<td>Ordinary Least Squares Regression</td>
+<td>Analysis of Covariance</td>
+</tr>
+<tr class="even">
+<td>Categorical</td>
+<td>Tests of Association</td>
+<td>Logistic Regression</td>
+<td>Logistic Regression</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="describing-categorical-data" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Describing Categorical Data</h1>
+<p>In categorical data analysis, we use qualitative data types which describes data whose measurement scale is by categorical.</p>
+<section id="qualitative-data-types" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="qualitative-data-types"><span class="header-section-number">2.1</span> Qualitative Data Types</h2>
+<p><strong>Nominal</strong></p>
+<ul>
+<li>Categories with no logical ordering</li>
+</ul>
+<p><strong>Ordinal</strong></p>
+<ul>
+<li>Categories with a logical order / only two ways to order the categories (binary is ordinal)</li>
+</ul>
+</section>
+<section id="examining-categorical-variables" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="examining-categorical-variables"><span class="header-section-number">2.2</span> Examining Categorical Variables</h2>
+<p>By examining distributions of categorical variables we can</p>
+<ol type="1">
+<li>Determine the frequencies of data values</li>
+<li>Recognize possible associations among variables</li>
+</ol>
+<p>Association exists between two categorical variables if distribution of one variable changes when the level of the other variable changes.</p>
+<p>If there is no association, distribution of first variable is the same regardless of the level of the other.</p>
+</section>
+</section>
+<section id="tests-of-association" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Tests of Association</h1>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Happy</th>
+<th style="text-align: right;">Sad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sunny</td>
+<td style="text-align: right;">87%</td>
+<td style="text-align: right;">13%</td>
+</tr>
+<tr class="even">
+<td>Stormy</td>
+<td style="text-align: right;">40%</td>
+<td style="text-align: right;">60%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>How much of a change is required to believe there is actually a difference in manager mood based on weather?</li>
+</ul>
+<p><strong>Hypothesis Statements:</strong></p>
+<div class="text-center">
+<p><span class="math inline">\(H_0\)</span>: There is no association between Mood and Weather</p>
+<p><span class="math inline">\(H_a\)</span>: There is an association between Mood and Weather</p>
+</div>
+<section id="chi-square-tests" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="chi-square-tests"><span class="header-section-number">3.1</span> Chi-Square Tests</h2>
+<div class="text-center">
+<p><span class="math inline">\(H_0\)</span>: No Association</p>
+<p>Observed freq <span class="math inline">\(=\)</span> Expected freq.</p>
+<p><span class="math inline">\(H_a\)</span>: Association</p>
+<p>Observed freq. <span class="math inline">\(\neq\)</span> Expected freq.</p>
+</div>
+<p>Expected freq. are calculated by the formula</p>
+<p><span class="math display">\[
+\frac{\text{Row Total} \times \text{Column Total}}{\text{Sample Size}}
+\]</span></p>
+<section id="chi2-distribution" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="chi2-distribution"><span class="header-section-number">3.1.1</span> <span class="math inline">\(\chi^2\)</span> Distribution</h3>
+<ul>
+<li>Bounded below by zero</li>
+<li>Right skewed</li>
+<li>One set of degrees of freedom</li>
+</ul>
+<div class="cell" data-execution_count="1">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> chi2</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">20</span>, <span class="fl">0.001</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>plt.plot(x, chi2.pdf(x, df<span class="op">=</span><span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-chi-square" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-chi-square-output-1.png" width="588" height="411" class="figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Plot of a <span class="math inline">\(\chi^2\)</span> distribution with d.f. 4</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="pearson-chi2-test" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="pearson-chi2-test"><span class="header-section-number">3.1.2</span> Pearson <span class="math inline">\(\chi^2\)</span> Test</h3>
+<p><span class="math display">\[
+Q_P = \sum_{i=1}^{R} \sum_{j=1}^{C} \frac{(Obs_{i,j} - Exp_{i,j})^2}{Exp_{i,j}}
+\]</span></p>
+<p><span class="math display">\[
+d.f. = (\#\text{Rows} - 1)(\#\text{Columns} - 1)
+\]</span></p>
+</section>
+<section id="likelihood-ratio-chi2-test" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="likelihood-ratio-chi2-test"><span class="header-section-number">3.1.3</span> Likelihood Ratio <span class="math inline">\(\chi^2\)</span> Test</h3>
+<p><span class="math display">\[
+Q_{LR} = 2 \times \sum_{i=1}^{R}\sum_{j=1}^{C} Obs_{i,j} \times \log{(\frac{Obs_{i,j}}{Exp_{i,j}})}
+\]</span></p>
+<p><span class="math display">\[
+d.f. = (\#\text{Rows} - 1)(\#\text{Columns} - 1)
+\]</span></p>
+</section>
+</section>
+<section id="example" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="example"><span class="header-section-number">3.2</span> Example</h2>
+<blockquote class="blockquote">
+<p>A manager of a major car dealership wants to determine if the membership of a client in the loyalty program is associated with the color of car that they buy. With this knowledge, it potentially could help the sales staff show different cars to different clients to help improve the likelihood of a sale. The manager pull information from the previous years sales.</p>
+</blockquote>
+<blockquote class="blockquote">
+<ol type="1">
+<li>Calculate the expected counts in the right table</li>
+</ol>
+</blockquote>
+<p><img src="images/chi_square_example_1_table.png" class="img-fluid"></p>
+<p>Recall that expected frequency is given by the the product of row total and column total over sample size.</p>
+<div class="cell" data-execution_count="2">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'black'</span>: {<span class="st">'yes'</span>: <span class="dv">149</span>, <span class="st">'no'</span>: <span class="dv">101</span>},</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'white'</span>: {<span class="st">'yes'</span>: <span class="dv">101</span>, <span class="st">'no'</span>: <span class="dv">66</span>},</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'blue'</span>: {<span class="st">'yes'</span>: <span class="dv">72</span>, <span class="st">'no'</span>: <span class="dv">108</span>},</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'red'</span>: {<span class="st">'yes'</span>: <span class="dv">96</span>, <span class="st">'no'</span>: <span class="dv">161</span>},</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'green'</span>: {<span class="st">'yes'</span>: <span class="dv">39</span>, <span class="st">'no'</span>: <span class="dv">65</span>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>df_cars <span class="op">=</span> pd.DataFrame(d).T</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>df_cars[<span class="st">'total'</span>] <span class="op">=</span> df_cars[<span class="st">'yes'</span>] <span class="op">+</span> df_cars[<span class="st">'no'</span>]</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>df_cars[<span class="st">'exp_y'</span>] <span class="op">=</span> df_cars[<span class="st">'total'</span>] <span class="op">*</span> <span class="op">\</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    df_cars[<span class="st">'yes'</span>].<span class="bu">sum</span>() <span class="op">/</span> df_cars[<span class="st">'total'</span>].<span class="bu">sum</span>()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>df_cars[<span class="st">'exp_n'</span>] <span class="op">=</span> df_cars[<span class="st">'total'</span>] <span class="op">*</span> <span class="op">\</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    df_cars[<span class="st">'no'</span>].<span class="bu">sum</span>() <span class="op">/</span> df_cars[<span class="st">'total'</span>].<span class="bu">sum</span>()</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>df_cars.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">yes</th>
+<th data-quarto-table-cell-role="th">no</th>
+<th data-quarto-table-cell-role="th">total</th>
+<th data-quarto-table-cell-role="th">exp_y</th>
+<th data-quarto-table-cell-role="th">exp_n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">black</td>
+<td>149</td>
+<td>101</td>
+<td>250</td>
+<td>119.258873</td>
+<td>130.741127</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">white</td>
+<td>101</td>
+<td>66</td>
+<td>167</td>
+<td>79.664927</td>
+<td>87.335073</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">blue</td>
+<td>72</td>
+<td>108</td>
+<td>180</td>
+<td>85.866388</td>
+<td>94.133612</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">red</td>
+<td>96</td>
+<td>161</td>
+<td>257</td>
+<td>122.598121</td>
+<td>134.401879</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">green</td>
+<td>39</td>
+<td>65</td>
+<td>104</td>
+<td>49.611691</td>
+<td>54.388309</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<ol start="2" type="1">
+<li>Compute <span class="math inline">\(Q_P\)</span> and <span class="math inline">\(Q_{LR}\)</span> and summarize results.</li>
+</ol>
+</blockquote>
+<div class="cell" data-execution_count="3">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_pearson(row):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (row[<span class="st">'yes'</span>] <span class="op">-</span> row[<span class="st">'exp_y'</span>]) <span class="op">**</span> <span class="dv">2</span> <span class="op">/</span> row[<span class="st">'exp_y'</span>] <span class="op">+</span> (row[<span class="st">'no'</span>] <span class="op">-</span> row[<span class="st">'exp_n'</span>]) <span class="op">**</span> <span class="dv">2</span> <span class="op">/</span> row[<span class="st">'exp_n'</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_likelihood(row):</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span> <span class="op">*</span> ((row[<span class="st">'yes'</span>] <span class="op">*</span> np.log(row[<span class="st">'yes'</span>] <span class="op">/</span> row[<span class="st">'exp_y'</span>])) <span class="op">+</span> (row[<span class="st">'no'</span>] <span class="op">*</span> np.log(row[<span class="st">'no'</span>] <span class="op">/</span> row[<span class="st">'exp_n'</span>])))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>q_pearson <span class="op">=</span> df_cars.<span class="bu">apply</span>(calculate_pearson, axis<span class="op">=</span><span class="dv">1</span>).<span class="bu">sum</span>()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>likelihood <span class="op">=</span> df_cars.<span class="bu">apply</span>(calculate_likelihood, axis<span class="op">=</span><span class="dv">1</span>).<span class="bu">sum</span>()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Q_p: </span><span class="sc">{</span>q_pearson<span class="sc">}</span><span class="ss">, Q_LR: </span><span class="sc">{</span>likelihood<span class="sc">}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Q_p: 44.76457096344832, Q_LR: 45.07972866310165</code></pre>
+</div>
+</div>
+</section>
+<section id="ordinal-compared-to-nominal-tests" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="ordinal-compared-to-nominal-tests"><span class="header-section-number">3.3</span> Ordinal Compared to Nominal Tests</h2>
+<ul>
+<li>Pearson and Likelihood Ratio <span class="math inline">\(\chi^2\)</span> tests can handle any type of categorical variable</li>
+<li>Ordinal variables provide extra information since order of the categories matters compared to nominal</li>
+<li>Can test for even more with ordinal vars. against other ordinal vars.–whether two ordinal vars. have a linear relationship as compared to just a general one</li>
+</ul>
+<p><strong>Hypothesis Statements:</strong></p>
+<div class="text-center">
+<p><span class="math inline">\(H_0\)</span>: No Linear Association</p>
+<p><span class="math inline">\(H_a\)</span>: Linear Association</p>
+</div>
+</section>
+<section id="mantel-haenszel-chi2-test" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="mantel-haenszel-chi2-test"><span class="header-section-number">3.4</span> Mantel-Haenszel <span class="math inline">\(\chi^2\)</span> Test</h2>
+<p><span class="math display">\[
+Q_{MH} = (n - 1)r^2
+\]</span></p>
+<ul>
+<li><span class="math inline">\(r^2\)</span> is the Pearson correlation between row and column variables</li>
+</ul>
+</section>
+</section>
+<section id="measures-of-association" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Measures of Association</h1>
+<p><span class="math inline">\(\chi^2\)</span> deteremines whether an association exists but it <em>does not</em> measure strength of association.</p>
+<p>Measures of association do not measure whether an association exists. Some different measures of association include:</p>
+<ul>
+<li>Odds Ratio (Only for 2x2 tables, binary vs.&nbsp;binary)</li>
+<li>Cramer’s V (Any size table)</li>
+</ul>
+<section id="odds-ratio" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="odds-ratio"><span class="header-section-number">4.1</span> Odds Ratio</h2>
+<p>Odds ratio measure how much more likely, with respect to <strong>odds</strong>, a certain event occurs in one group relative to its occurrence in another group.</p>
+<p>Odds of an event occurring is <strong>not</strong> the same as the probability that an event occurs.</p>
+<p><span class="math display">\[
+\text{Odds} = \frac{p}{1 - p}
+\]</span></p>
+<section id="probability-vs.-odds-of-an-outcome" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="probability-vs.-odds-of-an-outcome"><span class="header-section-number">4.1.1</span> Probability vs.&nbsp;Odds of an Outcome</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: right;">Yes</th>
+<th style="text-align: right;">No</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Loyal</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">60</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Non-Loyal</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">90</td>
+</tr>
+</tbody>
+</table>
+<div class="cell" data-execution_count="4">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {<span class="st">'yes'</span>: [<span class="dv">20</span>, <span class="dv">10</span>], <span class="st">'no'</span>: [<span class="dv">60</span>, <span class="dv">90</span>]}</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df_loyalty <span class="op">=</span> pd.DataFrame(d, index<span class="op">=</span>[<span class="st">'Loyal'</span>, <span class="st">'Non-Loyal'</span>])</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>df_loyalty[<span class="st">'prob_y'</span>] <span class="op">=</span> df_loyalty[<span class="st">'yes'</span>] <span class="op">/</span> df_loyalty.iloc[:, :<span class="dv">2</span>].<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>df_loyalty[<span class="st">'prob_n'</span>] <span class="op">=</span> df_loyalty[<span class="st">'no'</span>] <span class="op">/</span> df_loyalty.iloc[:, :<span class="dv">2</span>].<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>df_loyalty[<span class="st">'odds_y'</span>] <span class="op">=</span> (df_loyalty[<span class="st">'prob_y'</span>] <span class="op">/</span> df_loyalty[<span class="st">'prob_n'</span>]).<span class="bu">round</span>(<span class="dv">3</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>df_loyalty[<span class="st">'odds_n'</span>] <span class="op">=</span> df_loyalty[<span class="st">'prob_n'</span>] <span class="op">/</span> df_loyalty[<span class="st">'prob_y'</span>]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>df_loyalty.head()</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f'Odds Ratio, Loyal to Non-Loyal: </span><span class="sc">{</span>df_loyalty<span class="sc">.</span>loc[<span class="st">"Loyal"</span>, <span class="st">"odds_y"</span>] <span class="op">/</span> df_loyalty<span class="sc">.</span>loc[<span class="st">"Non-Loyal"</span>, <span class="st">"odds_y"</span>]<span class="sc">}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Odds Ratio, Loyal to Non-Loyal: 3.0</code></pre>
+</div>
+</div>
+<ul>
+<li>Loyal program customers have <strong>3 times the odds</strong> of buying the product as compared to customers not in the loyalty program.</li>
+</ul>
+</section>
+</section>
+<section id="cramers-v" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="cramers-v"><span class="header-section-number">4.2</span> Cramer’s V</h2>
+<p>When you have more than &gt;2 categories in one or both variables we use Cramer’s V.</p>
+<p><span class="math display">\[
+V = \sqrt{\frac{(\frac{Q_P}{n})}{\min(\#\text{Rows} - 1, \#\text{Columns} - 1)}}
+\]</span></p>
+<ul>
+<li>Bounded between 0 and 1 (-1 and 1 for 2x2 scenario) where closer to 0 the weaker the relationship</li>
+</ul>
+</section>
+<section id="example-1" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="example-1"><span class="header-section-number">4.3</span> Example</h2>
+<blockquote class="blockquote">
+<p>The same manager as the previous example now wants to know the strength of the relationship between the color of car and loyalty program. Use the appropriate measure of association to calculate this.</p>
+</blockquote>
+<div class="cell" data-execution_count="5">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> df_cars[<span class="st">'total'</span>].<span class="bu">sum</span>()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>rows, cols <span class="op">=</span> df_cars.iloc[:, :<span class="dv">2</span>].shape</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>cramer_v <span class="op">=</span> np.sqrt((q_pearson <span class="op">/</span> n) <span class="op">/</span> np.<span class="bu">min</span>([rows <span class="op">-</span> <span class="dv">1</span>, cols <span class="op">-</span> <span class="dv">1</span>]))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">round</span>(cramer_v, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>0.216</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

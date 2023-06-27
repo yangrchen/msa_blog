@@ -1,374 +1,157 @@
 [
   {
-    "objectID": "posts/primer/probability/index.html",
-    "href": "posts/primer/probability/index.html",
-    "title": "Probability",
+    "objectID": "notes/communication/062623/index.html",
+    "href": "notes/communication/062623/index.html",
+    "title": "Communications: 06/26/2023",
     "section": "",
-    "text": "Probability is a numerical measure of the likelihood of that event’s occurrence. It takes on a value in the interval \\([0, 1]\\).\nA sample space is a collection of all possible outcomes in a random process. The sum of all probabilities in the sample space must sum to 1.\nAn event is a collection of one or more outcomes from a process whose result cannot be predicted. The probability of event \\(X\\) is expressed as \\(P(X)\\)\n\n\n\n\nEvent consisting of all sample points that are not in \\(A\\).\n\\[\nP(\\bar{A}) = 1 - P(A)\n\\]\n\n\n\nThe union of an event \\(A\\) and event \\(B\\) is the event containing all sample points in \\(A\\) or \\(B\\) or both.\n\\[\nA \\cup B\n\\]\n\n\n\nAll sample points that are in both \\(A\\) and \\(B\\).\n\\[\nA \\cap B\n\\]\n\n\n\n\\[\nP(A \\cup B) = P(A) + P(B) - P(A \\cap B)\n\\]\n\n\n\nMutually exclusive meants that events have no sample points in common–they do not intersect.\nThe events cannot both occur which turns the addition law into\n\\[\nP(A \\cup B) = P(A) + P(B)\n\\]\n\n\n\nProbability of an event given that another event has occurred.\n\\[\nP(A | B) = \\frac{P(A \\cap B)}{P(B)}\n\\]\n\n\n\nWe derive this from the conditional property which expresses the intersection as a multiplication:\n\\[\n\\begin{align*}\nP(A \\cap B) &= P(A | B) \\cdot P(B) \\\\\n&= P(B | A) \\cdot P(A)\n\\end{align*}\n\\]\nIf events are independent then this becomes\n\\[\nP(A \\cap B) = P(A) \\cdot P(B)\n\\]"
+    "text": "Make eye contact\n\nIf you’re uncomfortable making eye contact, you can look at the hairline or some other area near the face\n\nPracticing natural gestures\n\nYou can practice holding something heavy while you’re pointing in a presentation\nIf you fidget with your hands, press thumb into the joint of the middle finger\n\nAlways make sure to find something interesting to you about your presentation–when you are excited, you can get the audience excited.\n\nStrong speakers are prepared, show enthusiasm and demonstrate knowledge."
   },
   {
-    "objectID": "posts/primer/probability/index.html#basic-relationships",
-    "href": "posts/primer/probability/index.html#basic-relationships",
-    "title": "Probability",
+    "objectID": "notes/communication/062623/index.html#slide-order",
+    "href": "notes/communication/062623/index.html#slide-order",
+    "title": "Communications: 06/26/2023",
+    "section": "2.1 Slide Order",
+    "text": "2.1 Slide Order\n\n\n\n\nflowchart LR\n    A[Title Slide] --&gt; B[\"BLUF (Bottom Line Up Front)\"] --&gt; C[Agenda]\n    C --&gt; D[Section 1] --&gt; G[Appendix]\n    C --&gt; E[Section 2] --&gt; G\n    C --&gt; F[Questions] --&gt; G\n\n\n\n\n\n\nUse visual elements in the sections to highlight / call out specific details in graphs or tables\nUse a milestone bar to help the audience keep track of the overall location"
+  },
+  {
+    "objectID": "notes/index.html",
+    "href": "notes/index.html",
+    "title": "Notes",
     "section": "",
-    "text": "Event consisting of all sample points that are not in \\(A\\).\n\\[\nP(\\bar{A}) = 1 - P(A)\n\\]\n\n\n\nThe union of an event \\(A\\) and event \\(B\\) is the event containing all sample points in \\(A\\) or \\(B\\) or both.\n\\[\nA \\cup B\n\\]\n\n\n\nAll sample points that are in both \\(A\\) and \\(B\\).\n\\[\nA \\cap B\n\\]\n\n\n\n\\[\nP(A \\cup B) = P(A) + P(B) - P(A \\cap B)\n\\]\n\n\n\nMutually exclusive meants that events have no sample points in common–they do not intersect.\nThe events cannot both occur which turns the addition law into\n\\[\nP(A \\cup B) = P(A) + P(B)\n\\]\n\n\n\nProbability of an event given that another event has occurred.\n\\[\nP(A | B) = \\frac{P(A \\cap B)}{P(B)}\n\\]\n\n\n\nWe derive this from the conditional property which expresses the intersection as a multiplication:\n\\[\n\\begin{align*}\nP(A \\cap B) &= P(A | B) \\cdot P(B) \\\\\n&= P(B | A) \\cdot P(A)\n\\end{align*}\n\\]\nIf events are independent then this becomes\n\\[\nP(A \\cap B) = P(A) \\cdot P(B)\n\\]"
+    "text": "Communications: 06/26/2023\n\n\n\n\n\n\n\ncommunication\n\n\n\n\n\n\n\n\n\n\n\nJun 26, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nCategorical Data Analysis\n\n\n\n\n\n\n\nprimer\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\nprimer\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nHypothesis Testing\n\n\n\n\n\n\n\nprimer\n\n\nhypothesis testing\n\n\nstatistics\n\n\n\n\n\n\n\n\n\n\n\nJun 7, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nConfidence Intervals\n\n\n\n\n\n\n\nprimer\n\n\nstatistics\n\n\n\n\n\n\n\n\n\n\n\nMay 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nProbability\n\n\n\n\n\n\n\nprimer\n\n\nprobability\n\n\n\n\n\n\n\n\n\n\n\nMay 23, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nFundamental Statistical Concepts\n\n\n\n\n\n\n\nprimer\n\n\n\n\n\n\n\n\n\n\n\nMay 22, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "posts/primer/probability/index.html#conditional-vs.-marginal-probabilities",
-    "href": "posts/primer/probability/index.html#conditional-vs.-marginal-probabilities",
-    "title": "Probability",
-    "section": "2.1 Conditional vs. Marginal Probabilities",
-    "text": "2.1 Conditional vs. Marginal Probabilities\nMarginal probabilities are considered unconditional probabilities–they are probabilities of events without any condition.\n\n2.1.1 Example\n\nLet’s take a look at promotion of people at a company with advanced degrees vs. those who don’t have them.\n\n\n\nCode\nimport pandas as pd\n\nd = {'yes': {'promoted': 288, 'not_promoted': 672},\n     'no': {'promoted': 36, 'not_promoted': 204}}\n\ndf = pd.DataFrame(d)\ndf\n\n\n\n\n\n\n\n\n\nyes\nno\n\n\n\n\npromoted\n288\n36\n\n\nnot_promoted\n672\n204\n\n\n\n\n\n\n\nOne marginal probability is the probability of an advanced degree:\n\n\nCode\nprob_adv_deg = df['yes'].sum() / (df['yes'].sum() + df['no'].sum())\nprob_adv_deg\n\n\n0.8\n\n\nOn the other hand, a conditional probability might be the probability of a promotion given that the employee has no advanced degree:\n\n\nCode\ncond_prob = df.loc['promoted', 'no'] / df['no'].sum()\ncond_prob\n\n\n0.15"
-  },
-  {
-    "objectID": "posts/primer/confidence_intervals/index.html",
-    "href": "posts/primer/confidence_intervals/index.html",
-    "title": "Confidence Intervals",
-    "section": "",
-    "text": "Point estimators cannot be expected to provide exact values of population parameters. Intervals provide information about how close the point estimate is to the value of the parameter.\nConfidence intervals are interval estimates where we have a certain level of confidence in the interval.\nWhat does it mean when we are 95% confidence that the population mean is between 20 and 30?"
-  },
-  {
-    "objectID": "posts/primer/confidence_intervals/index.html#student-t-distribution",
-    "href": "posts/primer/confidence_intervals/index.html#student-t-distribution",
-    "title": "Confidence Intervals",
-    "section": "3.1 Student t Distribution",
-    "text": "3.1 Student t Distribution\nThe t distribution is also symmetric, but has thicker tails than the Normal distribution.\nIt has \\(n - 1\\) degrees of freedom where the degrees of freedom are the number of independent pieces of information that go into the computation of \\(s\\).\nFor larger samples, the t distribution is approximately the standard Normal distribution.\n\n\nCode\nx = np.linspace(-4, 4, 100)\n\npdf = t.pdf(x, df=19)\nplt.plot(x, pdf)\n\n\n\n\n\nPlot of a t distribution with d.f. 19\n\n\n\n\nThe confidence interval for \\(\\bar{x}\\) is calculated as:\n\\[\n\\bar{x} \\pm t_{\\alpha/2} \\cdot \\frac{s}{\\sqrt{n}}\n\\]\nFor large samples (\\(n \\geq 50\\)) we can calculate the confidence interval for the mean from any population.\nFor small samples (\\(n &lt; 50\\)) we need to assume the population follows a Normal distribution."
-  },
-  {
-    "objectID": "posts/primer/fundamental/index.html",
-    "href": "posts/primer/fundamental/index.html",
-    "title": "Fundamental Statistical Concepts",
-    "section": "",
-    "text": "There are three main pieces to statistics:"
-  },
-  {
-    "objectID": "posts/primer/fundamental/index.html#common-types-of-bias",
-    "href": "posts/primer/fundamental/index.html#common-types-of-bias",
-    "title": "Fundamental Statistical Concepts",
-    "section": "2.1 Common Types of Bias",
-    "text": "2.1 Common Types of Bias\n\nSelection Bias\n\nUndercoverage: frame and population are not equal\nNonresponse: subject in sample cannot / will not respond or be measured\n\nSampling Bias\n\nConvenience Sampling: selecting subjects based on accessibility and ease\nVoluntary sampling: subjects volunteer themselves–may not be representative"
-  },
-  {
-    "objectID": "posts/primer/fundamental/index.html#common-sampling-techniques",
-    "href": "posts/primer/fundamental/index.html#common-sampling-techniques",
-    "title": "Fundamental Statistical Concepts",
-    "section": "2.2 Common Sampling Techniques",
-    "text": "2.2 Common Sampling Techniques\n\n2.2.1 Simple Random Sampling (SRS)\nSample items from population such that every possible sample of specified sizes has an equal chance of being selected\n\n\n\nSimple Random Sampling\n\n\nAdvantages\n\nNo statistical bias\nNo prev. info about sample needed ahead of time\n\nDisadvantages\n\nExpensive\nHard to implement\nNeed list of population\n\n\n\n2.2.2 Stratified Random Sampling (STS)\nPopulation is divided into subgroups, called strata, so that each member in the population belongs to only one strata.\nSample items from every strata. The sample size between groups does not need to be the same (e.g. if we know groups in pop. are in a 20:80 ratio)\n\n\n\nStratified Random Sampling\n\n\nAdvantages\n\nSmaller sample sizes can achieve same accuracy as SRS\nMore info about parts of population\n\nDisadvantages\n\nNeed info about population ahead of time to split on\n\n\n\n2.2.3 Cluster Sampling\nSimilar to stratified where you group members of population into subgroups called clusters. You only talk to a sample of \\(m\\) clusters selected randomly.\nIn cluster sampling, you don’t necessarily believe there are differences between clusters.\n\n\n\nCluster Sampling\n\n\nAdvantages\n\nOvercome issues with travel, time, expense\nEasier to implement than SRS or STS\n\nDisadvantages\n\nNeed info about population ahead of time to split on–but not total list.\nMay have slight bias if random clusters aren’t representative\n\n\n\n2.2.4 Systematic Sampling\nSelect every \\(k^{th}\\) item in the populatino after randomly selecting a starting point between 1 and \\(k\\).\n\\(k\\) is determined as a ratio of population size over desired sample size.\n\n\n\nSystematic Sampling Starting Point Selection\n\n\n\n\n\nSystematic Sampling\n\n\nAdvantages\n\nVery easy to get sample\n\nDisadvantages\n\nMay be biased especialy if order of list of population matters"
-  },
-  {
-    "objectID": "posts/primer/fundamental/index.html#example",
-    "href": "posts/primer/fundamental/index.html#example",
-    "title": "Fundamental Statistical Concepts",
-    "section": "2.3 Example",
-    "text": "2.3 Example\n\nA large worldwide financial company wnats to develop a new retirement plan for the company. They want to survey different managers of branches around the world to find out the most important strategies the new retirement plan should contain. They have 5000 branches worldwide and want to personally interview these branch managers. They have information about the banch size (small, medium, large) and the state/province location of the branch. They want to talk to 50 branch managers.\nDevelop four separate strategies to sample these branch managers based on the four different statistical sampling techniques discussed previously.\n\n\nSRS: Randomly sample 50 branches to interview the managers of\nSTS: Stratify by size and select random samples from every strata\nCluster: Randomly select sample of states/provinces, then select branches at random from those states/provinces\nSystematic: Select every 100th branch in list of branches starting from a random starting point between 1 and 100\n\n\n\nCode\n# Example of systematic sampling in Python\n\nimport numpy as np\nindexes = np.arange(5000)\nsample_size = 50\nk = len(indexes) // sample_size\n\nprint(f'k: {k}')\nprint(f'Sample Size: {sample_size}')\n\nstart = np.random.randint(k + 1)\nselected = indexes[start::k]\n\nprint(f'Length of selected: {len(selected)}')\nindexes[start::k]\n\n\nk: 100\nSample Size: 50\nLength of selected: 50\n\n\narray([   5,  105,  205,  305,  405,  505,  605,  705,  805,  905, 1005,\n       1105, 1205, 1305, 1405, 1505, 1605, 1705, 1805, 1905, 2005, 2105,\n       2205, 2305, 2405, 2505, 2605, 2705, 2805, 2905, 3005, 3105, 3205,\n       3305, 3405, 3505, 3605, 3705, 3805, 3905, 4005, 4105, 4205, 4305,\n       4405, 4505, 4605, 4705, 4805, 4905])"
-  },
-  {
-    "objectID": "posts/primer/fundamental/index.html#qualitative-vs.-quantitative",
-    "href": "posts/primer/fundamental/index.html#qualitative-vs.-quantitative",
-    "title": "Fundamental Statistical Concepts",
-    "section": "3.1 Qualitative vs. Quantitative",
-    "text": "3.1 Qualitative vs. Quantitative\nQuantitative data are numeric data that define value of quantity.\nQualitative data are data whose measurement scale is inherently categorical.\n\nNominal data are categories with no logical ordering\nOrdinal data are categories with a logical order / only two ways to order the categories (binary is ordinal)"
-  },
-  {
-    "objectID": "posts/primer/fundamental/index.html#time-series-vs.-cross-sectional",
-    "href": "posts/primer/fundamental/index.html#time-series-vs.-cross-sectional",
-    "title": "Fundamental Statistical Concepts",
-    "section": "3.2 Time Series vs. Cross-sectional",
-    "text": "3.2 Time Series vs. Cross-sectional\nTime series is a set of ordered data values observed at successive point in times. Each row might be indexed by time referring to a dependence in time.\nCross-sectional is a set of data values observed at a fixed point in time or where time is of no significance (could have time as a variable just that the response does not depend on it)."
-  },
-  {
-    "objectID": "posts/primer/hypothesis_testing/index.html",
-    "href": "posts/primer/hypothesis_testing/index.html",
-    "title": "Hypothesis Testing",
-    "section": "",
-    "text": "According to the CLT, the the mean has a sampling distribution that follows a Normal distribution as long as the sample size is large enough.\nLet’s take the average age of our customers as an example. Initially, we believe that the average age of our customers is \\(\\mu = 25\\) years old with standard deviation \\(\\sigma = 10\\).\nWe sample 100 customers and collect their age.\n\n\nCode\nfrom scipy.stats import t\nimport numpy as np\nfrom scipy.stats import norm\nimport matplotlib.pyplot as plt\n\nmean = 25\nsd = 1\nalpha = 0.05\n\nx = np.linspace(20, 35, 1000)\n\ncrit_value = norm.ppf(1 - alpha / 2, loc=mean, scale=sd)\npdf = norm.pdf(x, loc=mean, scale=sd)\nplt.axvline(31, color='r')\n\nplt.plot(x, pdf)\n\n\n\n\n\nWhat is the probability we see a sample mean \\(\\bar{x} = 31\\) under our original assumption that the mean is 25?\nIt’s very low! \\(&lt; 0.0001\\) so we have to strongly question our original hypothesis. We may no longer think it is true given the data."
-  },
-  {
-    "objectID": "posts/primer/hypothesis_testing/index.html#type-i-error",
-    "href": "posts/primer/hypothesis_testing/index.html#type-i-error",
-    "title": "Hypothesis Testing",
-    "section": "7.1 Type I Error",
-    "text": "7.1 Type I Error\n\nReject the null hypothesis when the null hypothesis was actually true (False rejection)\nProbability of making a Type I error in a hypothesis test is called the significance level"
-  },
-  {
-    "objectID": "posts/primer/hypothesis_testing/index.html#type-ii-error",
-    "href": "posts/primer/hypothesis_testing/index.html#type-ii-error",
-    "title": "Hypothesis Testing",
-    "section": "7.2 Type II Error",
-    "text": "7.2 Type II Error\n\nAccepting the null hypothesis when the null hypothesis was actually false (False acceptance)\nProbability of not making a Type II error in a hypothesis test is called the power\nDifficult to control Type II error\nCan only control for Type I or Type II at a time"
-  },
-  {
-    "objectID": "posts/primer/hypothesis_testing/index.html#conditions",
-    "href": "posts/primer/hypothesis_testing/index.html#conditions",
-    "title": "Hypothesis Testing",
-    "section": "9.1 Conditions",
-    "text": "9.1 Conditions\n\nThe hypothesis test is two-sided\n\\(C = 1 - \\alpha\\) where \\(C\\) is the confidence level and \\(\\alpha\\) is the significance level"
-  },
-  {
-    "objectID": "posts/primer/categorical_data/index.html",
-    "href": "posts/primer/categorical_data/index.html",
+    "objectID": "notes/primer/categorical_data/index.html",
+    "href": "notes/primer/categorical_data/index.html",
     "title": "Categorical Data Analysis",
     "section": "",
     "text": "Type of Predictors | Type of Response\nCategorical\nContinuous\nContinuous and Categorical\n\n\n\n\nContinuous\nAnalysis of Variance\nOrdinary Least Squares Regression\nAnalysis of Covariance\n\n\nCategorical\nTests of Association\nLogistic Regression\nLogistic Regression"
   },
   {
-    "objectID": "posts/primer/categorical_data/index.html#qualitative-data-types",
-    "href": "posts/primer/categorical_data/index.html#qualitative-data-types",
+    "objectID": "notes/primer/categorical_data/index.html#qualitative-data-types",
+    "href": "notes/primer/categorical_data/index.html#qualitative-data-types",
     "title": "Categorical Data Analysis",
     "section": "2.1 Qualitative Data Types",
     "text": "2.1 Qualitative Data Types\nNominal\n\nCategories with no logical ordering\n\nOrdinal\n\nCategories with a logical order / only two ways to order the categories (binary is ordinal)"
   },
   {
-    "objectID": "posts/primer/categorical_data/index.html#examining-categorical-variables",
-    "href": "posts/primer/categorical_data/index.html#examining-categorical-variables",
+    "objectID": "notes/primer/categorical_data/index.html#examining-categorical-variables",
+    "href": "notes/primer/categorical_data/index.html#examining-categorical-variables",
     "title": "Categorical Data Analysis",
     "section": "2.2 Examining Categorical Variables",
     "text": "2.2 Examining Categorical Variables\nBy examining distributions of categorical variables we can\n\nDetermine the frequencies of data values\nRecognize possible associations among variables\n\nAssociation exists between two categorical variables if distribution of one variable changes when the level of the other variable changes.\nIf there is no association, distribution of first variable is the same regardless of the level of the other."
   },
   {
-    "objectID": "posts/primer/categorical_data/index.html#chi-square-tests",
-    "href": "posts/primer/categorical_data/index.html#chi-square-tests",
+    "objectID": "notes/primer/categorical_data/index.html#chi-square-tests",
+    "href": "notes/primer/categorical_data/index.html#chi-square-tests",
     "title": "Categorical Data Analysis",
     "section": "3.1 Chi-Square Tests",
     "text": "3.1 Chi-Square Tests\n\n\\(H_0\\): No Association\nObserved freq \\(=\\) Expected freq.\n\\(H_a\\): Association\nObserved freq. \\(\\neq\\) Expected freq.\n\nExpected freq. are calculated by the formula\n\\[\n\\frac{\\text{Row Total} \\times \\text{Column Total}}{\\text{Sample Size}}\n\\]\n\n3.1.1 \\(\\chi^2\\) Distribution\n\nBounded below by zero\nRight skewed\nOne set of degrees of freedom\n\n\n\nCode\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.stats import chi2\n\nx = np.arange(0, 20, 0.001)\n\nplt.plot(x, chi2.pdf(x, df=4))\n\n\n\n\n\nFigure 1: Plot of a \\(\\chi^2\\) distribution with d.f. 4\n\n\n\n\n\n\n3.1.2 Pearson \\(\\chi^2\\) Test\n\\[\nQ_P = \\sum_{i=1}^{R} \\sum_{j=1}^{C} \\frac{(Obs_{i,j} - Exp_{i,j})^2}{Exp_{i,j}}\n\\]\n\\[\nd.f. = (\\#\\text{Rows} - 1)(\\#\\text{Columns} - 1)\n\\]\n\n\n3.1.3 Likelihood Ratio \\(\\chi^2\\) Test\n\\[\nQ_{LR} = 2 \\times \\sum_{i=1}^{R}\\sum_{j=1}^{C} Obs_{i,j} \\times \\log{(\\frac{Obs_{i,j}}{Exp_{i,j}})}\n\\]\n\\[\nd.f. = (\\#\\text{Rows} - 1)(\\#\\text{Columns} - 1)\n\\]"
   },
   {
-    "objectID": "posts/primer/categorical_data/index.html#example",
-    "href": "posts/primer/categorical_data/index.html#example",
+    "objectID": "notes/primer/categorical_data/index.html#example",
+    "href": "notes/primer/categorical_data/index.html#example",
     "title": "Categorical Data Analysis",
     "section": "3.2 Example",
     "text": "3.2 Example\n\nA manager of a major car dealership wants to determine if the membership of a client in the loyalty program is associated with the color of car that they buy. With this knowledge, it potentially could help the sales staff show different cars to different clients to help improve the likelihood of a sale. The manager pull information from the previous years sales.\n\n\n\nCalculate the expected counts in the right table\n\n\n\nRecall that expected frequency is given by the the product of row total and column total over sample size.\n\n\nCode\nd = {\n    'black': {'yes': 149, 'no': 101},\n    'white': {'yes': 101, 'no': 66},\n    'blue': {'yes': 72, 'no': 108},\n    'red': {'yes': 96, 'no': 161},\n    'green': {'yes': 39, 'no': 65}\n}\ndf_cars = pd.DataFrame(d).T\ndf_cars['total'] = df_cars['yes'] + df_cars['no']\ndf_cars['exp_y'] = df_cars['total'] * \\\n    df_cars['yes'].sum() / df_cars['total'].sum()\ndf_cars['exp_n'] = df_cars['total'] * \\\n    df_cars['no'].sum() / df_cars['total'].sum()\ndf_cars.head()\n\n\n\n\n\n\n\n\n\nyes\nno\ntotal\nexp_y\nexp_n\n\n\n\n\nblack\n149\n101\n250\n119.258873\n130.741127\n\n\nwhite\n101\n66\n167\n79.664927\n87.335073\n\n\nblue\n72\n108\n180\n85.866388\n94.133612\n\n\nred\n96\n161\n257\n122.598121\n134.401879\n\n\ngreen\n39\n65\n104\n49.611691\n54.388309\n\n\n\n\n\n\n\n\n\nCompute \\(Q_P\\) and \\(Q_{LR}\\) and summarize results.\n\n\n\n\nCode\ndef calculate_pearson(row):\n    return (row['yes'] - row['exp_y']) ** 2 / row['exp_y'] + (row['no'] - row['exp_n']) ** 2 / row['exp_n']\n\n\ndef calculate_likelihood(row):\n    return 2 * ((row['yes'] * np.log(row['yes'] / row['exp_y'])) + (row['no'] * np.log(row['no'] / row['exp_n'])))\n\n\nq_pearson = df_cars.apply(calculate_pearson, axis=1).sum()\nlikelihood = df_cars.apply(calculate_likelihood, axis=1).sum()\n\nprint(f'Q_p: {q_pearson}, Q_LR: {likelihood}')\n\n\nQ_p: 44.76457096344832, Q_LR: 45.07972866310165"
   },
   {
-    "objectID": "posts/primer/categorical_data/index.html#ordinal-compared-to-nominal-tests",
-    "href": "posts/primer/categorical_data/index.html#ordinal-compared-to-nominal-tests",
+    "objectID": "notes/primer/categorical_data/index.html#ordinal-compared-to-nominal-tests",
+    "href": "notes/primer/categorical_data/index.html#ordinal-compared-to-nominal-tests",
     "title": "Categorical Data Analysis",
     "section": "3.3 Ordinal Compared to Nominal Tests",
     "text": "3.3 Ordinal Compared to Nominal Tests\n\nPearson and Likelihood Ratio \\(\\chi^2\\) tests can handle any type of categorical variable\nOrdinal variables provide extra information since order of the categories matters compared to nominal\nCan test for even more with ordinal vars. against other ordinal vars.–whether two ordinal vars. have a linear relationship as compared to just a general one\n\nHypothesis Statements:\n\n\\(H_0\\): No Linear Association\n\\(H_a\\): Linear Association"
   },
   {
-    "objectID": "posts/primer/categorical_data/index.html#mantel-haenszel-chi2-test",
-    "href": "posts/primer/categorical_data/index.html#mantel-haenszel-chi2-test",
+    "objectID": "notes/primer/categorical_data/index.html#mantel-haenszel-chi2-test",
+    "href": "notes/primer/categorical_data/index.html#mantel-haenszel-chi2-test",
     "title": "Categorical Data Analysis",
     "section": "3.4 Mantel-Haenszel \\(\\chi^2\\) Test",
     "text": "3.4 Mantel-Haenszel \\(\\chi^2\\) Test\n\\[\nQ_{MH} = (n - 1)r^2\n\\]\n\n\\(r^2\\) is the Pearson correlation between row and column variables"
   },
   {
-    "objectID": "posts/primer/categorical_data/index.html#odds-ratio",
-    "href": "posts/primer/categorical_data/index.html#odds-ratio",
+    "objectID": "notes/primer/categorical_data/index.html#odds-ratio",
+    "href": "notes/primer/categorical_data/index.html#odds-ratio",
     "title": "Categorical Data Analysis",
     "section": "4.1 Odds Ratio",
     "text": "4.1 Odds Ratio\nOdds ratio measure how much more likely, with respect to odds, a certain event occurs in one group relative to its occurrence in another group.\nOdds of an event occurring is not the same as the probability that an event occurs.\n\\[\n\\text{Odds} = \\frac{p}{1 - p}\n\\]\n\n4.1.1 Probability vs. Odds of an Outcome\n\n\n\n\nYes\nNo\n\n\n\n\nLoyal\n20\n60\n\n\nNon-Loyal\n10\n90\n\n\n\n\n\nCode\nd = {'yes': [20, 10], 'no': [60, 90]}\ndf_loyalty = pd.DataFrame(d, index=['Loyal', 'Non-Loyal'])\n\ndf_loyalty['prob_y'] = df_loyalty['yes'] / df_loyalty.iloc[:, :2].sum(axis=1)\ndf_loyalty['prob_n'] = df_loyalty['no'] / df_loyalty.iloc[:, :2].sum(axis=1)\ndf_loyalty['odds_y'] = (df_loyalty['prob_y'] / df_loyalty['prob_n']).round(3)\ndf_loyalty['odds_n'] = df_loyalty['prob_n'] / df_loyalty['prob_y']\n\ndf_loyalty.head()\nprint(\n    f'Odds Ratio, Loyal to Non-Loyal: {df_loyalty.loc[\"Loyal\", \"odds_y\"] / df_loyalty.loc[\"Non-Loyal\", \"odds_y\"]}')\n\n\nOdds Ratio, Loyal to Non-Loyal: 3.0\n\n\n\nLoyal program customers have 3 times the odds of buying the product as compared to customers not in the loyalty program."
   },
   {
-    "objectID": "posts/primer/categorical_data/index.html#cramers-v",
-    "href": "posts/primer/categorical_data/index.html#cramers-v",
+    "objectID": "notes/primer/categorical_data/index.html#cramers-v",
+    "href": "notes/primer/categorical_data/index.html#cramers-v",
     "title": "Categorical Data Analysis",
     "section": "4.2 Cramer’s V",
     "text": "4.2 Cramer’s V\nWhen you have more than &gt;2 categories in one or both variables we use Cramer’s V.\n\\[\nV = \\sqrt{\\frac{(\\frac{Q_P}{n})}{\\min(\\#\\text{Rows} - 1, \\#\\text{Columns} - 1)}}\n\\]\n\nBounded between 0 and 1 (-1 and 1 for 2x2 scenario) where closer to 0 the weaker the relationship"
   },
   {
-    "objectID": "posts/primer/categorical_data/index.html#example-1",
-    "href": "posts/primer/categorical_data/index.html#example-1",
+    "objectID": "notes/primer/categorical_data/index.html#example-1",
+    "href": "notes/primer/categorical_data/index.html#example-1",
     "title": "Categorical Data Analysis",
     "section": "4.3 Example",
     "text": "4.3 Example\n\nThe same manager as the previous example now wants to know the strength of the relationship between the color of car and loyalty program. Use the appropriate measure of association to calculate this.\n\n\n\nCode\nn = df_cars['total'].sum()\nrows, cols = df_cars.iloc[:, :2].shape\n\ncramer_v = np.sqrt((q_pearson / n) / np.min([rows - 1, cols - 1]))\nnp.round(cramer_v, 3)\n\n\n0.216"
   },
   {
-    "objectID": "posts/primer/anova/index.html",
-    "href": "posts/primer/anova/index.html",
-    "title": "Analysis of Variance",
+    "objectID": "notes/primer/fundamental/index.html",
+    "href": "notes/primer/fundamental/index.html",
+    "title": "Fundamental Statistical Concepts",
     "section": "",
-    "text": "One sample hypothesis tests are focused on one population parameter. However, sometimes we would like to compare multiple parameters against each other. This is the foundation of an analysis called analysis of variance (ANOVA).\nRecall the one-sample case:\n\\[\nH_0: \\mu\n\\begin{cases}\n\\geq \\\\\n= \\\\\n\\leq\n\\end{cases}\n\\ \\ \\mu_0\n\\]\n\\[\nH_a: \\mu\n\\begin{cases}\n&lt; \\\\\n\\neq \\\\\n&gt;\n\\end{cases}\n\\mu_0\n\\]\nIn the two-sample case, there are two parameters we are calculating so now we have an expression:\n\\[\nH_0: \\mu_1 - \\mu_2\n\\begin{cases}\n\\geq \\\\\n= \\\\\n\\leq\n\\end{cases}\n\\ 0\n\\]\n\\[\nH_a: \\mu_1 - \\mu_2\n\\begin{cases}\n&lt; \\\\\n\\neq \\\\\n&gt;\n\\end{cases}\n\\ 0\n\\]\n\n\n\nAssume two samples are independent of each other\nWe have to take into account whether the variances are equal or not\n\nDifferent hypothesis test structures depends on whether or not variances are equal\n\n\nRecall that our general test statistic is calculated as\n\\[\n\\begin{align*}\n\\text{Test Statistic} &= \\frac{\\text{Statistic} - \\text{Null Value}}{\\text{Standard Error}} \\\\\n\\ \\\\\n&= \\frac{(\\bar{x}_1 - \\bar{x}_2) - D_0}{s_p\\sqrt{\\frac{1}{n_1} + \\frac{1}{n_2}}}\n\\end{align*}\n\\]\n\n\\(s_p\\) is the pooled standard deviation\n\nWe then calculate our p-value based on the t-distribution with \\(d.f. = n_1 - 1 + n_2 - 1 = n_1 + n_2 - 2\\)\n\n\n\nUnder assumption of equal variances we have two estimates of population variance–\\(s_1^2\\) and \\(s_2^2\\). We should combine both to get our estimate:\n\\[\n\\begin{align*}\ns_p &= \\sqrt{\\frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}} \\\\\n\\ \\\\\n&= \\sqrt{\\frac{\\sum (x_{1,i} - \\bar{x}_1)^2 + \\sum (x_{2,i} - \\bar{x}_2)^2}{n_1 + n_2 - 2}}\n\\end{align*}\n\\]\n\n\n\nEach population has an approximate Normal distribution\nVariances of two groups are equal\n\n\n\n\n\n\\[\n(\\bar{x}_1 - \\bar{x}_2) \\pm t_{\\alpha/2} \\times s_p \\sqrt{\\frac{1}{n_1} + \\frac{1}{n_2}}\n\\]\n\n\n\nHypothesis Statements:\n\nSame as the prior tests\n\nOur Test Statistic:\n\\[\n\\text{Test Statistic} = \\frac{(\\bar{x}_1 - \\bar{x}_2) - D_0}{\\sqrt{\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2}}}\n\\]\n\nStandard error changes since we need to test estimates of our two separate population variances separately \\(\\rightarrow\\) cannot “pool” them\n\nThe degrees of freedom on our t-test are a more complicated expression:\n\\[\nd.f. = \\frac{(\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2})^2}{\\frac{(\\frac{s_1^2}{n_1})^2}{n_1 - 1} + \\frac{(\\frac{s_2^2}{n_2})^2}{n_2 - 1}}\n\\]\n\n\n\nFor different variances, we don’t use the pooled variance\n\\[\n(\\bar{x}_1 - \\bar{x}_2) \\pm t_{\\alpha/2}^* \\times \\sqrt{\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2}}\n\\]\n\nStandard error changes using separate population variances\n\n\n\n\n\nA human resources manager of a large business firm is trying to determine if there exists gender bias in the pay scale of employees at the company. The manager assumes the variability of salaries between genders is different, but wants to test if makes have higher average salary than females. The manager samples 62 males and 77 females. The sample of males had an average salary of $87,547 with a s.d. of $5,910. The sample of females had an average salary of $78,289 with a s.d. of $6,276. Run a hypothesis test.\n\n\n\nCode\n# H_a: mu_1 &gt; mu_2 with mu_1 representing mean of males\n\nt &lt;- ((87547 - 78289) - 0) / sqrt(5910^2 / 62 + 6276^2 / 77)\nsprintf(\"Test statistic equals %.3f\", t)\n\n\n[1] \"Test statistic equals 8.930\"\n\n\nCode\ndf &lt;- (5910^2 / 62 + 6276^2 / 77)^2 / ((5910^2 / 62)^2 / 61 + (6276^2 / 77)^2 / 76)\nsprintf(\"Df: %d\", floor(df))\n\n\n[1] \"Df: 133\"\n\n\nCode\npt(t, df, lower.tail = FALSE)\n\n\n[1] 1.468658e-15"
+    "text": "There are three main pieces to statistics:"
   },
   {
-    "objectID": "posts/primer/anova/index.html#assumptions",
-    "href": "posts/primer/anova/index.html#assumptions",
-    "title": "Analysis of Variance",
+    "objectID": "notes/primer/fundamental/index.html#common-types-of-bias",
+    "href": "notes/primer/fundamental/index.html#common-types-of-bias",
+    "title": "Fundamental Statistical Concepts",
+    "section": "2.1 Common Types of Bias",
+    "text": "2.1 Common Types of Bias\n\nSelection Bias\n\nUndercoverage: frame and population are not equal\nNonresponse: subject in sample cannot / will not respond or be measured\n\nSampling Bias\n\nConvenience Sampling: selecting subjects based on accessibility and ease\nVoluntary sampling: subjects volunteer themselves–may not be representative"
+  },
+  {
+    "objectID": "notes/primer/fundamental/index.html#common-sampling-techniques",
+    "href": "notes/primer/fundamental/index.html#common-sampling-techniques",
+    "title": "Fundamental Statistical Concepts",
+    "section": "2.2 Common Sampling Techniques",
+    "text": "2.2 Common Sampling Techniques\n\n2.2.1 Simple Random Sampling (SRS)\nSample items from population such that every possible sample of specified sizes has an equal chance of being selected\n\n\n\nSimple Random Sampling\n\n\nAdvantages\n\nNo statistical bias\nNo prev. info about sample needed ahead of time\n\nDisadvantages\n\nExpensive\nHard to implement\nNeed list of population\n\n\n\n2.2.2 Stratified Random Sampling (STS)\nPopulation is divided into subgroups, called strata, so that each member in the population belongs to only one strata.\nSample items from every strata. The sample size between groups does not need to be the same (e.g. if we know groups in pop. are in a 20:80 ratio)\n\n\n\nStratified Random Sampling\n\n\nAdvantages\n\nSmaller sample sizes can achieve same accuracy as SRS\nMore info about parts of population\n\nDisadvantages\n\nNeed info about population ahead of time to split on\n\n\n\n2.2.3 Cluster Sampling\nSimilar to stratified where you group members of population into subgroups called clusters. You only talk to a sample of \\(m\\) clusters selected randomly.\nIn cluster sampling, you don’t necessarily believe there are differences between clusters.\n\n\n\nCluster Sampling\n\n\nAdvantages\n\nOvercome issues with travel, time, expense\nEasier to implement than SRS or STS\n\nDisadvantages\n\nNeed info about population ahead of time to split on–but not total list.\nMay have slight bias if random clusters aren’t representative\n\n\n\n2.2.4 Systematic Sampling\nSelect every \\(k^{th}\\) item in the populatino after randomly selecting a starting point between 1 and \\(k\\).\n\\(k\\) is determined as a ratio of population size over desired sample size.\n\n\n\nSystematic Sampling Starting Point Selection\n\n\n\n\n\nSystematic Sampling\n\n\nAdvantages\n\nVery easy to get sample\n\nDisadvantages\n\nMay be biased especialy if order of list of population matters"
+  },
+  {
+    "objectID": "notes/primer/fundamental/index.html#example",
+    "href": "notes/primer/fundamental/index.html#example",
+    "title": "Fundamental Statistical Concepts",
+    "section": "2.3 Example",
+    "text": "2.3 Example\n\nA large worldwide financial company wnats to develop a new retirement plan for the company. They want to survey different managers of branches around the world to find out the most important strategies the new retirement plan should contain. They have 5000 branches worldwide and want to personally interview these branch managers. They have information about the banch size (small, medium, large) and the state/province location of the branch. They want to talk to 50 branch managers.\nDevelop four separate strategies to sample these branch managers based on the four different statistical sampling techniques discussed previously.\n\n\nSRS: Randomly sample 50 branches to interview the managers of\nSTS: Stratify by size and select random samples from every strata\nCluster: Randomly select sample of states/provinces, then select branches at random from those states/provinces\nSystematic: Select every 100th branch in list of branches starting from a random starting point between 1 and 100\n\n\n\nCode\n# Example of systematic sampling in Python\n\nimport numpy as np\nindexes = np.arange(5000)\nsample_size = 50\nk = len(indexes) // sample_size\n\nprint(f'k: {k}')\nprint(f'Sample Size: {sample_size}')\n\nstart = np.random.randint(k + 1)\nselected = indexes[start::k]\n\nprint(f'Length of selected: {len(selected)}')\nindexes[start::k]\n\n\nk: 100\nSample Size: 50\nLength of selected: 50\n\n\narray([  96,  196,  296,  396,  496,  596,  696,  796,  896,  996, 1096,\n       1196, 1296, 1396, 1496, 1596, 1696, 1796, 1896, 1996, 2096, 2196,\n       2296, 2396, 2496, 2596, 2696, 2796, 2896, 2996, 3096, 3196, 3296,\n       3396, 3496, 3596, 3696, 3796, 3896, 3996, 4096, 4196, 4296, 4396,\n       4496, 4596, 4696, 4796, 4896, 4996])"
+  },
+  {
+    "objectID": "notes/primer/fundamental/index.html#qualitative-vs.-quantitative",
+    "href": "notes/primer/fundamental/index.html#qualitative-vs.-quantitative",
+    "title": "Fundamental Statistical Concepts",
+    "section": "3.1 Qualitative vs. Quantitative",
+    "text": "3.1 Qualitative vs. Quantitative\nQuantitative data are numeric data that define value of quantity.\nQualitative data are data whose measurement scale is inherently categorical.\n\nNominal data are categories with no logical ordering\nOrdinal data are categories with a logical order / only two ways to order the categories (binary is ordinal)"
+  },
+  {
+    "objectID": "notes/primer/fundamental/index.html#time-series-vs.-cross-sectional",
+    "href": "notes/primer/fundamental/index.html#time-series-vs.-cross-sectional",
+    "title": "Fundamental Statistical Concepts",
+    "section": "3.2 Time Series vs. Cross-sectional",
+    "text": "3.2 Time Series vs. Cross-sectional\nTime series is a set of ordered data values observed at successive point in times. Each row might be indexed by time referring to a dependence in time.\nCross-sectional is a set of data values observed at a fixed point in time or where time is of no significance (could have time as a variable just that the response does not depend on it)."
+  },
+  {
+    "objectID": "notes/primer/probability/index.html",
+    "href": "notes/primer/probability/index.html",
+    "title": "Probability",
     "section": "",
-    "text": "Assume two samples are independent of each other\nWe have to take into account whether the variances are equal or not\n\nDifferent hypothesis test structures depends on whether or not variances are equal\n\n\nRecall that our general test statistic is calculated as\n\\[\n\\begin{align*}\n\\text{Test Statistic} &= \\frac{\\text{Statistic} - \\text{Null Value}}{\\text{Standard Error}} \\\\\n\\ \\\\\n&= \\frac{(\\bar{x}_1 - \\bar{x}_2) - D_0}{s_p\\sqrt{\\frac{1}{n_1} + \\frac{1}{n_2}}}\n\\end{align*}\n\\]\n\n\\(s_p\\) is the pooled standard deviation\n\nWe then calculate our p-value based on the t-distribution with \\(d.f. = n_1 - 1 + n_2 - 1 = n_1 + n_2 - 2\\)"
+    "text": "Probability is a numerical measure of the likelihood of that event’s occurrence. It takes on a value in the interval \\([0, 1]\\).\nA sample space is a collection of all possible outcomes in a random process. The sum of all probabilities in the sample space must sum to 1.\nAn event is a collection of one or more outcomes from a process whose result cannot be predicted. The probability of event \\(X\\) is expressed as \\(P(X)\\)\n\n\n\n\nEvent consisting of all sample points that are not in \\(A\\).\n\\[\nP(\\bar{A}) = 1 - P(A)\n\\]\n\n\n\nThe union of an event \\(A\\) and event \\(B\\) is the event containing all sample points in \\(A\\) or \\(B\\) or both.\n\\[\nA \\cup B\n\\]\n\n\n\nAll sample points that are in both \\(A\\) and \\(B\\).\n\\[\nA \\cap B\n\\]\n\n\n\n\\[\nP(A \\cup B) = P(A) + P(B) - P(A \\cap B)\n\\]\n\n\n\nMutually exclusive meants that events have no sample points in common–they do not intersect.\nThe events cannot both occur which turns the addition law into\n\\[\nP(A \\cup B) = P(A) + P(B)\n\\]\n\n\n\nProbability of an event given that another event has occurred.\n\\[\nP(A | B) = \\frac{P(A \\cap B)}{P(B)}\n\\]\n\n\n\nWe derive this from the conditional property which expresses the intersection as a multiplication:\n\\[\n\\begin{align*}\nP(A \\cap B) &= P(A | B) \\cdot P(B) \\\\\n&= P(B | A) \\cdot P(A)\n\\end{align*}\n\\]\nIf events are independent then this becomes\n\\[\nP(A \\cap B) = P(A) \\cdot P(B)\n\\]"
   },
   {
-    "objectID": "posts/primer/anova/index.html#pooled-standard-deviation",
-    "href": "posts/primer/anova/index.html#pooled-standard-deviation",
-    "title": "Analysis of Variance",
+    "objectID": "notes/primer/probability/index.html#basic-relationships",
+    "href": "notes/primer/probability/index.html#basic-relationships",
+    "title": "Probability",
     "section": "",
-    "text": "Under assumption of equal variances we have two estimates of population variance–\\(s_1^2\\) and \\(s_2^2\\). We should combine both to get our estimate:\n\\[\n\\begin{align*}\ns_p &= \\sqrt{\\frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}} \\\\\n\\ \\\\\n&= \\sqrt{\\frac{\\sum (x_{1,i} - \\bar{x}_1)^2 + \\sum (x_{2,i} - \\bar{x}_2)^2}{n_1 + n_2 - 2}}\n\\end{align*}\n\\]\n\n\n\nEach population has an approximate Normal distribution\nVariances of two groups are equal"
+    "text": "Event consisting of all sample points that are not in \\(A\\).\n\\[\nP(\\bar{A}) = 1 - P(A)\n\\]\n\n\n\nThe union of an event \\(A\\) and event \\(B\\) is the event containing all sample points in \\(A\\) or \\(B\\) or both.\n\\[\nA \\cup B\n\\]\n\n\n\nAll sample points that are in both \\(A\\) and \\(B\\).\n\\[\nA \\cap B\n\\]\n\n\n\n\\[\nP(A \\cup B) = P(A) + P(B) - P(A \\cap B)\n\\]\n\n\n\nMutually exclusive meants that events have no sample points in common–they do not intersect.\nThe events cannot both occur which turns the addition law into\n\\[\nP(A \\cup B) = P(A) + P(B)\n\\]\n\n\n\nProbability of an event given that another event has occurred.\n\\[\nP(A | B) = \\frac{P(A \\cap B)}{P(B)}\n\\]\n\n\n\nWe derive this from the conditional property which expresses the intersection as a multiplication:\n\\[\n\\begin{align*}\nP(A \\cap B) &= P(A | B) \\cdot P(B) \\\\\n&= P(B | A) \\cdot P(A)\n\\end{align*}\n\\]\nIf events are independent then this becomes\n\\[\nP(A \\cap B) = P(A) \\cdot P(B)\n\\]"
   },
   {
-    "objectID": "posts/primer/anova/index.html#confidence-interval",
-    "href": "posts/primer/anova/index.html#confidence-interval",
-    "title": "Analysis of Variance",
-    "section": "",
-    "text": "\\[\n(\\bar{x}_1 - \\bar{x}_2) \\pm t_{\\alpha/2} \\times s_p \\sqrt{\\frac{1}{n_1} + \\frac{1}{n_2}}\n\\]"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#testing-difference-in-means---unequal-variances",
-    "href": "posts/primer/anova/index.html#testing-difference-in-means---unequal-variances",
-    "title": "Analysis of Variance",
-    "section": "",
-    "text": "Hypothesis Statements:\n\nSame as the prior tests\n\nOur Test Statistic:\n\\[\n\\text{Test Statistic} = \\frac{(\\bar{x}_1 - \\bar{x}_2) - D_0}{\\sqrt{\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2}}}\n\\]\n\nStandard error changes since we need to test estimates of our two separate population variances separately \\(\\rightarrow\\) cannot “pool” them\n\nThe degrees of freedom on our t-test are a more complicated expression:\n\\[\nd.f. = \\frac{(\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2})^2}{\\frac{(\\frac{s_1^2}{n_1})^2}{n_1 - 1} + \\frac{(\\frac{s_2^2}{n_2})^2}{n_2 - 1}}\n\\]"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#confidence-interval-1",
-    "href": "posts/primer/anova/index.html#confidence-interval-1",
-    "title": "Analysis of Variance",
-    "section": "",
-    "text": "For different variances, we don’t use the pooled variance\n\\[\n(\\bar{x}_1 - \\bar{x}_2) \\pm t_{\\alpha/2}^* \\times \\sqrt{\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2}}\n\\]\n\nStandard error changes using separate population variances"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#example---comparing-two-means",
-    "href": "posts/primer/anova/index.html#example---comparing-two-means",
-    "title": "Analysis of Variance",
-    "section": "",
-    "text": "A human resources manager of a large business firm is trying to determine if there exists gender bias in the pay scale of employees at the company. The manager assumes the variability of salaries between genders is different, but wants to test if makes have higher average salary than females. The manager samples 62 males and 77 females. The sample of males had an average salary of $87,547 with a s.d. of $5,910. The sample of females had an average salary of $78,289 with a s.d. of $6,276. Run a hypothesis test.\n\n\n\nCode\n# H_a: mu_1 &gt; mu_2 with mu_1 representing mean of males\n\nt &lt;- ((87547 - 78289) - 0) / sqrt(5910^2 / 62 + 6276^2 / 77)\nsprintf(\"Test statistic equals %.3f\", t)\n\n\n[1] \"Test statistic equals 8.930\"\n\n\nCode\ndf &lt;- (5910^2 / 62 + 6276^2 / 77)^2 / ((5910^2 / 62)^2 / 61 + (6276^2 / 77)^2 / 76)\nsprintf(\"Df: %d\", floor(df))\n\n\n[1] \"Df: 133\"\n\n\nCode\npt(t, df, lower.tail = FALSE)\n\n\n[1] 1.468658e-15"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#example---comparing-two-variances",
-    "href": "posts/primer/anova/index.html#example---comparing-two-variances",
-    "title": "Analysis of Variance",
-    "section": "2.1 Example - Comparing Two Variances",
-    "text": "2.1 Example - Comparing Two Variances\n\nA human resources manager of a large business firm is trying to determine if there exists gender bias in the pay scale of employees at the company. The manager has no assumption about the variability of salaries between genders, but wants to test if makes have higher average salary than females. The manager samples 62 males and 77 females. The sample of males had an average salary of $87,547 with a s.d. of $5,910. The sample of females had an average salary of $78,289 with a s.d. of $6,276. Run a hypothesis test.\nNeed to first test if variances are equal or not before running test of means\n\n\n\nCode\nf &lt;- 6276^2 / 5910^2\nsprintf(\"F Statistic: %.3f\", f)\n\n\n[1] \"F Statistic: 1.128\"\n\n\nCode\ndf1 &lt;- 76\ndf2 &lt;- 61\n\npf(f, df1, df2, lower.tail = FALSE)\n\n\n[1] 0.3147624\n\n\nAt a significance level of 0.05 we would not reject the null hypothesis that our variances are different."
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#example---sources-of-variation",
-    "href": "posts/primer/anova/index.html#example---sources-of-variation",
-    "title": "Analysis of Variance",
-    "section": "3.1 Example - Sources of Variation",
-    "text": "3.1 Example - Sources of Variation\n\nYou have SAT scores for both boys and girls from a local school\nYou believe that the boys and girls have the same avg. test score, but want to test otherwise\nOf the 39 females, 32 of them are part of the accelerated math and language arts program\nOf the 39 males, 11 of them are part of the accelerated math and language arts program\n\nMatched samples are samples selected such that each data value from one sample is related (or matched / paired) with a corresponding data value from a second sample\nIn the previous example, we would match boys and girls who were in the accelerated program and ones who were not.\nOur focus turns from individual values in the populations and to the values of the differences in the populations. All assumptions and calculations are done on the differences, not individual samples.\n\\[\nH_0: \\mu_d\n\\begin{cases}\n\\geq \\\\\n= \\\\\n\\leq\n\\end{cases}\n\\ \\ D_0\n\\]\n\\[\nH_a: \\mu_d\n\\begin{cases}\n&lt; \\\\\n\\neq \\\\\n&gt;\n\\end{cases}\n\\ \\ D_0\n\\]\n\nAssumptions for matched pairs hypothesis test are same as for regular hypothesis test for means\nLarge sample (\\(n &gt; 50\\)) of differences\nSmall samples with differences having Normal distribution\n\nHypothesis Statements:\n\\[\nH_0: \\mu_d\n\\begin{cases}\n\\geq \\\\\n= \\\\\n\\leq\n\\end{cases}\n\\ \\ D_0\n\\hspace{2cm}\nH_a: \\mu_d\n\\begin{cases}\ntest\n\\end{cases}\n\\]\nTest Statistic:\n\\[\nt = \\frac{\\bar{x}_d - D_0}{\\frac{s_d}{\\sqrt{n_d}}}\n\\]\n\\[ d.f. = n_d - 1 \\]"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#confidence-interval-2",
-    "href": "posts/primer/anova/index.html#confidence-interval-2",
-    "title": "Analysis of Variance",
-    "section": "3.2 Confidence Interval",
-    "text": "3.2 Confidence Interval\n\\[\n\\bar{x}_d \\pm t_{\\alpha/2}^* \\times \\frac{s_d}{\\sqrt{n_d}}\n\\]"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#example---paired-samples",
-    "href": "posts/primer/anova/index.html#example---paired-samples",
-    "title": "Analysis of Variance",
-    "section": "3.3 Example - Paired Samples",
-    "text": "3.3 Example - Paired Samples\n\nA human resources manager of a large business firm is trying to determine if there exists gender bias in the pay scale of employees at the company. The manager samples 51 pairs of male and female employees where the pair has the same job title and experience at the company. The average difference in salaries is $2,131 with a s.d. of differences of $7,898. Run a hypothesis test.\n\n\n\nCode\nt &lt;- (2131 - 0) / (7898 / sqrt(51))\nsprintf(\"Test statistic: %.3f\", t)\n\n\n[1] \"Test statistic: 1.927\"\n\n\nCode\ndf &lt;- 50\n\npt(t, df, lower.tail = FALSE)\n\n\n[1] 0.02984447\n\n\nAt a significant level of 0.05 we reject the null hypothesis that there is no gender bias in the pay scale of employees at the company."
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#confidence-interval-3",
-    "href": "posts/primer/anova/index.html#confidence-interval-3",
-    "title": "Analysis of Variance",
-    "section": "4.1 Confidence Interval",
-    "text": "4.1 Confidence Interval\n\\[\n(p_1 - p_2) \\pm z^* \\times \\sqrt{\\frac{p_1(1 - p_1)}{n_1} + \\frac{p_2(1 - p_2)}{n_2}}\n\\]"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#comprehensive-example",
-    "href": "posts/primer/anova/index.html#comprehensive-example",
-    "title": "Analysis of Variance",
-    "section": "4.2 Comprehensive Example",
-    "text": "4.2 Comprehensive Example\n\nA researcher at a large university on the west coast is interested in comparing some factors between upperclassmen (juniors and seniors) and underclassmen (freshmen and sophomores) in the undergraduate school. The researcher believes that more experience in college may help students perform better in the classroom. The researcher is interested in testing if the average GPA of upperclassmen is greater than the average GPA of underclassmen. The researcher sampled 89 underclassmen with an average GPA of 2.75 with a s.d. of 0.91 and 102 upperclassmen with an average GPA of 3.07 and a s.d. of 1.02.\n\n\n\nThe researcher did not use matched sampling. Do you agree with their decision?\n\n\nNo. There are other factors that can influence GPA like major that we could match on for equal comparison\n\n\nConduct a hypothesis test on the variances to see if they are equal.\n\n\n\\[\nH_0: \\frac{\\sigma_1^2}{\\sigma_2^2} \\leq 1\n\\hspace{2cm}\nH_a: \\frac{\\sigma_1^2}{\\sigma_2^2} &gt; 1\n\\]\n\n\nCode\nf &lt;- 1.02^2 / 0.91^2\nsprintf(\"F Statistic: %0.3f\", f)\n\n\n[1] \"F Statistic: 1.256\"\n\n\nCode\ndf1 &lt;- 101\ndf2 &lt;- 88\n\npf(f, df1, df2, lower.tail = FALSE)\n\n\n[1] 0.1367661\n\n\nBased on a significance level of 0.05 we do not reject the null hypothesis. We do not have enough evidence to say that the variances between the two populations is different.\n\n\nConduct the appropriate hypothesis test on the means to see if they are equal.\n\n\n\n\nCode\ns_p &lt;- sqrt(((101 * 1.02^2) + (88 * 0.91^2)) / (102 + 89 - 2))\nsprintf(\"Pooled std. dev: %0.3f\", s_p)\n\n\n[1] \"Pooled std. dev: 0.970\"\n\n\nCode\nt &lt;- ((3.07 - 2.75) - 0) / (s_p * sqrt(1 / 102 + 1 / 89))\nsprintf(\"Test Statistic: %0.3f\", t)\n\n\n[1] \"Test Statistic: 2.274\"\n\n\nCode\npt(t, 89 + 102 - 2, lower.tail = FALSE)\n\n\n[1] 0.01205843\n\n\nAt a significance level of 0.05 we reject our null hypothesis that more experience in college does not lead to higher GPA performance."
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#example-continued",
-    "href": "posts/primer/anova/index.html#example-continued",
-    "title": "Analysis of Variance",
-    "section": "4.3 Example Continued",
-    "text": "4.3 Example Continued\n\nSame researcher as before also believes that a higher proportion of upperclassmen live off campus compared to the proportion of underclassmen. While sampling the students in the previous sample, the researcher also asked whether the student lived off campus. Of the 89 underclassmen sampled, 27 lived off campus. Of the 102 upperclassmen sampled, 65 lived off campus.\n\n\nConstruct a 95% confidence interval for the difference between the proportion of upperclassmen living off campus to the proportion of underclassmen living off campus.\n\n\\[\nH_0: p_1 - p_2 \\leq 0 \\hspace{1cm} H_a: p_1 - p_2 &gt; 0\n\\]\n\n\nCode\np1 &lt;- 65 / 102\np2 &lt;- 27 / 89\nsprintf(\"Upper p: %0.3f, Under p: %0.3f\", p1, p2)\n\n\n[1] \"Upper p: 0.637, Under p: 0.303\"\n\n\nCode\np_mean &lt;- (102 * p1 + 89 * p2) / (102 + 89)\nsprintf(\"p_mean: %0.3f\", p_mean)\n\n\n[1] \"p_mean: 0.482\"\n\n\nCode\nz &lt;- ((p1 - p2) - 0) / sqrt(p_mean * (1 - p_mean) * (1 / 102 + 1 / 89))\nsprintf(\"Z Statistic: %0.3f\", z)\n\n\n[1] \"Z Statistic: 4.607\"\n\n\nCode\nz_crit &lt;- qnorm(0.05 / 2, lower.tail = FALSE)\nz_crit\n\n\n[1] 1.959964\n\n\nCode\nmargin &lt;- z_crit * sqrt(p1 * (1 - p1) / 102 + p2 * (1 - p2) / 89)\nmargin\n\n\n[1] 0.1335203\n\n\nCode\nsprintf(\"95 perc. CI: %0.3f plus-minus %0.3f\", p1 - p2, margin)\n\n\n[1] \"95 perc. CI: 0.334 plus-minus 0.134\"\n\n\n\nConduct the appropriate hypothesis test to test the researcher’s claim.\n\n\\[\nH_0: p_1 - p_2 \\leq 0 \\hspace{1cm} H_a: p_1 - p_2 &gt; 0\n\\]\n\n\nCode\npnorm(z, lower.tail = FALSE)\n\n\n[1] 2.044913e-06\n\n\nAt a significance level of 0.0005 we reject the null hypothesis that the proportion of upperclassmen living off campus is not greater than the proportion of underclassmen living off campus.\n\nCan you compare the confidence interval and the hypothesis test?\n\nNo as the hypothesis test is one-sided while the confidence interval is two-sided."
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#one-way-anova",
-    "href": "posts/primer/anova/index.html#one-way-anova",
-    "title": "Analysis of Variance",
-    "section": "5.1 One-Way ANOVA",
-    "text": "5.1 One-Way ANOVA\nSimplest form of ANOVA is the one-way model.\n\nIndependent samples are obtained from \\(k\\) levels (categories) of a single factor (explanatory variable), then testing whether the \\(k\\) levels have equal means.\nSimilar to regression analysis in that we have one categorical variable predicting continuous response\n\n\\[\nH_0: \\mu_1 = \\mu_2 = \\cdots = \\mu_k\n\\]\n\\[\nH_a: \\text{At least one mean different than another}\n\\]\n\n5.1.1 Assumptions\n\nNormally distributed categories\nEquality of variances between categories\nIndependence\n\nTest Statistic:\n\\[\nF = \\frac{s_{max}^2}{s_{min}^2}\n\\]\nThe p-value is calculated from Hartley-s F-max distribution which isn’t covered here.\n\n\n5.1.2 Sources of Variation\n\nWithin-Sample Variability\n\nVariability in response that exists within category of a variable\n\nWhat you categories cannot explain (like SSE)\n\n\nBetween-Sample Variability\n\nVariability in response that exists between categories of a variable\n\nWhat you categories can explain (like SSR)\n\n\n\n\n\n5.1.3 Sum of Squares Within\nWithin sample is variability that you cannot explain by just knowing which category your observation falls into\n\\[\nSSW = \\sum_{i=1}^k\\sum_{j=1}^{n_i} (x_{i,j} - \\bar{x}_i)^2\n\\]\n\n\n5.1.4 Sum of Squares Between\nBetween sample is variability that you can explain by just knowing which category your observation falls into\n\\[\nSSB = \\sum_{i=1}^k n_i(\\bar{x}_i - \\bar{\\bar{x}})^2\n\\]"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#partitioning-variability-in-anova",
-    "href": "posts/primer/anova/index.html#partitioning-variability-in-anova",
-    "title": "Analysis of Variance",
-    "section": "5.2 Partitioning Variability in ANOVA",
-    "text": "5.2 Partitioning Variability in ANOVA\n\n\n\n\nflowchart LR\nA(Total Variability) --&gt; B(SSR + SSE)\nB --&gt; C[Variability Between Groups]\nB --&gt; D[Variability Within Groups]"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#anova-f-test",
-    "href": "posts/primer/anova/index.html#anova-f-test",
-    "title": "Analysis of Variance",
-    "section": "5.3 ANOVA F-test",
-    "text": "5.3 ANOVA F-test\n\\[\n\\begin{align*}\nH_0&: \\mu_1 = \\mu_2 = \\cdots = \\mu_k \\\\\nH_a&: \\text{At least one mean different than another}\n\\end{align*}\n\\]\nTest follows an F-distribution and is calculated as\n\\[\nF = \\frac{(\\frac{SSB}{k - 1})}{(\\frac{SSW}{N - k})}\n\\]\n\n\\(k\\) categories would be \\(k - 1\\) variables in a regression model\n\\(N\\) is the total sample size across all categories"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#one-way-anova-table",
-    "href": "posts/primer/anova/index.html#one-way-anova-table",
-    "title": "Analysis of Variance",
-    "section": "5.4 One-Way ANOVA Table",
-    "text": "5.4 One-Way ANOVA Table\n\n\n\nOne-Way ANOVA Table"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#one-way-anova-example",
-    "href": "posts/primer/anova/index.html#one-way-anova-example",
-    "title": "Analysis of Variance",
-    "section": "5.5 One-Way ANOVA Example",
-    "text": "5.5 One-Way ANOVA Example\n\nA marketing analyst is interested in testing the effectiveness of 4 different commercials describing their company’s new product. The marketing analyst randomly assigns a commercial to each of 32 cities across the country and measures the average increase in sales of their new product at their stores. The marketing analyst wants to test if there is a difference in sales between the commercials.\n\n\n\nFill in the blanks on the ANOVA table.\n\n\n\n\n\nSource\nDF\nSS\nMS\nF-Value\nP-Value\n\n\n\n\nBetween\n3\n2.3236\n0.775\n22.794\n\n\n\nWithin\n28\n0.9587\n0.034\n\n\n\n\nTotal\n31\n3.2823\n\n\n\n\n\n\n\n\nCode\npf(22.794, 3, 28, lower.tail = FALSE)\n\n\n[1] 1.128339e-07"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#multiple-comparisons-problem",
-    "href": "posts/primer/anova/index.html#multiple-comparisons-problem",
-    "title": "Analysis of Variance",
-    "section": "6.1 Multiple Comparisons Problem",
-    "text": "6.1 Multiple Comparisons Problem\n\nYou have a test which makes an error 5% of the time when performed.\n\n\nWhat is the probability of making an error on your first test?\n\n5%\n\nWhat is the probability of making an error on your second test?\n\n5%\n\nWhat is the probability of making at least one error in two tests?\n\n9.75%\n\n\n\n6.1.1 Different Types of Error\nComparison-wise error rate\n\nError rate for each individual test or comparison\n\nExperiment-wise error rate\n\nError rate across all comparisons–proportion of experiments/comparisons in which at least one error occurs\n\nTests and confidence intervals usually control for comparison-wise, \\(\\alpha\\), but ideally want to control for experiment-wise."
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#multiple-comparison-methods",
-    "href": "posts/primer/anova/index.html#multiple-comparison-methods",
-    "title": "Analysis of Variance",
-    "section": "6.2 Multiple Comparison Methods",
-    "text": "6.2 Multiple Comparison Methods\n\n\n\n\n\n\n\n\nNumber of Groups Compared\nNumber of Comparisons\nExperimentwise Error Rate\n\n\n\n\n2\n1\n0.05\n\n\n3\n3\n0.14\n\n\n4\n6\n0.26\n\n\n5\n10\n0.40\n\n\n\n\n\\(EER \\leq 1 - (1 - \\alpha)^{nc}\\) where \\(nc\\) is the number of comparisons\n\n\n\n\n\nflowchart LR\nA(Control Comparisonwise Error Rate) --&gt; B(Pairwise t-tests)\nC(Control Experimentwise Error Rate) --&gt; D[Compare All Pairs Tukey]"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#tukeys-hsd-test",
-    "href": "posts/primer/anova/index.html#tukeys-hsd-test",
-    "title": "Analysis of Variance",
-    "section": "6.3 Tukey’s HSD Test",
-    "text": "6.3 Tukey’s HSD Test\nHSD represents the Honest Significant Difference or Critical Range\nWe use Tukey’s when we consider pairwise comparisons\n\nExperimentwise error rate is equal to \\(\\alpha\\) when all pairwise comparisons are considered\nExperimentwise error rate is less than \\(\\alpha\\) when fewer than all pairwise comparisons are considered\nReplaces margin of error calculation for a typical confidence interval for a difference in means with an adjusted margin of error\n\n\\[\n\\text{Critical Range (Margin of Error)} = q_a \\times \\sqrt{\\frac{MSW}{2} \\times (\\frac{1}{n_i} + \\frac{1}{n_j})}\n\\]\n\n\\(q_a\\) is from studentized range distribution"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#randomized-blocking",
-    "href": "posts/primer/anova/index.html#randomized-blocking",
-    "title": "Analysis of Variance",
-    "section": "7.1 Randomized Blocking",
-    "text": "7.1 Randomized Blocking\n\n7.1.1 Sources of Variation\nGenerally, comparing many population means works well in certain situations\nThere are some instances where blocking is used to control for sources of variation that might distort conclusions"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#example",
-    "href": "posts/primer/anova/index.html#example",
-    "title": "Analysis of Variance",
-    "section": "7.2 Example",
-    "text": "7.2 Example\n\nThe same marketing analyst as before is interested in testing the effectiveness of 4 different commercials describing their company’s new product. The marketing analyst randomly assigns a commercial to each of 32 cities across the country and measures the average increase in sales of their new product at their stores. The four commercial average sales were $1.2M for commercial A, $1.8M for B, $0.76M for C, and $1.3M for D. Where are the differences in sales?\n\n\nWhat if the new product is a warm coat and a majority of the cities seeing C were warm weather cities?\nThe same marketing analyst as before is interested in testing the effectiveness of 4 different commercials describing their company’s new product. Split (block) country into 8 regions. Show each commercial to one city in each region. Sample size still 32."
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#assumptions-2",
-    "href": "posts/primer/anova/index.html#assumptions-2",
-    "title": "Analysis of Variance",
-    "section": "7.3 Assumptions",
-    "text": "7.3 Assumptions\nSame as One-Way ANOVA:\n\nNormally distributed categories\nEquality of variances between categories\nIndependence\n\nBlocking can come from collection of data as well as the analysis of the data as a variable being added to the model.\nWhen a new variable is added, we get a new source of variation–sum of squares of blocking."
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#sum-of-squares-blocks",
-    "href": "posts/primer/anova/index.html#sum-of-squares-blocks",
-    "title": "Analysis of Variance",
-    "section": "7.4 Sum of Squares Blocks",
-    "text": "7.4 Sum of Squares Blocks\n\\[\nSSBL = \\sum_{j=1}^b k(\\bar{x}_j - \\bar{\\bar{x}})^2\n\\]\nThe sum of squares comes out of the error sum of squares and gets brought into the model–the SSW shrinks even more."
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#blocking-anova-table",
-    "href": "posts/primer/anova/index.html#blocking-anova-table",
-    "title": "Analysis of Variance",
-    "section": "7.5 Blocking ANOVA Table",
-    "text": "7.5 Blocking ANOVA Table\n\n\n\nBlocking ANOVA Table\n\n\n\nThe F-Value in the Blocking row is the F-test with \\(H_a\\) at least one block mean not equal"
-  },
-  {
-    "objectID": "posts/primer/anova/index.html#post-hoc-analysis-for-blocking",
-    "href": "posts/primer/anova/index.html#post-hoc-analysis-for-blocking",
-    "title": "Analysis of Variance",
-    "section": "7.6 Post-hoc Analysis for blocking",
-    "text": "7.6 Post-hoc Analysis for blocking\nTukey-Kramer ANOVA comparisons do not work for blocking.\nInstead, we have Fisher’s Least Significant Difference. Fisher’s LSD is a recalculation of the margin of error for the difference in means confidence interval just like Tukey’s critical range.\n\\[\nLSD = t^* \\times \\sqrt{MSW} \\times \\sqrt{\\frac{2}{b}}\n\\]"
+    "objectID": "notes/primer/probability/index.html#conditional-vs.-marginal-probabilities",
+    "href": "notes/primer/probability/index.html#conditional-vs.-marginal-probabilities",
+    "title": "Probability",
+    "section": "2.1 Conditional vs. Marginal Probabilities",
+    "text": "2.1 Conditional vs. Marginal Probabilities\nMarginal probabilities are considered unconditional probabilities–they are probabilities of events without any condition.\n\n2.1.1 Example\n\nLet’s take a look at promotion of people at a company with advanced degrees vs. those who don’t have them.\n\n\n\nCode\nimport pandas as pd\n\nd = {'yes': {'promoted': 288, 'not_promoted': 672},\n     'no': {'promoted': 36, 'not_promoted': 204}}\n\ndf = pd.DataFrame(d)\ndf\n\n\n\n\n\n\n\n\n\nyes\nno\n\n\n\n\npromoted\n288\n36\n\n\nnot_promoted\n672\n204\n\n\n\n\n\n\n\nOne marginal probability is the probability of an advanced degree:\n\n\nCode\nprob_adv_deg = df['yes'].sum() / (df['yes'].sum() + df['no'].sum())\nprob_adv_deg\n\n\n0.8\n\n\nOn the other hand, a conditional probability might be the probability of a promotion given that the employee has no advanced degree:\n\n\nCode\ncond_prob = df.loc['promoted', 'no'] / df['no'].sum()\ncond_prob\n\n\n0.15"
   },
   {
     "objectID": "index.html",
@@ -378,10 +161,248 @@
     "text": "Hiya, I’m Yang!\nI’m a data science Master’s student who’s passionate about AI, deep learning, and explainable data science. This is an open repository of notes, projects, and musings that I am gathering through my Master’s at the Institute for Advanced Analytics.\nI’m excited to share what I learn and hope you can join me for the ride! You can find me on LinkedIn, Github or through my main website"
   },
   {
-    "objectID": "notes/index.html",
-    "href": "notes/index.html",
-    "title": "Notes",
+    "objectID": "blog/index.html",
+    "href": "blog/index.html",
+    "title": "Blog",
     "section": "",
-    "text": "Categorical Data Analysis\n\n\n\n\n\n\n\n\n\n\n\n\nJun 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nAnalysis of Variance\n\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nHypothesis Testing\n\n\n\n\n\n\n\nhypothesis testing\n\n\nstatistics\n\n\n\n\n\n\n\n\n\n\n\nJun 7, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nConfidence Intervals\n\n\n\n\n\n\n\nprimer\n\n\nstatistics\n\n\n\n\n\n\n\n\n\n\n\nMay 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nProbability\n\n\n\n\n\n\n\nprimer\n\n\nprobability\n\n\n\n\n\n\n\n\n\n\n\nMay 23, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nFundamental Statistical Concepts\n\n\n\n\n\n\n\n\n\n\n\n\nMay 22, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
+    "text": "No matching items"
+  },
+  {
+    "objectID": "notes/primer/confidence_intervals/index.html",
+    "href": "notes/primer/confidence_intervals/index.html",
+    "title": "Confidence Intervals",
+    "section": "",
+    "text": "Point estimators cannot be expected to provide exact values of population parameters. Intervals provide information about how close the point estimate is to the value of the parameter.\nConfidence intervals are interval estimates where we have a certain level of confidence in the interval.\nWhat does it mean when we are 95% confidence that the population mean is between 20 and 30?"
+  },
+  {
+    "objectID": "notes/primer/confidence_intervals/index.html#student-t-distribution",
+    "href": "notes/primer/confidence_intervals/index.html#student-t-distribution",
+    "title": "Confidence Intervals",
+    "section": "3.1 Student t Distribution",
+    "text": "3.1 Student t Distribution\nThe t distribution is also symmetric, but has thicker tails than the Normal distribution.\nIt has \\(n - 1\\) degrees of freedom where the degrees of freedom are the number of independent pieces of information that go into the computation of \\(s\\).\nFor larger samples, the t distribution is approximately the standard Normal distribution.\n\n\nCode\nx = np.linspace(-4, 4, 100)\n\npdf = t.pdf(x, df=19)\nplt.plot(x, pdf)\n\n\n\n\n\nPlot of a t distribution with d.f. 19\n\n\n\n\nThe confidence interval for \\(\\bar{x}\\) is calculated as:\n\\[\n\\bar{x} \\pm t_{\\alpha/2} \\cdot \\frac{s}{\\sqrt{n}}\n\\]\nFor large samples (\\(n \\geq 50\\)) we can calculate the confidence interval for the mean from any population.\nFor small samples (\\(n &lt; 50\\)) we need to assume the population follows a Normal distribution."
+  },
+  {
+    "objectID": "notes/primer/hypothesis_testing/index.html",
+    "href": "notes/primer/hypothesis_testing/index.html",
+    "title": "Hypothesis Testing",
+    "section": "",
+    "text": "According to the CLT, the the mean has a sampling distribution that follows a Normal distribution as long as the sample size is large enough.\nLet’s take the average age of our customers as an example. Initially, we believe that the average age of our customers is \\(\\mu = 25\\) years old with standard deviation \\(\\sigma = 10\\).\nWe sample 100 customers and collect their age.\n\n\nCode\nfrom scipy.stats import t\nimport numpy as np\nfrom scipy.stats import norm\nimport matplotlib.pyplot as plt\n\nmean = 25\nsd = 1\nalpha = 0.05\n\nx = np.linspace(20, 35, 1000)\n\ncrit_value = norm.ppf(1 - alpha / 2, loc=mean, scale=sd)\npdf = norm.pdf(x, loc=mean, scale=sd)\nplt.axvline(31, color='r')\n\nplt.plot(x, pdf)\n\n\n\n\n\nWhat is the probability we see a sample mean \\(\\bar{x} = 31\\) under our original assumption that the mean is 25?\nIt’s very low! \\(&lt; 0.0001\\) so we have to strongly question our original hypothesis. We may no longer think it is true given the data."
+  },
+  {
+    "objectID": "notes/primer/hypothesis_testing/index.html#type-i-error",
+    "href": "notes/primer/hypothesis_testing/index.html#type-i-error",
+    "title": "Hypothesis Testing",
+    "section": "7.1 Type I Error",
+    "text": "7.1 Type I Error\n\nReject the null hypothesis when the null hypothesis was actually true (False rejection)\nProbability of making a Type I error in a hypothesis test is called the significance level"
+  },
+  {
+    "objectID": "notes/primer/hypothesis_testing/index.html#type-ii-error",
+    "href": "notes/primer/hypothesis_testing/index.html#type-ii-error",
+    "title": "Hypothesis Testing",
+    "section": "7.2 Type II Error",
+    "text": "7.2 Type II Error\n\nAccepting the null hypothesis when the null hypothesis was actually false (False acceptance)\nProbability of not making a Type II error in a hypothesis test is called the power\nDifficult to control Type II error\nCan only control for Type I or Type II at a time"
+  },
+  {
+    "objectID": "notes/primer/hypothesis_testing/index.html#conditions",
+    "href": "notes/primer/hypothesis_testing/index.html#conditions",
+    "title": "Hypothesis Testing",
+    "section": "9.1 Conditions",
+    "text": "9.1 Conditions\n\nThe hypothesis test is two-sided\n\\(C = 1 - \\alpha\\) where \\(C\\) is the confidence level and \\(\\alpha\\) is the significance level"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html",
+    "href": "notes/primer/anova/index.html",
+    "title": "Analysis of Variance",
+    "section": "",
+    "text": "One sample hypothesis tests are focused on one population parameter. However, sometimes we would like to compare multiple parameters against each other. This is the foundation of an analysis called analysis of variance (ANOVA).\nRecall the one-sample case:\n\\[\nH_0: \\mu\n\\begin{cases}\n\\geq \\\\\n= \\\\\n\\leq\n\\end{cases}\n\\ \\ \\mu_0\n\\]\n\\[\nH_a: \\mu\n\\begin{cases}\n&lt; \\\\\n\\neq \\\\\n&gt;\n\\end{cases}\n\\mu_0\n\\]\nIn the two-sample case, there are two parameters we are calculating so now we have an expression:\n\\[\nH_0: \\mu_1 - \\mu_2\n\\begin{cases}\n\\geq \\\\\n= \\\\\n\\leq\n\\end{cases}\n\\ 0\n\\]\n\\[\nH_a: \\mu_1 - \\mu_2\n\\begin{cases}\n&lt; \\\\\n\\neq \\\\\n&gt;\n\\end{cases}\n\\ 0\n\\]\n\n\n\nAssume two samples are independent of each other\nWe have to take into account whether the variances are equal or not\n\nDifferent hypothesis test structures depends on whether or not variances are equal\n\n\nRecall that our general test statistic is calculated as\n\\[\n\\begin{align*}\n\\text{Test Statistic} &= \\frac{\\text{Statistic} - \\text{Null Value}}{\\text{Standard Error}} \\\\\n\\ \\\\\n&= \\frac{(\\bar{x}_1 - \\bar{x}_2) - D_0}{s_p\\sqrt{\\frac{1}{n_1} + \\frac{1}{n_2}}}\n\\end{align*}\n\\]\n\n\\(s_p\\) is the pooled standard deviation\n\nWe then calculate our p-value based on the t-distribution with \\(d.f. = n_1 - 1 + n_2 - 1 = n_1 + n_2 - 2\\)\n\n\n\nUnder assumption of equal variances we have two estimates of population variance–\\(s_1^2\\) and \\(s_2^2\\). We should combine both to get our estimate:\n\\[\n\\begin{align*}\ns_p &= \\sqrt{\\frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}} \\\\\n\\ \\\\\n&= \\sqrt{\\frac{\\sum (x_{1,i} - \\bar{x}_1)^2 + \\sum (x_{2,i} - \\bar{x}_2)^2}{n_1 + n_2 - 2}}\n\\end{align*}\n\\]\n\n\n\nEach population has an approximate Normal distribution\nVariances of two groups are equal\n\n\n\n\n\n\\[\n(\\bar{x}_1 - \\bar{x}_2) \\pm t_{\\alpha/2} \\times s_p \\sqrt{\\frac{1}{n_1} + \\frac{1}{n_2}}\n\\]\n\n\n\nHypothesis Statements:\n\nSame as the prior tests\n\nOur Test Statistic:\n\\[\n\\text{Test Statistic} = \\frac{(\\bar{x}_1 - \\bar{x}_2) - D_0}{\\sqrt{\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2}}}\n\\]\n\nStandard error changes since we need to test estimates of our two separate population variances separately \\(\\rightarrow\\) cannot “pool” them\n\nThe degrees of freedom on our t-test are a more complicated expression:\n\\[\nd.f. = \\frac{(\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2})^2}{\\frac{(\\frac{s_1^2}{n_1})^2}{n_1 - 1} + \\frac{(\\frac{s_2^2}{n_2})^2}{n_2 - 1}}\n\\]\n\n\n\nFor different variances, we don’t use the pooled variance\n\\[\n(\\bar{x}_1 - \\bar{x}_2) \\pm t_{\\alpha/2}^* \\times \\sqrt{\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2}}\n\\]\n\nStandard error changes using separate population variances\n\n\n\n\n\nA human resources manager of a large business firm is trying to determine if there exists gender bias in the pay scale of employees at the company. The manager assumes the variability of salaries between genders is different, but wants to test if makes have higher average salary than females. The manager samples 62 males and 77 females. The sample of males had an average salary of $87,547 with a s.d. of $5,910. The sample of females had an average salary of $78,289 with a s.d. of $6,276. Run a hypothesis test.\n\n\n\nCode\n# H_a: mu_1 &gt; mu_2 with mu_1 representing mean of males\n\nt &lt;- ((87547 - 78289) - 0) / sqrt(5910^2 / 62 + 6276^2 / 77)\nsprintf(\"Test statistic equals %.3f\", t)\n\n\n[1] \"Test statistic equals 8.930\"\n\n\nCode\ndf &lt;- (5910^2 / 62 + 6276^2 / 77)^2 / ((5910^2 / 62)^2 / 61 + (6276^2 / 77)^2 / 76)\nsprintf(\"Df: %d\", floor(df))\n\n\n[1] \"Df: 133\"\n\n\nCode\npt(t, df, lower.tail = FALSE)\n\n\n[1] 1.468658e-15"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#assumptions",
+    "href": "notes/primer/anova/index.html#assumptions",
+    "title": "Analysis of Variance",
+    "section": "",
+    "text": "Assume two samples are independent of each other\nWe have to take into account whether the variances are equal or not\n\nDifferent hypothesis test structures depends on whether or not variances are equal\n\n\nRecall that our general test statistic is calculated as\n\\[\n\\begin{align*}\n\\text{Test Statistic} &= \\frac{\\text{Statistic} - \\text{Null Value}}{\\text{Standard Error}} \\\\\n\\ \\\\\n&= \\frac{(\\bar{x}_1 - \\bar{x}_2) - D_0}{s_p\\sqrt{\\frac{1}{n_1} + \\frac{1}{n_2}}}\n\\end{align*}\n\\]\n\n\\(s_p\\) is the pooled standard deviation\n\nWe then calculate our p-value based on the t-distribution with \\(d.f. = n_1 - 1 + n_2 - 1 = n_1 + n_2 - 2\\)"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#pooled-standard-deviation",
+    "href": "notes/primer/anova/index.html#pooled-standard-deviation",
+    "title": "Analysis of Variance",
+    "section": "",
+    "text": "Under assumption of equal variances we have two estimates of population variance–\\(s_1^2\\) and \\(s_2^2\\). We should combine both to get our estimate:\n\\[\n\\begin{align*}\ns_p &= \\sqrt{\\frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}} \\\\\n\\ \\\\\n&= \\sqrt{\\frac{\\sum (x_{1,i} - \\bar{x}_1)^2 + \\sum (x_{2,i} - \\bar{x}_2)^2}{n_1 + n_2 - 2}}\n\\end{align*}\n\\]\n\n\n\nEach population has an approximate Normal distribution\nVariances of two groups are equal"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#confidence-interval",
+    "href": "notes/primer/anova/index.html#confidence-interval",
+    "title": "Analysis of Variance",
+    "section": "",
+    "text": "\\[\n(\\bar{x}_1 - \\bar{x}_2) \\pm t_{\\alpha/2} \\times s_p \\sqrt{\\frac{1}{n_1} + \\frac{1}{n_2}}\n\\]"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#testing-difference-in-means---unequal-variances",
+    "href": "notes/primer/anova/index.html#testing-difference-in-means---unequal-variances",
+    "title": "Analysis of Variance",
+    "section": "",
+    "text": "Hypothesis Statements:\n\nSame as the prior tests\n\nOur Test Statistic:\n\\[\n\\text{Test Statistic} = \\frac{(\\bar{x}_1 - \\bar{x}_2) - D_0}{\\sqrt{\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2}}}\n\\]\n\nStandard error changes since we need to test estimates of our two separate population variances separately \\(\\rightarrow\\) cannot “pool” them\n\nThe degrees of freedom on our t-test are a more complicated expression:\n\\[\nd.f. = \\frac{(\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2})^2}{\\frac{(\\frac{s_1^2}{n_1})^2}{n_1 - 1} + \\frac{(\\frac{s_2^2}{n_2})^2}{n_2 - 1}}\n\\]"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#confidence-interval-1",
+    "href": "notes/primer/anova/index.html#confidence-interval-1",
+    "title": "Analysis of Variance",
+    "section": "",
+    "text": "For different variances, we don’t use the pooled variance\n\\[\n(\\bar{x}_1 - \\bar{x}_2) \\pm t_{\\alpha/2}^* \\times \\sqrt{\\frac{s_1^2}{n_1} + \\frac{s_2^2}{n_2}}\n\\]\n\nStandard error changes using separate population variances"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#example---comparing-two-means",
+    "href": "notes/primer/anova/index.html#example---comparing-two-means",
+    "title": "Analysis of Variance",
+    "section": "",
+    "text": "A human resources manager of a large business firm is trying to determine if there exists gender bias in the pay scale of employees at the company. The manager assumes the variability of salaries between genders is different, but wants to test if makes have higher average salary than females. The manager samples 62 males and 77 females. The sample of males had an average salary of $87,547 with a s.d. of $5,910. The sample of females had an average salary of $78,289 with a s.d. of $6,276. Run a hypothesis test.\n\n\n\nCode\n# H_a: mu_1 &gt; mu_2 with mu_1 representing mean of males\n\nt &lt;- ((87547 - 78289) - 0) / sqrt(5910^2 / 62 + 6276^2 / 77)\nsprintf(\"Test statistic equals %.3f\", t)\n\n\n[1] \"Test statistic equals 8.930\"\n\n\nCode\ndf &lt;- (5910^2 / 62 + 6276^2 / 77)^2 / ((5910^2 / 62)^2 / 61 + (6276^2 / 77)^2 / 76)\nsprintf(\"Df: %d\", floor(df))\n\n\n[1] \"Df: 133\"\n\n\nCode\npt(t, df, lower.tail = FALSE)\n\n\n[1] 1.468658e-15"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#example---comparing-two-variances",
+    "href": "notes/primer/anova/index.html#example---comparing-two-variances",
+    "title": "Analysis of Variance",
+    "section": "2.1 Example - Comparing Two Variances",
+    "text": "2.1 Example - Comparing Two Variances\n\nA human resources manager of a large business firm is trying to determine if there exists gender bias in the pay scale of employees at the company. The manager has no assumption about the variability of salaries between genders, but wants to test if makes have higher average salary than females. The manager samples 62 males and 77 females. The sample of males had an average salary of $87,547 with a s.d. of $5,910. The sample of females had an average salary of $78,289 with a s.d. of $6,276. Run a hypothesis test.\nNeed to first test if variances are equal or not before running test of means\n\n\n\nCode\nf &lt;- 6276^2 / 5910^2\nsprintf(\"F Statistic: %.3f\", f)\n\n\n[1] \"F Statistic: 1.128\"\n\n\nCode\ndf1 &lt;- 76\ndf2 &lt;- 61\n\npf(f, df1, df2, lower.tail = FALSE)\n\n\n[1] 0.3147624\n\n\nAt a significance level of 0.05 we would not reject the null hypothesis that our variances are different."
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#example---sources-of-variation",
+    "href": "notes/primer/anova/index.html#example---sources-of-variation",
+    "title": "Analysis of Variance",
+    "section": "3.1 Example - Sources of Variation",
+    "text": "3.1 Example - Sources of Variation\n\nYou have SAT scores for both boys and girls from a local school\nYou believe that the boys and girls have the same avg. test score, but want to test otherwise\nOf the 39 females, 32 of them are part of the accelerated math and language arts program\nOf the 39 males, 11 of them are part of the accelerated math and language arts program\n\nMatched samples are samples selected such that each data value from one sample is related (or matched / paired) with a corresponding data value from a second sample\nIn the previous example, we would match boys and girls who were in the accelerated program and ones who were not.\nOur focus turns from individual values in the populations and to the values of the differences in the populations. All assumptions and calculations are done on the differences, not individual samples.\n\\[\nH_0: \\mu_d\n\\begin{cases}\n\\geq \\\\\n= \\\\\n\\leq\n\\end{cases}\n\\ \\ D_0\n\\]\n\\[\nH_a: \\mu_d\n\\begin{cases}\n&lt; \\\\\n\\neq \\\\\n&gt;\n\\end{cases}\n\\ \\ D_0\n\\]\n\nAssumptions for matched pairs hypothesis test are same as for regular hypothesis test for means\nLarge sample (\\(n &gt; 50\\)) of differences\nSmall samples with differences having Normal distribution\n\nHypothesis Statements:\n\\[\nH_0: \\mu_d\n\\begin{cases}\n\\geq \\\\\n= \\\\\n\\leq\n\\end{cases}\n\\ \\ D_0\n\\hspace{2cm}\nH_a: \\mu_d\n\\begin{cases}\ntest\n\\end{cases}\n\\]\nTest Statistic:\n\\[\nt = \\frac{\\bar{x}_d - D_0}{\\frac{s_d}{\\sqrt{n_d}}}\n\\]\n\\[ d.f. = n_d - 1 \\]"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#confidence-interval-2",
+    "href": "notes/primer/anova/index.html#confidence-interval-2",
+    "title": "Analysis of Variance",
+    "section": "3.2 Confidence Interval",
+    "text": "3.2 Confidence Interval\n\\[\n\\bar{x}_d \\pm t_{\\alpha/2}^* \\times \\frac{s_d}{\\sqrt{n_d}}\n\\]"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#example---paired-samples",
+    "href": "notes/primer/anova/index.html#example---paired-samples",
+    "title": "Analysis of Variance",
+    "section": "3.3 Example - Paired Samples",
+    "text": "3.3 Example - Paired Samples\n\nA human resources manager of a large business firm is trying to determine if there exists gender bias in the pay scale of employees at the company. The manager samples 51 pairs of male and female employees where the pair has the same job title and experience at the company. The average difference in salaries is $2,131 with a s.d. of differences of $7,898. Run a hypothesis test.\n\n\n\nCode\nt &lt;- (2131 - 0) / (7898 / sqrt(51))\nsprintf(\"Test statistic: %.3f\", t)\n\n\n[1] \"Test statistic: 1.927\"\n\n\nCode\ndf &lt;- 50\n\npt(t, df, lower.tail = FALSE)\n\n\n[1] 0.02984447\n\n\nAt a significant level of 0.05 we reject the null hypothesis that there is no gender bias in the pay scale of employees at the company."
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#confidence-interval-3",
+    "href": "notes/primer/anova/index.html#confidence-interval-3",
+    "title": "Analysis of Variance",
+    "section": "4.1 Confidence Interval",
+    "text": "4.1 Confidence Interval\n\\[\n(p_1 - p_2) \\pm z^* \\times \\sqrt{\\frac{p_1(1 - p_1)}{n_1} + \\frac{p_2(1 - p_2)}{n_2}}\n\\]"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#comprehensive-example",
+    "href": "notes/primer/anova/index.html#comprehensive-example",
+    "title": "Analysis of Variance",
+    "section": "4.2 Comprehensive Example",
+    "text": "4.2 Comprehensive Example\n\nA researcher at a large university on the west coast is interested in comparing some factors between upperclassmen (juniors and seniors) and underclassmen (freshmen and sophomores) in the undergraduate school. The researcher believes that more experience in college may help students perform better in the classroom. The researcher is interested in testing if the average GPA of upperclassmen is greater than the average GPA of underclassmen. The researcher sampled 89 underclassmen with an average GPA of 2.75 with a s.d. of 0.91 and 102 upperclassmen with an average GPA of 3.07 and a s.d. of 1.02.\n\n\n\nThe researcher did not use matched sampling. Do you agree with their decision?\n\n\nNo. There are other factors that can influence GPA like major that we could match on for equal comparison\n\n\nConduct a hypothesis test on the variances to see if they are equal.\n\n\n\\[\nH_0: \\frac{\\sigma_1^2}{\\sigma_2^2} \\leq 1\n\\hspace{2cm}\nH_a: \\frac{\\sigma_1^2}{\\sigma_2^2} &gt; 1\n\\]\n\n\nCode\nf &lt;- 1.02^2 / 0.91^2\nsprintf(\"F Statistic: %0.3f\", f)\n\n\n[1] \"F Statistic: 1.256\"\n\n\nCode\ndf1 &lt;- 101\ndf2 &lt;- 88\n\npf(f, df1, df2, lower.tail = FALSE)\n\n\n[1] 0.1367661\n\n\nBased on a significance level of 0.05 we do not reject the null hypothesis. We do not have enough evidence to say that the variances between the two populations is different.\n\n\nConduct the appropriate hypothesis test on the means to see if they are equal.\n\n\n\n\nCode\ns_p &lt;- sqrt(((101 * 1.02^2) + (88 * 0.91^2)) / (102 + 89 - 2))\nsprintf(\"Pooled std. dev: %0.3f\", s_p)\n\n\n[1] \"Pooled std. dev: 0.970\"\n\n\nCode\nt &lt;- ((3.07 - 2.75) - 0) / (s_p * sqrt(1 / 102 + 1 / 89))\nsprintf(\"Test Statistic: %0.3f\", t)\n\n\n[1] \"Test Statistic: 2.274\"\n\n\nCode\npt(t, 89 + 102 - 2, lower.tail = FALSE)\n\n\n[1] 0.01205843\n\n\nAt a significance level of 0.05 we reject our null hypothesis that more experience in college does not lead to higher GPA performance."
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#example-continued",
+    "href": "notes/primer/anova/index.html#example-continued",
+    "title": "Analysis of Variance",
+    "section": "4.3 Example Continued",
+    "text": "4.3 Example Continued\n\nSame researcher as before also believes that a higher proportion of upperclassmen live off campus compared to the proportion of underclassmen. While sampling the students in the previous sample, the researcher also asked whether the student lived off campus. Of the 89 underclassmen sampled, 27 lived off campus. Of the 102 upperclassmen sampled, 65 lived off campus.\n\n\nConstruct a 95% confidence interval for the difference between the proportion of upperclassmen living off campus to the proportion of underclassmen living off campus.\n\n\\[\nH_0: p_1 - p_2 \\leq 0 \\hspace{1cm} H_a: p_1 - p_2 &gt; 0\n\\]\n\n\nCode\np1 &lt;- 65 / 102\np2 &lt;- 27 / 89\nsprintf(\"Upper p: %0.3f, Under p: %0.3f\", p1, p2)\n\n\n[1] \"Upper p: 0.637, Under p: 0.303\"\n\n\nCode\np_mean &lt;- (102 * p1 + 89 * p2) / (102 + 89)\nsprintf(\"p_mean: %0.3f\", p_mean)\n\n\n[1] \"p_mean: 0.482\"\n\n\nCode\nz &lt;- ((p1 - p2) - 0) / sqrt(p_mean * (1 - p_mean) * (1 / 102 + 1 / 89))\nsprintf(\"Z Statistic: %0.3f\", z)\n\n\n[1] \"Z Statistic: 4.607\"\n\n\nCode\nz_crit &lt;- qnorm(0.05 / 2, lower.tail = FALSE)\nz_crit\n\n\n[1] 1.959964\n\n\nCode\nmargin &lt;- z_crit * sqrt(p1 * (1 - p1) / 102 + p2 * (1 - p2) / 89)\nmargin\n\n\n[1] 0.1335203\n\n\nCode\nsprintf(\"95 perc. CI: %0.3f plus-minus %0.3f\", p1 - p2, margin)\n\n\n[1] \"95 perc. CI: 0.334 plus-minus 0.134\"\n\n\n\nConduct the appropriate hypothesis test to test the researcher’s claim.\n\n\\[\nH_0: p_1 - p_2 \\leq 0 \\hspace{1cm} H_a: p_1 - p_2 &gt; 0\n\\]\n\n\nCode\npnorm(z, lower.tail = FALSE)\n\n\n[1] 2.044913e-06\n\n\nAt a significance level of 0.0005 we reject the null hypothesis that the proportion of upperclassmen living off campus is not greater than the proportion of underclassmen living off campus.\n\nCan you compare the confidence interval and the hypothesis test?\n\nNo as the hypothesis test is one-sided while the confidence interval is two-sided."
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#one-way-anova",
+    "href": "notes/primer/anova/index.html#one-way-anova",
+    "title": "Analysis of Variance",
+    "section": "5.1 One-Way ANOVA",
+    "text": "5.1 One-Way ANOVA\nSimplest form of ANOVA is the one-way model.\n\nIndependent samples are obtained from \\(k\\) levels (categories) of a single factor (explanatory variable), then testing whether the \\(k\\) levels have equal means.\nSimilar to regression analysis in that we have one categorical variable predicting continuous response\n\n\\[\nH_0: \\mu_1 = \\mu_2 = \\cdots = \\mu_k\n\\]\n\\[\nH_a: \\text{At least one mean different than another}\n\\]\n\n5.1.1 Assumptions\n\nNormally distributed categories\nEquality of variances between categories\nIndependence\n\nTest Statistic:\n\\[\nF = \\frac{s_{max}^2}{s_{min}^2}\n\\]\nThe p-value is calculated from Hartley-s F-max distribution which isn’t covered here.\n\n\n5.1.2 Sources of Variation\n\nWithin-Sample Variability\n\nVariability in response that exists within category of a variable\n\nWhat you categories cannot explain (like SSE)\n\n\nBetween-Sample Variability\n\nVariability in response that exists between categories of a variable\n\nWhat you categories can explain (like SSR)\n\n\n\n\n\n5.1.3 Sum of Squares Within\nWithin sample is variability that you cannot explain by just knowing which category your observation falls into\n\\[\nSSW = \\sum_{i=1}^k\\sum_{j=1}^{n_i} (x_{i,j} - \\bar{x}_i)^2\n\\]\n\n\n5.1.4 Sum of Squares Between\nBetween sample is variability that you can explain by just knowing which category your observation falls into\n\\[\nSSB = \\sum_{i=1}^k n_i(\\bar{x}_i - \\bar{\\bar{x}})^2\n\\]"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#partitioning-variability-in-anova",
+    "href": "notes/primer/anova/index.html#partitioning-variability-in-anova",
+    "title": "Analysis of Variance",
+    "section": "5.2 Partitioning Variability in ANOVA",
+    "text": "5.2 Partitioning Variability in ANOVA\n\n\n\n\nflowchart LR\nA(Total Variability) --&gt; B(SSR + SSE)\nB --&gt; C[Variability Between Groups]\nB --&gt; D[Variability Within Groups]"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#anova-f-test",
+    "href": "notes/primer/anova/index.html#anova-f-test",
+    "title": "Analysis of Variance",
+    "section": "5.3 ANOVA F-test",
+    "text": "5.3 ANOVA F-test\n\\[\n\\begin{align*}\nH_0&: \\mu_1 = \\mu_2 = \\cdots = \\mu_k \\\\\nH_a&: \\text{At least one mean different than another}\n\\end{align*}\n\\]\nTest follows an F-distribution and is calculated as\n\\[\nF = \\frac{(\\frac{SSB}{k - 1})}{(\\frac{SSW}{N - k})}\n\\]\n\n\\(k\\) categories would be \\(k - 1\\) variables in a regression model\n\\(N\\) is the total sample size across all categories"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#one-way-anova-table",
+    "href": "notes/primer/anova/index.html#one-way-anova-table",
+    "title": "Analysis of Variance",
+    "section": "5.4 One-Way ANOVA Table",
+    "text": "5.4 One-Way ANOVA Table\n\n\n\nOne-Way ANOVA Table"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#one-way-anova-example",
+    "href": "notes/primer/anova/index.html#one-way-anova-example",
+    "title": "Analysis of Variance",
+    "section": "5.5 One-Way ANOVA Example",
+    "text": "5.5 One-Way ANOVA Example\n\nA marketing analyst is interested in testing the effectiveness of 4 different commercials describing their company’s new product. The marketing analyst randomly assigns a commercial to each of 32 cities across the country and measures the average increase in sales of their new product at their stores. The marketing analyst wants to test if there is a difference in sales between the commercials.\n\n\n\nFill in the blanks on the ANOVA table.\n\n\n\n\n\nSource\nDF\nSS\nMS\nF-Value\nP-Value\n\n\n\n\nBetween\n3\n2.3236\n0.775\n22.794\n\n\n\nWithin\n28\n0.9587\n0.034\n\n\n\n\nTotal\n31\n3.2823\n\n\n\n\n\n\n\n\nCode\npf(22.794, 3, 28, lower.tail = FALSE)\n\n\n[1] 1.128339e-07"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#multiple-comparisons-problem",
+    "href": "notes/primer/anova/index.html#multiple-comparisons-problem",
+    "title": "Analysis of Variance",
+    "section": "6.1 Multiple Comparisons Problem",
+    "text": "6.1 Multiple Comparisons Problem\n\nYou have a test which makes an error 5% of the time when performed.\n\n\nWhat is the probability of making an error on your first test?\n\n5%\n\nWhat is the probability of making an error on your second test?\n\n5%\n\nWhat is the probability of making at least one error in two tests?\n\n9.75%\n\n\n\n6.1.1 Different Types of Error\nComparison-wise error rate\n\nError rate for each individual test or comparison\n\nExperiment-wise error rate\n\nError rate across all comparisons–proportion of experiments/comparisons in which at least one error occurs\n\nTests and confidence intervals usually control for comparison-wise, \\(\\alpha\\), but ideally want to control for experiment-wise."
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#multiple-comparison-methods",
+    "href": "notes/primer/anova/index.html#multiple-comparison-methods",
+    "title": "Analysis of Variance",
+    "section": "6.2 Multiple Comparison Methods",
+    "text": "6.2 Multiple Comparison Methods\n\n\n\n\n\n\n\n\nNumber of Groups Compared\nNumber of Comparisons\nExperimentwise Error Rate\n\n\n\n\n2\n1\n0.05\n\n\n3\n3\n0.14\n\n\n4\n6\n0.26\n\n\n5\n10\n0.40\n\n\n\n\n\\(EER \\leq 1 - (1 - \\alpha)^{nc}\\) where \\(nc\\) is the number of comparisons\n\n\n\n\n\nflowchart LR\nA(Control Comparisonwise Error Rate) --&gt; B(Pairwise t-tests)\nC(Control Experimentwise Error Rate) --&gt; D[Compare All Pairs Tukey]"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#tukeys-hsd-test",
+    "href": "notes/primer/anova/index.html#tukeys-hsd-test",
+    "title": "Analysis of Variance",
+    "section": "6.3 Tukey’s HSD Test",
+    "text": "6.3 Tukey’s HSD Test\nHSD represents the Honest Significant Difference or Critical Range\nWe use Tukey’s when we consider pairwise comparisons\n\nExperimentwise error rate is equal to \\(\\alpha\\) when all pairwise comparisons are considered\nExperimentwise error rate is less than \\(\\alpha\\) when fewer than all pairwise comparisons are considered\nReplaces margin of error calculation for a typical confidence interval for a difference in means with an adjusted margin of error\n\n\\[\n\\text{Critical Range (Margin of Error)} = q_a \\times \\sqrt{\\frac{MSW}{2} \\times (\\frac{1}{n_i} + \\frac{1}{n_j})}\n\\]\n\n\\(q_a\\) is from studentized range distribution"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#randomized-blocking",
+    "href": "notes/primer/anova/index.html#randomized-blocking",
+    "title": "Analysis of Variance",
+    "section": "7.1 Randomized Blocking",
+    "text": "7.1 Randomized Blocking\n\n7.1.1 Sources of Variation\nGenerally, comparing many population means works well in certain situations\nThere are some instances where blocking is used to control for sources of variation that might distort conclusions"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#example",
+    "href": "notes/primer/anova/index.html#example",
+    "title": "Analysis of Variance",
+    "section": "7.2 Example",
+    "text": "7.2 Example\n\nThe same marketing analyst as before is interested in testing the effectiveness of 4 different commercials describing their company’s new product. The marketing analyst randomly assigns a commercial to each of 32 cities across the country and measures the average increase in sales of their new product at their stores. The four commercial average sales were $1.2M for commercial A, $1.8M for B, $0.76M for C, and $1.3M for D. Where are the differences in sales?\n\n\nWhat if the new product is a warm coat and a majority of the cities seeing C were warm weather cities?\nThe same marketing analyst as before is interested in testing the effectiveness of 4 different commercials describing their company’s new product. Split (block) country into 8 regions. Show each commercial to one city in each region. Sample size still 32."
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#assumptions-2",
+    "href": "notes/primer/anova/index.html#assumptions-2",
+    "title": "Analysis of Variance",
+    "section": "7.3 Assumptions",
+    "text": "7.3 Assumptions\nSame as One-Way ANOVA:\n\nNormally distributed categories\nEquality of variances between categories\nIndependence\n\nBlocking can come from collection of data as well as the analysis of the data as a variable being added to the model.\nWhen a new variable is added, we get a new source of variation–sum of squares of blocking."
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#sum-of-squares-blocks",
+    "href": "notes/primer/anova/index.html#sum-of-squares-blocks",
+    "title": "Analysis of Variance",
+    "section": "7.4 Sum of Squares Blocks",
+    "text": "7.4 Sum of Squares Blocks\n\\[\nSSBL = \\sum_{j=1}^b k(\\bar{x}_j - \\bar{\\bar{x}})^2\n\\]\nThe sum of squares comes out of the error sum of squares and gets brought into the model–the SSW shrinks even more."
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#blocking-anova-table",
+    "href": "notes/primer/anova/index.html#blocking-anova-table",
+    "title": "Analysis of Variance",
+    "section": "7.5 Blocking ANOVA Table",
+    "text": "7.5 Blocking ANOVA Table\n\n\n\nBlocking ANOVA Table\n\n\n\nThe F-Value in the Blocking row is the F-test with \\(H_a\\) at least one block mean not equal"
+  },
+  {
+    "objectID": "notes/primer/anova/index.html#post-hoc-analysis-for-blocking",
+    "href": "notes/primer/anova/index.html#post-hoc-analysis-for-blocking",
+    "title": "Analysis of Variance",
+    "section": "7.6 Post-hoc Analysis for blocking",
+    "text": "7.6 Post-hoc Analysis for blocking\nTukey-Kramer ANOVA comparisons do not work for blocking.\nInstead, we have Fisher’s Least Significant Difference. Fisher’s LSD is a recalculation of the margin of error for the difference in means confidence interval just like Tukey’s critical range.\n\\[\nLSD = t^* \\times \\sqrt{MSW} \\times \\sqrt{\\frac{2}{b}}\n\\]"
   }
 ]
