@@ -1,0 +1,42 @@
+---
+title: "Communications: 06/26/2023"
+date: 06/26/2023
+---
+
+# Tips on Engaging Audience
+
+-   Make eye contact
+    -   If you're uncomfortable making eye contact, you can look at the hairline or some other area near the face
+-   Practicing natural gestures
+    -   You can practice holding something heavy while you're pointing in a presentation
+    -   If you fidget with your hands, press thumb into the joint of the middle finger
+-   Always make sure to find something interesting to you about your presentation--when you are excited, you can get the audience excited.
+
+Strong speakers are prepared, show enthusiasm and demonstrate knowledge.
+
+# Presentation Structure
+
+Start with the bottom line up front. You are not trying to craft a mystery. Start with the answer then use the presentation to prove the answer is correct.
+
+Be up front with the "why" of the analysis as well. For example, in TIPS the why will be what is the most important info we found in our analysis.
+
+## Slide Order
+```{mermaid}
+flowchart LR
+    A[Title Slide] --> B["BLUF (Bottom Line Up Front)"] --> C[Agenda]
+    C --> D[Section 1] --> G[Appendix]
+    C --> E[Section 2] --> G
+    C --> F[Questions] --> G
+```
+
+-   Use visual elements in the sections to highlight / call out specific details in graphs or tables
+-   Use a milestone bar to help the audience keep track of the overall location
+
+# Issues to Avoid
+
+These are issues that we typically encounter due to a lack of practice, lack of confidence, etc.
+
+-   Filler words
+    -   You can't say filler words if you're taking in breath
+-   Fidgeting
+-   Rushing

@@ -2,7 +2,6 @@
 title: "Confidence Intervals"
 date: 05/30/2023
 categories:
-    - primer
     - statistics
 ---
 
