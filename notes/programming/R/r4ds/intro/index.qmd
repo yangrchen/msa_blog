@@ -1,0 +1,69 @@
+---
+title: "r4ds: Introduction"
+date: 06/27/2023
+---
+
+::: {.callout-note}
+These notes are based on the second edition of the [R for Data Science](https://r4ds.hadley.nz/intro.html) book by Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund. 
+
+All quotes and examples are credited to the authors of this awesome book!
+:::
+
+# The Data Science Workflow
+
+```{mermaid}
+flowchart LR
+    A[Import] --> B[Tidy]
+    B --> C[Transform]
+    C --> D[Visualize]
+    D --> E[Model]
+    E --> C
+    E --> F[Communicate]
+    classDef empty width:0px,height:0px;
+```
+
+## Import
+
+Data comes from multiple sources:
+
+-   Files
+-   Databases
+-   Web APIs
+
+In the context of R, we are loading our data into a dataframe.
+
+## Tidy
+
+Store our data in a form that is consistent and allows us to focus on analyzing the problem rather than "fighting to get the data into the right form for different functions."
+
+## Transform
+
+If we have a problem we are trying to analyze, then we use our problem space to guide observations of interest or create new variables from existing variables that relate to our problem. 
+
+```{mermaid}
+flowchart LR
+    Tidying --- C[ ]:::empty
+    Transforming --- C
+    C --> Wrangling
+    classDef empty width:0px,height:0px;
+```
+
+## Visualization and Model
+
+We represent our data in graphs, charts, and other displays to help us find or resolve questions about our data.
+
+"Models are complementary tools to visualization". Models help us answer the questions we have.
+
+-   Every model makes assumptions and they cannot answer their own assumptions
+
+## Communication
+
+After the previous steps are at a satisfactory point, we have to communicate our results in a way that others can understand. This might mean in notebooks like this one or through presentations to a business client.
+
+# What We Won't Learn Here
+
+-   Modeling
+-   Big data (book uses in-memory datasets)
+-   Python, Julia, and other languages
+
+The book focuses around the use of R, the `tidyverse` package and numerous packages in the R ecosysytem.

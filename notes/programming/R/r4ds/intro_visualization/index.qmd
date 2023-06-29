@@ -1,0 +1,90 @@
+---
+title: "r4ds: Visualization Introduction"
+date: 06/27/2023
+---
+
+The book focuses on utilizing `ggplot2` to build out data visualizations. The underlying system of the package is the **grammar of graphics** which builds up visuals through a layered approach of defined components.
+
+Grammar of graphics has a layered hierarchy of components:
+
+-   **Data**
+-   **Aesthetics**
+-   **Scale**
+-   **Geometric Objects**
+-   **Statistics**
+-   **Facets**
+-   **Coordinate System**
+
+We load the `tidyverse` package to have `ggplot` available to us in our workspace.
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+# Dataset and colorblind color palette
+library(palmerpenguins)
+library(ggthemes)
+```
+
+# The Penguins Dataset
+
+> "Do penguins with longer flippers weigh more or less than penguins with shorter flippers? You probably already have an answer, but try to make your answer precise. What does the relationship between flipper length and body mass look like? Is it positive? Negative? Linear? Nonlinear? Does the relationship vary by the species of the penguin? How about by the island where the penguin lives? Let's create visualizations that we can use to answer these questions."
+
+## Terms
+
+-   **Variable** is quantity, quality, property that can be measured.
+-   **Value** is the state of variable when it is measured. Value may change from measurement to measurement.
+-   **Observations** are measurements made under similar conditions. Observations contain several values for different variables. Sometimes called a data point.
+-   **Tabular data** organizes values according to their variables and an observation. Considered *tidy* if every value is placed in its own cell, every variable in its own column, each observation on a row.
+
+Index | $x_1$ | $x_2$
+--: | --: | :--
+0 | 1 | Apple
+1 | 2 | Banana
+
+To view a dataframe / tibble:
+
+```{r}
+penguins
+```
+
+Use `glimpse` for a transposed view of the data. This function helps us view the different variables we have in our dataset.
+
+```{r}
+glimpse(penguins)
+```
+
+# ggplot Fundamentals
+
+## Initial ggplot
+
+Begin a plot by calling the `ggplot` function along with the data you have.
+
+```{r}
+ggplot(data = penguins)
+```
+
+The next layer in the hierarchy is **aesthetics**. We now add an additional layer that maps visual properties to our dataset variables. We can map `x` to flipper length and `y` to body mass.
+
+```{r}
+ggplot(penguins, mapping = aes(x = flipper_length_mm, y = body_mass_g))
+```
+
+Next layer in the hierarchy is what actually plots the data. We define a **geom** to initialize a geometric object to present data. A point geom is created using `geom_point`.
+
+```{r}
+ggplot(penguins, mapping = aes(x = flipper_length_mm, y = body_mass_g)) +
+    geom_point()
+```
+
+Relationship appears to be positive between flipper length and body mass from the plot!
+
+## Aesthetics and Layers
+
+We can assign a variable to different parameters in the `aes` function to have `ggplot` automatically assign unique values of an aesthetic to a unique level of the variable.
+
+```{r}
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+    geom_point()
+```

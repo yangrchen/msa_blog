@@ -1,0 +1,199 @@
+---
+title: Introduction to Statistical Inference
+date: 06/28/2023
+---
+
+Last time we talked about different statistical measures like mean and standard deviation. These are called **point estimates**.
+
+-   Want to learn about an entire population
+-   Take a representative sample and calculate sample statistics
+-   Sample statistics have som error as they are *estimates* of their population parameters
+
+There is *variability* among samples. However, we can have a margin of error for our estimate via the **Central Limit Theorem**
+
+::: {.callout-note}
+# Central Limit Theorem
+
+Distribution of sample means is approximately Normal, regardless of the population parameter's distribution given a large sample size.
+:::
+
+# Standard Error of the Mean
+
+**Standard error** measures the variability of our estimate. Compare to the sample standard deviation which is a measure of the **variability in your data**.
+
+-   Standard error is the variation on the statistic
+-   If you were to resample data and compute the new sample average many times, how much variability would you expect in the results?
+
+$$
+s_{\bar{x}} = \frac{s}{\sqrt{n}}
+$$
+
+-   As the sample size grows larger, our confidence in the standard error grows
+
+# Confidence Intervals
+
+When we create a confidence interval for the true population mean:
+
+$$
+\bar{x} \pm t \cdot \frac{s}{\sqrt{n}}
+$$
+
+-   $t$ is a quantile from the $t$ distribution
+-   $t$ changes as a result of the confidence level we select
+
+In other words, the t-value indicates the number of standard error from the mean for the margin of error.
+
+With a 95% confidence interval, we are 95% "confident" that the true population mean exists. Confidence is **not** probability. If we repeated our experiment 100 times then 95 times we will have captured the true value.
+
+# Hypothesis Testing
+
+A hypothesis test investigates if we can prove that the true population value is significantly different than an assumed value.
+
+## Procedure
+
+1.  Start with a null hypothesis $H_0$ about a parameter of interest. We assume $H_0$ is true.
+2.  Select an acceptable significance level $\alpha$ which represents the likelihood that you incorrectly reject $H_0$ (probability of Type I error)
+3.  Alternative hypothesis $H_a$ is the logical opposite. Note that alternative hypothesis is the "significantly different" statement--no equal signs should appear in alternative
+4. Collect data, compute statistic
+5. Determine the probability that you observed a statistic as extreme or more extreme as the one you did assuming $H_0$ is true $\rightarrow$ **p-value**
+6. If p-value $\leq \alpha$, reject $H_0$ and fail to reject otherwise
+
+# Simulation Study
+
+We simulate the flipping of a coin in R. With a fair coin and 100 flips you expect about 50 Heads.
+
+```{r}
+sample(c("Heads", "Tails"), 1)
+
+n <- 100
+outcomes <- sample(c("Heads", "Tails"), n, replace = T)
+
+sum(outcomes == "Heads")
+```
+
+With 10000 trials:
+
+```{r}
+library(ggplot2)
+
+trials <- 10000
+n <- 100
+set.seed(11)
+number_heads <- vector()
+
+for (i in 1:trials) {
+    outcomes <- sample(c("Heads", "Tails"), n, replace = T)
+    number_heads[i] <- sum(outcomes == "Heads")
+}
+
+df <- data.frame(number_heads)
+
+ggplot(df, aes(x = number_heads)) +
+    geom_density(color = "blue") +
+    labs(x = "Number of heads in 100 tosses")
+```
+
+# One-Sample t-tests
+
+Testing a mean against a hypothesized value. We first need to calculate the t-statistic:
+
+$$
+t = \frac{\bar{x} - \mu_0}{s_{\bar{x}}}
+$$
+
+-   $H_0$ is rejected when the t-value is more extreme than one would expect to happen by chance when $H_0$ is true
+
+## Example in R
+
+> We want to know if the true Sales Price is different then $178,000.
+>
+> The null hypothesis is $H_0$: $\mu = 178000$ and the alternative is $H_a$: $\mu \neq 178000$. $\alpha = 0.05$
+
+```{r}
+library(AmesHousing)
+
+ames <- make_ordinal_ames()
+
+t.test(ames$Sale_Price, mu = 178000)
+```
+
+Do not reject the null hypothesis as p-value $> \alpha$ 
+
+To conduct a directional t-test:
+
+```{r}
+t.test(ames$Sale_Price, mu = 178000, alternative = "greater")
+
+t.test(ames$Sale_Price, mu = 178000, alternative = "less")
+```
+
+# Two-Sample t-tests
+
+We are now testing the difference between two means.
+
+## Assumptions
+
+-   Independent observations
+-   Normally distributed data for each group
+-   Equal variances for each group
+    -   Tested formally with F-test to determine which t-test to use
+
+## F-Test for Equality of Variances
+
+::: {.text-center}
+$H_0: \sigma_1^2 = \sigma_2^2$
+
+$H_a: \sigma_1^2 \neq \sigma_2^2$
+
+$F = \frac{\max(s_1^2, s_2^2)}{\min(s_1^2, s_2^2)}$
+:::
+
+## Two-Sample t-test in R
+
+We first need to verify the normality condition:
+
+```{r}
+ggplot(ames, aes(sample = Sale_Price, color = Central_Air)) +
+    stat_qq() +
+    stat_qq_line()
+```
+
+Normality seems to fail with houses that have central air conditioning. However, for illustration we will still conduct the two-sample t-test.
+
+Note that in practice if normality fails then some groups consider not even conducting a t-test when variances are equal--just go straight to variances are not equal.
+
+```{r}
+var.test(Sale_Price ~ Central_Air, data = ames)
+```
+
+Reject $H_0$ based on the p-value so we conclude that the variances are **not** equal.
+
+```{r}
+t.test(Sale_Price ~ Central_Air, data = ames, var.equal = FALSE)
+```
+
+With a regular two-sample t-test we reject the null hypothesis that the means are equal.
+
+However, our normality assumption wasn't satisfied so we should use a nonparametric test that does not rely on normality.
+
+## Wilcoxon Rank
+
+The question we are answering with this test is, "Are the median sale prices of houses with and without central air the same?"
+
+```{r}
+wilcox.test(Sale_Price ~ Central_Air, data = ames)
+```
+
+### Interpretations of Wilcoxon
+
+Conditions | Interpretation of Significant Mann-Whiteney-Wilcoxon Test
+:-- | :--
+Group distributions are identical in shape, variance and symmetric | Difference in means
+Group distributions are identical in shape, variance, but not symmetric | Difference in medians
+Group distributions are not identical in shape, variance, and are not symmetric | Difference in location (distributional dominance)
+
+# Conclusions in Testing
+
+1.  Always test for normality (either formally or informally first)
+2.  Test for variance equality
+3.  Conduct two-sample t-test or nonparametric depending on the normality condition

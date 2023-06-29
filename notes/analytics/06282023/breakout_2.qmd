@@ -1,0 +1,48 @@
+
+```{r}
+library(tidyverse)
+covid <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/coviddata.csv")
+
+glimpse(covid)
+```
+
+1.  You’ve been asked to explore differences between rates of death from Covid in the east vs. the west. You download some data (covidPerCapita) from the CDC that has Covid death rates per capita (covidDeathsPerCapita) by zip code (zip). Not all zip codes are reporting, and even handling the data from those that do report is difficult so you select a random sample of zip codes in the east and the west.
+    -   Conduct a t-test for the difference of means in per capita deaths from Covid in the east 
+region vs the west region. Don’t forget to verify assumptions. Note anything of interest 
+to you, including the results of any tests performed, violations of assumptions, etc.
+
+Verifying normality:
+
+```{r}
+ggplot(covid, aes(sample = covidDeathsPerCapita, color = region)) +
+    stat_qq() +
+    stat_qq_line()
+```
+
+-   Both regions are approximately normally distributed for per capita deaths
+
+Testing for difference in variances:
+
+```{r}
+var.test(covidDeathsPerCapita ~ region, data = covid)$p.value
+```
+
+-   At a p-value of 0.174 we do not reject the null hypothesis that the variances are not significantly different
+-   We can proceed with a two-sample t-test with equal variances
+
+```{r}
+t.test(covidDeathsPerCapita ~ region, data = covid, var.equal = TRUE)
+```
+
+We have a very low p-value such that we reject the null hypothesis that our means are similar. We believe that the mean deaths are significantly different between the two regions.
+
+Although our tests from this sample allow us to conclude that the means are different, we have to be careful because our sample does not include all zip codes. Is our data balanced? Did we have issues with the way the data was sampled? 
+
+```{r}
+t.test(covidDeathsPerCapita ~ region, data = covid, var.equal = TRUE, alternative = "greater")
+```
+
+```{r}
+length(covid[covid$region == "West", ]) == length(covid[covid$region == "East", ])
+```
+

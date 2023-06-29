@@ -1,0 +1,89 @@
+```{r}
+library(tidyverse)
+library(UsingR)
+data(normtemp)
+glimpse(normtemp)
+?normtemp
+```
+
+1.  Revisit the NormTemp dataset from Lab 1, where we examined the observed 
+mean body temperature (temperature) in comparison to the well-known 
+“average” of 98.6
+
+
+```{r}
+t.test(normtemp$temperature, mu = 98.6)
+```
+
+-   The p-value is 2.411e-07
+-   The p-value is the probability that we observe our data given that the mean body temperature is 98.6
+-   Given our low p-value at a significance level of $\alpha = 0.05$ we reject our null hypothesis. We believe the actual mean is significantly different from 98.6
+-   The 95% confidence interval for temperature is [98.12200, 98.37646]
+
+```{r}
+females <- normtemp[normtemp$gender == 2, ]
+t.test(females$temperature, mu = 98.6)
+```
+
+-   Given our p-value $< \alpha$ our conclusion does not change
+
+```{r}
+ggplot(normtemp, aes(sample = temperature, color = gender)) +
+    stat_qq() +
+    stat_qq_line()
+```
+
+-   Approximately Normal
+
+```{r}
+var.test(temperature ~ gender, data = normtemp)
+```
+
+- We believe variances are equal
+
+```{r}
+t.test(temperature ~ gender, data = normtemp)
+```
+
+-   At a significance level of 0.05, we reject our null hypothesis that there is no difference in means between the two genders
+
+1.  The Airline dataset contains information regarding the number of international 
+airline travelers (variable air) across different months of the year from 
+1949-1960. We are interested in knowing if during this time period there was a
+significant difference between air travel in the Summer months of June,
+July, and August vs. the remainder of the year? Use a statistical 
+hypothesis test (alpha=0.05) to support your answer.
+
+```{r}
+data(AirPassengers)
+library(tseries)
+library(forecast)
+cycle(AirPassengers)
+```
+
+```{r}
+air1 = data.frame(AirPassengers)
+air2 = air1 |> mutate(summer = ifelse(cycle(AirPassengers) %in% 6:8, 1, 0))
+```
+
+```{r}
+ggplot(air2, aes(sample = AirPassengers, color = factor(summer))) +
+    stat_qq() +
+    stat_qq_line()
+```
+
+-   Normality not met. We will use a nonparametric test
+
+```{r}
+ggplot(air2, aes(x = AirPassengers, color = factor(summer))) +
+    geom_density()
+```
+
+-   After plotting the distributions of both groups, we can see a similar shape but not a similar enough variation between the two groups.
+-   When we are conducting the Wilcoxon test we can't necessarily claim anything about the mean or median but moreso about the distributional dominance
+
+```{r}
+wilcox.test(AirPassengers ~ summer, data = air2)
+```
+
+-   At a significance level of 0.05, we reject our null hypothesis that the true location shift is equal to 0

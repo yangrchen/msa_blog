@@ -1,0 +1,105 @@
+---
+title: Lab 1
+date: 06/27/2023
+---
+
+```{r}
+library(UsingR)
+library(ggplot2)
+data(normtemp)
+str(normtemp)
+```
+
+> 1. Use the `normtemp` dataset to answer the following:
+>
+> Determine the following statistics for the variable **temperature**
+
+```{r}
+summary(normtemp$temperature)
+```
+
+> Does **temperature** appear to be normally distributed?
+
+```{r}
+ggplot(normtemp, aes(sample = temperature)) +
+    stat_qq(col = "blue") +
+    stat_qq_line() +
+    labs(x = "theoretical", y = "observed")
+```
+
+Based on the QQ-Plot, temperature appears to be approximately Normal. However, we should be wary that the distribution is tending towards a platykurtic distribution
+
+> Create box plots for **temperature**. Are there any outliers? Display a reference line at 98.6.
+>
+> For horizontal line: `geom_hline(yintercept=98.6)`
+>
+> For vertical line: `geom_vline(xintercept=98.6)`
+
+```{r}
+ggplot(normtemp, aes(x = temperature)) +
+    geom_boxplot(outlier.color = "red") +
+    labs(x = "Temperature", title = "Box-Plot of Temperature") +
+    geom_vline(xintercept = 98.6, col = "blue")
+```
+
+Three observations appear to be outliers (colored in red) for temperature. After plotting the reference line at 98.6 degrees, we can visually see that the median is actually lower than 98.6.
+
+> 2. Using the `Ameshousing` dataset from our in-class examples, run some distributional analysis on **Sale_Price**, **Log(Sale_Price)**, and **Gr_Liv_Area**.
+>
+> Create histograms of these three variables.
+>
+> - Overlay a kernel density estimator of the variables.
+
+```{r}
+library(AmesHousing)
+
+ames <- make_ordinal_ames()
+```
+
+```{r}
+ggplot(ames, aes(x = Sale_Price)) +
+    geom_histogram(aes(y = after_stat(!!str2lang("density"))), fill = "pink", alpha = 0.4) +
+    geom_density() +
+    labs(x = "Sales Price (USD)", title = "Histogram of Housing Sales Price")
+
+ggplot(ames, aes(x = log(Sale_Price))) +
+    geom_histogram(aes(y = after_stat(!!str2lang("density"))), fill = "blue", alpha = 0.4) +
+    geom_density() +
+    labs(x = "Sales Price (USD)", title = "Histogram of Log(Sales Price)")
+
+ggplot(ames, aes(x = Gr_Liv_Area)) +
+    geom_histogram(aes(y = after_stat(!!str2lang("density"))), fill = "purple", alpha = 0.4) +
+    geom_density() +
+    labs(x = "Sales Price (USD)", title = "Histogram of Living Area")
+```
+
+> Create a QQ Plot for both **Sale_Price** and **Log(Sale_Price)**. Based on these exploratory procedures, which version of the price information would you say is closer to being normally distributed?
+
+```{r}
+ggplot(ames, aes(sample = Sale_Price)) +
+    stat_qq(col = "blue", shape = 8, size = 1) +
+    stat_qq_line() +
+    labs(x = "theoretical", y = "observed", title = "QQ-Plot of Sale Price")
+
+ggplot(ames, aes(sample = log(Sale_Price))) +
+    stat_qq(col = "blue", shape = 8, size = 1) +
+    stat_qq_line()
+labs(x = "theoretical", y = "observed", title = "QQ-Plot of Log(Sale Price)")
+```
+
+The **Log(Sale Price)** QQ-Plot shows a much closer similarity to a Normal distribution than just **Sale Price**.
+
+> 3. Using the `Ameshousing` dataset from our in-class examples, determine the following:
+>
+> What type of variables are each of these columns (**Nominal**, **Ordinal**, or **Continuous/Quantitative**)? Keep in mind that the way they are represented in the R dataset may not be appropriate, so you should make this determination using your *own judgement based on the data you are looking at*.
+
+```{r}
+library(tidyverse)
+
+glimpse(ames)
+```
+
+-   Overall_Qual is an ordinal variable as it represents categories that could be ordered based on the rated quality of the house
+-   Lot_Shape is an ordinal variable. It represents categories that could be ordered based on the rated lot shape. For example, Slightly_Irregular could be ordered after Irregular
+-   Heating_QC is an ordinal variable. It represents the categories of heating quality that could be ordered. For example, Excellent would represent a higher order than Good
+-   Lot_Area is a quantitative variable as it represents a continuous quantity of the area of the lot

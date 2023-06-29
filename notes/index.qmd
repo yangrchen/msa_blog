@@ -1,13 +1,24 @@
 ---
 title: "Notes"
-listing:
-  contents:
-    - "**/index.qmd"
-  sort: "date desc"
-  type: default
-  categories: true
-  sort-ui: false
-  filter-ui: false
+from: markdown+emoji
 page-layout: full
+author: ""
 title-block-banner: true
+number-sections: false
 ---
+
+# [Programming](programming/index.qmd) :snake:
+
+Notes on Python, R and fun little experiments using software!
+
+# [Analytics](analytics/index.qmd) :mag_right:
+
+Notes curated from my statistics and analytics courses taught by Dr. Aric LaBarr and Dr. Susan Simmons.
+
+# [Communication](communication/index.qmd) :speak_no_evil:
+
+All about professional and technical communication taught by Dr. Sarah Egan Warren!
+
+# [Primer](primer/index.qmd) :baby_chick:
+
+MSA Summer Primer 2023 Notes

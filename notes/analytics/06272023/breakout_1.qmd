@@ -1,0 +1,74 @@
+---
+title: Breakout 1
+date: 06/27/2023
+---
+
+# Loading the Data
+
+```{r}
+bike <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bike.csv")
+str(bike)
+
+table(bike$season)
+```
+
+# Plotting the Distribution
+
+```{r}
+library(ggplot2)
+ggplot(bike, aes(x = cnt)) +
+    geom_histogram(fill = "blue") +
+    labs(x = "Bike Rentals", title = "Histogram of Bike Rentals", y = "Frequency")
+```
+
+# Getting Summary Statistics
+
+```{r}
+summary(bike$cnt)
+sd(bike$cnt)
+quantile(bike$cnt, probs = c(0.10, 0.40, 0.80))
+```
+
+
+```{r}
+ggplot(bike, aes(x = cnt)) +
+    geom_histogram(fill = "red", binwidth = 50) +
+    labs(x = "Bike Rentals", title = "Histogram of Bike Rentals", y = "Frequency")
+
+ggplot(bike, aes(x = cnt)) +
+    geom_histogram(fill = "purple", binwidth = 100) +
+    labs(x = "Bike Rentals", title = "Histogram of Bike Rentals", y = "Frequency")
+
+ggplot(bike, aes(x = cnt)) +
+    geom_histogram(fill = "pink", binwidth = 250) +
+    labs(x = "Bike Rentals", title = "Histogram of Bike Rentals", y = "Frequency")
+
+```
+
+We can overlay a density estimator on our histogram:
+
+```{r}
+ggplot(bike, aes(x = cnt)) +
+    geom_histogram(aes(y = after_stat(!!str2lang("density"))), alpha = 0.2) +
+    geom_density() +
+    labs(x = "Bike Rentals", title = "Histogram of Bike Rentals")
+```
+
+Using a QQ-Plot we can also see that the distribution is right-skewed:
+
+```{r}
+ggplot(bike, aes(sample = cnt)) +
+    stat_qq(shape = 2) +
+    stat_qq_line()
+```
+
+# Associations
+
+```{r}
+ggplot(bike, aes(x = factor(season), y = cnt, fill = factor(season))) +
+    geom_boxplot() +
+    scale_x_discrete(labels = c("Spring", "Summer", "Fall", "Winter")) +
+    labs(x = "Season", y = "Bike Rentals", fill = "Season")
+```
+
+Spring seems to have the fewest number of bike rentals. There are anomalous observations for count within each season.

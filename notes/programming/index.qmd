@@ -1,0 +1,16 @@
+---
+title: "Programming"
+description: "Notes on Python, R and fun little experiments using software!"
+listing:
+  contents:
+    - "**/index.qmd"
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: false
+  filter-ui: false
+  field-display-names: 
+    name: "Name"
+page-layout: full
+title-block-banner: true
+---
