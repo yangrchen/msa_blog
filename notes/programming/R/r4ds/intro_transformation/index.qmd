@@ -1,0 +1,197 @@
+---
+title: Data Transformation Introduction
+date: 06/29/2023
+draft: true
+---
+
+Data transformation in R can be handled by the `dplyr` package. With data transformation, we may want to create new variables or summaries to answer questions with our data.
+
+```{r}
+library(nycflights13)
+library(tidyverse)
+```
+
+We use the `nycflights13` dataset which contains 336,776 flights that departed NYC in 2013.
+
+```{r}
+glimpse(flights)
+```
+
+# dplyr Basics
+
+With `dplyr` the first argument is always a data frame and the output is always a new data frame. We usually use the pipe `%>%` character to pass along the results of a previous function into a subsequent function.
+
+-   `x %>% f(y)` is equivalent to `f(x, y)`
+
+It's important to note that `dplyr` functions never modify their inputs. So we have to assign our results back to a variable to save them.
+
+```{r}
+flights %>%
+    filter(dest == "IAH") %>%
+    group_by(year, month, day) %>%
+    summarize(
+        arr_delay = mean(arr_delay, na.rm = TRUE)
+    )
+```
+
+We organize verbs into four groups:
+
+-   **Rows**
+-   **Columns**
+-   **Groups**
+-   **Tables**
+
+## Rows
+
+-   `filter`, filters down rows in order based on a condition
+-   `arrange`, changes the order of rows without change which are present
+
+### `filter`
+
+Filters based on values of the columns in the data frame.
+
+```{r}
+flights %>%
+    filter(dep_delay > 120)
+```
+
+Available operators include:
+
+-   `>`
+-   `>=`
+-   `<`
+-   `<=`
+-   `==`
+-   `!=`
+
+```{r}
+flights %>%
+    filter(dep_delay <= 120)
+```
+
+And we combine conditions with `&` to represent logical "and" or `|` to represent logical "or".
+
+```{r}
+flights %>%
+    filter(month == 1 & day == 1)
+
+flights %>%
+    filter(month == 1 | month == 6)
+```
+
+A shortcut for `|` and `==` is `%in%`:
+
+```{r}
+flights %>%
+    filter(month %in% c(1, 2))
+```
+
+### `arrange`
+
+Changes the orders of rows based on the value of columns. This is essentially sorting. Each additional column provided is used to break ties in the values of preceding columns.
+
+```{r}
+flights %>%
+    arrange(year, month, day, dep_time)
+
+flights %>%
+    arrange(desc(month))
+```
+
+### `distinct`
+
+Finds all unique rows in the data. We can supply column names to find distinct combination of some variables.
+
+```{r}
+flights %>%
+    distinct()
+
+flights %>%
+    distinct(origin, dest, .keep_all = TRUE)
+```
+
+We can use `count` to find number of occurrences instead.
+
+```{r}
+flights %>%
+    count(origin, dest, sort = TRUE)
+```
+
+### Exercises
+
+1.  In a single pipeline for each condition, find all flights that meet the condition:
+    -   Had an arrival delay of two or more hours
+    -   Flew to Houston (`IAH` or `HOU`)
+    -   Were operated by United, American, or Delta
+    -   Departed in summer (July, August, and September)
+    -   Arrived more than two hours late, but didn't leave late
+    -   Were delayed by at least an hour, but made up over 30 minutes in flight
+
+```{r}
+flights %>%
+    filter(arr_delay >= 2)
+
+flights %>%
+    filter(dest %in% c("IAH", "HOU"))
+
+flights %>%
+    filter(carrier %in% c("UA", "AA", "DL"))
+
+flights %>%
+    filter(month %in% c(7, 8, 9))
+
+flights %>%
+    filter(dep_delay <= 0 & arr_delay > 120)
+
+flights %>%
+    filter(dep_delay >= 60 & dep_delay - arr_delay == 0)
+```
+
+2.  Sort `flights` to find the flights with longest departure delays. Find the flights that left earliest in the morning.
+
+```{r}
+flights %>%
+    arrange(desc(dep_delay))
+
+flights %>%
+    arrange(dep_time)
+```
+
+3.  Sort `flights` to find the fastest flights.
+
+```{r}
+flights %>%
+    arrange(distance / air_time)
+```
+
+4.  Was there a flight on every day of 2013?
+
+```{r}
+flights %>%
+    distinct(month, day) %>%
+    nrow()
+```
+
+5.  Which flights traveled the farthest distance? Which traveled the least distance?
+
+```{r}
+flights %>%
+    arrange(desc(distance))
+
+flights %>%
+    arrange(distance)
+```
+
+6.  Does it matter what order you used `filter` and `arrange` if you're using both? Why/why not? Think about the results and how much work the functions would have to do.
+
+You should filter first to reduce the number of traversals a sort would have to do.
+
+## Columns
+
+-   `mutate`, creates new columns derived from existing columns
+-   `select`, changes which columns are present
+-   `rename`, changes names of columns
+-   `relocate, changes positions of columns
+
+### `mutate`
+

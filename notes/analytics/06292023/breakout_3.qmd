@@ -1,0 +1,56 @@
+```{r}
+library(tidyverse)
+bike <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bike.csv")
+glimpse(bike)
+```
+
+# 1
+
+```{r}
+bike_lm <- lm(cnt ~ weathersit, data = bike)
+
+ggplot(bike, aes(x = cnt, fill = factor(weathersit))) +
+    geom_density(alpha = 0.2, position = "identity") +
+    labs(x = "Number of riders")
+
+ggplot(bike, aes(y = cnt, x = factor(weathersit), fill = factor(weathersit))) +
+    geom_boxplot() +
+    labs(y = "Number of riders", x = "Weather Category") +
+    stat_summary(fun = mean, geom = "point", shape = 2, size = 3, color = "pink", fill = "red") +
+    scale_fill_brewer(palette = "Blues") +
+    coord_flip()
+
+kruskal.test(cnt ~ weathersit, data = bike)
+```
+
+# 2
+
+```{r}
+ggplot(bike, aes(x = cnt, fill = factor(season))) +
+    geom_density(alpha = 0.2, position = "identity") +
+    labs(x = "Number of riders")
+
+ggplot(bike, aes(y = cnt, x = factor(season), fill = factor(season))) +
+    geom_boxplot() +
+    labs(y = "Number of riders", x = "Weather Category") +
+    stat_summary(fun = mean, geom = "point", shape = 2, size = 3, color = "pink", fill = "red") +
+    scale_fill_brewer(palette = "Blues") +
+    coord_flip()
+
+kruskal.test(cnt ~ season, data = bike)
+```
+
+```{r}
+ggplot(bike, aes(x = cnt, fill = factor(holiday))) +
+    geom_density(alpha = 0.2, position = "identity") +
+    labs(x = "Number of riders")
+
+ggplot(bike, aes(y = cnt, x = factor(holiday), fill = factor(holiday))) +
+    geom_boxplot() +
+    labs(y = "Number of riders", x = "Weather Category") +
+    stat_summary(fun = mean, geom = "point", shape = 2, size = 3, color = "pink", fill = "red") +
+    scale_fill_brewer(palette = "Blues") +
+    coord_flip()
+
+kruskal.test(cnt ~ holiday, data = bike)
+```

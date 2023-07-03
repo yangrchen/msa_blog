@@ -1,0 +1,23 @@
+{
+    "folders": [
+        {
+            "name": "Notes",
+            "path": "notes"
+        },
+        {
+            "name": "Projects",
+            "path": "projects"
+        },
+        {
+            "name": "Blog",
+            "path": "blog"
+        },
+        {
+            "name": "Data",
+            "path": "data"
+        }
+    ],
+    "settings": {
+        "liveServer.settings.multiRootWorkspaceName": "Projects"
+    }
+}

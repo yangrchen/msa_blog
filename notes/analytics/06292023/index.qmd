@@ -1,0 +1,231 @@
+---
+title: Introduction to ANOVA and Regression
+date: 06/29/2023
+---
+
+# Linear Models
+
+The population model for our linear model is written as:
+
+$$
+y = \beta_0 + \beta_1x_1 + \cdots + \beta_kx_k + \varepsilon
+$$
+
+-   $\varepsilon$ is the random error
+-   All the modeled signal is the rest of the equation which is called the **deterministic component**
+-   $x_1, \cdots, x_k$ are the explanatory variables
+-   $y$ is the response variable
+
+Typically linear models are used in an explanatory model fashion--we are trying to answer how our explanatory variables are related to our response. We are not predicting the response.
+
+## Honest Model Assessment
+
+Before you look for any relationships, you should split into **training**, **validation** and **test** samples.
+
+Different rules of thumb for splits:
+
+-   Lots of data? 50-40-10 split
+-   Not so much data? 70-20-10 split
+-   Not enough data? Use Cross-Validation
+
+### The Overfitting Problem
+
+Models will capture nuances of the data on which they're built (training data)
+
+When these "patterns" do not hold up in validation or test, the model performance suffers. We call this **overfitting**.
+
+![Overfitting Example](images/overfitting.png)
+
+## Train-Test Split in R
+
+```{r train-test split}
+library(tidyverse)
+library(AmesHousing)
+
+ames <- make_ordinal_ames()
+set.seed(123)
+ames <- ames |> mutate(id = row_number())
+train <- ames |> sample_frac(0.7)
+test <- anti_join(ames, train, by = "id")
+
+dim(train)
+dim(test)
+```
+
+# Bivariate Exploratory Data Analysis
+
+An **association** is the expected value of one variable changes at different levels of the other variable.
+
+A **linear association** between two continuous can be inferred when the general shape of a scatter plot is similar to a straight line.
+
+One way to see associations with a continuous variable across our categorical variable is by using side-by-side boxplots or overlaid histograms:
+
+```{r boxplots}
+ggplot(train, aes(y = Sale_Price / 1000, x = Exter_Qual, fill = Exter_Qual)) +
+    geom_boxplot() +
+    labs(y = "Sales Price (Thousands $)", x = "Exterior Quality Category") +
+    stat_summary(fun = mean, geom = "point", shape = 20, size = 5, color = "red", fill = "red") +
+    scale_fill_brewer(palette = "Blues") +
+    coord_flip()
+```
+
+```{r overlaid-density}
+ggplot(ames, aes(x = Sale_Price / 1000, fill = Exter_Qual)) +
+    geom_density(alpha = 0.2, position = "identity") +
+    labs(x = "Sales Price (Thousands $)")
+```
+
+-   In the density plot, variance is different between groups and the Excellent quality seems to have a higher overall mean
+
+# One-Way ANOVA
+
+One-Way ANOVA is a test of relationship between categorical input and quantitative response.
+
+One-Way refers to only one factor (e.g. a group of quality ratings).
+
+We are comparing $k$ levels of our predictor variable and seeing if there are any statistically significant difference in their mean response.
+
+::: {.text-center}
+$H_0: F_1 = F_2 = F_3 = F_4$
+
+$H_a:$ Atleast one mean is different
+:::
+
+In the ANOVA model, instead of using *one-hot encoding* for our variables, we use reference coding where we drop one of the levels. The level dropped will be the **reference level**.
+
+Level | $x_a$ | $x_b$
+--- | --- | ---
+A | 1 | 0
+B | 0 | 1
+C | 0 | 0
+
+$$
+y = \beta_0 + \beta_Ax_A + \beta_Bx_B + \varepsilon
+$$
+
+-   $\beta_A$ is the difference between mean response in level A vs. level C
+-   There are three unique values possible for the predicted value--one for each level
+
+## Assumptions for ANOVA
+
+-   Observations are independent
+-   Each group is normally distributed
+    -   Or the *residuals* of the ANOVA model are normally distributed
+-   All groups have equal variances (homeskedasticity)
+    -   If true, use "pooled" variance
+    -   If false, use Welch's ANOVA
+
+### Assessing ANOVA Assumptions
+
+-   Good data collection designs help the independence assumption
+-   Informal plots (QQ-Plots) or formal tests can verify the normally distributed assumption
+-   Formal test of equal variances or viewing residual plot to assess homoskedasticity
+
+## ANOVA Hypothesis Test in R
+
+$H_0$ is the means of each level of `Exter-Qual` are equal. $H_a$ is at least one mean is different.
+
+```{r anova-hypothesis}
+ames_lm <- lm(Sale_Price ~ Exter_Qual, data = train)
+anova(ames_lm)
+```
+
+-   There appears to be a significant difference in mean sales price between the different levels of exterior quality.
+
+```{r making-preds}
+train$pred_anova <- predict(ames_lm, data = train)
+train$resid_anova <- resid(ames_lm, data = train)
+
+model_output = train |> select(Sale_Price, pred_anova, resid_anova)
+```
+
+And then to test assumptions:
+
+```{r testing-assumptions-1}
+par(mfrow = c(2, 2))
+plot(ames_lm)
+```
+
+To formally test our variance, we have **Levene's Test** which **requires normality of underlying data** and **Fligner's Test** which does **not require normality**.
+
+```{r levene-fligner}
+library(car)
+
+leveneTest(Sale_Price ~ Exter_Qual, data = train)
+
+fligner.test(Sale_Price ~ Exter_Qual, data = train)$p.value
+```
+
+# Welch's ANOVA
+
+We use Welch's ANOVA when the equal variances assumption fails. Similar to the two-sample t-test with unequal variances.
+
+```{r welch}
+oneway.test(Sale_Price ~ Exter_Qual, data = train, var.equal = FALSE)
+```
+
+# Kruskal-Wallis
+
+Kruskal-Wallis is a nonparametric test for more than two groups:
+
+Conditions | Interpretation of Significant Kruskal-Wallis Test
+:-- | :--
+Group distributions are identical in shape, variance, and symmetric | Difference in means
+Group distributions are identical in shape, variance, but not symmetric | Difference in medians
+Else | Difference in location (distributional dominance)
+
+## Kruskal-Wallis ANOVA in R
+
+```{r kruskal-wallis}
+kruskal.test(Sale_Price ~ Exter_Qual, data = train)
+```
+
+# ANOVA Analysis Plan Summmary
+
+$H_0:$ All means are equal.
+
+$H_a:$ At least one mean is different
+
+1.  Produce descriptive statistics
+2.  Verify assumptions
+    1.  Independence
+    2.  Normality
+    3.  Equal variance for all groups
+3.  Examine the p-value for overall F-test in the ANOVA table. If p-value $< \alpha$, reject $H_0$
+
+# ANOVA Post-Hoc Tests
+
+While the ANOVA F-Test tells us if at least one group mean is different, we need to understand which groups are different. 
+
+We will compare the groups pairwise to determine if they are different.
+
+```{mermaid}
+flowchart LR
+    A[Control Experimentwise Error Rate] --> B[All Pairwise Comparisons]
+    A --> C[Comparisons to a Control]
+    B --> D[Tukey]
+    C --> E[Dunnett]
+```
+
+## Tukey's Honest Significant Difference
+
+Appropriate for making *all* pairwise comparisons between groups.
+
+Experimentwise error rate is equal to $\alpha$ when *all* pairwise comparisons are made and less than $\alpha$ otherwise.
+
+```{r}
+ames_aov <- aov(Sale_Price ~ Exter_Qual, data = train)
+tukey.ames <- TukeyHSD(ames_aov)
+print(tukey.ames)
+```
+
+-   Conclusion is that all pairs are significantly different
+
+## Dunnett's Test for Control Comparison
+
+If you're not making all pairwise comparisons, Tukey's is overly conservative. 
+
+```{r}
+library(DescTools)
+DunnettTest(x = train$Sale_Price, g = train$Exter_Qual, control = "Typical")
+```

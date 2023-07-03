@@ -1,0 +1,128 @@
+# 1
+```{r}
+library(tidyverse)
+garlic <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/garlic.csv")
+glimpse(garlic)
+```
+
+# 2
+
+## a
+
+Verifying normality:
+
+```{r}
+garlic_lm <- lm(BulbWt ~ factor(Fertilizer), data = garlic)
+ggplot(garlic, aes(x = BulbWt, fill = factor(Fertilizer))) +
+    geom_density(alpha = 0.2, position = "identity") +
+    labs(x = "Bulb Weight")
+```
+
+-   Groups do not appear to be Normally distributed
+
+Verifying equal variance:
+
+```{r}
+fligner.test(BulbWt ~ factor(Fertilizer), data = garlic)$p.value
+```
+
+-   Through the Fligner test, we do not have enough evidence to claim that there are different variances
+
+```{r}
+kruskal.test(BulbWt ~ factor(Fertilizer), data = garlic)
+```
+
+-   Given the p-value, we believe that there is a significant difference in location. Values in one or more of the groups tend to be higher than others
+
+## b
+
+4 choose 2 so 6 tests
+
+## c
+
+```{r}
+1 - (1 - 0.05)^6
+```
+
+We solve this problem of experiment-wise error rate by using Tukey's Honest Significant Difference.
+
+## d
+
+```{r}
+garlic_aov <- aov(BulbWt ~ factor(Fertilizer), data = garlic)
+
+tukey_garlic <- TukeyHSD(garlic_aov)
+print(tukey_garlic)
+```
+
+-   Fertilizers 4 and 1 as well as Fertilizers 4 and 3 are statistically different from each other. Pairs 2-1, 3-1, 3-2, 4-2 are not statistically different.
+
+# 3
+
+```{r}
+bottle <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bottle.csv")
+glimpse(bottle)
+```
+
+Verifying assumption of normality:
+
+```{r}
+ggplot(bottle, aes(sample = Units, color = factor(Line))) +
+    stat_qq() +
+    stat_qq_line()
+```
+
+-   The groups are approximately Normal
+
+Verifying assumption of equal variances:
+
+```{r}
+library(car)
+leveneTest(Units ~ factor(Line), data = bottle)
+```
+
+-   There is no evidence to say that the variances between the lines are different
+
+```{r}
+bottle_lm <- lm(Units ~ factor(Line), data = bottle)
+
+anova(bottle_lm)
+```
+
+-   At least one of the lines has a significant difference in mean units produced
+
+```{r}
+TukeyHSD(aov(Units ~ factor(Line), data = bottle))
+```
+
+-   We can confirm that 3 seems to be performing worse than 1 or 2 as there are statistical differences between the pairs 
+
+# 4
+
+```{r}
+trials <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/trials.csv")
+glimpse(trials)
+```
+
+```{r}
+ggplot(trials, aes(sample = BPChange, color = Treatment)) +
+    stat_qq() +
+    stat_qq_line()
+```
+
+```{r}
+leveneTest(BPChange ~ factor(Treatment), data = trials)
+```
+
+-   Difference in variances
+
+```{r}
+oneway.test(BPChange ~ factor(Treatment), data = trials)
+```
+
+-   Difference in means is significant
+
+```{r}
+TukeyHSD(aov(BPChange ~ factor(Treatment), data = trials))
+```
+

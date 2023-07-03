@@ -1,0 +1,42 @@
+# 1
+
+```{python}
+import pandas as pd
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bike.csv")
+
+df.head()
+```
+
+```{python}
+np.corrcoef(df[['temp', 'atemp', 'hum', 'windspeed', 'cnt']])
+```
+
+```{python}
+ax = sns.pairplot(df[['temp', 'atemp', 'hum', 'windspeed', 'cnt']])
+
+plt.show()
+```
+
+-   Strong linear relationship between `temp` and `atemp`
+
+# 2
+
+Picking `atemp`
+
+```{python}
+slr = smf.ols('cnt ~ atemp', df).fit()
+slr.summary()
+slr.rsquared
+```
+
+-   `atemp` explains about 16% of the variability in `cnt`
+-   `atemp` has a coefficient of 423.1802. For every unit increase in `atemp` the `cnt` increases by 423.1802 all other variables held constant
+
+
+

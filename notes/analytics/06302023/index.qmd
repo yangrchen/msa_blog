@@ -1,0 +1,132 @@
+---
+title: Ordinary Least Squares Regression
+date: 06.30.2023
+---
+
+# Pearson's Correlation
+
+Pearson's correlation measures *linear* relationships.
+
+![Pearson's Correlation Scenarios](images/pearson.png)
+
+## Hypothesis Test for Correlation
+
+Parameter representing population correlation is $\rho$ and is estimated by $r$
+
+$H_0: \rho = 0$
+
+However, rejecting $H_0$ only means that $\rho$ is not exactly 0 so we need to see if the relationship is practically significant.
+
+Note that outliers affect correlation and correlation *does not* imply causation.
+
+## Test of Correlation in R
+
+```{r train-test split}
+library(tidyverse)
+library(AmesHousing)
+
+ames <- make_ordinal_ames()
+set.seed(123)
+ames <- ames |> mutate(id = row_number())
+train <- ames |> sample_frac(0.7)
+test <- anti_join(ames, train, by = "id")
+
+dim(train)
+dim(test)
+```
+
+```{r r-pearson}
+cor.test(train$Gr_Liv_Area, train$Sale_Price)
+```
+
+## Pearson in Python
+
+```{python python-pearson}
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+import pandas as pd
+import numpy as np
+
+data = pd.read_csv("data/AmesHousing.csv")
+
+train, test = train_test_split(data, test_size=0.3, random_state=123)
+```
+
+```{python}
+np.corrcoef(train['Gr Liv Area'], train['SalePrice'])
+
+np.corrcoef(train[['Year Built', 'Total Bsmt SF', '1st Flr SF', 'Gr Liv Area']], rowvar=False)
+```
+
+## Correlation Does NOT Imply Causation
+
+A strong correlation does not mean that a change in one variable causes a change in the other.
+
+# Simple Linear Regression
+
+$$
+y = \beta_0 + \beta_1x_i + e_i
+$$
+
+In SLR, correlation is not equal to slope. Two pairs of variables can have the same correlation coeff, but different linear relationships.
+
+-   $\beta_0$ is the intercept estimate
+-   $\beta_1$ is the slope estimate
+
+## Explained vs. Unexplained Variability
+
+We are trying to explain variation in the response variable. We can't explain all of it due to random, uncontrollable error but we can model it.
+
+![Variability Explained in SLR](images/variability.png)
+
+With linear regression, we are trying to minimize a **loss function** called **sum of squared errors**:
+
+$$
+SSE = \sum_{i=1}^{n} (y_i - \hat{y}_i) ^2
+$$
+
+-   This makes up the amount of unexplained variability in our model
+
+## The Baseline Model
+
+::: {.text-center}
+$H_0: \beta_1 = 0$
+
+$H_a: \beta_1 \neq 0$
+:::
+
+For SLR, the global F-Test, parameter t-test and the test of Pearson's correlation are all equivalent.
+
+When we can't reject the null hypothesis we are essentially saying that the independent variable doesn't explain any of the variability in the response.
+
+## Assumptions of Simple Linear Regression
+
+-   Linearity of the mean
+    -   As I change values in the independent variable, the line should go through the mean of the response linearly
+-   Errors are normally distributed
+-   Errors have equal variance (homoskedasticity)
+-   Errors are independent
+
+### Testing of Assumptions
+
+-   Normality can use a histogram, QQ-Plot or normality test
+-   Equal variances can use residuals versus predicted values
+-   Independence can look at residual plots for potential autocorrelation
+-   Linearity in the mean can be tested through a residual plot and finding that there is no pattern in residual plot
+
+```{r}
+slr <- lm(Sale_Price ~ Gr_Liv_Area, data = train)
+par(mfrow = c(2, 2))
+
+plot(slr)
+summary(slr)
+```
+
+```{python python-testing-assumptions}
+import statsmodels.formula.api as smf
+
+train = train.rename(columns={"Gr Liv Area": "Gr_Liv_Area"})
+model_slr = smf.ols("SalePrice ~ Gr_Liv_Area", data=train).fit()
+
+model_slr.pvalues
+```

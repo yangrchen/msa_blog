@@ -1,0 +1,229 @@
+---
+title: Getting to Know Your Classmates Data
+author: Carlos Castillo, Yang Chen, Nick Hicks, Manisha Kasam
+date: June 30, 2023
+---
+
+# Preparing and Loading Data
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(stringr)
+library(countrycode)
+library(ggthemes)
+
+# setwd("summer_r")
+classmates <- read.csv("data/Get_to_know_survey_2023.csv")
+glimpse(classmates)
+```
+
+# Birth_Month Column
+​
+```{r}
+classmates <- classmates %>%
+    rowwise() %>%
+    mutate(Birth_Month = str_split(Birth_Month_Year, ", ")[[1]][1])
+
+classmates %>%
+    select(Birth_Month)
+```
+
+# Birth_Year Column
+​
+```{r}
+classmates <- classmates %>%
+    rowwise() %>%
+    mutate(Birth_Year = str_split(Birth_Month_Year, ", ")[[1]][2])
+
+classmates %>%
+    select(Birth_Year)
+```
+
+# Standardizing Birth_Year and Birth_Month
+​
+```{r}
+classmates <- classmates %>%
+    mutate(Birth_Month = str_to_title(str_trim(Birth_Month))) %>%
+    mutate(Birth_Month = ifelse(Birth_Month %in% as.character(1:12), month.name[as.integer(Birth_Month)], Birth_Month))
+
+classmates <- classmates %>%
+    mutate_at(c("Birth_Year"), ~ na_if(., ""))
+
+classmates %>%
+    select(Birth_Month, Birth_Year)
+```
+
+# 5 Most Frequent Birth Months, 5 Least Frequent
+​
+```{r}
+classmates %>%
+    filter(!is.na(Birth_Month)) %>%
+    count(Birth_Month) %>%
+    arrange(desc(n)) %>%
+    head(n = 5)
+
+classmates %>%
+    filter(!is.na(Birth_Month)) %>%
+    count(Birth_Month) %>%
+    arrange(n) %>%
+    head(n = 5)
+```
+
+# 5 Most Frequent Birth Years, 5 Least Frequent
+
+```{r}
+classmates %>%
+    count(Birth_Year) %>%
+    arrange(desc(n)) %>%
+    head(n = 5)
+
+classmates %>%
+    count(Birth_Year) %>%
+    arrange(n) %>%
+    head(n = 5)
+```
+
+# Standardizing Country Column
+
+We are standardizing `Country` first. We decided that we would also be filtering out any US state with a non-US country combination.
+
+```{r}
+classmates <- classmates %>%
+    mutate_at(c("Country"), ~ na_if(., "")) %>%
+    mutate(Country = str_to_title(str_trim(Country))) %>%
+    mutate(Country = str_replace_all(Country, c("[Uu]\\.*s\\.*a*\\.*" = "United States", ".*United States*.*" = "United States"))) %>%
+    mutate(Country = ifelse(is.na(Country), "United States", Country)) %>%
+    mutate(Country = countrycode(Country, "country.name", "country.name"))
+
+classmates %>%
+    filter(!is.na(Country)) %>%
+    count(Country) %>%
+    arrange(desc(n)) %>%
+    head(n = 5)
+
+classmates %>%
+    filter(!is.na(Country)) %>%
+    count(Country) %>%
+    arrange(n) %>%
+    head(n = 5)
+```
+
+# Filtering Out Non-US States, Standardizing States
+
+```{r}
+classmates <- classmates %>%
+    mutate(State = str_trim(State)) %>%
+    mutate(State = case_when(
+        str_detect(Country, "United States", negate = TRUE) ~ NA_character_,
+        (str_to_upper(State) %in% state.abb) ~ state.name[match(State, state.abb)],
+        (str_to_title(State) %in% state.name) ~ State,
+        TRUE ~ NA_character_
+    )) %>%
+    mutate(State = str_to_title(State))
+
+classmates %>%
+    select(State)
+```
+
+# Five Most Frequent States, Five Least Frequent States
+
+```{r}
+classmates %>%
+    filter(!is.na(State)) %>%
+    count(State) %>%
+    arrange(desc(n)) %>%
+    head(n = 5)
+
+classmates %>%
+    filter(!is.na(State)) %>%
+    count(State) %>%
+    arrange(n) %>%
+    head(n = 5)
+```
+
+# Cleaning `How_Hear_About_Program` Column
+
+```{r}
+classmates <- classmates %>%
+    mutate(How_Hear_About_Program = str_trim(How_Hear_About_Program)) %>%
+    mutate(How_Hear_About_Program = paste(str_split(How_Hear_About_Program, " ")[[1]][-1], collapse = " "))
+
+classmates %>%
+    filter(!is.na(How_Hear_About_Program)) %>%
+    count(How_Hear_About_Program) %>%
+    arrange(desc(n)) %>%
+    head(n = 5)
+```
+
+# Wide to Long `Languages` Column
+
+```{r}
+classmates_copy <- data.frame(classmates)
+classmates <- classmates %>%
+    mutate(Languages = str_squish(Languages)) %>%
+    separate_longer_delim(Languages, ", ") %>%
+    mutate(Languages = str_replace_all(Languages, ",", ""))
+
+classmates
+
+languages_top_5 <- classmates %>%
+    filter(!is.na(Languages)) %>%
+    count(Languages) %>%
+    arrange(desc(n)) %>%
+    head(5)
+
+languages_top_5
+```
+
+# Extra Cleaning & Analyses
+
+## Top 5 Languages Visualized
+
+```{r}
+ggplot(languages_top_5, aes(x = reorder(Languages, desc(n)), y = n, fill = Languages)) +
+    geom_col() +
+    labs(x = "Languages", y = "Counts", title = "MSA Class of 2024: Top 5 Languages") +
+    theme_economist()
+```
+
+## Wide to Long `Hobbies` Column
+
+```{r}
+classmates <- classmates %>%
+    mutate(Hobbies = str_squish(Hobbies)) %>%
+    separate_longer_delim(Hobbies, ", ")
+
+classmates
+
+classmates_copy <- classmates_copy %>%
+    mutate(Hobbies = str_squish(Hobbies)) %>%
+    separate_longer_delim(Hobbies, ", ")
+
+hobbies_top_5 <- classmates_copy %>%
+    filter(!is.na(Hobbies)) %>%
+    count(Hobbies) %>%
+    arrange(desc(n)) %>%
+    head(n = 5)
+
+hobbies_top_5
+```
+
+## Top 5 Hobbies Visualized
+
+Note: Using copy of older `classmates` data frame since we don't want to "double-count" student hobbies after making the `language` column long. Maybe there's a better way to do this through grouping.
+
+```{r}
+ggplot(hobbies_top_5, aes(x = reorder(Hobbies, desc(n)), y = n, fill = Hobbies)) +
+    geom_col() +
+    labs(x = "Hobbies", y = "Counts", title = "MSA Class of 2024: Top 5 Hobbies") +
+    theme_economist()
+```
+
+## Standardizing Birth_Month_Year
+```{r}
+classmates <- classmates %>%
+    mutate(Birth_Month_Year = paste(Birth_Month, Birth_Year, sep = ", "))
+
+classmates %>%
+    select(Birth_Month_Year)
+```

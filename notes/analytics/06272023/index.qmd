@@ -1,6 +1,7 @@
 ---
 title: Exploratory Data Analysis
 date: 06/27/2023
+date-modified: 07/02/2023
 ---
 
 # What kind of variables do you have?
@@ -43,6 +44,47 @@ Small | Medium | Large
 1 | 0 | 0
 0 | 1 | 0
 0 | 0 | 1
+
+The table shows an example of **one-hot encoding**. We can achieve this in R using the `onehot` package:
+
+```{r}
+library(onehot)
+
+set.seed(41)
+dat <- data.frame(
+    y = c(rnorm(10, 2), rnorm(10, 1), rnorm(10, 0)),
+    x1 = factor(rep(c("A", "B", "C"), each = 10)),
+    x2 = factor(rep(c("Z", "X", "Y", "W", "V", "U"), each = 5))
+)
+
+encoder <- onehot(dat)
+dummies <- predict(encoder, dat)
+head(dummies)
+```
+
+And in Python:
+
+```{python}
+import numpy as np
+from numpy import random
+import pandas as pd
+
+x1 = np.repeat(["A", "B", "C"], 10)
+x2 = np.repeat(["Z", "X", "Y", "W", "V", "U"], 5)
+
+random.seed(41)
+y = np.concatenate([random.normal(2.0, 1.0, 10), random.normal(1.0, 1.0, 10), random.normal(0.0, 1.0, 10)])
+array = np.array([x1, x2, y])
+array2 = np.transpose(array)
+
+df = pd.DataFrame(data = array2, columns = ["x1", "x2", "y"])
+df.head()
+```
+
+```{python}
+one_hot_encoded_data = pd.get_dummies(df, columns = ['x1', 'x2'])
+one_hot_encoded_data.head()
+```
 
 The levels are given values if treated quantitatively:
 
@@ -179,6 +221,7 @@ Each bar in the histogram represents a *group* of values (**bin**).
 
 The height of the bar represents the frequency of percent of values in the bin. You can specify the number of width of the bins as desired.
 
+#### R Code
 ```{r}
 library(ggplot2)
 
@@ -186,6 +229,32 @@ ggplot(ames, aes(x = Sale_Price / 1000)) +
     geom_histogram(mapping = aes(y = after_stat(density)), alpha = 0.5) +
     geom_density(alpha = 0.2) +
     labs(x = "Sales Price (Thousands $)")
+```
+
+#### Python Code
+
+Note this is a different Ames Housing dataset.
+
+```{python}
+import seaborn as sns
+from pathlib import Path
+import matplotlib.pyplot as plt
+
+ames_py = pd.read_csv("../../../data/ames.csv")
+ax = sns.histplot(x = ames_py['SalePrice'] / 1000, kde = True, data = ames_py, color = "blue")
+ax.set(
+    xlabel = 'Sales Price (Thousands $)',
+    ylabel = 'Frequency',
+    title = 'Histogram of Sales Price in Thousands of Dollars'
+)
+plt.show()
+```
+
+```{python}
+ax = sns.displot(ames_py, x = ames_py['SalePrice'] / 1000, kde=True)
+ax.set(
+    xlabel = 'Sales Price (Thousands $)',
+    ylabel = 'Frequency')
 ```
 
 The distribution is right-skewed so the mean is greater than the median housing price.
@@ -203,6 +272,8 @@ If the points follow the line diagonal line, the distribution is Normal.
 -   Quadratic patterns indicate problems with skew
 -   Cubic patterns indicate problems with kurtosis
 
+#### R Code
+
 ```{r}
 ggplot(ames, aes(sample = Sale_Price / 1000)) +
     stat_qq() +
@@ -210,9 +281,19 @@ ggplot(ames, aes(sample = Sale_Price / 1000)) +
     labs(x = "theoretical", y = "observed")
 ```
 
+#### Python Code
+
+```{python}
+import statsmodels.api as sma
+
+sma.qqplot(ames_py['SalePrice'] / 1000, line='45', fit = True)
+```
+
 ### Box Plots
 
 ![Box Plot](images/box-plot.png)
+
+#### R Code
 
 ```{r}
 ggplot(ames, aes(y = Sale_Price / 1000, x = Central_Air, fill = Central_Air)) +
@@ -221,6 +302,21 @@ ggplot(ames, aes(y = Sale_Price / 1000, x = Central_Air, fill = Central_Air)) +
     scale_fill_brewer(palette = "Accent") +
     theme_classic() +
     coord_flip()
+```
+
+#### Python Code
+
+```{python}
+ax = sns.boxplot(ames_py, x = ames_py['SalePrice'] / 1000)
+ax.set(
+    xlabel='Sales Price (Thousands $)',
+    title='Boxplot of Sales Price in Thousands of Dollars')
+plt.show()
+```
+
+```{python}
+ax = sns.catplot(ames_py, x='CentralAir', y='SalePrice', kind='box')
+plt.show()
 ```
 
 ## Defining Anomalous Observations

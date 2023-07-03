@@ -1,0 +1,87 @@
+# 1
+
+```{r}
+library(AppliedPredictiveModeling)
+data(FuelEconomy)
+```
+
+```{r}
+cor(cars2010[, c("EngDispl", "NumCyl", "ExhaustValvesPerCyl", "VarValveTiming", "FE")])
+pairs(cars2010[, c("EngDispl", "NumCyl", "ExhaustValvesPerCyl", "VarValveTiming", "FE")])
+engdispl_lm <- lm(FE ~ EngDispl, data = cars2010)
+par(nfrow = c(2, 2))
+plot(engdispl_lm)
+summary(engdispl_lm)
+```
+
+-   Highest correlation with `FE` is `EnglDispl`
+
+```{r}
+cor.test(cars2010$FE, cars2010$EngDispl)
+```
+
+-   P-value is significant at a 0.05 level and we have evidence that the correlation coefficient is not equal to 0
+
+```{r}
+cor(cars2010[, c("EngDispl", "NumCyl", "ExhaustValvesPerCyl", "VarValveTiming")])
+```
+
+-   `EnglDispl` and `NumCyl` have a large correlation between one another
+
+```{r}
+slr <- lm(FE ~ EngDispl, cars2010)
+summary(slr)$r.squared
+```
+
+-   F-statistic is 1803 with a p-value of 2.2e-16. Overall model is significant
+-   $y = 50.5632 - 4.5209x_1$ 
+-   $R^2$ is 0.620 which means that 62% of the variability in `FE` can be explained by `EngDispl` alone
+
+# 2
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+icecream <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/icecream.csv", sep = " ")
+glimpse(icecream)
+```
+
+```{r}
+sales_slr <- lm(Sales ~ Temperature, icecream)
+par(mfrow = c(2, 2))
+plot(sales_slr)
+
+ggplot(icecream, aes(x = Temperature, y = Sales)) +
+    geom_point() +
+    stat_smooth(method = "lm")
+
+summary(sales_slr)
+```
+
+-   Residuals seem to be Normally distributed from the QQ-Plot
+-   Error variance is constant and does not show a pattern
+-   Linearity of the mean
+-   Overall F-test is significant so `Temperature` seems to be significant in explaining `Sales`
+-   Parameter estimate for `Temperature` is 1.0889
+
+# 3
+
+```{r}
+minntemp <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/minntemp.csv", sep = " ")
+glimpse(minntemp)
+```
+
+```{r}
+temp_slr <- lm(Temp ~ Time, minntemp)
+par(mfrow = c(2, 2))
+plot(temp_slr)
+ggplot(minntemp, aes(x = Time, y = Temp)) +
+    geom_point() +
+    stat_smooth(method = "lm")
+summary(temp_slr)
+```
+
+-   No linearity of the mean, seems quadratic
+-   No constant variance
+-   Normally distributed errors
+-   No statistical evidence that `time` is related to `temperature` at a confidence level of 0.05
