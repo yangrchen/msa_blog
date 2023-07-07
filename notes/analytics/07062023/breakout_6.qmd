@@ -6,6 +6,7 @@ date: 07/06/2023
 # 1
 
 ```{r}
+library(tidyverse)
 bike <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bike.csv")
 
 set.seed(123)
