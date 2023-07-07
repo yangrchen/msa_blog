@@ -226,3 +226,28 @@ classmates <- classmates %>%
 classmates %>%
     select(Birth_Month_Year)
 ```
+
+## Student Countries Heatmap
+
+```{r warning=FALSE, message=FALSE}
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+selected_countries <- classmates %>%
+    select(Country) %>%
+    distinct(Country) %>%
+    arrange(Country)
+world_data <- ne_countries(scale = "medium", returnclass = "sf")
+selected_countries_data <- world_data %>%
+    inner_join(selected_countries, by = c("name" = "Country"))
+
+ggplot() +
+    geom_sf(data = world_data, color = "grey50", fill = "lightblue") +
+    geom_sf(data = selected_countries_data, fill = "red", alpha = 0.7) +
+    labs(
+        title = "Countries of Origin",
+        subtitle = "MSA 2024",
+        caption = "Library: Natural Earth"
+    ) +
+    theme_minimal()
+```

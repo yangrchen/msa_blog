@@ -1,0 +1,95 @@
+---
+title: Lab 5
+date: 07/03/2023
+---
+
+```{python}
+import pandas as pd
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+
+drugdose = pd.read_csv('https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/drug.csv')
+
+drugdose.T.head()
+```
+
+# 1
+
+## a
+
+```{python}
+ax = sns.catplot(
+    drugdose, kind="bar",
+    x="DrugDose", y="BloodP", hue="Disease",
+    errorbar=None, palette="dark", alpha=.6, height=6
+)
+```
+
+-   There seems to be a significant difference in blood pressure for the 100mg drug dose with disease B as well as the 200mg drug dose with disease B
+
+## b
+
+```{python}
+drug_lm = smf.ols('BloodP ~ C(DrugDose) * C(Disease)', drugdose).fit()
+
+sm.stats.anova_lm(drug_lm, typ=2)
+```
+
+-   Interaction between `DrugDose` and `Disease` seems to be significant in explaining `BloodP`
+
+## c
+
+```{python}
+unique_disease = np.sort(drugdose['Disease'].unique())
+
+for disease in unique_disease:
+    sliced_data = smf.ols('BloodP ~ C(DrugDose)', drugdose[drugdose['Disease'] == disease]).fit()
+    print(f'\nDisease: {disease}')
+    print(sm.stats.anova_lm(sliced_data)['PR(>F)'])
+```
+
+-   For diseases A and B there seems to be significant differences in drug dose on blood pressure. Disease C does not seem to have a significant difference in drug dose on blood pressure.
+
+# 2
+
+```{python}
+disks = pd.read_csv('https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/disks.csv')
+
+disks.T.head()
+```
+
+## a
+
+```{python}
+disks_lm = smf.ols('Time ~ C(Technician) * C(Brand)', disks).fit()
+
+print(disks_lm.summary())
+sm.stats.anova_lm(disks_lm, typ=2)
+```
+
+-   At a significant level of $\alpha = 0.05$, the overall F-test is significant in our model
+-   Similarly, the interaction is also significant
+
+## b
+
+Since our interaction is significant, we no longer care about the significance of our main effects. With model hierarchy, we keep the main effects in our model as well
+
+## c
+
+```{python}
+import statsmodels.stats.multicomp as mc
+
+unique_brands = np.sort(disks['Brand'].unique())
+
+for b in unique_brands:
+    sliced_data = disks[disks['Brand'] == b]
+    sliced_ols = smf.ols('Time ~ C(Technician)', sliced_data).fit()
+    print(f'\nBrand: {b}')
+    print(mc.MultiComparison(sliced_data['Time'], sliced_data['Technician']).tukeyhsd(alpha=0.01))
+    print(sm.stats.anova_lm(sliced_ols))
+```
+
+-   There are differences between different technicians for each brand of disk drive

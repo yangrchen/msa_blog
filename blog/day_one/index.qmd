@@ -1,4 +1,0 @@
----
-title: Day One at the Institute
-draft: true
----

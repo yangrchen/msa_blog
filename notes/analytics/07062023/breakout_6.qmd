@@ -1,0 +1,41 @@
+---
+title: Breakout 6
+date: 07/06/2023
+---
+
+# 1
+
+```{r}
+bike <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bike.csv")
+
+set.seed(123)
+bike <- bike %>% mutate(id = row_number())
+train <- bike %>% sample_frac(0.7)
+test <- anti_join(bike, train, by = "id")
+dim(train)
+dim(test)
+```
+
+# 2
+
+```{r}
+bike_lm <- lm(cnt ~ temp + hum + windspeed, train)
+summary(bike_lm)
+```
+
+-   $R_a^2 is 0.2487$
+-   The variables `temp`, `hum` are significant at the 0.01 level
+
+# 3
+
+```{r}
+bike_lm2 <- lm(cnt ~ atemp + hum + windspeed, train)
+summary(bike_lm2)
+```
+
+-   $R_a^2$ is 0.25
+-   `atemp`, `hum`, and `windspeed` are all significant at the 0.01 level
+
+# 4
+
+Our second model with `atemp` has a higher $R_a^2$ value.

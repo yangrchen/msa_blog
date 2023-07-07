@@ -1,0 +1,209 @@
+---
+title: Multiple Linear Regression
+date: 07/06/2023
+editor:
+    render-on-save: false
+---
+
+Models with more than one predictor variable are called **multiple regression models**.
+
+$$
+y = \beta_0 + \beta_1x_1 + \beta_2x_2 + \cdots + \beta_kx_k + \varepsilon
+$$
+
+-   Estimate $\hat{\beta}_j$ is the predicted average change in $y$ with a one unit in crease in $x_j$ given all other variables are held constant.
+
+We are still trying to minimize the sum of squared errors:
+
+$$
+SSE = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+$$
+
+Linear in MLR refers to the linear combination of variables in the model--not how they're visualized in multiple dimensions.
+
+A model like $y = \beta_0 + \beta_1x_1 + \beta_1x_1^2$ is still a linear regression!
+
+# Global F-Test
+
+In SLR, we could use a single t-test to determine model utility. In MLR, we have the Global F-Test to determine if an overall model is useful for predicting $y$ overall.
+
+::: {.text-center}
+$H_0: \beta_1 = \beta_2 = \cdots = \beta_k = 0$
+
+$H_a:$ At least one variable is useful in predicting the target
+:::
+
+The F-statistic is calculated as:
+
+$$
+F = \frac{(\frac{SSR}{k})}{(\frac{SSE}{n - k - 1})}
+$$
+
+-   $\frac{SSR}{k}$ is the average amount of variation each variable explains
+-   $\frac{SSE}{n - k - 1}$ is the average amount of variation left per data point
+
+When it comes to comparing which variable is more important. You should **not** look at the parameter estimates. Instead, compare the t-values which do not change based on the scale of the variable. 
+
+## R Code
+
+```{r}
+library(tidyverse)
+library(AmesHousing)
+library(reticulate)
+
+use_condaenv("blues_clues")
+
+ames <- make_ordinal_ames()
+set.seed(123)
+ames <- ames |> mutate(id = row_number())
+train <- ames |> sample_frac(0.7)
+test <- anti_join(ames, train, by = "id")
+
+ames_lm2 <- lm(Sale_Price ~ Gr_Liv_Area + TotRms_AbvGrd, train)
+summary(ames_lm2)
+```
+
+## Python Code
+
+```{python}
+import pandas as pd
+import statsmodels.formula.api as smf
+import statsmodels.api as sm
+from sklearn.model_selection import train_test_split
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+ames = pd.read_csv("../../../data/ames.csv")
+train, test = train_test_split(ames, random_state=123)
+train.head()
+```
+
+```{python}
+ames_lm2 = smf.ols("SalePrice ~ GrLivArea + TotRmsAbvGrd", train).fit()
+
+ames_lm2.f_pvalue
+```
+
+# Evaluating MLR
+
+## Assumptions
+
+-   The mean of $y$ is accurately modeled by a linear function of the independent variables
+-   $\varepsilon$ is Normal with a mean of 0
+-   $\varepsilon$ has a constant variance
+-   The errors are independent
+-   No perfect collinearity
+
+## Multicollinearity
+
+**Multicollinearity** is when predictor variables are correlated with one another.
+
+No **perfect** collinearity means no predictor variables as a perfect linear combination of each other. In practice, we only care when collinearity has a significant impact.
+
+### R Code
+
+```{r}
+par(mfrow = c(2, 2))
+plot(ames_lm2)
+```
+
+### Python Code
+
+```{python}
+train["resid"] = ames_lm2.resid
+train["predict"] = ames_lm2.predict()
+ax = sns.relplot(train, x="predict", y="resid")
+plt.show()
+```
+
+```{python}
+sm.qqplot(train["resid"])
+```
+
+# MLR vs. SLR
+
+We can investigate more independent variables simultaneously. However, there is increased complexity which makes it difficult to determine which model is "best".
+
+# What is MLR Good At?
+
+## Predict
+
+Develop a model to predict future values of a response variable based on its relationship with other predictor variables.
+
+The parameters in the model and their statistical significance are secondary importance. Focus is on producing a model that can predict future values well.
+
+We should take care to be aware of and address overfitting a model in this case.
+
+## Explain
+
+To develop an understanding of relationships between the response and predictor.
+
+The statistical significance of coefficients as well as the magnitudes and signs of coefficients are important.
+
+# The $R^2$ Problem
+
+In MLR, the addition of any variable will make the $R^2$ value increase regardless of the actual strength of the variable.
+
+```{r}
+mlr_random <- lm(Sale_Price ~ Gr_Liv_Area + TotRms_AbvGrd + rnorm(length(Sale_Price), 0, 1), train)
+
+summary(mlr_random)
+```
+
+-   $R^2$ increased despite the insignificant variable!
+
+## Adjusted Coefficient of Determination
+
+$R_a^2$ penalizes a model for adding variables that do not provide useful information.
+
+$$
+\begin{align*}
+R_a^2 &= 1 - [(\frac{n - 1}{n - k - 1})(\frac{SSE}{TSS})] \\
+&= 1 - [(1 - R^2)(\frac{n - 1}{n - k - 1})]
+\end{align*}
+$$
+
+-   $R_a^2 \leq R^2$
+
+Although better at determining utility of model, we lose the interpretation as the coefficient can be negative.
+
+# Categorical Predictors
+
+## Dummy Encoding
+
+We can encode categorical variables with **dummy encoding**.
+
+$$
+x_1 = 
+\begin{cases}
+1 \hspace{0.2cm} \text{if Y}\\
+0 \hspace{0.2cm} \text{if N}
+\end{cases}
+$$
+
+-   $\beta_1$ will represent the average difference between category Y and N
+
+```{python}
+import numpy as np
+
+simple_array = np.array([0, 2, 1])
+encoded_array = np.zeros((simple_array.size, simple_array.max() + 1), dtype=int)
+
+encoded_array[np.arange(simple_array.size), simple_array] = 1
+
+encoded_array
+```
+
+## Effects Encoding
+
+$$
+x_1 =
+\begin{cases}
+1 \hspace{0.2cm} \text{if Y} \\
+-1 \hspace{0.2cm} \text{if N}
+\end{cases}
+$$
+
+-   $\beta_1$ is the average difference between category Y and the overall average of categories Y and N
+
+

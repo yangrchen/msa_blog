@@ -1,0 +1,138 @@
+---
+title: More Complex ANOVA & Regression
+date: 07/03/2023
+---
+
+# n-Way ANOVA
+
+```{mermaid}
+flowchart LR
+    A[Continuous Target Variable] --> B[One-Way ANOVA]
+    A --> C[Two-Way ANOVA]
+    A --> D[n-Way ANOVA]
+```
+
+# Additional Linear Models Terminology
+
+A **model** is a mathematical relationship between explanatory variables and response variables.
+
+An **effect** is the expected change in response that occurs with a change in value of an explanatory variable.
+
+-   The **main effect** is the effect of a single explanatory variable (e.g. $x_1, x_2, x_3$)
+
+# Exploring the (Ames) Data
+
+```{r}
+library(tidyverse)
+library(AmesHousing)
+
+ames <- make_ordinal_ames()
+set.seed(123)
+ames <- ames |> mutate(id = row_number())
+train <- ames |> sample_frac(0.7)
+test <- anti_join(ames, train, by = "id")
+
+dim(train)
+dim(test)
+```
+
+```{r}
+train %>%
+    group_by(Heating_QC, Central_Air) %>%
+    summarise(
+        mean = mean(Sale_Price),
+        sd = sd(Sale_Price),
+        max = max(Sale_Price),
+        min = min(Sale_Price)
+    )
+```
+
+-   `Central_Air` seems to have an effect on `Sale_Price`
+
+However, we always need to have statistical proof to back up any claims we make.
+
+# Two-Way ANOVA Using Ames
+
+With Two-Way ANOVA we are trying to see if the two variables are actually having a significant effect on explaining/predicting sale price.
+
+$$
+Y_{ijk} = \mu + \alpha_i + \beta_j + \varepsilon_{ijk}
+$$
+
+-   $\mu$ is the base level
+-   $\alpha_i$ is the heating quality
+-   $\beta_j$ is central air
+-   $\varepsilon$ is unexplained error
+
+```{r}
+ames_aov2 <- aov(Sale_Price ~ Heating_QC + Central_Air, data = train)
+summary(ames_aov2)
+```
+
+-   The individual p-values are telling us whether or not the variable has some significant effect on the response
+-   If these two independent variables are completely independent then the p-values with just the one variable model would be the same
+
+## Post-Hoc Testing
+
+We have statistical differences among the categories and we want to know where these differences exist.
+
+```{r tukey-hsd-plots}
+tukey_ames2 <- TukeyHSD(ames_aov2)
+print(tukey_ames2)
+plot(tukey_ames2, las = 1)
+```
+
+-   `diff` refers to the average difference in `Sale_Price` between the two categories
+
+Keep in mind that if you increase your sample size, **you should decrease your significance level**. P-values always go down with an increase in sample size.
+
+# Two-Way ANOVA with Interactions
+
+An **interaction effect** is when the effect of one variable changes as levels of another variables changes (e.g. $x_1x_2, x_1x_2x_3$).
+
+Interaction does **not** mean that two variables are correlated with each other.
+
+In an interaction term $x_1x_2$, changes in $x_2$ affect the relationship of $x_1$ to $y$ and vice versa.
+
+![Interaction Interpretation](images/interactions_interpretation.png)
+
+$$
+Y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}
+$$
+
+## R Code
+
+```{r}
+ames_aov_int <- aov(Sale_Price ~ Heating_QC * Central_Air, data = train)
+summary(ames_aov_int)
+```
+
+-   When you're looking at significance, make sure to look at the interaction's significance first.
+    -   If interaction exists, we no longer care if the individual variables are significant or not because it's the interaction that matters.
+
+## Model Hierarchy
+
+Idea of **model hierarchy**: If higher-order terms are significant, then we should keep all the main effect terms that are a part of the higher-order terms as well.
+
+## Slicing
+
+If the interaction term was significant, the number of level pairs we would have to consider can be overwhelming. **Slicing** performs an F-test for means for one variable within the level of another variable.
+
+An example is subsetting the data into `Central_Air`: Yes and `Central_Air`: No and then seeing the significance of `Heating_QC`:
+
+```{r}
+CA_aov <- train %>%
+    group_by(Central_Air) %>%
+    nest() %>%
+    mutate(aov = map(data, ~ summary(aov(Sale_Price ~ Heating_QC, data = .x))))
+print(CA_aov$aov)
+```
+
+## Assumptions
+
+Same as One-Way ANOVA:
+
+-   Independence of observations
+-   Equality of variance
+    -   Levene Test only available for interactions
+-   Normality of categories

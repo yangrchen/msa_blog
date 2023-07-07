@@ -1,0 +1,33 @@
+---
+title: First Few Weeks at the Institute
+date: 07/03/2023
+draft: true
+---
+
+How would I describe the Institute? It's fast, it's *scary*, and it's absolutely thrilling.
+
+Coming in as a Master's student, I'm not sure I knew what to expect entirely. Just a few months ago I had a vastly different plan of trekking out to California to be a full-time art student, but now a data science professional?
+
+Unlikely.
+
+<!-- This feels a little vague. -->
+
+So far I'm glad I'm attending the program and I don't see that changing. I'm continually challenged in my technical and interpersonal skills and I have learned to question and evaluate who I want to be as a professional.
+
+# Why the Graduate Program is Non-Traditional
+
+Just a couple of traits that makes the program a little different than what I had come to expect from a graduate program:
+
+-   Teamwork is crucial. Your success in any assignment, project, and interaction is defined by the success of your team. 
+<!-- NOTE: The wording here with the practicum feels wordy and not very interesting.-->
+-   Application over theory. The faculty teaches you to understand the purpose and limitations of statistical theories; however, the lectures are focused on implementing concepts. Instead of your entire semester culminating in a thesis or final exam you are working within a team to analyze an organization's large dataset.
+
+# Fast Tempo == Better Time Management?
+
+
+
+# Teamwork Matters
+
+# Data Solutions Are Open-ended
+
+During one lab session, me and a handful of other students were asking the professor whether our evaluation of the assumptions for an ANOVA model on the dataset were correct--

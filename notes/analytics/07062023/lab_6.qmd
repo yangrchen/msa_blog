@@ -1,0 +1,84 @@
+---
+title: Lab 6
+date: 07/06/2023
+---
+
+# 1
+
+```{r}
+library(tidyverse)
+library(AppliedPredictiveModeling)
+data(FuelEconomy)
+glimpse(cars2010)
+```
+
+## a
+
+```{r}
+cars2010 <- cars2010 %>%
+    mutate(across(!c(EngDispl, FE), as.factor))
+cars_lm <- lm(FE ~ ., data = cars2010)
+summary(cars_lm)
+```
+
+-   The F p-value is significant meaning that our overall model is significant in predicting `FE`
+-   The 13 variables explain 83.33 percent of variation in fuel economy
+
+## b
+
+```{r}
+car::Anova(cars_lm)
+```
+
+-   Highest p-value is `VarValveTiming` with 0.584
+
+## c
+
+```{r}
+cars_2010_sub <- cars2010 %>%
+    select(-VarValveTiming)
+
+cars_lm2 <- lm(FE ~ ., cars_2010_sub)
+summary(cars_lm2)
+car::Anova(cars_lm2)
+```
+
+-   The p-value for the model did not change significantly
+-   $R^2$ did not change significantly and $R_a^2$ increased a little 
+-   
+
+## d
+
+Dropping `IntakeValvePerCyl`:
+
+```{r}
+cars_2010_sub <- cars_2010_sub %>%
+    select(-IntakeValvePerCyl)
+
+cars_lm3 <- lm(FE ~ ., cars_2010_sub)
+summary(cars_lm3)
+car::Anova(cars_lm3)
+```
+
+```{r}
+cars_2010_sub <- cars_2010_sub %>%
+    select(-TransLockup)
+
+cars_lm4 <- lm(FE ~ ., cars_2010_sub)
+summary(cars_lm4)
+car::Anova(cars_lm4)
+```
+
+```{r}
+cars_2010_sub <- cars_2010_sub %>%
+    select(-VarValveLift)
+
+cars_lm5 <- lm(FE ~ ., cars_2010_sub)
+summary(cars_lm5)
+car::Anova(cars_lm5)
+```
+
+-  Both $R^2$ and $R_a^2$ decreased
+-  9 variables significant at the 0.008 level 
+
+

@@ -18,6 +18,10 @@
         }
     ],
     "settings": {
-        "liveServer.settings.multiRootWorkspaceName": "Projects"
+        "liveServer.settings.multiRootWorkspaceName": "Projects",
+        "[python]": {
+            "editor.defaultFormatter": "ms-python.black-formatter"
+        },
+        "python.formatting.provider": "none"
     }
 }

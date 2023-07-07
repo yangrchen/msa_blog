@@ -1,0 +1,61 @@
+---
+title: Breakout 5
+date: 07/03/2023
+---
+
+```{python}
+import pandas as pd
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+```
+
+```{python}
+bike = pd.read_csv('https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bike.csv')
+bike.head()
+```
+
+# 1
+
+```{python}
+bike_lm = smf.ols('cnt ~ C(workingday) * C(season)', bike).fit()
+
+sm.stats.anova_lm(bike_lm)
+```
+
+-   The interaction between `workingday` and `season` seems to be significant towards predicting `cnt`
+
+# 2
+
+Talk with breakout group.
+
+# 3
+
+```{python}
+casual_lm = smf.ols('casual ~ C(workingday) * C(season)', bike).fit()
+
+sm.stats.anova_lm(casual_lm)
+```
+
+-   Not a significant interaction between `workingday` and `season` for casual bikers
+
+```{python}
+registered_lm = smf.ols('registered ~ C(workingday) * C(season)', bike).fit()
+
+sm.stats.anova_lm(registered_lm)
+```
+
+-   Significant interaction between `workingday` and `season` for registered bikers
+
+```{python}
+unique_season = bike['season'].unique()
+
+for season in unique_season:
+    sliced_data = smf.ols("casual ~ C(workingday)", bike[bike["season"] == season]).fit()
+    print(sm.stats.anova_lm(sliced_data))
+
+for season in unique_season:
+    sliced_data = smf.ols("registered ~ C(workingday)", bike[bike["season"] == season]).fit()
+    print(sm.stats.anova_lm(sliced_data))
+```
+
+-   For each individual season, there is a significant difference between working days and non-working days in registered bikers
