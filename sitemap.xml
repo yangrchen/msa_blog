@@ -1,43 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://yangrchen.github.io/msa_blog/notes/communication/062623/index.html</loc>
-    <lastmod>2023-06-27T02:06:59.398Z</lastmod>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06302023/lab_4.html</loc>
+    <lastmod>2023-07-07T03:15:30.607Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06302023/index.html</loc>
+    <lastmod>2023-07-07T03:15:29.792Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06272023/lab_1.html</loc>
+    <lastmod>2023-07-07T03:15:28.893Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/index.html</loc>
+    <lastmod>2023-07-07T03:15:27.767Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/07062023/breakout_6.html</loc>
+    <lastmod>2023-07-07T03:15:25.578Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/07032023/lab_5.html</loc>
+    <lastmod>2023-07-07T03:15:23.570Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/07032023/index.html</loc>
+    <lastmod>2023-07-07T03:15:22.570Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06292023/lab_3.html</loc>
+    <lastmod>2023-07-07T03:15:21.688Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06282023/breakout_2.html</loc>
+    <lastmod>2023-07-07T03:15:20.735Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06282023/index.html</loc>
+    <lastmod>2023-07-07T03:15:19.834Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/communication/index.html</loc>
+    <lastmod>2023-07-07T03:15:18.988Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/programming/R/r4ds/intro/index.html</loc>
+    <lastmod>2023-07-07T03:15:17.408Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/notes/index.html</loc>
-    <lastmod>2023-06-27T02:06:58.770Z</lastmod>
+    <lastmod>2023-07-07T03:15:16.856Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/notes/primer/categorical_data/index.html</loc>
-    <lastmod>2023-06-27T02:06:57.464Z</lastmod>
+    <lastmod>2023-07-07T03:15:15.727Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/notes/primer/fundamental/index.html</loc>
-    <lastmod>2023-06-27T02:06:56.551Z</lastmod>
+    <lastmod>2023-07-07T03:15:14.864Z</lastmod>
   </url>
   <url>
-    <loc>https://yangrchen.github.io/msa_blog/notes/primer/probability/index.html</loc>
-    <lastmod>2023-06-27T02:06:55.735Z</lastmod>
+    <loc>https://yangrchen.github.io/msa_blog/notes/primer/index.html</loc>
+    <lastmod>2023-07-07T03:15:14.067Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/index.html</loc>
-    <lastmod>2023-06-27T02:06:54.951Z</lastmod>
+    <lastmod>2023-07-07T03:15:12.732Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/projects/summer_r/index.html</loc>
+    <lastmod>2023-07-07T03:15:12.487Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/blog/index.html</loc>
-    <lastmod>2023-06-27T02:06:55.374Z</lastmod>
+    <lastmod>2023-07-07T03:15:12.968Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/primer/probability/index.html</loc>
+    <lastmod>2023-07-07T03:15:13.605Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/notes/primer/confidence_intervals/index.html</loc>
-    <lastmod>2023-06-27T02:06:56.103Z</lastmod>
+    <lastmod>2023-07-07T03:15:14.431Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/notes/primer/hypothesis_testing/index.html</loc>
-    <lastmod>2023-06-27T02:06:57.007Z</lastmod>
+    <lastmod>2023-07-07T03:15:15.256Z</lastmod>
   </url>
   <url>
     <loc>https://yangrchen.github.io/msa_blog/notes/primer/anova/index.html</loc>
-    <lastmod>2023-06-27T02:06:58.306Z</lastmod>
+    <lastmod>2023-07-07T03:15:16.632Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/programming/python/intro/weather.html</loc>
+    <lastmod>2023-07-07T03:15:17.123Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/programming/R/r4ds/intro_visualization/index.html</loc>
+    <lastmod>2023-07-07T03:15:17.890Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/programming/index.html</loc>
+    <lastmod>2023-07-07T03:15:18.728Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/communication/062623/index.html</loc>
+    <lastmod>2023-07-07T03:15:19.249Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06282023/lab_2.html</loc>
+    <lastmod>2023-07-07T03:15:20.304Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06292023/index.html</loc>
+    <lastmod>2023-07-07T03:15:21.310Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06292023/breakout_3.html</loc>
+    <lastmod>2023-07-07T03:15:22.079Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/07032023/breakout_5.html</loc>
+    <lastmod>2023-07-07T03:15:23.026Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/07062023/index.html</loc>
+    <lastmod>2023-07-07T03:15:24.053Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/07062023/lab_6.html</loc>
+    <lastmod>2023-07-07T03:15:27.314Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06272023/index.html</loc>
+    <lastmod>2023-07-07T03:15:28.386Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06272023/breakout_1.html</loc>
+    <lastmod>2023-07-07T03:15:29.327Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yangrchen.github.io/msa_blog/notes/analytics/06302023/breakout_4.html</loc>
+    <lastmod>2023-07-07T03:15:30.154Z</lastmod>
   </url>
 </urlset>
