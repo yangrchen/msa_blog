@@ -7,7 +7,9 @@
   },
   {
     "listing": "/blog/index.html",
-    "items": []
+    "items": [
+      "/blog/first_weeks/index.html"
+    ]
   },
   {
     "listing": "/notes/primer/index.html",

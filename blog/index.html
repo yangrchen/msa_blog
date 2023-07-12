@@ -72,9 +72,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -119,6 +119,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../notes/index.html" rel="" target="">
  <span class="menu-text">Notes</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../blog/index.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Blog</span></a>
+  </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/yangrchen" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
@@ -159,7 +163,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(0)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -172,7 +176,34 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1689048000000" data-listing-file-modified-sort="1689132074633" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
+<div class="thumbnail">
+<p><a href="../blog/first_weeks/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+</div>
+<div class="body">
+<a href="../blog/first_weeks/index.html">
+<h3 class="no-anchor listing-title">
+First Weeks: Initial Thoughts
+</h3>
+<div class="listing-subtitle">
 
+</div>
+<div class="listing-description">
+How would I describe the Institute for Advanced Analytics? It’s fast, it’s <em>scary</em>, and it’s absolutely thrilling.
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="../blog/first_weeks/index.html">
+<div class="listing-date">
+Jul 11, 2023
+</div>
+<div class="listing-author">
+Yang Chen
+</div>
+</a>
+</div>
+</div>
 </div>
 <div class="listing-no-matching d-none">
 No matching items
