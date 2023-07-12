@@ -1,20 +1,13 @@
 [
   {
-    "listing": "/notes/analytics/index.html",
-    "items": [
-      "/notes/analytics/07062023/index.html",
-      "/notes/analytics/07032023/index.html",
-      "/notes/analytics/06302023/index.html",
-      "/notes/analytics/06292023/index.html",
-      "/notes/analytics/06282023/index.html",
-      "/notes/analytics/06272023/index.html"
-    ]
-  },
-  {
     "listing": "/notes/communication/index.html",
     "items": [
       "/notes/communication/062623/index.html"
     ]
+  },
+  {
+    "listing": "/blog/index.html",
+    "items": []
   },
   {
     "listing": "/notes/primer/index.html",
@@ -28,14 +21,24 @@
     ]
   },
   {
-    "listing": "/blog/index.html",
-    "items": []
-  },
-  {
     "listing": "/notes/programming/index.html",
     "items": [
       "/notes/programming/R/r4ds/intro/index.html",
       "/notes/programming/R/r4ds/intro_visualization/index.html"
+    ]
+  },
+  {
+    "listing": "/notes/analytics/index.html",
+    "items": [
+      "/notes/analytics/07112023/index.html",
+      "/notes/analytics/07102023/index.html",
+      "/notes/analytics/07072023/index.html",
+      "/notes/analytics/07062023/index.html",
+      "/notes/analytics/07032023/index.html",
+      "/notes/analytics/06302023/index.html",
+      "/notes/analytics/06292023/index.html",
+      "/notes/analytics/06282023/index.html",
+      "/notes/analytics/06272023/index.html"
     ]
   }
 ]
