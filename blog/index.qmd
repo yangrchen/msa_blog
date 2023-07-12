@@ -2,7 +2,7 @@
 title: Blog
 listing:
   contents:
-    - ../posts/blog/**/index.qmd
+    - "**/index.qmd"
   sort: "date desc"
   type: default
   categories: true

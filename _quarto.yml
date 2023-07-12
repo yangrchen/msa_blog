@@ -9,6 +9,7 @@ website:
   navbar:
     right:
       - notes/index.qmd
+      - blog/index.qmd
       - icon: github
         href: https://github.com/yangrchen
 format:
