@@ -1,0 +1,42 @@
+---
+title: Lab 7
+date: 07/07/2023
+---
+
+```{r}
+library(tidyverse)
+library(AppliedPredictiveModeling)
+data(FuelEconomy)
+
+cars2010 <- cars2010 %>%
+    mutate(across(!c(EngDispl, FE), as.factor))
+```
+
+# a
+```{r}
+full.model <- lm(FE ~ ., data = cars2010)
+empty.model <- lm(FE ~ 1, data = cars2010)
+
+for.model <- step(empty.model,
+    scope = list(
+        lower = empty.model,
+        upper = full.model
+    ), direction = "forward", k = qchisq(0.10, 1, lower.tail = FALSE)
+)
+```
+
+-   First variable added is `EngDispl`
+-   Last variable added was `ExhaustValvesPerCyl`
+
+# b
+```{r}
+step.model <- step(empty.model,
+    scope = list(
+        lower = empty.model,
+        upper = full.model
+    ), direction = "both", k = log(nrow(cars2010))
+)
+```
+
+-   8 variables remain after stepwise
+-   Did not get the same models between the two different methods. Stepwise had less 

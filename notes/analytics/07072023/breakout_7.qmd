@@ -1,0 +1,54 @@
+---
+title: Breakout 7
+date: 07/07/2023
+---
+
+# 1
+```{r}
+library(tidyverse)
+bike <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bike.csv")
+glimpse(bike)
+```
+```{r}
+set.seed(18954)
+bike <- bike %>%
+    mutate(id = row_number()) %>%
+    select(-dteday)
+
+train <- sample_frac(bike, 0.7)
+test <- anti_join(bike, train, by = "id")
+```
+```{r}
+train <- train %>%
+    select(-id)
+
+full.model <- lm(cnt ~ ., data = train)
+empty.model <- lm(cnt ~ 1, data = train)
+
+cor(train)
+
+for.model <- step(empty.model,
+    scope = list(
+        lower = empty.model,
+        upper = full.model
+    ), direction = "forward", k = 2, trace = FALSE
+)
+for.model
+```
+
+# 2
+```{r}
+train <- train %>%
+    select(-c(casual, registered))
+
+full.model <- lm(cnt ~ ., data = train)
+empty.model <- lm(cnt ~ 1, data = train)
+
+for.model <- step(empty.model,
+    scope = list(
+        lower = empty.model,
+        upper = full.model
+    ), direction = "forward", k = 2, trace = FALSE
+)
+for.model
+```

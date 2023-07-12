@@ -1,0 +1,57 @@
+---
+title: Lab 8
+date: 07/10/2023
+---
+
+```{r}
+library(tidyverse)
+
+cafeteria <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/cafeteria.csv")
+```
+
+# 1
+
+```{r}
+cafeteria_lm <- lm(Sales ~ Dispensers, data = cafeteria)
+
+ggplot(cafeteria_lm, aes(x = .fitted, y = .resid)) +
+    geom_point() +
+    geom_hline(yintercept = 0)
+```
+
+-   We see a curved pattern in the residuals vs. fitted
+values plot
+-   May want to introduce higher order terms to account
+for the pattern
+
+# 2
+
+Forward selection by hand:
+
+```{r}
+empty.model <- lm(Sales ~ 1, data = cafeteria)
+full.model <- lm(Sales ~ I(Dispensers^4) + I(Dispensers^3) + I(Dispensers^2) + Dispensers, data = cafeteria)
+```
+
+```{r}
+c(AIC(empty.model), AIC(lm(Sales ~ Dispensers, data = cafeteria)), AIC(lm(Sales ~ Dispensers + I(Dispensers^2), data = cafeteria)), AIC(lm(Sales ~ Dispensers + I(Dispensers^2) + I(Dispensers^3), data = cafeteria)), AIC(full.model))
+```
+
+-   Best degree for the model is the second-order: 2
+
+```{r}
+selected.model <- lm(Sales ~ Dispensers + I(Dispensers^2), data = cafeteria)
+
+ggplot(selected.model, aes(x = .fitted, y = .resid)) +
+    geom_point() +
+    geom_hline(yintercept = 0)
+
+ggplot(selected.model, aes(sample = .resid)) +
+    stat_qq() +
+    stat_qq_line()
+
+hist(selected.model$resid)
+```
+
+-   QQ-Plot shows evidence of normality
+-   Histogram shows a fairly Normal dist.

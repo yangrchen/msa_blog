@@ -1,0 +1,60 @@
+---
+title: Lab 9
+date: 07/11/2023
+---
+
+# 1
+
+```{r}
+library(AppliedPredictiveModeling)
+library(tidyverse)
+library(lmtest)
+data(FuelEconomy)
+
+cars2010 <- cars2010 %>%
+    mutate(idx = row_number())
+glimpse(cars2010)
+
+cars2010.model <- lm(FE ~ EngDispl + Transmission + AirAspirationMethod + TransLockup + TransCreeperGear + DriveDesc + IntakeValvePerCyl + CarlineClassDesc + VarValveLift, data = cars2010)
+```
+
+## a
+
+```{r}
+cars2010.time <- lm(FE ~ idx, data = cars2010)
+
+dwtest(cars2010.time, alternative = "greater")
+```
+
+## b
+
+Studentized residuals:
+
+```{r}
+ggplot(cars2010.model, aes(x = cars2010$idx, y = rstudent(cars2010.model))) +
+    geom_point() +
+    geom_line(y = -3) +
+    geom_line(y = 3) +
+    labs(title = "External Studentized Residuals", x = "Observation", y = "Residuals")
+
+df.cut <- 2 * (sqrt((length(cars2010.model$coefficients)) / nrow(cars2010)))
+
+ggplot(cars2010.model, aes(x = cars2010$idx, y = dffits(cars2010.model))) +
+    geom_point(color = "orange") +
+    geom_line(y = df.cut) +
+    geom_line(y = -df.cut) +
+    labs(title = "DFFITS", x = "Observation", y = "DFFITS")
+
+rstud <- abs(rstudent(cars2010.model))
+df.test <- abs(dffits(cars2010.model))
+
+length(union(
+    names(rstud[rstud > 3]),
+    names(df.test[df.test > 1])
+))
+length(rstud[rstud > 3])
+```
+
+```{r}
+max(cooks.distance(cars2010.model))
+```

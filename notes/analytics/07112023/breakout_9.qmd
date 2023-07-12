@@ -1,0 +1,66 @@
+---
+title: Breakout 9
+date: 07/11/2023
+---
+
+```{r}
+library(car)
+library(tidyverse)
+
+glimpse(mtcars)
+```
+
+```{r}
+lm.model <- lm(mpg ~ ., data = mtcars)
+v <- vif(lm.model)
+v[v > 10]
+which.min(abs(cor(mtcars)["mpg", c("cyl", "disp", "wt")]))
+```
+
+```{r}
+mtcars.subset <- mtcars %>%
+    select(-disp)
+
+lm.model <- lm(mpg ~ ., data = mtcars.subset)
+v <- vif(lm.model)
+v[v > 10]
+```
+
+```{r}
+mtcars.subset <- mtcars.subset %>%
+    select(-cyl)
+
+lm.model <- lm(mpg ~ ., data = mtcars.subset)
+v <- vif(lm.model)
+v[v > 10]
+```
+
+# Model Selection
+
+```{r}
+empty.model <- lm(mpg ~ 1, data = mtcars.subset)
+full.model <- lm(mpg ~ ., data = mtcars.subset)
+
+for.model <- step(empty.model,
+    scope = list(
+        lower = empty.model,
+        upper = full.model
+    ),
+    direction = "forward",
+    k = 2,
+    trace = FALSE
+)
+summary(for.model)
+```
+
+```{r}
+ggplot(for.model, aes(sample = .resid)) +
+    stat_qq() +
+    stat_qq_line()
+
+hist(resid(for.model))
+
+ggplot(for.model, aes(x = .fitted, y = .resid)) +
+    geom_point() +
+    geom_line(y = 0)
+```

@@ -1,0 +1,133 @@
+---
+title: Diagnostics
+date: 07/10/2023
+---
+
+# Examining Residuals
+
+Recall the assumptions of linear regression:
+
+-   Mean of the Ys is accurately modeled by linear function of the Xs
+-   $\varepsilon$ is assumed to be Normal with a mean of 0
+-   $\varepsilon$ is assumed to have constant variance $\sigma^2$
+-   Errors are independent
+-   **No perfect collinearity**
+
+We can investigate many of our assumptions through 
+residuals in residuals vs. fitted values plots.
+
+## R Code
+
+```{r}
+library(tidyverse)
+library(httpgd)
+library(reticulate)
+
+use_condaenv(condaenv = "blues_clues", required = TRUE)
+# hgd(port = 8888)
+data_path <- "data/Salary.csv"
+salary <- read.csv(data_path)
+par(mfrow = c(2, 2))
+salary_lm <- lm(Salary ~ YearsExperience, data = salary)
+
+ggplot(salary_lm, aes(x = .fitted, y = .resid)) +
+    geom_point() +
+    geom_hline(yintercept = 0) +
+    labs(x = "Predicted Values", y = "Residuals")
+```
+
+## Python Code
+
+```{python}
+import pandas as pd
+import seaborn as sns
+from pathlib import Path
+
+salary = r.salary
+salary = pd.read_csv(salary)
+# sns.residplot(data=salary, x="YearsExperience", y="Salary", order=2)
+```
+
+# Misspecified Model
+
+We detect a misspecified model when a pattern is detected 
+in the residuals. The model form is incorrect for the data.
+
+We can potentially resolve this by including polynomial 
+terms, interactions, splines, etc.
+
+# Model Hierarchy
+
+When adding higher order terms (power terms and/or 
+interactions) you should have **all** lower terms included 
+in the model.
+
+If $x^3$ is in the model, you should have $x$ and $x^2$ in 
+the model as well. If you include an interaction $x_1x_2$ 
+in the model, then $x_1$ and $x_2$ should be included.
+
+# Polynomial Regression
+
+Patterns in residual plots of our variable may give us an 
+indication to try higher order terms.
+
+In a polynomial regression, if the higher order term is 
+used then we lose the interpretation for that entire variable. 
+
+If we do model selection with higher order terms and the 
+higher orders end up in the final model then we have to 
+make sure to add the lower terms back in to the model.
+
+## R Code
+
+```{r}
+salary_quad <- lm(Salary ~ YearsExperience + I(YearsExperience^2), data = salary)
+summary(salary_quad)
+
+ggplot(salary_quad, aes(x = .fitted, y = .resid)) +
+    geom_point() +
+    geom_hline(yintercept = 0) +
+    labs(x = "Predicted Values", y = "Residuals")
+```
+
+-   In R we use the `I()` function to create a higher 
+order term
+
+When a straight line is inappropriate, we can consider:
+
+-   Fit a polynomial/more complex regression
+-   Transform the dependent and/or independent
+variables to obtain linearity
+-   Fit a nonlinear regression model if appropriate
+-   Fit a nonparametric regression model (e.g. LOESS)
+
+# Lack of Constant Variance
+
+The random error, $\varepsilon$, is assumed to have a 
+constant variance, $\sigma^2$. Under heteroscedasticity, 
+any inferences under traditional assumptions will be 
+incorrect and our hypothesis tests and confidence 
+intervals will not be valid.
+
+We can detect heteroscedasticity by either plotting
+residuals or using **Spearman Rank Correlation**.
+
+## Spearman Rank Correlation
+
+If Spearman rank coefficient between the absolute value
+of the residuals and predicted values is:
+
+-   Close to zero: variance is potentially
+homoscedastic
+-   Positive: variance increases as mean increases
+-   Negative: variance descreases as the mean increases
+
+::: {.text-center}
+$H_0:$ Variance is homoscedastic
+
+$H_a:$ Variance is heteroscedastic
+:::
+
+If there is a relationship between the absolute value of
+residuals and predicted value but it is not linear,
+this test will **not** discover it.
