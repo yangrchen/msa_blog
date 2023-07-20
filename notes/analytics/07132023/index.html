@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yang Chen">
+<meta name="dcterms.date" content="2023-07-13">
+
+<title>Yang MSA - Model Building and Scoring for Prediction</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Yang MSA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../notes/index.html" rel="" target="">
+ <span class="menu-text">Notes</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/yangrchen" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Model Building and Scoring for Prediction</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">analytics</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Yang Chen </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 13, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#model-building" id="toc-model-building" class="nav-link active" data-scroll-target="#model-building"><span class="header-section-number">1</span> Model Building</a>
+  <ul class="collapse">
+  <li><a href="#best-linear-unbiased-estimator" id="toc-best-linear-unbiased-estimator" class="nav-link" data-scroll-target="#best-linear-unbiased-estimator"><span class="header-section-number">1.1</span> Best Linear Unbiased Estimator</a></li>
+  </ul></li>
+  <li><a href="#regularized-regression-overview" id="toc-regularized-regression-overview" class="nav-link" data-scroll-target="#regularized-regression-overview"><span class="header-section-number">2</span> Regularized Regression Overview</a>
+  <ul class="collapse">
+  <li><a href="#penalties-in-models" id="toc-penalties-in-models" class="nav-link" data-scroll-target="#penalties-in-models"><span class="header-section-number">2.1</span> Penalties in Models</a></li>
+  </ul></li>
+  <li><a href="#ridge-regression" id="toc-ridge-regression" class="nav-link" data-scroll-target="#ridge-regression"><span class="header-section-number">3</span> Ridge Regression</a>
+  <ul class="collapse">
+  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code"><span class="header-section-number">3.1</span> R Code</a></li>
+  <li><a href="#python-code" id="toc-python-code" class="nav-link" data-scroll-target="#python-code"><span class="header-section-number">3.2</span> Python Code</a></li>
+  </ul></li>
+  <li><a href="#lasso-regression" id="toc-lasso-regression" class="nav-link" data-scroll-target="#lasso-regression"><span class="header-section-number">4</span> LASSO Regression</a>
+  <ul class="collapse">
+  <li><a href="#differences-in-effects" id="toc-differences-in-effects" class="nav-link" data-scroll-target="#differences-in-effects"><span class="header-section-number">4.1</span> Differences in Effects</a></li>
+  <li><a href="#r-code-1" id="toc-r-code-1" class="nav-link" data-scroll-target="#r-code-1"><span class="header-section-number">4.2</span> R Code</a></li>
+  </ul></li>
+  <li><a href="#elasticnet-regression" id="toc-elasticnet-regression" class="nav-link" data-scroll-target="#elasticnet-regression"><span class="header-section-number">5</span> ElasticNet Regression</a></li>
+  <li><a href="#optimizing-penalties" id="toc-optimizing-penalties" class="nav-link" data-scroll-target="#optimizing-penalties"><span class="header-section-number">6</span> Optimizing Penalties</a>
+  <ul class="collapse">
+  <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation"><span class="header-section-number">6.1</span> Cross-Validation</a></li>
+  <li><a href="#important-variables" id="toc-important-variables" class="nav-link" data-scroll-target="#important-variables"><span class="header-section-number">6.2</span> Important Variables</a></li>
+  </ul></li>
+  <li><a href="#model-comparisons" id="toc-model-comparisons" class="nav-link" data-scroll-target="#model-comparisons"><span class="header-section-number">7</span> Model Comparisons</a>
+  <ul class="collapse">
+  <li><a href="#model-metrics" id="toc-model-metrics" class="nav-link" data-scroll-target="#model-metrics"><span class="header-section-number">7.1</span> Model Metrics</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="model-building" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Model Building</h1>
+<p>Linear regression is a good initial approach to model building, but not the only form of regression.</p>
+<p>Linear regression is the best <strong>linear unbiased estimator</strong>.</p>
+<section id="best-linear-unbiased-estimator" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="best-linear-unbiased-estimator"><span class="header-section-number">1.1</span> Best Linear Unbiased Estimator</h2>
+<p><span class="math display">\[
+\hat{\beta}_j ~ N(\beta_j, s_{\hat{\beta}_j})
+\]</span></p>
+<p>On average, coefficients from all samples are centered from the true coefficient. What does it mean to be <em>best</em>? If assumptions hold, <span class="math inline">\(s_{\hat{\beta}_j}\)</span> is the minimum variance of all the unbiased estimators.</p>
+<p>Put another way: The spread of our guesses is as narrow as it can be.</p>
+<p>What if biased estimators had smaller variance?</p>
+</section>
+</section>
+<section id="regularized-regression-overview" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Regularized Regression Overview</h1>
+<p>As the number of variables increases, more problems tend to arise:</p>
+<ul>
+<li>Assumptions start to fail</li>
+<li>Multicollinearity concerns
+<ul>
+<li>Variations lead to overfitting</li>
+<li>Higher variance than desired</li>
+</ul></li>
+</ul>
+<p><strong>Regularized regression</strong> puts constraints on the estimated coefficients in our model and <em>shrink</em> these estimates to 0.</p>
+<p>Coefficients are biased but potentially improve variance of the model.</p>
+<p>Here we are giving up interpretability for better prediction power. We’re not guaranteed to predict better, but we have the potential to do so.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/biased-regression.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Bias-Variance Tradeoff Example</figcaption>
+</figure>
+</div>
+<p>With regularized regression, we move our model farther from the truth, but the precision of our guesses increases. We have to balance moving farther from the “truth” with precision.</p>
+<p>There are three common types of regularized regression:</p>
+<ul>
+<li>Ridge</li>
+<li>LASSO</li>
+<li>ElasticNet</li>
+</ul>
+<section id="penalties-in-models" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="penalties-in-models"><span class="header-section-number">2.1</span> Penalties in Models</h2>
+<p>Recall OLS regression minimizes the sum of squared errors:</p>
+<p><span class="math display">\[
+\min(\sum_{i=1}^{n} (y_i - \hat{y}_i)^2) = \min(SSE)
+\]</span></p>
+<p>Regularized regression introduces a penalty term to the minimization:</p>
+<p><span class="math display">\[
+\min(\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \text{Penalty}) = \min(SSE + \text{Penalty})
+\]</span></p>
+</section>
+</section>
+<section id="ridge-regression" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Ridge Regression</h1>
+<p>Ridge regression introduces <span class="math inline">\(L_2\)</span> penalty term:</p>
+<p><span class="math display">\[
+\min(\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda\sum_{j=1}^{p} \hat{\beta}_j^2) = \min(SSE + \lambda\sum_{j=1}^{p} \hat{\beta}_j^2)
+\]</span></p>
+<ul>
+<li>If <span class="math inline">\(\lambda = 0\)</span>, then OLS</li>
+<li>As <span class="math inline">\(\lambda \rightarrow \infty\)</span>, coefficients shrink to 0
+<ul>
+<li>The only way to counteract <span class="math inline">\(\lambda\)</span> getting bigger is to make the coefficients smaller.</li>
+</ul></li>
+</ul>
+<section id="r-code" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="r-code"><span class="header-section-number">3.1</span> R Code</h2>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AmesHousing)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: carData
+
+Attaching package: 'car'
+
+The following object is masked from 'package:dplyr':
+
+    recode
+
+The following object is masked from 'package:purrr':
+
+    some</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> <span class="fu">make_ordinal_ames</span>()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> ames <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>())</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> ames <span class="sc">%&gt;%</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_frac</span>(<span class="fl">0.7</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(ames, train, <span class="at">by =</span> <span class="st">"id"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2051   82</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>train_reg <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Sale_Price, Lot_Area, Street, Bldg_Type, House_Style, Overall_Qual, Roof_Style, Central_Air, First_Flr_SF, Second_Flr_SF, Full_Bath, Half_Bath, Fireplaces, Garage_Area, Gr_Liv_Area, TotRms_AbvGrd) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">replace</span>(<span class="fu">is.na</span>(.), <span class="dv">0</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Leave all continuous variables alone</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Dummy encode all categorical variables</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Still need to factor any numeric categoricals beforehand</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># We delete the first column from the model matrix since we don't need the intercept column that model.matrix provides</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>train_x <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Sale_Price <span class="sc">~</span> ., <span class="at">data =</span> train_reg)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>train_y <span class="ot">&lt;-</span> train_reg<span class="sc">$</span>Sale_Price</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>test_reg <span class="ot">&lt;-</span> test <span class="sc">%&gt;%</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Sale_Price, Lot_Area, Street, Bldg_Type, House_Style, Overall_Qual, Roof_Style, Central_Air, First_Flr_SF, Second_Flr_SF, Full_Bath, Half_Bath, Fireplaces, Garage_Area, Gr_Liv_Area, TotRms_AbvGrd) <span class="sc">%&gt;%</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">replace</span>(<span class="fu">is.na</span>(.), <span class="dv">0</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>test_x <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Sale_Price <span class="sc">~</span> ., <span class="at">data =</span> test_reg)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>test_y <span class="ot">&lt;-</span> train_reg<span class="sc">$</span>Sale_Price</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'Matrix'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:tidyr':
+
+    expand, pack, unpack</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loaded glmnet 4.1-7</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># alpha controls the option as to which penalty to use</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ames_ridge <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> train_x, <span class="at">y =</span> train_y, <span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ames_ridge, <span class="at">xvar =</span> <span class="st">"lambda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="python-code" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="python-code"><span class="header-section-number">3.2</span> Python Code</h2>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> r.train</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> r.test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="lasso-regression" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> LASSO Regression</h1>
+<p>Least absolute shrinkage and selection operator regression introduces an <span class="math inline">\(L_1\)</span> penalty term to the minimization:</p>
+<p><span class="math display">\[
+\min(\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda\sum_{j=1}^{p} |\hat{\beta}_j|) = \min(SSE + \lambda\sum_{j=1}^{p} |\hat{\beta}_j|)
+\]</span></p>
+<ul>
+<li>If <span class="math inline">\(\lambda = 0\)</span>, then OLS</li>
+<li>As <span class="math inline">\(\lambda \rightarrow 0\)</span>, coefficients shrink to 0</li>
+</ul>
+<section id="differences-in-effects" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="differences-in-effects"><span class="header-section-number">4.1</span> Differences in Effects</h2>
+<p>LASSO can delete variables whereas Ridge can only get close to 0. Differences in effects are due to differences in penalty. The deletion of variables can actually act as variable selection.</p>
+</section>
+<section id="r-code-1" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="r-code-1"><span class="header-section-number">4.2</span> R Code</h2>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>ames_lasso <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> train_x, <span class="at">y =</span> train_y, <span class="at">alpha =</span> <span class="dv">1</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ames_lasso, <span class="at">xvar =</span> <span class="st">"lambda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="elasticnet-regression" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> ElasticNet Regression</h1>
+<p>Elastic net regression combines both penalty terms in the minimization:</p>
+<p><span class="math display">\[
+\min(\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda_1\sum_{j=1}^{p} |\hat{\beta}_j| + \lambda_2\sum_{j=1}^{p} \hat{\beta}_j^2)
+\]</span></p>
+<p>The <code>glmnet</code> function in R takes a slightly different approach:</p>
+<p><span class="math display">\[
+\min(\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda[\alpha\sum_{j=1}^{p} |\hat{\beta}_j| + (1 - \alpha)\sum_{j=1}^{p}\hat{\beta}_j^2])
+\]</span></p>
+<ul>
+<li>Any value of <code>alpha</code> between 0 and 1 gives a combination of both penalties</li>
+</ul>
+</section>
+<section id="optimizing-penalties" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Optimizing Penalties</h1>
+<p>Need to select <span class="math inline">\(\lambda\)</span> for any of the regularized regression. Don’t want to minimize variance to point of overfitting.</p>
+<p>Note that none of the regularized regressions care about multicollinearity or model hierarchy. Since we are only looking at the coefficients, if multicollinearity is affecting the coefficients then regularized will most likely filter them out.</p>
+<section id="cross-validation" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="cross-validation"><span class="header-section-number">6.1</span> Cross-Validation</h2>
+<p>Cross-validation is one approach to prevent overfitting when tuning a parameter.</p>
+<ul>
+<li>Split training data into multiple pieces</li>
+<li>Build model on majority of pieces</li>
+<li>Evaluate on remaining piece</li>
+<li>Repeat process with switching out pieces for building and evaluation</li>
+</ul>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gives us lambda.min and lambda.1se on the graph</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># By default, k-fold = 10</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>ames_lasso_cv <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(<span class="at">x =</span> train_x, <span class="at">y =</span> train_y, <span class="at">alpha =</span> <span class="dv">1</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ames_lasso_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="important-variables" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="important-variables"><span class="header-section-number">6.2</span> Important Variables</h2>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(ames_lasso, <span class="at">s =</span> <span class="fu">c</span>(ames_lasso_cv<span class="sc">$</span>lambda.min, ames_lasso_cv<span class="sc">$</span>lambda<span class="fl">.1</span>se))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>37 x 2 sparse Matrix of class "dgCMatrix"
+                                       s1            s2
+(Intercept)                  4.809883e+04  8.326132e+04
+Lot_Area                     5.455632e-01  3.727557e-01
+StreetPave                   7.742774e+03  .           
+Bldg_TypeTwoFmCon           -9.791571e+03  .           
+Bldg_TypeDuplex             -2.380411e+04  .           
+Bldg_TypeTwnhs              -1.755640e+04 -1.552627e+03
+Bldg_TypeTwnhsE             -8.901776e+03  .           
+House_StyleOne_and_Half_Unf  1.006755e+04  .           
+House_StyleOne_Story         2.100854e+04  .           
+House_StyleSFoyer            3.314566e+04  .           
+House_StyleSLvl              9.806126e+03  .           
+House_StyleTwo_and_Half_Fin -2.786798e+04  .           
+House_StyleTwo_and_Half_Unf -8.735039e+03  .           
+House_StyleTwo_Story         .             .           
+Overall_Qual.L               2.270985e+05  1.963587e+05
+Overall_Qual.Q               1.004889e+05  1.061646e+05
+Overall_Qual.C               1.201336e+04  .           
+Overall_Qual^4              -9.446123e+02  .           
+Overall_Qual^5              -2.520393e+04 -5.544525e+03
+Overall_Qual^6              -8.477324e+03  .           
+Overall_Qual^7              -2.899510e+03  .           
+Overall_Qual^8               .             .           
+Overall_Qual^9              -7.317252e+01  .           
+Roof_StyleGable             -1.083345e+03  .           
+Roof_StyleGambrel            .             .           
+Roof_StyleHip                4.183190e+03  3.243469e+03
+Roof_StyleMansard           -4.033550e+04  .           
+Roof_StyleShed              -2.192610e+04  .           
+Central_AirY                 1.360755e+04  1.155248e+04
+First_Flr_SF                 4.577067e-02  1.421832e+01
+Second_Flr_SF                4.756848e+00  .           
+Full_Bath                    1.503856e+04  4.316036e+03
+Half_Bath                    1.073726e+04  1.820427e+02
+Fireplaces                   8.158764e+03  6.631559e+03
+Garage_Area                  3.623071e+01  4.285732e+01
+Gr_Liv_Area                  4.233104e+01  3.285089e+01
+TotRms_AbvGrd               -7.343589e+02  .           </code></pre>
+</div>
+</div>
+<p>Regularized regression</p>
+</section>
+</section>
+<section id="model-comparisons" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Model Comparisons</h1>
+<p>When we get to scoring our model on the test set, <strong>do not rerun the algorithm</strong>. We do not want to fit our model to the test dataset. Only use test data to score equations obtained from the final model for comparing.</p>
+<section id="model-metrics" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="model-metrics"><span class="header-section-number">7.1</span> Model Metrics</h2>
+<p>Root MSE:</p>
+<p><span class="math display">\[
+RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
+\]</span></p>
+<p>Mean Absolute Error:</p>
+<p><span class="math display">\[
+MAE = \frac{1}{n}\sum_{i=1}^{n} |y_i - \hat{y}_i|
+\]</span></p>
+<p>Mean Absolute Percentage Error:</p>
+<p><span class="math display">\[
+MAPE = 100 \cdot \frac{1}{n}\sum_{i=1}^{n} |\frac{y_i - \hat{y}_i}{y_i}
+\]</span></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
