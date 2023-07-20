@@ -1,0 +1,39 @@
+---
+title: Breakout 12
+date: 07/17/2023
+---
+
+```{r}
+library(tidyverse)
+
+bike <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bike.csv")
+
+set.seed(123)
+bike <- bike %>%
+    mutate(id = row_number())
+train <- bike %>% sample_frac(0.7)
+test <- anti_join(bike, train, by = "id")
+```
+
+```{r}
+train$casual_high <- train$casual >= train$registered
+```
+
+```{r}
+library(vcdExtra)
+
+chisq.test(table(train$casual_high, train$season))
+CMHtest(table(train$casual_high, train$season))$table[1, ]
+```
+
+```{r}
+library(DescTools)
+
+CMHtest(table(train$casual_high, train$holiday))$table[1, ]
+OddsRatio(table(train$casual_high, train$holiday))
+table(train$casual_high, train$holiday)
+
+((11544 / (11544 + 338)) / (338 / (11544 + 338))) / ((257 / (257 + 26)) / (26 / (257 + 26)))
+```
+
+-   Times where casual users are higher than the registered users have 3.455 times the odds of being a holiday

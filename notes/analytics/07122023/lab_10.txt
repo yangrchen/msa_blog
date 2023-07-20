@@ -1,0 +1,221 @@
+---
+title: Lab 10
+date: 07/12/2023
+---
+
+```{r}
+library(tidyverse)
+library(AmesHousing)
+library(car)
+
+set.seed(123)
+
+ames <- make_ordinal_ames()
+
+ames <- ames %>%
+    mutate(id = row_number())
+
+train <- ames %>%
+    sample_frac(0.7)
+
+test <- anti_join(ames, train, by = "id")
+dim(train)
+```
+
+```{r}
+str(train %>%
+    select(!where(is.factor) & where(is.numeric)))
+```
+
+# Filtering for Numerics or Integer
+
+```{r}
+number.columns <- train %>%
+    select(where(is.numeric) | where(is.integer))
+number.columns
+correlations <- abs(cor(number.columns))
+```
+
+-   TotlBsmtSF - FirstFlrSF
+-   GRLivArea - TotalRmsAbvGrd
+-   GarageCars - GarageArea
+-   Dropping basement, rooms above ground, garage cars
+
+```{r}
+train.1 <- train %>%
+    select(-c(Total_Bsmt_SF, TotRms_AbvGrd, Garage_Cars, id, Utilities, Bsmt_Cond, Bldg_Type, Exterior_2nd, BsmtFin_Type_1, Misc_Feature, Garage_Qual, Garage_Cond, Gr_Liv_Area, id))
+train.1.lm <- lm(Sale_Price ~ ., data = train.1)
+attributes(alias(train.1.lm)$Complete)$dimnames[1]
+vif(train.1.lm)
+```
+
+```{r}
+train.2 <- train.1 %>%
+    select(-Pool_Area)
+
+train.2.lm <- lm(Sale_Price ~ ., data = train.2)
+vif(train.2.lm)
+
+train.3 <- train.2 %>%
+    select(-Longitude)
+
+train.3.lm <- lm(Sale_Price ~ ., data = train.3)
+vif(train.3.lm)
+
+train.4 <- train.3 %>%
+    select(-Latitude)
+
+train.4.lm <- lm(Sale_Price ~ ., data = train.4)
+vif(train.4.lm)
+```
+
+```{r}
+empty.model <- lm(Sale_Price ~ 1, data = train.4)
+full.model <- lm(Sale_Price ~ ., data = train.4)
+
+step.model <- step(
+    empty.model,
+    scope = list(
+        lower = empty.model,
+        upper = full.model
+    ),
+    direction = "both",
+    k = 2,
+    trace = FALSE
+)
+```
+
+```{r}
+names(model.frame(step.model))
+ggplot(step.model, aes(sample = .resid)) +
+    stat_qq() +
+    stat_qq_line()
+
+ggplot(step.model, aes(x = .fitted, y = .resid)) +
+    geom_point() +
+    geom_line(y = 0)
+
+ggplot(train.4, aes(x = Sale_Price)) +
+    geom_histogram()
+```
+
+-   Neither independence nor constant variance seem to be met here
+-   Can try transforming the dependent variable
+
+```{r}
+library(caret)
+log.step.model <- lm(log(Sale_Price) ~ Overall_Qual + Neighborhood + First_Flr_SF + Second_Flr_SF + Roof_Matl + MS_SubClass + Bsmt_Full_Bath + Misc_Val + Bsmt_Exposure + Overall_Cond + Year_Built + Sale_Condition + Screen_Porch + Lot_Area + Pool_QC + Bsmt_Qual + Bsmt_Unf_SF + Condition_2 + Garage_Area + Exterior_1st + Condition_1 + Functional + Exter_Qual + Fireplaces + Garage_Type + Kitchen_Qual + Land_Slope + Mas_Vnr_Area + Full_Bath + Mas_Vnr_Type + Street + Foundation + Bedroom_AbvGr + Low_Qual_Fin_SF + Land_Contour + Wood_Deck_SF + Lot_Shape + Paved_Drive + Kitchen_AbvGr, data = train.4)
+
+top.vars <- varImp(step.model) %>%
+    arrange(desc(Overall)) %>%
+    head(12)
+
+final.lm <- lm(Sale_Price ~ First_Flr_SF + Roof_Matl + Misc_Val + Second_Flr_SF + MS_SubClass + Year_Built + Lot_Area + Neighborhood, data = train.4)
+
+ggplot(final.lm, aes(x = .fitted, y = .resid)) +
+    geom_point() +
+    geom_line(y = 0)
+
+ggplot(final.lm, aes(sample = .resid)) +
+    stat_qq() +
+    stat_qq_line()
+```
+
+# Edward Code
+
+```{r}
+# Packages
+library(AmesHousing)
+library(tidyverse)
+library(car)
+library(caret)
+
+# Getting the data
+set.seed(123)
+ames <- data.frame(make_ordinal_ames())
+ames <- ames %>% mutate(id = row_number())
+# Split into train and test
+train <- ames %>% sample_frac(0.7)
+test <- anti_join(ames, train, by = "id")
+
+# EDA
+summary(train)
+
+# Isolate quantitative variables, excluding categoricals
+quant_data <- train %>%
+    select(where(is.numeric) | where(is.integer))
+
+# Dropping categoricals, drop sale price as well when computing the correlation matrix
+str(quant_data)
+quant_data <- subset(quant_data, select = -c(Year_Built, Year_Remod_Add, Misc_Val, Year_Sold, id, Sale_Price))
+
+# Removing highly correlated variables to account for multicollinearity
+corr_matrix <- cor(quant_data)
+# set the upper half to 0s since corr matrix is symmetric
+corr_matrix[upper.tri(corr_matrix)] <- 0
+# set the diagonal to 0 to remove self correlation
+diag(corr_matrix) <- 0
+# create a new subset of the data with the correlated variables (>.80) removed
+clean_quant_data <- quant_data[, !apply(corr_matrix, 2, function(x) any(abs(x) > 0.80, na.rm = TRUE))]
+# we should remove Garage_Cars, Total_Bsmt_SF, Gr_Liv_Area in our data set. Also remove id
+train.1 <- subset(train, select = -c(Garage_Cars, Total_Bsmt_SF, Gr_Liv_Area, id))
+
+# create our naive model
+train.1.lm <- lm(Sale_Price ~ ., data = train.1)
+# look for more mcl?
+vif(train.1.lm)
+# there are aliased coefficients, lets remove them
+attributes(alias(train.1.lm)$Complete)$dimnames[1]
+train.2 <- subset(train.1, select = -c(Garage_Qual, Bldg_Type, Bsmt_Cond, Exterior_2nd, BsmtFin_Type_1, Garage_Cond, Misc_Feature, Utilities))
+
+# check vif again
+train.2.lm <- lm(Sale_Price ~ ., data = train.2)
+vif(train.2.lm)
+# we find that Pool_area, long, lat are all issues
+train.3 <- subset(train.2, select = -c(Pool_Area, Longitude, Latitude))
+
+# Try model selection algorithms to determine important variables
+empty.model <- lm(Sale_Price ~ 1, train.3)
+
+full.model <- lm(Sale_Price ~ ., train.3)
+
+# stepwise with BIC criteria
+step.model <- step(empty.model, scope = list(lower = empty.model, upper = full.model), direction = "both", data = train.3, k = log(nrow(train.3)))
+
+# now reduce the number of variables to 12
+# rank variables by importance (t-test signifcance), select top 12
+importance <- varImp(step.model)
+top_vars <- importance %>%
+    arrange(desc(Overall)) %>%
+    slice_head(n = 12)
+
+# Make the final model
+mlr <- lm(Sale_Price ~ First_Flr_SF + Roof_Matl + Second_Flr_SF + Overall_Qual + Year_Built
+    + MS_SubClass + Neighborhood, data = train.3)
+
+# Check MLR assumptions
+# appears semi-normally distributed
+hist(resid(mlr))
+par(mfrow = c(2, 2))
+plot(mlr)
+# variance is equal, doesnt appear to be the need for higher order terms
+plot(resid(mlr))
+ggplot(mlr, aes(sample = .resid)) +
+    stat_qq() +
+    stat_qq_line()
+ggplot(mlr, aes(x = .fitted, y = .resid)) +
+    geom_point() +
+    geom_line(y = 0)
+
+# will pretend we know about the data collection and that errors are independent
+summary(mlr)
+# R^2 and F-stat are promising
+
+
+# TODO
+# Remove influential observations, fit on test data and get MSE and MAE
+```
+
+Gr_Liv_Area
+Second_Flr_SF
+Garage_Area

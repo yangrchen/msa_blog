@@ -1,0 +1,50 @@
+---
+title: Lab 13
+date: 07/18/2023
+---
+
+## a
+
+```{r}
+#| warning: false
+
+library(tidyverse)
+
+safety <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/safety.csv")
+
+safety <- safety %>%
+    mutate(across(c(Region, Size), as.factor))
+```
+
+```{r}
+model <- glm(Unsafe ~ Region + Weight + Size, family = binomial(), data = safety)
+summary(model)
+```
+
+Significant variables are `Size`
+
+```{r}
+library(survival)
+concordance(model)
+```
+
+Model correctly ranks unsafe cars ahead of safe cars 84.8% of the time.
+
+## b
+
+```{r}
+model2 <- glm(Unsafe ~ Weight + Size, data = safety, family = binomial())
+summary(model2)
+```
+
+```{r}
+model3 <- glm(Unsafe ~ Size, data = safety, family = binomial())
+summary(model3)
+concordance(model3)
+
+exp(cbind(coef(model3), confint(model3)))
+```
+
+Only `Size` remained in the model. 0.8182 C-statistic
+
+The interpretation of the `Size` variable in the model is that Size2 is 0.108 times more likely to be unsafe than compared to Size1. Size3 is 0.03 times more likely to be unsafe than compared to Size1.

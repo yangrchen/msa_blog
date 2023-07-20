@@ -1,0 +1,49 @@
+---
+title: Breakout 11
+date: 07/13/2023
+---
+
+# 1
+
+```{r}
+library(glmnet)
+library(tidyverse)
+
+bike <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bike.csv")
+set.seed(123)
+
+bike <- bike %>%
+    mutate(id = row_number())
+train <- bike %>%
+    sample_frac(0.7)
+test <- anti_join(bike, train, by = "id")
+```
+
+```{r}
+nrow(train)
+nrow(test)
+```
+
+12165 rows in `train`, 5214 rows in `test`
+
+```{r}
+train_x <- model.matrix(cnt ~ temp + atemp + hum + windspeed, data = train)[, -1]
+train_y <- train$cnt
+
+test_x <- model.matrix(cnt ~ temp + atemp + hum + windspeed, data = test)[, -1]
+test_y <- test$cnt
+```
+
+```{r}
+train_ridge <- glmnet(x = train_x, y = train_y, alpha = 0)
+train_ridge_cv <- cv.glmnet(x = train_x, y = train_y, alpha = 0)
+train_ridge_cv$lambda.min
+```
+
+Min. $\lambda$ is 7.388165 
+
+```{r}
+test$pred_ridge <- predict(train_ridge, s = train_ridge_cv$lambda.min, newx = test_x)
+head(test$pred_ridge)
+head(test$cnt)
+```

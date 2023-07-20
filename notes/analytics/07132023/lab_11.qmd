@@ -1,0 +1,37 @@
+---
+title: Lab 11
+date: 07/13/2023
+---
+
+# 1
+
+```{r, warning=FALSE} 
+library(AppliedPredictiveModeling)
+library(glmnet)
+library(tidyverse)
+
+data(FuelEconomy)
+str(cars2010)
+```
+
+## a
+
+```{r}
+cars2010 <- cars2010 %>%
+    mutate(across(!c(EngDispl, FE), as.factor))
+
+x <- model.matrix(FE ~ ., data = cars2010)[, -1]
+y <- cars2010$FE
+cars2010_lasso <- glmnet(x = x, y = y, data = cars2010, alpha = 1)
+plot(cars2010_lasso, xvar = "lambda")
+```
+
+## b
+
+```{r}
+cars2010_lasso_cv <- cv.glmnet(x = x, y = y, data = cars2010, alpha = 1)
+sprintf("Lambda Min: %f", cars2010_lasso_cv$lambda.min)
+sprintf("Lambda 1se: %f", cars2010_lasso_cv$lambda.1se)
+
+coef(cars2010_lasso, s = c(cars2010_lasso_cv$lambda.min, cars2010_lasso_cv$lambda.1se))
+```

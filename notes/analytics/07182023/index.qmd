@@ -1,0 +1,235 @@
+---
+title: Introduction to Logistic Regression
+date: 07/18/2023
+---
+
+# Setup
+
+```{r}
+#| warning: false
+
+library(AmesHousing)
+library(tidyverse)
+library(reticulate)
+
+use_condaenv("blues_clues")
+
+set.seed(123)
+ames <- make_ordinal_ames()
+
+ames <- ames %>%
+    mutate(id = row_number())
+train <- ames %>% sample_frac(0.7)
+train <- train %>%
+    mutate(Bonus = ifelse(Sale_Price > 175000, 1, 0))
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import statsmodels.formula.api as smf
+
+train = r.train
+
+
+```
+
+Logistic regression is one of many classification models that can help us predict a specific class in a categorical variable.
+
+One of the most common targets we will be trying to predict is a binary target variable (Yes / No, 1 / 0).
+
+# Why Linear Regression Doesn't Work for Classification
+
+$$
+y_i = \beta_0 + \beta_1x_{1,i} + \varepsilon_i
+$$
+
+-   If response is categorical, how do you encode the response numerically?
+-   If our regression is prediction 0.5, 1.1, -0.4 what does that mean practically?
+
+```{r}
+lp_model <- lm(Bonus ~ Gr_Liv_Area, data = train)
+with(train, plot(
+    x = Gr_Liv_Area, y = Bonus,
+    main = "OLS Regression?",
+    xlab = "Greater Living ARea (Sqft)",
+    ylab = "Bonus Eligibility"
+))
+abline(lp_model)
+```
+
+# Binary Logistic Regression
+
+$$
+p_i = \frac{1}{1 + e^{-(\beta_0 + \beta_1x_{1,i} + \cdots + \beta_k x_{k,i})}}
+$$
+
+-   Predicted probability will always be between 0 and 1
+-   Parameter estimates do not enter model equation linearly
+-   Rate of change of probability varies as the X's vary
+
+Decision probabilities are not linear. Even small changes in X can drastically change the decision.
+
+```{python}
+def sigmoid(x):
+    return 1.0 / (1.0 + np.exp(-x))
+
+
+x = np.arange(-10, 10, 0.1)
+
+plt.plot(x, sigmoid(x))
+plt.xlabel("x")
+plt.ylabel("sigmoid(x)")
+plt.title("Sigmoid Curve")
+plt.show()
+```
+
+## Logit Link Function
+
+To create linear model, a logit function is applied to the probabilities:
+
+$$
+\log(\frac{p_i}{1 - p_i}) = \beta_0 + \beta_1x_{1,i} + \cdots + \beta_k x_{k,i}
+$$
+
+-   $\frac{p_i}{1 - p_i}$ is the odds of an outcome happening
+-   The relationship between parameters and **logits** are linear
+-   Logits unbounded
+
+## Assumptions
+
+-   Independence of observations
+-   Logit is linearly related to variables
+
+## R Code
+
+```{r}
+ames_logit <- glm(Bonus ~ Gr_Liv_Area, data = train, family = binomial())
+
+summary(ames_logit)
+```
+
+## Python Code
+
+```{python}
+ames_logit = smf.logit("Bonus ~ Gr_Liv_Area", data=train).fit()
+
+ames_logit.summary()
+```
+
+# Interpretation of Logistic Regression Coefficients
+
+A $\hat{\beta}$ change in the logit is equivalent to $100 \cdot (e^{\hat{\beta}} - 1)\%$. Why?
+
+$$
+\frac{p}{1 - p} = e^{\beta_0 + \beta_1x}
+$$
+
+With a unit change in x:
+
+$$
+\frac{p}{1 - p} e^{\beta_0 + \beta_1x + \beta_1}
+$$
+
+The odds ratio is then the ratio between the unit change odds and default odds:
+
+$$
+\text{Odds Ratio} = \frac{e^{\beta_0 + \beta_1x + \beta_1}}{e^{\beta_0 + \beta_1x}} = e^{\beta_1}
+$$
+
+The interpretation in terms of a percentage change in expected odds is then:
+
+$$
+100 \cdot (e^{\beta_1} - 1)\%
+$$
+
+## R Code
+
+```{r}
+100 * (exp(cbind(coef(ames_logit), confint(ames_logit))) - 1)
+```
+
+The reason we subtract by 1 is that 1 is the center point of odds. We subtract to help center back around 0.
+
+Every additional square foot of greater living area increases the expected odds of being bonus eligible by 0.38%.
+
+In practice, a client will care more about this interpretation of how an outcome odds changes rather than the pure technical details behind how a model was built.
+
+## Categorical Variable Interpretation
+
+```{r}
+ames_logit2 <- glm(Bonus ~ Gr_Liv_Area + Central_Air + factor(Fireplaces), data = train, family = binomial())
+
+100 * (exp(cbind(coef(ames_logit2), confint(ames_logit2))) - 1)
+
+exp(cbind(coef(ames_logit2), confint(ames_logit2)))
+coef(ames_logit2)
+```
+
+Homes with central air increases the expected odds of being bonus eligible by 3416% compared to those without central air. 
+
+A more believable way of saying this would be $e^{3.56} = 35.16$ times more likely to be bonus eligible than compared to those without central air.
+
+# Model Assessment
+
+One main way to evaluate models is to compare every pair of 0's and 1's in the target variable. These pairs are considered **concordant, discordant, or tied.** We want to rank our 1's higher than our 0's.
+
+## Concordant
+
+0 and 1 pair where bonus eligible home (1) has a higher predicted probability than the non-bonus eligible home (0). The idea is that we calculate $p_i$ for the 0 and 1 case for the pair and see which probability is higher.
+
+Does not matter what the actual predicted probability values are as long as the bonus eligible home has a higher predicted probability than the non-bonus eligible home.
+
+## Discordant
+
+0 and 1 pair where bonus eligible home (1) has a lower predicted probability than the non-bonus eligible home (0)
+
+Model unsuccessfully ordered the homes.
+
+## Tied Pair
+
+0 and 1 pair where the bonus eligible home has the same predicted probability as the non-bonus eligible home.
+
+## Concordance
+
+```{r}
+library(survival)
+
+concordance(ames_logit)
+```
+
+Model correctly ranks bonus eligible homes ahead of non-bonus eligible homes 86.3% of the time. This does not mean that our model is accurate 86.3% of the time.
+
+# Variable Selection and Regularized Regression
+
+All of the same approaches to variable selection in linear regression are available for logistic.
+
+```{r}
+train_sel_log <- train %>%
+    select(
+        Bonus, Lot_Area, Street, Bldg_Type, House_Style,
+        Overall_Qual, Roof_Style, Central_Air,
+        First_Flr_SF, Second_Flr_SF, Full_Bath, Half_Bath,
+        Fireplaces, Garage_Area, Gr_Liv_Area,
+        TotRms_AbvGrd
+    ) %>%
+    replace(is.na(.), 0)
+
+full_model <- glm(Bonus ~ ., data = train_sel_log)
+empty_model <- glm(Bonus ~ 1, data = train_sel_log)
+```
+
+```{r}
+for_model <- step(
+    empty_model,
+    scope = list(
+        lower = empty_model,
+        upper = full_model
+    ),
+    direction = "forward",
+    k = log(dim(train_sel_log)[1])
+)
+```
+
+Variable selection methods are computationally expensive. You should spend time to find a subset of main effects that you want to try *and then* try variable selection.

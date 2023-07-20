@@ -1,0 +1,14 @@
+{
+  "hash": "f8ad85d422c28a7d3bb24c2da7e4571a",
+  "result": {
+    "markdown": "---\ntitle: Breakout 11\ndate: 07/13/2023\n---\n\n\n# 1\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(glmnet)\n```\n\n::: {.cell-output .cell-output-stderr}\n```\nLoading required package: Matrix\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nLoaded glmnet 4.1-7\n```\n:::\n\n```{.r .cell-code}\nlibrary(tidyverse)\n```\n\n::: {.cell-output .cell-output-stderr}\n```\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.2     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.2     ✔ tibble    3.2.1\n✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n✔ purrr     1.0.1     \n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ tidyr::expand() masks Matrix::expand()\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\n✖ tidyr::pack()   masks Matrix::pack()\n✖ tidyr::unpack() masks Matrix::unpack()\nℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors\n```\n:::\n\n```{.r .cell-code}\nbike <- read.csv(\"https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bike.csv\")\nset.seed(123)\n\nbike <- bike %>%\n    mutate(id = row_number())\ntrain <- bike %>%\n    sample_frac(0.7)\ntest <- anti_join(bike, train, by = \"id\")\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nnrow(train)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 12165\n```\n:::\n\n```{.r .cell-code}\nnrow(test)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 5214\n```\n:::\n:::\n\n\n12165 rows in `train`, 5214 rows in `test`\n\n\n::: {.cell}\n\n```{.r .cell-code}\ntrain_x <- model.matrix(cnt ~ temp + atemp + hum + windspeed, data = train)[, -1]\ntrain_y <- train$cnt\n\ntest_x <- model.matrix(cnt ~ temp + atemp + hum + windspeed, data = test)[, -1]\ntest_y <- test$cnt\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\ntrain_ridge <- glmnet(x = train_x, y = train_y, alpha = 0)\ntrain_ridge_cv <- cv.glmnet(x = train_x, y = train_y, alpha = 0)\ntrain_ridge_cv$lambda.min\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 7.388165\n```\n:::\n:::\n\n\nMin. $\\lambda$ is 7.388165 \n\n\n::: {.cell}\n\n```{.r .cell-code}\ntest$pred_ridge <- predict(train_ridge, s = train_ridge_cv$lambda.min, newx = test_x)\nhead(test$pred_ridge)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n         s1\n1  25.04585\n2  92.24244\n3  96.43314\n4 117.79311\n5  98.29221\n6  98.29221\n```\n:::\n\n```{.r .cell-code}\nhead(test$cnt)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1]  3 56 34 39  6  3\n```\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

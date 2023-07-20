@@ -1,0 +1,67 @@
+---
+title: Lab 12
+date: 07/17/2023
+---
+
+```{r}
+library(tidyverse)
+safety <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/safety.csv")
+```
+
+# 1
+
+## a
+
+-   `Unsafe` is ordinal
+-   `Type` is nominal
+-   `Region` is ordinal
+-   `Weight` is ordinal
+-   `Size` is ordinal
+
+## b
+
+```{r}
+table(safety$Region, safety$Unsafe)
+
+ggplot(safety) +
+    geom_bar(aes(x = Region, fill = factor(Unsafe)))
+```
+
+-   Percentage of cars classified as unsafe in the Asia region is 42.9 percent
+-   Percentage of cars classified as safe in the North America region is 75.4 percent
+-   Appropriate test to use is Mantel-Haenszel
+    -   $H_0:$ No linear association, $H_a:$ Linear association exists
+
+```{r}
+library(vcdExtra)
+library(DescTools)
+
+CMHtest(table(safety$Region, safety$Unsafe))$table[1, ]
+
+OddsRatio(table(safety$Region, safety$Unsafe))
+
+table(safety$Region, safety$Unsafe)
+```
+
+-   At an $\alpha$ level of 0.05, we do not reject the null hypothesis that there is no linear association between `Region` and `Safety`
+-   There are 0.435 times the odds to be safe if it's in the Asia region
+
+## c
+
+Appropriate test is Mantel-Haenszel
+
+```{r}
+CMHtest(table(safety$Size, safety$Unsafe))$table[1, ]
+```
+
+-   We reject the null hypothesis that there is no linear association between the two variables
+
+```{r}
+cor.test(
+    x = as.numeric(ordered(safety$Size)), 
+    y = as.numeric(ordered(safety$Unsafe)), 
+    method = "spearman"
+)
+```
+
+-   It's not too strong at $\rho = -0.542$
