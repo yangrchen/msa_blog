@@ -1,6 +1,7 @@
 ---
 title: Model Building and Scoring for Prediction
 date: 07/13/2023
+date-modified: 07/20/2023
 engine: knitr
 editor: visual
 editor_options:
@@ -16,7 +17,7 @@ Linear regression is the best **linear unbiased estimator**.
 ## Best Linear Unbiased Estimator
 
 $$
-\hat{\beta}_j ~ N(\beta_j, s_{\hat{\beta}_j})
+\hat{\beta}_j \sim N(\beta_j, s_{\hat{\beta}_j})
 $$
 
 On average, coefficients from all samples are centered from the true coefficient. What does it mean to be *best*? If assumptions hold, $s_{\hat{\beta}_j}$ is the minimum variance of all the unbiased estimators.
@@ -73,7 +74,7 @@ $$
 $$
 
 -   If $\lambda = 0$, then OLS
--   As $\lambda \rightarrow \infty$, coefficients shrink to 0
+-   As $\lambda \rightarrow \infty$, coefficients shrink to 0 but cannot actually go to 0
     -   The only way to counteract $\lambda$ getting bigger is to make the coefficients smaller.
 
 ## R Code
@@ -142,7 +143,7 @@ $$
 $$
 
 -   If $\lambda = 0$, then OLS
--   As $\lambda \rightarrow 0$, coefficients shrink to 0
+-   As $\lambda \rightarrow 0$, coefficients shrink to 0 and can actually become 0
 
 ## Differences in Effects
 
@@ -194,7 +195,7 @@ ames_lasso_cv <- cv.glmnet(x = train_x, y = train_y, alpha = 1)
 plot(ames_lasso_cv)
 ```
 
-In regularized regression our evaluation statistic is **mean-squared error**. With each fold, we train a model on the remaining trainning data and calculate the mean-squared error on the fold. We do this for $k$ folds and then calculate the average of all the mean-squared errors to get the final statistic for the model. 
+In regularized regression our evaluation statistic is **mean-squared error**. With each fold, we train a model on the remaining trainning data and calculate the mean-squared error on the fold. We do this for $k$ folds and then calculate the average of all the mean-squared errors to get the final statistic for the model.
 
 When tuning $\lambda$, we will do this across a range of different $\lambda$ values with average mean-squared error being compared throughout the range.
 

@@ -1,6 +1,7 @@
 ---
 title: Introduction to Statistical Inference
 date: 06/28/2023
+date-modified: 07/20/2023
 ---
 
 Last time we talked about different statistical measures like mean and standard deviation. These are called **point estimates**.
@@ -11,15 +12,15 @@ Last time we talked about different statistical measures like mean and standard 
 
 There is *variability* among samples. However, we can have a margin of error for our estimate via the **Central Limit Theorem**
 
-::: {.callout-note}
+::: callout-note
 # Central Limit Theorem
 
-Distribution of sample means is approximately Normal, regardless of the population parameter's distribution given a large sample size.
+Distribution of sample means is approximately Normal, regardless of the population parameter's distribution given a large sample size ($n \geq 50$).
 :::
 
 # Standard Error of the Mean
 
-**Standard error** measures the variability of our estimate. Compare to the sample standard deviation which is a measure of the **variability in your data**.
+**Standard error** measures the variability of our statistic estimate. Compare to the sample standard deviation, $s$, which is a measure of the **variability in your data**.
 
 -   Standard error is the variation on the statistic
 -   If you were to resample data and compute the new sample average many times, how much variability would you expect in the results?
@@ -54,9 +55,9 @@ A hypothesis test investigates if we can prove that the true population value is
 1.  Start with a null hypothesis $H_0$ about a parameter of interest. We assume $H_0$ is true.
 2.  Select an acceptable significance level $\alpha$ which represents the likelihood that you incorrectly reject $H_0$ (probability of Type I error)
 3.  Alternative hypothesis $H_a$ is the logical opposite. Note that alternative hypothesis is the "significantly different" statement--no equal signs should appear in alternative
-4. Collect data, compute statistic
-5. Determine the probability that you observed a statistic as extreme or more extreme as the one you did assuming $H_0$ is true $\rightarrow$ **p-value**
-6. If p-value $\leq \alpha$, reject $H_0$ and fail to reject otherwise
+4.  Collect data, compute statistic
+5.  Determine the probability that you observed a statistic as extreme or more extreme as the one you did assuming $H_0$ is true $\rightarrow$ **p-value**
+6.  If p-value $\leq \alpha$, reject $H_0$ and fail to reject otherwise. Make sure to *interpret* the p-value.
 
 # Simulation Study
 
@@ -95,7 +96,9 @@ ggplot(df, aes(x = number_heads)) +
 
 # One-Sample t-tests
 
-Testing a mean against a hypothesized value. We first need to calculate the t-statistic:
+Testing a mean against a hypothesized value. A one-sided test is looking to see if the true mean is greater than or less than a hypothesized value. A two-sided test is looking to see if the true mean is different than a hypothesized value.
+
+We first need to calculate the t-statistic:
 
 $$
 t = \frac{\bar{x} - \mu_0}{s_{\bar{x}}}
@@ -105,7 +108,7 @@ $$
 
 ## Example in R
 
-> We want to know if the true Sales Price is different then $178,000.
+> We want to know if the true Sales Price is different then \$178,000.
 >
 > The null hypothesis is $H_0$: $\mu = 178000$ and the alternative is $H_a$: $\mu \neq 178000$. $\alpha = 0.05$
 
@@ -117,7 +120,7 @@ ames <- make_ordinal_ames()
 t.test(ames$Sale_Price, mu = 178000)
 ```
 
-Do not reject the null hypothesis as p-value $> \alpha$ 
+Do not reject the null hypothesis as p-value $> \alpha$
 
 To conduct a directional t-test:
 
@@ -140,7 +143,7 @@ We are now testing the difference between two means.
 
 ## F-Test for Equality of Variances
 
-::: {.text-center}
+::: text-center
 $H_0: \sigma_1^2 = \sigma_2^2$
 
 $H_a: \sigma_1^2 \neq \sigma_2^2$
@@ -186,11 +189,11 @@ wilcox.test(Sale_Price ~ Central_Air, data = ames)
 
 ### Interpretations of Wilcoxon
 
-Conditions | Interpretation of Significant Mann-Whiteney-Wilcoxon Test
-:-- | :--
-Group distributions are identical in shape, variance and symmetric | Difference in means
-Group distributions are identical in shape, variance, but not symmetric | Difference in medians
-Group distributions are not identical in shape, variance, and are not symmetric | Difference in location (distributional dominance)
+| Conditions                                                                      | Interpretation of Significant Mann-Whiteney-Wilcoxon Test |
+|:-----------------------------------|:-----------------------------------|
+| Group distributions are identical in shape, variance and symmetric              | Difference in means                                       |
+| Group distributions are identical in shape, variance, but not symmetric         | Difference in medians                                     |
+| Group distributions are not identical in shape, variance, and are not symmetric | Difference in location (distributional dominance)         |
 
 # Conclusions in Testing
 

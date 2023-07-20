@@ -1,7 +1,7 @@
 ---
 title: Categorical Data Analysis
 date: 07/17/2023
-draft: true
+date-modified: 07/20/2023
 ---
 
 Recall: categorical variables are data whose measurement scale is inherently categorical.
@@ -77,7 +77,7 @@ ax.set(
 
 How much of a change in the distribution is required to believe there actually is a difference?
 
-::: {.text-center}
+::: text-center
 $H_0:$ There is no association
 
 $H_a:$ There is an association
@@ -156,11 +156,14 @@ Pearson and Likelihood Ratio tests can handle any type of categorical variable. 
 
 We can test for ordinal variables against other ordinal variables with **Mantel-Haenszel Chi-Square Test**. This test checks whether two ordinal variables have a linear relationship as compared to just a general one.
 
+However, if you are comparing nominal to ordinal, you have to stick to a general test of association with Pearson's chi-square.
+
 ## Mantel-Haenszel Chi-Square Test
 
-::: {.text-center}
-$H_0:$ There is no linear relationship
-$H_a:$ There is a linear relationship
+::: text-center
+$H_0:$ There is no linear association
+
+$H_a:$ There is a linear association
 :::
 
 $$
@@ -168,6 +171,8 @@ $$
 $$
 
 -   $d.f.$ equals 1
+
+Just because you fail to reject in Mantel-Haenszel it **does not** mean that there is no association. There is just no linear association
 
 ```{r}
 library(vcdExtra)
@@ -187,6 +192,7 @@ Common measures of association:
 -   Spearman's Correlation (Ordinal vs. ordinal)
 
 ## Odds Ratios
+
 <!-- TODO: Add example of odds ratio and explaining why interpretation reverse is also true -->
 
 Odds ratios indicates how much more likely, with respect to odds, a certain event occurs in one group relative to its occurrence in another group.

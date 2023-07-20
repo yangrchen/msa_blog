@@ -1,6 +1,7 @@
 ---
 title: Introduction to Logistic Regression
 date: 07/18/2023
+date-modified: 07/20/2023
 ---
 
 # Setup
@@ -192,6 +193,8 @@ Model unsuccessfully ordered the homes.
 0 and 1 pair where the bonus eligible home has the same predicted probability as the non-bonus eligible home.
 
 ## Concordance
+
+Concordance is the proportion of concordant pairs across all pairs considered in our data.
 
 ```{r}
 library(survival)

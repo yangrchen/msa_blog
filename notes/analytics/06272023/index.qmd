@@ -1,7 +1,7 @@
 ---
 title: Exploratory Data Analysis
 date: 06/27/2023
-date-modified: 07/02/2023
+date-modified: 07/20/2023
 ---
 
 # What kind of variables do you have?
@@ -34,6 +34,7 @@ There are two types of categorical variables:
 -   Ordinal
     -   Have logical orderings associated with them
     -   Small, Medium, Large
+    -   Binary IS ordinal regardless of the labels
 
 With ordinal variables, you can treat them as either nominal or quantitative. You have to make the decision.
 
@@ -73,16 +74,22 @@ x1 = np.repeat(["A", "B", "C"], 10)
 x2 = np.repeat(["Z", "X", "Y", "W", "V", "U"], 5)
 
 random.seed(41)
-y = np.concatenate([random.normal(2.0, 1.0, 10), random.normal(1.0, 1.0, 10), random.normal(0.0, 1.0, 10)])
+y = np.concatenate(
+    [
+        random.normal(2.0, 1.0, 10),
+        random.normal(1.0, 1.0, 10),
+        random.normal(0.0, 1.0, 10),
+    ]
+)
 array = np.array([x1, x2, y])
 array2 = np.transpose(array)
 
-df = pd.DataFrame(data = array2, columns = ["x1", "x2", "y"])
+df = pd.DataFrame(data=array2, columns=["x1", "x2", "y"])
 df.head()
 ```
 
 ```{python}
-one_hot_encoded_data = pd.get_dummies(df, columns = ['x1', 'x2'])
+one_hot_encoded_data = pd.get_dummies(df, columns=["x1", "x2"])
 one_hot_encoded_data.head()
 ```
 
@@ -188,7 +195,7 @@ A Normal distribution is a distribution that is
 
 
 ```{python}
-#| code-fold: true
+# | code-fold: true
 from scipy.stats import norm
 import numpy as np
 import matplotlib.pyplot as plt
@@ -241,20 +248,18 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 ames_py = pd.read_csv("../../../data/ames.csv")
-ax = sns.histplot(x = ames_py['SalePrice'] / 1000, kde = True, data = ames_py, color = "blue")
+ax = sns.histplot(x=ames_py["SalePrice"] / 1000, kde=True, data=ames_py, color="blue")
 ax.set(
-    xlabel = 'Sales Price (Thousands $)',
-    ylabel = 'Frequency',
-    title = 'Histogram of Sales Price in Thousands of Dollars'
+    xlabel="Sales Price (Thousands $)",
+    ylabel="Frequency",
+    title="Histogram of Sales Price in Thousands of Dollars",
 )
 plt.show()
 ```
 
 ```{python}
-ax = sns.displot(ames_py, x = ames_py['SalePrice'] / 1000, kde=True)
-ax.set(
-    xlabel = 'Sales Price (Thousands $)',
-    ylabel = 'Frequency')
+ax = sns.displot(ames_py, x=ames_py["SalePrice"] / 1000, kde=True)
+ax.set(xlabel="Sales Price (Thousands $)", ylabel="Frequency")
 ```
 
 The distribution is right-skewed so the mean is greater than the median housing price.
@@ -286,7 +291,7 @@ ggplot(ames, aes(sample = Sale_Price / 1000)) +
 ```{python}
 import statsmodels.api as sma
 
-sma.qqplot(ames_py['SalePrice'] / 1000, line='45', fit = True)
+sma.qqplot(ames_py["SalePrice"] / 1000, line="45", fit=True)
 ```
 
 ### Box Plots
@@ -307,15 +312,16 @@ ggplot(ames, aes(y = Sale_Price / 1000, x = Central_Air, fill = Central_Air)) +
 #### Python Code
 
 ```{python}
-ax = sns.boxplot(ames_py, x = ames_py['SalePrice'] / 1000)
+ax = sns.boxplot(ames_py, x=ames_py["SalePrice"] / 1000)
 ax.set(
-    xlabel='Sales Price (Thousands $)',
-    title='Boxplot of Sales Price in Thousands of Dollars')
+    xlabel="Sales Price (Thousands $)",
+    title="Boxplot of Sales Price in Thousands of Dollars",
+)
 plt.show()
 ```
 
 ```{python}
-ax = sns.catplot(ames_py, x='CentralAir', y='SalePrice', kind='box')
+ax = sns.catplot(ames_py, x="CentralAir", y="SalePrice", kind="box")
 plt.show()
 ```
 

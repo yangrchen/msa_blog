@@ -1,6 +1,7 @@
 ---
 title: Ordinary Least Squares Regression
 date: 06.30.2023
+date-modified: 07/20/2023
 ---
 
 # Pearson's Correlation
@@ -13,7 +14,7 @@ Pearson's correlation measures *linear* relationships.
 
 Parameter representing population correlation is $\rho$ and is estimated by $r$
 
-::: {.text-center}
+::: text-center
 $H_0: \rho = 0$
 
 $H_a: \rho \neq 0$
@@ -93,13 +94,13 @@ $$
 
 ## The Baseline Model
 
-::: {.text-center}
+::: text-center
 $H_0: \beta_1 = 0$
 
 $H_a: \beta_1 \neq 0$
 :::
 
-For SLR, the global F-Test, parameter t-test and the test of Pearson's correlation are all equivalent.
+For SLR, the global F-Test, parameter t-test and the test of Pearson's correlation **are all equivalent**.
 
 When we can't reject the null hypothesis we are essentially saying that the independent variable doesn't explain any of the variability in the response.
 
@@ -113,8 +114,8 @@ When we can't reject the null hypothesis we are essentially saying that the inde
 
 ### Testing of Assumptions
 
--   Normality can use a histogram, QQ-Plot or normality test
--   Equal variances can use residuals versus predicted values
+-   Normality can be verified using a histogram, QQ-Plot or normality test
+-   Equal variances can be verified through residuals versus predicted values
 -   Independence can look at residual plots for potential autocorrelation
 -   Linearity in the mean can be tested through a residual plot and finding that there is no pattern in residual plot
 

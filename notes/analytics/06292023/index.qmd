@@ -1,6 +1,7 @@
 ---
 title: Introduction to ANOVA and Regression
 date: 06/29/2023
+date-modified: 07/20/2023
 ---
 
 # Linear Models
@@ -79,13 +80,13 @@ ggplot(ames, aes(x = Sale_Price / 1000, fill = Exter_Qual)) +
 
 # One-Way ANOVA
 
-One-Way ANOVA is a test of relationship between categorical input and quantitative response.
+One-Way ANOVA is a test of relationship between **categorical variable** and **quantitative response**.
 
 One-Way refers to only one factor (e.g. a group of quality ratings).
 
 We are comparing $k$ levels of our predictor variable and seeing if there are any statistically significant difference in their mean response.
 
-::: {.text-center}
+::: text-center
 $H_0: F_1 = F_2 = F_3 = F_4$
 
 $H_a:$ Atleast one mean is different
@@ -93,11 +94,11 @@ $H_a:$ Atleast one mean is different
 
 In the ANOVA model, instead of using *one-hot encoding* for our variables, we use reference coding where we drop one of the levels. The level dropped will be the **reference level**.
 
-Level | $x_a$ | $x_b$
---- | --- | ---
-A | 1 | 0
-B | 0 | 1
-C | 0 | 0
+| Level | $x_a$ | $x_b$ |
+|-------|-------|-------|
+| A     | 1     | 0     |
+| B     | 0     | 1     |
+| C     | 0     | 0     |
 
 $$
 y = \beta_0 + \beta_Ax_A + \beta_Bx_B + \varepsilon
@@ -111,7 +112,7 @@ $$
 -   Observations are independent
 -   Each group is normally distributed
     -   Or the *residuals* of the ANOVA model are normally distributed
--   All groups have equal variances (homeskedasticity)
+-   All groups have equal variances (homoskedasticity)
     -   If true, use "pooled" variance
     -   If false, use Welch's ANOVA
 
@@ -168,11 +169,11 @@ oneway.test(Sale_Price ~ Exter_Qual, data = train, var.equal = FALSE)
 
 Kruskal-Wallis is a nonparametric test for more than two groups:
 
-Conditions | Interpretation of Significant Kruskal-Wallis Test
-:-- | :--
-Group distributions are identical in shape, variance, and symmetric | Difference in means
-Group distributions are identical in shape, variance, but not symmetric | Difference in medians
-Else | Difference in location (distributional dominance)
+| Conditions                                                              | Interpretation of Significant Kruskal-Wallis Test |
+|:-----------------------------------|:-----------------------------------|
+| Group distributions are identical in shape, variance, and symmetric     | Difference in means                               |
+| Group distributions are identical in shape, variance, but not symmetric | Difference in medians                             |
+| Else                                                                    | Difference in location (distributional dominance) |
 
 ## Kruskal-Wallis ANOVA in R
 
@@ -182,9 +183,11 @@ kruskal.test(Sale_Price ~ Exter_Qual, data = train)
 
 # ANOVA Analysis Plan Summmary
 
+::: text-center
 $H_0:$ All means are equal.
 
 $H_a:$ At least one mean is different
+:::
 
 1.  Produce descriptive statistics
 2.  Verify assumptions
@@ -195,7 +198,7 @@ $H_a:$ At least one mean is different
 
 # ANOVA Post-Hoc Tests
 
-While the ANOVA F-Test tells us if at least one group mean is different, we need to understand which groups are different. 
+While the ANOVA F-Test tells us if at least one group mean is different, we need to understand which groups are different.
 
 We will compare the groups pairwise to determine if they are different.
 
@@ -223,7 +226,7 @@ print(tukey.ames)
 
 ## Dunnett's Test for Control Comparison
 
-If you're not making all pairwise comparisons, Tukey's is overly conservative. 
+If you're not making all pairwise comparisons, Tukey's is overly conservative.
 
 ```{r}
 library(DescTools)
