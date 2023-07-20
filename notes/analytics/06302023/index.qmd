@@ -13,7 +13,11 @@ Pearson's correlation measures *linear* relationships.
 
 Parameter representing population correlation is $\rho$ and is estimated by $r$
 
+::: {.text-center}
 $H_0: \rho = 0$
+
+$H_a: \rho \neq 0$
+:::
 
 However, rejecting $H_0$ only means that $\rho$ is not exactly 0 so we need to see if the relationship is practically significant.
 
