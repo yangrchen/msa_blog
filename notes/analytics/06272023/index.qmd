@@ -1,7 +1,7 @@
 ---
 title: Exploratory Data Analysis
 date: 06/27/2023
-date-modified: 07/20/2023
+date-modified: 07/22/2023
 ---
 
 # What kind of variables do you have?
@@ -15,7 +15,7 @@ Our variables are quantities or qualities of interest. These are also called:
 -   Inputs/Outputs
 -   Covariates
 
-## Quantiative Variables 
+## Quantitative Variables 
 
 Quantitative variables have a quantity value associated with them. These are intervals, numerics or ratios.
 
@@ -48,8 +48,13 @@ Small | Medium | Large
 
 The table shows an example of **one-hot encoding**. We can achieve this in R using the `onehot` package:
 
+### R Code
+
 ```{r}
 library(onehot)
+library(reticulate)
+
+use_condaenv("blues_clues")
 
 set.seed(41)
 dat <- data.frame(
@@ -63,7 +68,7 @@ dummies <- predict(encoder, dat)
 head(dummies)
 ```
 
-And in Python:
+### Python Code
 
 ```{python}
 import numpy as np
@@ -240,26 +245,17 @@ ggplot(ames, aes(x = Sale_Price / 1000)) +
 
 #### Python Code
 
-Note this is a different Ames Housing dataset.
-
 ```{python}
 import seaborn as sns
 from pathlib import Path
-import matplotlib.pyplot as plt
 
-ames_py = pd.read_csv("../../../data/ames.csv")
-ax = sns.histplot(x=ames_py["SalePrice"] / 1000, kde=True, data=ames_py, color="blue")
+ames = r.ames
+ax = sns.histplot(x=ames["Sale_Price"] / 1000, kde=True, data=ames, color="blue")
 ax.set(
     xlabel="Sales Price (Thousands $)",
     ylabel="Frequency",
     title="Histogram of Sales Price in Thousands of Dollars",
 )
-plt.show()
-```
-
-```{python}
-ax = sns.displot(ames_py, x=ames_py["SalePrice"] / 1000, kde=True)
-ax.set(xlabel="Sales Price (Thousands $)", ylabel="Frequency")
 ```
 
 The distribution is right-skewed so the mean is greater than the median housing price.
@@ -291,7 +287,7 @@ ggplot(ames, aes(sample = Sale_Price / 1000)) +
 ```{python}
 import statsmodels.api as sma
 
-sma.qqplot(ames_py["SalePrice"] / 1000, line="45", fit=True)
+sma.qqplot(ames["Sale_Price"] / 1000, line="45", fit=True)
 ```
 
 ### Box Plots
@@ -312,16 +308,15 @@ ggplot(ames, aes(y = Sale_Price / 1000, x = Central_Air, fill = Central_Air)) +
 #### Python Code
 
 ```{python}
-ax = sns.boxplot(ames_py, x=ames_py["SalePrice"] / 1000)
+ax = sns.boxplot(ames, x=ames["Sale_Price"] / 1000)
 ax.set(
     xlabel="Sales Price (Thousands $)",
     title="Boxplot of Sales Price in Thousands of Dollars",
 )
-plt.show()
 ```
 
 ```{python}
-ax = sns.catplot(ames_py, x="CentralAir", y="SalePrice", kind="box")
+ax = sns.catplot(ames, x="Central_Air", y="Sale_Price", kind="box")
 plt.show()
 ```
 
@@ -333,6 +328,6 @@ For symmetric distributions and particularly for the Normal distribution, it's c
 
 ### Box-Plot Definition
 
-Box plots define outliers as poitns that are $1.5 \times IQR$ above the third quartile or less than $1.5 \times IQR$ below the first quartile.
+Box plots define outliers as points that are $1.5 \times IQR$ above the third quartile or less than $1.5 \times IQR$ below the first quartile.
 
 There are more definitions but these are the first couple we are considering now.

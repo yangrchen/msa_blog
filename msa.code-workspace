@@ -11,10 +11,6 @@
         {
             "name": "Blog",
             "path": "blog"
-        },
-        {
-            "name": "Data",
-            "path": "data"
         }
     ],
     "settings": {
