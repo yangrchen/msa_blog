@@ -1,7 +1,7 @@
 ---
 title: Introduction to Statistical Inference
 date: 06/28/2023
-date-modified: 07/20/2023
+date-modified: 07/22/2023
 ---
 
 Last time we talked about different statistical measures like mean and standard deviation. These are called **point estimates**.
@@ -29,7 +29,7 @@ $$
 s_{\bar{x}} = \frac{s}{\sqrt{n}}
 $$
 
--   As the sample size grows larger, our confidence in the standard error grows
+As the sample size grows larger, our confidence in the standard error grows
 
 # Confidence Intervals
 
@@ -105,6 +105,10 @@ t = \frac{\bar{x} - \mu_0}{s_{\bar{x}}}
 $$
 
 -   $H_0$ is rejected when the t-value is more extreme than one would expect to happen by chance when $H_0$ is true
+
+## Assumptions
+
+One-sample t-tests need a large enough sample size for the Central Limit Theorem to hold. If you don't have sample size, then the population distribution needs to be Normal.
 
 ## Example in R
 
