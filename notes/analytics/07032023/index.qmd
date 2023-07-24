@@ -1,7 +1,7 @@
 ---
 title: More Complex ANOVA & Regression
 date: 07/03/2023
-date-modified: 07/20/2023
+date-modified: 07/23/2023
 ---
 
 # n-Way ANOVA
@@ -24,6 +24,8 @@ An **effect** is the expected change in response that occurs with a change in va
 # Exploring the (Ames) Data
 
 ```{r}
+#| warning: false 
+
 library(tidyverse)
 library(AmesHousing)
 

@@ -1,12 +1,20 @@
 ---
 title: Ordinary Least Squares Regression
-date: 06.30.2023
-date-modified: 07/20/2023
+date: 06/30/2023
+date-modified: 07/23/2023
 ---
+
+# Setup {.unnumbered}
+
+```{r}
+#| code-fold: true
+library(reticulate)
+use_condaenv("blues_clues")
+```
 
 # Pearson's Correlation
 
-Pearson's correlation measures *linear* relationships.
+Pearson's correlation measures *linear* relationships for continuous variables. 
 
 ![Pearson's Correlation Scenarios](images/pearson.png)
 
@@ -24,14 +32,17 @@ However, rejecting $H_0$ only means that $\rho$ is not exactly 0 so we need to s
 
 Note that outliers affect correlation and correlation *does not* imply causation.
 
-## Test of Correlation in R
+## R Code
 
 ```{r train-test split}
+#| warning: false
+
 library(tidyverse)
 library(AmesHousing)
 
-ames <- make_ordinal_ames()
 set.seed(123)
+
+ames <- make_ordinal_ames()
 ames <- ames |> mutate(id = row_number())
 train <- ames |> sample_frac(0.7)
 test <- anti_join(ames, train, by = "id")
@@ -44,28 +55,34 @@ dim(test)
 cor.test(train$Gr_Liv_Area, train$Sale_Price)
 ```
 
-## Pearson in Python
+```{r r-corr-matrix}
+cor(train[, c("Year_Built", "Total_Bsmt_SF", "First_Flr_SF", "Gr_Liv_Area", "Sale_Price")])
+```
+
+We can also generate a plot matrix of the variable associations with `pairs`:
+
+```{r}
+pairs(train[, c("Year_Built", "Total_Bsmt_SF", "First_Flr_SF", "Gr_Liv_Area", "Sale_Price")])
+```
+
+## Python Code
 
 ```{python python-pearson}
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np
 
-data = pd.read_csv("data/AmesHousing.csv")
+train = r.train
 
-train, test = train_test_split(data, test_size=0.3, random_state=123)
-```
-
-```{python}
-np.corrcoef(train['Gr Liv Area'], train['SalePrice'])
-
-np.corrcoef(train[['Year Built', 'Total Bsmt SF', '1st Flr SF', 'Gr Liv Area']], rowvar=False)
+np.corrcoef(train["Gr_Liv_Area"], train["Sale_Price"])
+np.corrcoef(
+    train[["Year_Built", "Total_Bsmt_SF", "First_Flr_SF", "Gr_Liv_Area", "Sale_Price"]],
+    rowvar=False,
+)
 ```
 
 ## Correlation Does NOT Imply Causation
 
-A strong correlation does not mean that a change in one variable causes a change in the other.
+A strong correlation does not mean that a change in one variable causes a change in the other. Correlations can be misleading if both variables are affected by other variables.
 
 # Simple Linear Regression
 
@@ -73,8 +90,9 @@ $$
 y = \beta_0 + \beta_1x_i + e_i
 $$
 
-In SLR, correlation is not equal to slope. Two pairs of variables can have the same correlation coeff, but different linear relationships.
+In SLR, correlation is not equal to slope. Two pairs of variables can have the same correlation coeff, but different linear relationships. 
 
+-   $\beta_0 + \beta_1x_1$ makes up the deterministic component
 -   $\beta_0$ is the intercept estimate
 -   $\beta_1$ is the slope estimate
 
@@ -84,13 +102,15 @@ We are trying to explain variation in the response variable. We can't explain al
 
 ![Variability Explained in SLR](images/variability.png)
 
-With linear regression, we are trying to minimize a **loss function** called **sum of squared errors**:
+With linear regression, we are trying to minimize a **loss function** called **sum of squared errors**. This is essentially measuring the difference between our predictions and the actual response values we observed in the data. 
+
+We square the differences so they don't cancel each other out and we have a loss that we can optimize our model on. 
 
 $$
 SSE = \sum_{i=1}^{n} (y_i - \hat{y}_i) ^2
 $$
 
--   This makes up the amount of unexplained variability in our model
+SSE makes up the amount of unexplained variability in our model.
 
 ## The Baseline Model
 
@@ -102,15 +122,21 @@ $H_a: \beta_1 \neq 0$
 
 For SLR, the global F-Test, parameter t-test and the test of Pearson's correlation **are all equivalent**.
 
-When we can't reject the null hypothesis we are essentially saying that the independent variable doesn't explain any of the variability in the response.
+When we can't reject the null hypothesis we are saying that the independent variable doesn't explain any of the variability in the response.
 
 ## Assumptions of Simple Linear Regression
 
 -   Linearity of the mean
-    -   As I change values in the independent variable, the line should go through the mean of the response linearly
+    -   As I change values in the independent variable, the line should go through the different means of the response linearly
+    -   If violated, misspecified model
 -   Errors are normally distributed
+    -   If violated, our test results are erroneous
 -   Errors have equal variance (homoskedasticity)
+    -   If violated, standard errors are compromised
 -   Errors are independent
+    -   If violated, standard errors are compromised
+
+There is also an assumption of no perfect collinearity. Under multicollinearity, we can't believe in our parameter estimates. The parameter estimates would be biased as there are multiple variables supplying the same information.
 
 ### Testing of Assumptions
 
@@ -130,8 +156,7 @@ summary(slr)
 ```{python python-testing-assumptions}
 import statsmodels.formula.api as smf
 
-train = train.rename(columns={"Gr Liv Area": "Gr_Liv_Area"})
-model_slr = smf.ols("SalePrice ~ Gr_Liv_Area", data=train).fit()
+model_slr = smf.ols("Sale_Price ~ Gr_Liv_Area", data=train).fit()
 
 model_slr.pvalues
 ```

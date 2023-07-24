@@ -1,7 +1,7 @@
 ---
 title: Introduction to ANOVA and Regression
 date: 06/29/2023
-date-modified: 07/20/2023
+date-modified: 07/22/2023
 ---
 
 # Linear Models
@@ -17,7 +17,7 @@ $$
 -   $x_1, \cdots, x_k$ are the explanatory variables
 -   $y$ is the response variable
 
-Typically linear models are used in an explanatory model fashion--we are trying to answer how our explanatory variables are related to our response. We are not predicting the response.
+Typically linear models are used in an explanatory model fashion--we are trying to answer how our explanatory variables are related to our response. We are not predicting the response. Models tend to be simpler and we focus on p-values and confidence intervals for interpretation.
 
 ## Honest Model Assessment
 
@@ -105,7 +105,7 @@ y = \beta_0 + \beta_Ax_A + \beta_Bx_B + \varepsilon
 $$
 
 -   $\beta_A$ is the difference between mean response in level A vs. level C
--   There are three unique values possible for the predicted value--one for each level
+-   There are **three unique values** possible for the predicted value--one for each level
 
 ## Assumptions for ANOVA
 
@@ -124,7 +124,9 @@ $$
 
 ## ANOVA Hypothesis Test in R
 
-$H_0$ is the means of each level of `Exter-Qual` are equal. $H_a$ is at least one mean is different.
+$H_0$ is the means of each level of `Exter-Qual` are equal. 
+
+$H_a$ is at least one mean is different.
 
 ```{r anova-hypothesis}
 ames_lm <- lm(Sale_Price ~ Exter_Qual, data = train)
@@ -137,7 +139,8 @@ anova(ames_lm)
 train$pred_anova <- predict(ames_lm, data = train)
 train$resid_anova <- resid(ames_lm, data = train)
 
-model_output = train |> select(Sale_Price, pred_anova, resid_anova)
+model_output <- train |> select(Sale_Price, pred_anova, resid_anova)
+model_output
 ```
 
 And then to test assumptions:
@@ -149,7 +152,14 @@ plot(ames_lm)
 
 To formally test our variance, we have **Levene's Test** which **requires normality of underlying data** and **Fligner's Test** which does **not require normality**.
 
+::: {.text-center}
+$H_0:$ The group variances are equal
+
+$H_a:$ The group variances are NOT equal
+:::
+
 ```{r levene-fligner}
+#| warning: false
 library(car)
 
 leveneTest(Sale_Price ~ Exter_Qual, data = train)
@@ -175,7 +185,7 @@ Kruskal-Wallis is a nonparametric test for more than two groups:
 | Group distributions are identical in shape, variance, but not symmetric | Difference in medians                             |
 | Else                                                                    | Difference in location (distributional dominance) |
 
-## Kruskal-Wallis ANOVA in R
+## R Code
 
 ```{r kruskal-wallis}
 kruskal.test(Sale_Price ~ Exter_Qual, data = train)
@@ -197,6 +207,8 @@ $H_a:$ At least one mean is different
 3.  Examine the p-value for overall F-test in the ANOVA table. If p-value $< \alpha$, reject $H_0$
 
 # ANOVA Post-Hoc Tests
+
+![Experimentwise Error Rate](images/experiment-error-rate.png)
 
 While the ANOVA F-Test tells us if at least one group mean is different, we need to understand which groups are different.
 
@@ -229,6 +241,7 @@ print(tukey.ames)
 If you're not making all pairwise comparisons, Tukey's is overly conservative.
 
 ```{r}
+#| warning: false
 library(DescTools)
 DunnettTest(x = train$Sale_Price, g = train$Exter_Qual, control = "Typical")
 ```

@@ -1,12 +1,12 @@
 ---
 title: Diagnostics
 date: 07/10/2023
-date-modified: 07/20/2023
+date-modified: 07/23/2023
 ---
 
 # Examining Residuals
 
-eRecall the assumptions of linear regression:
+Recall the assumptions of linear regression:
 
 -   Mean of the Ys is accurately modeled by linear function of the Xs
 -   $\varepsilon$ is assumed to be Normal with a mean of 0
@@ -19,12 +19,12 @@ We can investigate many of our assumptions through residuals in residuals vs. fi
 ## R Code
 
 ```{r}
+#| warning: false
 library(tidyverse)
 library(httpgd)
 library(reticulate)
 
 use_condaenv(condaenv = "blues_clues", required = TRUE)
-# hgd(port = 8888)
 data_path <- "data/Salary.csv"
 salary <- read.csv(data_path)
 par(mfrow = c(2, 2))
@@ -44,8 +44,7 @@ import seaborn as sns
 from pathlib import Path
 
 salary = r.salary
-salary = pd.read_csv(salary)
-# sns.residplot(data=salary, x="YearsExperience", y="Salary", order=2)
+sns.residplot(salary, x="YearsExperience", y="Salary", order=2)
 ```
 
 # Misspecified Model
@@ -91,9 +90,11 @@ When a straight line is inappropriate, we can consider:
 
 # Lack of Constant Variance
 
-The random error, $\varepsilon$, is assumed to have a constant variance, $\sigma^2$. Under heteroscedasticity, any inferences under traditional assumptions will be incorrect and our hypothesis tests and confidence intervals will not be valid.
+The random error, $\varepsilon$, is assumed to have a constant variance, $\sigma^2$. Under heteroscedasticity, any inferences under traditional assumptions **will be incorrect and our hypothesis tests and confidence intervals will not be valid.**
 
 We can detect heteroscedasticity by either plotting residuals or using **Spearman Rank Correlation**.
+
+![Lack of Constant Variance](images/heteroscedasticity.png)
 
 ## Spearman Rank Correlation
 
@@ -110,3 +111,66 @@ $H_a:$ Variance is heteroscedastic
 :::
 
 If there is a relationship between the absolute value of residuals and predicted value but it is not linear, this test will **not** discover it.
+
+### R Code
+
+```{r}
+lm_var <- lm(Salary ~ YearsExperience, data = salary)
+cor.test(abs(resid(lm_var)), fitted.values(lm_var), method = "spearman", exact = T)
+```
+
+# Lack of Normality
+
+Check that error terms are Normal by examining:
+
+-   Histogram of residuals
+-   Normal probability plot of the residuals (QQ-Plot)
+-   Formal tests for Normality
+
+## Formal Tests
+
+::: text-center
+$H_0:$ Normality
+
+$H_a:$ Not Normal
+:::
+
+**Anderson-Darling** is based on empirical cumulative distribution function of data and gives more weight to the tails.
+
+**Shapiro-Wilk** uses correlation between sample data and normal scores. The Shapiro-Wilk is better for smaller data sets.
+
+### R Code
+
+```{r}
+library(nortest)
+ad.test(resid(lm_var))
+
+shapiro.test(resid(lm_var))
+```
+
+## Accounting for Lack of Normality
+
+Depends on why the assumption was broken:
+
+-   Outliers $\rightarrow$ Robust Regression
+-   Nonnormal $\rightarrow$ Transformation Needed
+    -   Can try Box-Cox transformation
+
+## Box-Cox Transformation
+
+Box-Cox developed method to determine best power transformation to induce Normality.
+
+$$
+\begin{align*}
+(y^{\lambda} - 1) / \lambda, \hspace{0.2cm} \lambda &\neq 0 \\
+\log(y), \hspace{0.2cm} \lambda &= 0
+\end{align*}
+$$
+
+### R Code
+
+```{r}
+library(MASS)
+
+boxcox(lm_var)
+```

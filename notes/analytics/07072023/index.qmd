@@ -1,7 +1,7 @@
 ---
 title: Model Selection
 date: 07/07/2023
-date-modified: 07/20/2023
+date-modified: 07/23/2023
 ---
 
 # Model Building Concepts
@@ -39,11 +39,11 @@ Crude, large-sample approximation of leave-one-out cross-validation.
 
 ## Bayesian Information Criterion
 
-Favors smaller models and penalizes model complexity more.
-
 $$
 BIC = -2\log(L) + k\log(n)
 $$
+
+Favors smaller models and penalizes model complexity more.
 
 # Forward Selection
 

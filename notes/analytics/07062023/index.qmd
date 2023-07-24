@@ -1,7 +1,7 @@
 ---
 title: Multiple Linear Regression
 date: 07/06/2023
-date-modified: 07/20/2023
+date-modified: 07/23/2023
 ---
 
 Models with more than one predictor variable are called **multiple regression models**.
@@ -48,6 +48,8 @@ Note: The Global F-test is actually the same as an ANOVA test but for the weight
 ## R Code
 
 ```{r}
+#| warning: false
+
 library(tidyverse)
 library(AmesHousing)
 library(reticulate)
@@ -74,13 +76,8 @@ from sklearn.model_selection import train_test_split
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-ames = pd.read_csv("../../../data/ames.csv")
-train, test = train_test_split(ames, random_state=123)
-train.head()
-```
-
-```{python}
-ames_lm2 = smf.ols("SalePrice ~ GrLivArea + TotRmsAbvGrd", train).fit()
+train = r.train
+ames_lm2 = smf.ols("Sale_Price ~ Gr_Liv_Area + TotRms_AbvGrd", train).fit()
 
 ames_lm2.f_pvalue
 ```
