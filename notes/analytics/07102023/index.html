@@ -170,7 +170,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">July 20, 2023</p>
+        <p class="date-modified">July 23, 2023</p>
       </div>
     </div>
       
@@ -195,6 +195,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#polynomial-regression" id="toc-polynomial-regression" class="nav-link" data-scroll-target="#polynomial-regression"><span class="header-section-number">4</span> Polynomial Regression</a>
   <ul class="collapse">
   <li><a href="#r-code-1" id="toc-r-code-1" class="nav-link" data-scroll-target="#r-code-1"><span class="header-section-number">4.1</span> R Code</a></li>
+  </ul></li>
+  <li><a href="#lack-of-constant-variance" id="toc-lack-of-constant-variance" class="nav-link" data-scroll-target="#lack-of-constant-variance"><span class="header-section-number">5</span> Lack of Constant Variance</a>
+  <ul class="collapse">
+  <li><a href="#spearman-rank-correlation" id="toc-spearman-rank-correlation" class="nav-link" data-scroll-target="#spearman-rank-correlation"><span class="header-section-number">5.1</span> Spearman Rank Correlation</a>
+  <ul class="collapse">
+  <li><a href="#r-code-2" id="toc-r-code-2" class="nav-link" data-scroll-target="#r-code-2"><span class="header-section-number">5.1.1</span> R Code</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#lack-of-normality" id="toc-lack-of-normality" class="nav-link" data-scroll-target="#lack-of-normality"><span class="header-section-number">6</span> Lack of Normality</a>
+  <ul class="collapse">
+  <li><a href="#formal-tests" id="toc-formal-tests" class="nav-link" data-scroll-target="#formal-tests"><span class="header-section-number">6.1</span> Formal Tests</a>
+  <ul class="collapse">
+  <li><a href="#r-code-3" id="toc-r-code-3" class="nav-link" data-scroll-target="#r-code-3"><span class="header-section-number">6.1.1</span> R Code</a></li>
+  </ul></li>
+  <li><a href="#accounting-for-lack-of-normality" id="toc-accounting-for-lack-of-normality" class="nav-link" data-scroll-target="#accounting-for-lack-of-normality"><span class="header-section-number">6.2</span> Accounting for Lack of Normality</a></li>
+  <li><a href="#box-cox-transformation" id="toc-box-cox-transformation" class="nav-link" data-scroll-target="#box-cox-transformation"><span class="header-section-number">6.3</span> Box-Cox Transformation</a>
+  <ul class="collapse">
+  <li><a href="#r-code-4" id="toc-r-code-4" class="nav-link" data-scroll-target="#r-code-4"><span class="header-section-number">6.3.1</span> R Code</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -221,36 +240,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httpgd)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="at">condaenv =</span> <span class="st">"blues_clues"</span>, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># hgd(port = 8888)</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>data_path <span class="ot">&lt;-</span> <span class="st">"data/Salary.csv"</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>salary <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(data_path)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>salary_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> YearsExperience, <span class="at">data =</span> salary)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salary_lm, <span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Predicted Values"</span>, <span class="at">y =</span> <span class="st">"Residuals"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httpgd)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="at">condaenv =</span> <span class="st">"blues_clues"</span>, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>data_path <span class="ot">&lt;-</span> <span class="st">"data/Salary.csv"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>salary <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(data_path)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>salary_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> YearsExperience, <span class="at">data =</span> salary)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salary_lm, <span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Predicted Values"</span>, <span class="at">y =</span> <span class="st">"Residuals"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
@@ -262,55 +265,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>salary <span class="op">=</span> r.salary</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>salary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>salary <span class="op">=</span> r.salary</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>sns.residplot(salary, x<span class="op">=</span><span class="st">"YearsExperience"</span>, y<span class="op">=</span><span class="st">"Salary"</span>, order<span class="op">=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>    YearsExperience  Salary
-0               1.1   39343
-1               1.3   46205
-2               1.5   37731
-3               2.0   43525
-4               2.2   39891
-5               2.9   56642
-6               3.0   60150
-7               3.2   54445
-8               3.2   64445
-9               3.7   57189
-10              3.9   63218
-11              4.0   55794
-12              4.0   56957
-13              4.1   57081
-14              4.5   61111
-15              4.9   67938
-16              5.1   66029
-17              5.3   83088
-18              5.9   81363
-19              6.0   93940
-20              6.8   91738
-21              7.1   98273
-22              7.9  101302
-23              8.2  113812
-24              8.7  109431
-25              9.0  105582
-26              9.5  116969
-27              9.6  112635
-28             10.3  122391
-29             10.5  121872
-30             11.2  127345
-31             11.5  126756
-32             12.3  128765
-33             12.9  135675
-34             13.5  139465</code></pre>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.residplot(data=salary, x="YearsExperience", y="Salary", order=2)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 </section>
@@ -334,8 +298,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>salary_quad <span class="ot">&lt;-</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> YearsExperience <span class="sc">+</span> <span class="fu">I</span>(YearsExperience<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> salary)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(salary_quad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>salary_quad <span class="ot">&lt;-</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> YearsExperience <span class="sc">+</span> <span class="fu">I</span>(YearsExperience<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> salary)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(salary_quad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -361,13 +325,13 @@ F-statistic:   519 on 2 and 32 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salary_quad, <span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Predicted Values"</span>, <span class="at">y =</span> <span class="st">"Residuals"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salary_quad, <span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Predicted Values"</span>, <span class="at">y =</span> <span class="st">"Residuals"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <ul>
@@ -378,10 +342,152 @@ F-statistic:   519 on 2 and 32 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li>Fit a polynomial/more complex regression</li>
 <li>Transform the dependent and/or independent variables to obtain linearity</li>
 <li>Fit a nonlinear regression model if appropriate</li>
-<li>Fit a nonparameetric regression model (e.g.&nbsp;LOESS)</li>
+<li>Fit a nonparametric regression model (e.g.&nbsp;LOESS)</li>
 </ul>
+</section>
+</section>
+<section id="lack-of-constant-variance" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Lack of Constant Variance</h1>
+<p>The random error, <span class="math inline">\(\varepsilon\)</span>, is assumed to have a constant variance, <span class="math inline">\(\sigma^2\)</span>. Under heteroscedasticity, any inferences under traditional assumptions <strong>will be incorrect and our hypothesis tests and confidence intervals will not be valid.</strong></p>
+<p>We can detect heteroscedasticity by either plotting residuals or using <strong>Spearman Rank Correlation</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/heteroscedasticity.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Lack of Constant Variance</figcaption>
+</figure>
+</div>
+<section id="spearman-rank-correlation" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="spearman-rank-correlation"><span class="header-section-number">5.1</span> Spearman Rank Correlation</h2>
+<p>If Spearman rank coefficient between the absolute value of the residuals and predicted values is:</p>
+<ul>
+<li>Close to zero: variance is potentially homoscedastic</li>
+<li>Positive: variance increases as mean increases</li>
+<li>Negative: variance descreases as the mean increases</li>
+</ul>
+<div class="text-center">
+<p><span class="math inline">\(H_0:\)</span> Variance is homoscedastic</p>
+<p><span class="math inline">\(H_a:\)</span> Variance is heteroscedastic</p>
+</div>
+<p>If there is a relationship between the absolute value of residuals and predicted value but it is not linear, this test will <strong>not</strong> discover it.</p>
+<section id="r-code-2" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="r-code-2"><span class="header-section-number">5.1.1</span> R Code</h3>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lm_var <span class="ot">&lt;-</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> YearsExperience, <span class="at">data =</span> salary)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(<span class="fu">abs</span>(<span class="fu">resid</span>(lm_var)), <span class="fu">fitted.values</span>(lm_var), <span class="at">method =</span> <span class="st">"spearman"</span>, <span class="at">exact =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in cor.test.default(abs(resid(lm_var)), fitted.values(lm_var), method =
+"spearman", : Cannot compute exact p-value with ties</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Spearman's rank correlation rho
+
+data:  abs(resid(lm_var)) and fitted.values(lm_var)
+S = 7493, p-value = 0.7779
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.0494467 </code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="lack-of-normality" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Lack of Normality</h1>
+<p>Check that error terms are Normal by examining:</p>
+<ul>
+<li>Histogram of residuals</li>
+<li>Normal probability plot of the residuals (QQ-Plot)</li>
+<li>Formal tests for Normality</li>
+</ul>
+<section id="formal-tests" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="formal-tests"><span class="header-section-number">6.1</span> Formal Tests</h2>
+<div class="text-center">
+<p><span class="math inline">\(H_0:\)</span> Normality</p>
+<p><span class="math inline">\(H_a:\)</span> Not Normal</p>
+</div>
+<p><strong>Anderson-Darling</strong> is based on empirical cumulative distribution function of data and gives more weight to the tails.</p>
+<p><strong>Shapiro-Wilk</strong> uses correlation between sample data and normal scores. The Shapiro-Wilk is better for smaller data sets.</p>
+<section id="r-code-3" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="r-code-3"><span class="header-section-number">6.1.1</span> R Code</h3>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nortest)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ad.test</span>(<span class="fu">resid</span>(lm_var))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Anderson-Darling normality test
+
+data:  resid(lm_var)
+A = 0.4791, p-value = 0.2205</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">resid</span>(lm_var))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  resid(lm_var)
+W = 0.94679, p-value = 0.09028</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="accounting-for-lack-of-normality" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="accounting-for-lack-of-normality"><span class="header-section-number">6.2</span> Accounting for Lack of Normality</h2>
+<p>Depends on why the assumption was broken:</p>
+<ul>
+<li>Outliers <span class="math inline">\(\rightarrow\)</span> Robust Regression</li>
+<li>Nonnormal <span class="math inline">\(\rightarrow\)</span> Transformation Needed
+<ul>
+<li>Can try Box-Cox transformation</li>
+</ul></li>
+</ul>
+</section>
+<section id="box-cox-transformation" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="box-cox-transformation"><span class="header-section-number">6.3</span> Box-Cox Transformation</h2>
+<p>Box-Cox developed method to determine best power transformation to induce Normality.</p>
+<p><span class="math display">\[
+\begin{align*}
+(y^{\lambda} - 1) / \lambda, \hspace{0.2cm} \lambda &amp;\neq 0 \\
+\log(y), \hspace{0.2cm} \lambda &amp;= 0
+\end{align*}
+\]</span></p>
+<section id="r-code-4" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="r-code-4"><span class="header-section-number">6.3.1</span> R Code</h3>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'MASS'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    select</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxcox</span>(lm_var)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 
 
+</section>
 </section>
 </section>
 

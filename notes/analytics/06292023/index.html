@@ -173,7 +173,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">July 20, 2023</p>
+        <p class="date-modified">July 22, 2023</p>
       </div>
     </div>
       
@@ -208,7 +208,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#welchs-anova" id="toc-welchs-anova" class="nav-link" data-scroll-target="#welchs-anova"><span class="header-section-number">4</span> Welch’s ANOVA</a></li>
   <li><a href="#kruskal-wallis" id="toc-kruskal-wallis" class="nav-link" data-scroll-target="#kruskal-wallis"><span class="header-section-number">5</span> Kruskal-Wallis</a>
   <ul class="collapse">
-  <li><a href="#kruskal-wallis-anova-in-r" id="toc-kruskal-wallis-anova-in-r" class="nav-link" data-scroll-target="#kruskal-wallis-anova-in-r"><span class="header-section-number">5.1</span> Kruskal-Wallis ANOVA in R</a></li>
+  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code"><span class="header-section-number">5.1</span> R Code</a></li>
   </ul></li>
   <li><a href="#anova-analysis-plan-summmary" id="toc-anova-analysis-plan-summmary" class="nav-link" data-scroll-target="#anova-analysis-plan-summmary"><span class="header-section-number">6</span> ANOVA Analysis Plan Summmary</a></li>
   <li><a href="#anova-post-hoc-tests" id="toc-anova-post-hoc-tests" class="nav-link" data-scroll-target="#anova-post-hoc-tests"><span class="header-section-number">7</span> ANOVA Post-Hoc Tests</a>
@@ -237,7 +237,7 @@ y = \beta_0 + \beta_1x_1 + \cdots + \beta_kx_k + \varepsilon
 <li><span class="math inline">\(x_1, \cdots, x_k\)</span> are the explanatory variables</li>
 <li><span class="math inline">\(y\)</span> is the response variable</li>
 </ul>
-<p>Typically linear models are used in an explanatory model fashion–we are trying to answer how our explanatory variables are related to our response. We are not predicting the response.</p>
+<p>Typically linear models are used in an explanatory model fashion–we are trying to answer how our explanatory variables are related to our response. We are not predicting the response. Models tend to be simpler and we focus on p-values and confidence intervals for interpretation.</p>
 <section id="honest-model-assessment" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="honest-model-assessment"><span class="header-section-number">1.1</span> Honest Model Assessment</h2>
 <p>Before you look for any relationships, you should split into <strong>training</strong>, <strong>validation</strong> and <strong>test</strong> samples.</p>
@@ -339,7 +339,7 @@ y = \beta_0 + \beta_1x_1 + \cdots + \beta_kx_k + \varepsilon
 </section>
 <section id="one-way-anova" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> One-Way ANOVA</h1>
-<p>One-Way ANOVA is a test of relationship between categorical input and quantitative response.</p>
+<p>One-Way ANOVA is a test of relationship between <strong>categorical variable</strong> and <strong>quantitative response</strong>.</p>
 <p>One-Way refers to only one factor (e.g.&nbsp;a group of quality ratings).</p>
 <p>We are comparing <span class="math inline">\(k\)</span> levels of our predictor variable and seeing if there are any statistically significant difference in their mean response.</p>
 <div class="text-center">
@@ -378,7 +378,7 @@ y = \beta_0 + \beta_Ax_A + \beta_Bx_B + \varepsilon
 \]</span></p>
 <ul>
 <li><span class="math inline">\(\beta_A\)</span> is the difference between mean response in level A vs.&nbsp;level C</li>
-<li>There are three unique values possible for the predicted value–one for each level</li>
+<li>There are <strong>three unique values</strong> possible for the predicted value–one for each level</li>
 </ul>
 <section id="assumptions-for-anova" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="assumptions-for-anova"><span class="header-section-number">3.1</span> Assumptions for ANOVA</h2>
@@ -388,7 +388,7 @@ y = \beta_0 + \beta_Ax_A + \beta_Bx_B + \varepsilon
 <ul>
 <li>Or the <em>residuals</em> of the ANOVA model are normally distributed</li>
 </ul></li>
-<li>All groups have equal variances (homeskedasticity)
+<li>All groups have equal variances (homoskedasticity)
 <ul>
 <li>If true, use “pooled” variance</li>
 <li>If false, use Welch’s ANOVA</li>
@@ -405,7 +405,8 @@ y = \beta_0 + \beta_Ax_A + \beta_Bx_B + \varepsilon
 </section>
 <section id="anova-hypothesis-test-in-r" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="anova-hypothesis-test-in-r"><span class="header-section-number">3.2</span> ANOVA Hypothesis Test in R</h2>
-<p><span class="math inline">\(H_0\)</span> is the means of each level of <code>Exter-Qual</code> are equal. <span class="math inline">\(H_a\)</span> is at least one mean is different.</p>
+<p><span class="math inline">\(H_0\)</span> is the means of each level of <code>Exter-Qual</code> are equal.</p>
+<p><span class="math inline">\(H_a\)</span> is at least one mean is different.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
@@ -432,46 +433,48 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>train<span class="sc">$</span>pred_anova <span class="ot">&lt;-</span> <span class="fu">predict</span>(ames_lm, <span class="at">data =</span> train)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>train<span class="sc">$</span>resid_anova <span class="ot">&lt;-</span> <span class="fu">resid</span>(ames_lm, <span class="at">data =</span> train)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>model_output <span class="ot">=</span> train <span class="sc">|&gt;</span> <span class="fu">select</span>(Sale_Price, pred_anova, resid_anova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>model_output <span class="ot">&lt;-</span> train <span class="sc">|&gt;</span> <span class="fu">select</span>(Sale_Price, pred_anova, resid_anova)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>model_output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2,051 × 3
+   Sale_Price pred_anova resid_anova
+        &lt;int&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+ 1     232600    228910.       3690.
+ 2     166000    228910.     -62910.
+ 3     170000    142107.      27893.
+ 4     252000    228910.      23090.
+ 5     134000    142107.      -8107.
+ 6     164700    228910.     -64210.
+ 7     193500    142107.      51393.
+ 8     118500    142107.     -23607.
+ 9      94000    142107.     -48107.
+10     111250    142107.     -30857.
+# ℹ 2,041 more rows</code></pre>
+</div>
 </div>
 <p>And then to test assumptions:</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ames_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ames_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/testing-assumptions-1-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>To formally test our variance, we have <strong>Levene’s Test</strong> which <strong>requires normality of underlying data</strong> and <strong>Fligner’s Test</strong> which does <strong>not require normality</strong>.</p>
+<div class="text-center">
+<p><span class="math inline">\(H_0:\)</span> The group variances are equal</p>
+<p><span class="math inline">\(H_a:\)</span> The group variances are NOT equal</p>
+</div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: carData</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'car'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:dplyr':
-
-    recode</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:purrr':
-
-    some</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">leveneTest</span>(Sale_Price <span class="sc">~</span> Exter_Qual, <span class="at">data =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">leveneTest</span>(Sale_Price <span class="sc">~</span> Exter_Qual, <span class="at">data =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Levene's Test for Homogeneity of Variance (center = median)
@@ -483,7 +486,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fligner.test</span>(Sale_Price <span class="sc">~</span> Exter_Qual, <span class="at">data =</span> train)<span class="sc">$</span>p.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fligner.test</span>(Sale_Price <span class="sc">~</span> Exter_Qual, <span class="at">data =</span> train)<span class="sc">$</span>p.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.873388e-44</code></pre>
@@ -497,7 +500,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oneway.test</span>(Sale_Price <span class="sc">~</span> Exter_Qual, <span class="at">data =</span> train, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oneway.test</span>(Sale_Price <span class="sc">~</span> Exter_Qual, <span class="at">data =</span> train, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -537,12 +540,12 @@ F = 431.82, num df = 3.00, denom df = 102.11, p-value &lt; 2.2e-16</code></pre>
 </tr>
 </tbody>
 </table>
-<section id="kruskal-wallis-anova-in-r" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="kruskal-wallis-anova-in-r"><span class="header-section-number">5.1</span> Kruskal-Wallis ANOVA in R</h2>
+<section id="r-code" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="r-code"><span class="header-section-number">5.1</span> R Code</h2>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kruskal.test</span>(Sale_Price <span class="sc">~</span> Exter_Qual, <span class="at">data =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kruskal.test</span>(Sale_Price <span class="sc">~</span> Exter_Qual, <span class="at">data =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -556,8 +559,10 @@ Kruskal-Wallis chi-squared = 975.98, df = 3, p-value &lt; 2.2e-16</code></pre>
 </section>
 <section id="anova-analysis-plan-summmary" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> ANOVA Analysis Plan Summmary</h1>
+<div class="text-center">
 <p><span class="math inline">\(H_0:\)</span> All means are equal.</p>
 <p><span class="math inline">\(H_a:\)</span> At least one mean is different</p>
+</div>
 <ol type="1">
 <li>Produce descriptive statistics</li>
 <li>Verify assumptions
@@ -571,6 +576,12 @@ Kruskal-Wallis chi-squared = 975.98, df = 3, p-value &lt; 2.2e-16</code></pre>
 </section>
 <section id="anova-post-hoc-tests" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> ANOVA Post-Hoc Tests</h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/experiment-error-rate.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Experimentwise Error Rate</figcaption>
+</figure>
+</div>
 <p>While the ANOVA F-Test tells us if at least one group mean is different, we need to understand which groups are different.</p>
 <p>We will compare the groups pairwise to determine if they are different.</p>
 <div class="cell">
@@ -594,9 +605,9 @@ Kruskal-Wallis chi-squared = 975.98, df = 3, p-value &lt; 2.2e-16</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ames_aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(Sale_Price <span class="sc">~</span> Exter_Qual, <span class="at">data =</span> train)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>tukey.ames <span class="ot">&lt;-</span> <span class="fu">TukeyHSD</span>(ames_aov)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tukey.ames)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ames_aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(Sale_Price <span class="sc">~</span> Exter_Qual, <span class="at">data =</span> train)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>tukey.ames <span class="ot">&lt;-</span> <span class="fu">TukeyHSD</span>(ames_aov)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tukey.ames)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Tukey multiple comparisons of means
@@ -624,20 +635,8 @@ Excellent-Good    146994.54 129666.98 164322.10 0e+00</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DescTools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'DescTools'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:car':
-
-    Recode</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DunnettTest</span>(<span class="at">x =</span> train<span class="sc">$</span>Sale_Price, <span class="at">g =</span> train<span class="sc">$</span>Exter_Qual, <span class="at">control =</span> <span class="st">"Typical"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DescTools)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">DunnettTest</span>(<span class="at">x =</span> train<span class="sc">$</span>Sale_Price, <span class="at">g =</span> train<span class="sc">$</span>Exter_Qual, <span class="at">control =</span> <span class="st">"Typical"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>

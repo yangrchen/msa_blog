@@ -170,6 +170,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </div>
     </div>
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">July 23, 2023</p>
+      </div>
+    </div>
       
     </div>
     
@@ -185,6 +191,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#autocorrelation" id="toc-autocorrelation" class="nav-link active" data-scroll-target="#autocorrelation"><span class="header-section-number">1</span> Autocorrelation</a>
   <ul class="collapse">
   <li><a href="#durbin-watson-statistic-first-order" id="toc-durbin-watson-statistic-first-order" class="nav-link" data-scroll-target="#durbin-watson-statistic-first-order"><span class="header-section-number">1.1</span> Durbin-Watson Statistic (First-Order)</a></li>
+  <li><a href="#handling-correlated-errors" id="toc-handling-correlated-errors" class="nav-link" data-scroll-target="#handling-correlated-errors"><span class="header-section-number">1.2</span> Handling Correlated Errors</a></li>
   </ul></li>
   <li><a href="#influential-points-and-outliers" id="toc-influential-points-and-outliers" class="nav-link" data-scroll-target="#influential-points-and-outliers"><span class="header-section-number">2</span> Influential Points and Outliers</a>
   <ul class="collapse">
@@ -225,6 +232,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="autocorrelation" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Autocorrelation</h1>
 <p>With time-series data, <strong>autocorrelation</strong> can occur and residuals follow a cyclic pattern. Plot residuals over time to see if any cyclic trends occur.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/autocorrelation-plot.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Cyclic Residuals</figcaption>
+</figure>
+</div>
 <section id="durbin-watson-statistic-first-order" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="durbin-watson-statistic-first-order"><span class="header-section-number">1.1</span> Durbin-Watson Statistic (First-Order)</h2>
 <p>We can also assess autocorrelation using the <strong>Durbin-Watson statistic</strong> which compares a residual against the previous time residual over the sum of residuals squared.</p>
@@ -236,6 +249,14 @@ d = \frac{\sum_{t=2}^{T} (e_t - e_{t-1})^2}{\sum_{t=1}^{T} e_t^2}
 <li>When <span class="math inline">\(d=2\)</span>, fail to reject <span class="math inline">\(H_0\)</span> and assume there is not enough evidence supporting autocorrelation</li>
 <li><span class="math inline">\(d &lt; 2\)</span>, possible positive autocorrelation</li>
 <li><span class="math inline">\(d &gt; 2\)</span>, possible negative autocorrelation</li>
+</ul>
+</section>
+<section id="handling-correlated-errors" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="handling-correlated-errors"><span class="header-section-number">1.2</span> Handling Correlated Errors</h2>
+<ul>
+<li>If correlated due to time, perform time series</li>
+<li>If correlated due to clustered data, perform a hierarchical model</li>
+<li>Longitudinal analysis/panel data</li>
 </ul>
 </section>
 </section>
@@ -271,8 +292,8 @@ d = \frac{\sum_{t=2}^{T} (e_t - e_{t-1})^2}{\sum_{t=1}^{T} e_t^2}
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="studentized-residuals"><span class="header-section-number">2.1.1</span> Studentized Residuals</h3>
 <p>Divide the residuals by their standard errors after deleting that one observation</p>
 <ul>
-<li><span class="math inline">\(\abs(SR) &gt; 2\)</span> for datasets with a relatively small number of observations</li>
-<li><span class="math inline">\(\abs(SR) &gt; 3\)</span> for datasets with relatively large number of observations</li>
+<li><span class="math inline">\(\left|SR\right| &gt; 2\)</span> for datasets with a relatively small number of observations</li>
+<li><span class="math inline">\(\left|SR\right| &gt; 3\)</span> for datasets with relatively large number of observations</li>
 </ul>
 </section>
 <section id="cooks-d" class="level3" data-number="2.1.2">
@@ -290,7 +311,7 @@ D_i &gt; \frac{4}{n - p - 1}
 <h3 data-number="2.1.3" class="anchored" data-anchor-id="dffits"><span class="header-section-number">2.1.3</span> DFFITS</h3>
 <p>Measures impact that the <span class="math inline">\(i^{th}\)</span> observation has on predicted value</p>
 <p><span class="math display">\[
-| DFFITS_i | &gt; 2\sqrt{\frac{p}{n}}
+\left| DFFITS_i \right| &gt; 2\sqrt{\frac{p}{n}}
 \]</span></p>
 </section>
 <section id="hat-values" class="level3" data-number="2.1.4">
@@ -317,7 +338,7 @@ h_{ii} &gt; \frac{2p}{n}
 <p>Measure of change in the <span class="math inline">\(j^{th}\)</span> parameter estimate with deletion of <span class="math inline">\(i^{th}\)</span> observation.</p>
 <p>One DFBETA per parameter per observation. Helps to explain which parameter coefficient the influence most lies.</p>
 <p><span class="math display">\[
-| DFBETA_{ij} | &gt; 2 \sqrt{\frac{1}{n}}
+\left| DFBETA_{ij} \right| &gt; 2 \sqrt{\frac{1}{n}}
 \]</span></p>
 </section>
 </section>
@@ -326,35 +347,21 @@ h_{ii} &gt; \frac{2p}{n}
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"http://www.statsci.org/data/general/hills.txt"</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>races.table <span class="ot">&lt;-</span> <span class="fu">read.table</span>(url, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>races.table <span class="ot">&lt;-</span> races.table <span class="sc">%&gt;%</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">idx =</span> <span class="fu">row_number</span>())</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>lm.model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Time <span class="sc">~</span> Distance <span class="sc">+</span> Climb, <span class="at">data =</span> races.table)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lm.model, <span class="fu">aes</span>(<span class="at">x =</span> races.table<span class="sc">$</span>idx, <span class="at">y =</span> <span class="fu">rstudent</span>(lm.model))) <span class="sc">+</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"orange"</span>) <span class="sc">+</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">y =</span> <span class="sc">-</span><span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">y =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"External Studentized Residuals"</span>, <span class="at">x =</span> <span class="st">"Observation"</span>, <span class="at">y =</span> <span class="st">"Residuals"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"http://www.statsci.org/data/general/hills.txt"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>races.table <span class="ot">&lt;-</span> <span class="fu">read.table</span>(url, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>races.table <span class="ot">&lt;-</span> races.table <span class="sc">%&gt;%</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">idx =</span> <span class="fu">row_number</span>())</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>lm.model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Time <span class="sc">~</span> Distance <span class="sc">+</span> Climb, <span class="at">data =</span> races.table)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lm.model, <span class="fu">aes</span>(<span class="at">x =</span> races.table<span class="sc">$</span>idx, <span class="at">y =</span> <span class="fu">rstudent</span>(lm.model))) <span class="sc">+</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"orange"</span>) <span class="sc">+</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">y =</span> <span class="sc">-</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">y =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"External Studentized Residuals"</span>, <span class="at">x =</span> <span class="st">"Observation"</span>, <span class="at">y =</span> <span class="st">"Residuals"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
@@ -392,7 +399,7 @@ VIF_i = \frac{1}{1 - R_i^2}
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: carData</code></pre>
@@ -413,7 +420,7 @@ Attaching package: 'car'</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>            mpg        cyl       disp         hp        drat         wt
@@ -443,9 +450,9 @@ carb -0.65624923 -0.5696071  0.05753435  0.2740728  1.00000000</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>lm.model <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> ., <span class="at">data =</span> mtcars)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">vif</span>(lm.model)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>v[v <span class="sc">&gt;</span> <span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lm.model <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> ., <span class="at">data =</span> mtcars)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">vif</span>(lm.model)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>v[v <span class="sc">&gt;</span> <span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     cyl     disp       wt 

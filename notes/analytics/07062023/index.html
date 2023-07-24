@@ -170,7 +170,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">July 20, 2023</p>
+        <p class="date-modified">July 23, 2023</p>
       </div>
     </div>
       
@@ -209,7 +209,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#adjusted-coefficient-of-determination" id="toc-adjusted-coefficient-of-determination" class="nav-link" data-scroll-target="#adjusted-coefficient-of-determination"><span class="header-section-number">5.1</span> Adjusted Coefficient of Determination</a></li>
   </ul></li>
-  <li><a href="#categorical-predictors" id="toc-categorical-predictors" class="nav-link" data-scroll-target="#categorical-predictors"><span class="header-section-number">6</span> Categorical Predictors</a></li>
+  <li><a href="#categorical-predictors" id="toc-categorical-predictors" class="nav-link" data-scroll-target="#categorical-predictors"><span class="header-section-number">6</span> Categorical Predictors</a>
+  <ul class="collapse">
+  <li><a href="#dummy-encoding" id="toc-dummy-encoding" class="nav-link" data-scroll-target="#dummy-encoding"><span class="header-section-number">6.1</span> Dummy Encoding</a></li>
+  <li><a href="#effects-encoding" id="toc-effects-encoding" class="nav-link" data-scroll-target="#effects-encoding"><span class="header-section-number">6.2</span> Effects Encoding</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -248,40 +252,26 @@ F = \frac{(\frac{SSR}{k})}{(\frac{SSE}{n - k - 1})}
 <li><span class="math inline">\(\frac{SSE}{n - k - 1}\)</span> is the average amount of variation left per data point</li>
 </ul>
 <p>When it comes to comparing which variable is more important. You should <strong>not</strong> look at the parameter estimates. Instead, compare the t-values which do not change based on the scale of the variable.</p>
+<p>Note: The Global F-test is actually the same as an ANOVA test but for the weights in our model.</p>
 <section id="r-code" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="r-code"><span class="header-section-number">1.1</span> R Code</h2>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AmesHousing)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="st">"blues_clues"</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> <span class="fu">make_ordinal_ames</span>()</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> ames <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>())</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> ames <span class="sc">|&gt;</span> <span class="fu">sample_frac</span>(<span class="fl">0.7</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(ames, train, <span class="at">by =</span> <span class="st">"id"</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>ames_lm2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Sale_Price <span class="sc">~</span> Gr_Liv_Area <span class="sc">+</span> TotRms_AbvGrd, train)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ames_lm2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AmesHousing)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="st">"blues_clues"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> <span class="fu">make_ordinal_ames</span>()</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> ames <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>())</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> ames <span class="sc">|&gt;</span> <span class="fu">sample_frac</span>(<span class="fl">0.7</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(ames, train, <span class="at">by =</span> <span class="st">"id"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>ames_lm2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Sale_Price <span class="sc">~</span> Gr_Liv_Area <span class="sc">+</span> TotRms_AbvGrd, train)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ames_lm2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -311,37 +301,20 @@ F-statistic:  1034 on 2 and 2048 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>ames <span class="op">=</span> pd.read_csv(<span class="st">"../../../data/ames.csv"</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>train, test <span class="op">=</span> train_test_split(ames, random_state<span class="op">=</span><span class="dv">123</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>train.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> r.train</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>ames_lm2 <span class="op">=</span> smf.ols(<span class="st">"Sale_Price ~ Gr_Liv_Area + TotRms_AbvGrd"</span>, train).fit()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>ames_lm2.f_pvalue</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>        Id  MSSubClass MSZoning  ...  SaleType  SaleCondition SalePrice
-1446  1447          20       RL  ...        WD         Normal    157900
-1123  1124          20       RL  ...        WD         Normal    118000
-186    187          80       RL  ...        WD         Normal    173000
-1020  1021          20       RL  ...        WD         Normal    176000
-67      68          20       RL  ...        WD         Normal    226000
-
-[5 rows x 81 columns]</code></pre>
-</div>
-</div>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ames_lm2 <span class="op">=</span> smf.ols(<span class="st">"SalePrice ~ GrLivArea + TotRmsAbvGrd"</span>, train).fit()</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ames_lm2.f_pvalue</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>9.720219891564917e-163</code></pre>
+<pre><code>4.3720518917664e-311</code></pre>
 </div>
 </div>
 </section>
@@ -367,11 +340,11 @@ F-statistic:  1034 on 2 and 2048 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ames_lm2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ames_lm2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -380,22 +353,22 @@ F-statistic:  1034 on 2 and 2048 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>train[<span class="st">"resid"</span>] <span class="op">=</span> ames_lm2.resid</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>train[<span class="st">"predict"</span>] <span class="op">=</span> ames_lm2.predict()</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.relplot(train, x<span class="op">=</span><span class="st">"predict"</span>, y<span class="op">=</span><span class="st">"resid"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>train[<span class="st">"resid"</span>] <span class="op">=</span> ames_lm2.resid</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>train[<span class="st">"predict"</span>] <span class="op">=</span> ames_lm2.predict()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.relplot(train, x<span class="op">=</span><span class="st">"predict"</span>, y<span class="op">=</span><span class="st">"resid"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="480"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="480"></p>
 </div>
 </div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sm.qqplot(train[<span class="st">"resid"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sm.qqplot(train[<span class="st">"resid"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-6-3.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-5-3.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -425,9 +398,9 @@ F-statistic:  1034 on 2 and 2048 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mlr_random <span class="ot">&lt;-</span> <span class="fu">lm</span>(Sale_Price <span class="sc">~</span> Gr_Liv_Area <span class="sc">+</span> TotRms_AbvGrd <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(Sale_Price), <span class="dv">0</span>, <span class="dv">1</span>), train)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mlr_random)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mlr_random <span class="ot">&lt;-</span> <span class="fu">lm</span>(Sale_Price <span class="sc">~</span> Gr_Liv_Area <span class="sc">+</span> TotRms_AbvGrd <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(Sale_Price), <span class="dv">0</span>, <span class="dv">1</span>), train)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mlr_random)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -453,9 +426,7 @@ Multiple R-squared:  0.5026,    Adjusted R-squared:  0.5019
 F-statistic: 689.4 on 3 and 2047 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<ul>
-<li><span class="math inline">\(R^2\)</span> increased despite the insignificant variable!</li>
-</ul>
+<p><span class="math inline">\(R^2\)</span> increased despite the insignificant variable!</p>
 <section id="adjusted-coefficient-of-determination" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="adjusted-coefficient-of-determination"><span class="header-section-number">5.1</span> Adjusted Coefficient of Determination</h2>
 <p><span class="math inline">\(R_a^2\)</span> penalizes a model for adding variables that do not provide useful information.</p>
@@ -473,16 +444,49 @@ R_a^2 &amp;= 1 - [(\frac{n - 1}{n - k - 1})(\frac{SSE}{TSS})] \\
 </section>
 <section id="categorical-predictors" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Categorical Predictors</h1>
+<section id="dummy-encoding" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="dummy-encoding"><span class="header-section-number">6.1</span> Dummy Encoding</h2>
 <p>We can encode categorical variables with <strong>dummy encoding</strong>.</p>
 <p><span class="math display">\[
 x_1 =
 \begin{cases}
-1 if Y \\
-0 if N
+1 \hspace{0.2cm} \text{if Y}\\
+0 \hspace{0.2cm} \text{if N}
 \end{cases}
 \]</span></p>
+<p><span class="math inline">\(\beta_1\)</span> will represent the average difference between category Y and N</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>simple_array <span class="op">=</span> np.array([<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>])</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>encoded_array <span class="op">=</span> np.zeros((simple_array.size, simple_array.<span class="bu">max</span>() <span class="op">+</span> <span class="dv">1</span>), dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>encoded_array[np.arange(simple_array.size), simple_array] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>encoded_array</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>array([[1, 0, 0],
+       [0, 0, 1],
+       [0, 1, 0]])</code></pre>
+</div>
+</div>
+</section>
+<section id="effects-encoding" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="effects-encoding"><span class="header-section-number">6.2</span> Effects Encoding</h2>
+<p><span class="math display">\[
+x_1 =
+\begin{cases}
+1 \hspace{0.2cm} \text{if Y} \\
+-1 \hspace{0.2cm} \text{if N}
+\end{cases}
+\]</span></p>
+<p><span class="math inline">\(\beta_1\)</span> is the average difference between category Y and <strong>the overall average of categories Y and N</strong>. Essentially, the overall average of all groups in a category variable.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

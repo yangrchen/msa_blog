@@ -194,11 +194,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#simulation-study" id="toc-simulation-study" class="nav-link" data-scroll-target="#simulation-study"><span class="header-section-number">4</span> Simulation Study</a></li>
   <li><a href="#one-sample-t-tests" id="toc-one-sample-t-tests" class="nav-link" data-scroll-target="#one-sample-t-tests"><span class="header-section-number">5</span> One-Sample t-tests</a>
   <ul class="collapse">
-  <li><a href="#example-in-r" id="toc-example-in-r" class="nav-link" data-scroll-target="#example-in-r"><span class="header-section-number">5.1</span> Example in R</a></li>
+  <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions"><span class="header-section-number">5.1</span> Assumptions</a></li>
+  <li><a href="#example-in-r" id="toc-example-in-r" class="nav-link" data-scroll-target="#example-in-r"><span class="header-section-number">5.2</span> Example in R</a></li>
   </ul></li>
   <li><a href="#two-sample-t-tests" id="toc-two-sample-t-tests" class="nav-link" data-scroll-target="#two-sample-t-tests"><span class="header-section-number">6</span> Two-Sample t-tests</a>
   <ul class="collapse">
-  <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions"><span class="header-section-number">6.1</span> Assumptions</a></li>
+  <li><a href="#assumptions-1" id="toc-assumptions-1" class="nav-link" data-scroll-target="#assumptions-1"><span class="header-section-number">6.1</span> Assumptions</a></li>
   <li><a href="#f-test-for-equality-of-variances" id="toc-f-test-for-equality-of-variances" class="nav-link" data-scroll-target="#f-test-for-equality-of-variances"><span class="header-section-number">6.2</span> F-Test for Equality of Variances</a></li>
   <li><a href="#two-sample-t-test-in-r" id="toc-two-sample-t-test-in-r" class="nav-link" data-scroll-target="#two-sample-t-test-in-r"><span class="header-section-number">6.3</span> Two-Sample t-test in R</a></li>
   <li><a href="#wilcoxon-rank" id="toc-wilcoxon-rank" class="nav-link" data-scroll-target="#wilcoxon-rank"><span class="header-section-number">6.4</span> Wilcoxon Rank</a>
@@ -233,12 +234,12 @@ Central Limit Theorem
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Distribution of sample means is approximately Normal, regardless of the population parameter’s distribution given a large sample size.</p>
+<p>Distribution of sample means is approximately Normal, regardless of the population parameter’s distribution given a large sample size (<span class="math inline">\(n \geq 50\)</span>).</p>
 </div>
 </div>
 <section id="standard-error-of-the-mean" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Standard Error of the Mean</h1>
-<p><strong>Standard error</strong> measures the variability of our estimate. Compare to the sample standard deviation which is a measure of the <strong>variability in your data</strong>.</p>
+<p><strong>Standard error</strong> measures the variability of our statistic estimate. Compare to the sample standard deviation, <span class="math inline">\(s\)</span>, which is a measure of the <strong>variability in your data</strong>.</p>
 <ul>
 <li>Standard error is the variation on the statistic</li>
 <li>If you were to resample data and compute the new sample average many times, how much variability would you expect in the results?</li>
@@ -246,9 +247,7 @@ Central Limit Theorem
 <p><span class="math display">\[
 s_{\bar{x}} = \frac{s}{\sqrt{n}}
 \]</span></p>
-<ul>
-<li>As the sample size grows larger, our confidence in the standard error grows</li>
-</ul>
+<p>As the sample size grows larger, our confidence in the standard error grows</p>
 </section>
 <section id="confidence-intervals" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Confidence Intervals</h1>
@@ -274,7 +273,7 @@ s_{\bar{x}} = \frac{s}{\sqrt{n}}
 <li>Alternative hypothesis <span class="math inline">\(H_a\)</span> is the logical opposite. Note that alternative hypothesis is the “significantly different” statement–no equal signs should appear in alternative</li>
 <li>Collect data, compute statistic</li>
 <li>Determine the probability that you observed a statistic as extreme or more extreme as the one you did assuming <span class="math inline">\(H_0\)</span> is true <span class="math inline">\(\rightarrow\)</span> <strong>p-value</strong></li>
-<li>If p-value <span class="math inline">\(\leq \alpha\)</span>, reject <span class="math inline">\(H_0\)</span> and fail to reject otherwise</li>
+<li>If p-value <span class="math inline">\(\leq \alpha\)</span>, reject <span class="math inline">\(H_0\)</span> and fail to reject otherwise. Make sure to <em>interpret</em> the p-value.</li>
 </ol>
 </section>
 </section>
@@ -297,7 +296,7 @@ s_{\bar{x}} = \frac{s}{\sqrt{n}}
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(outcomes <span class="sc">==</span> <span class="st">"Heads"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 49</code></pre>
+<pre><code>[1] 51</code></pre>
 </div>
 </div>
 <p>With 10000 trials:</p>
@@ -329,15 +328,20 @@ s_{\bar{x}} = \frac{s}{\sqrt{n}}
 </section>
 <section id="one-sample-t-tests" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> One-Sample t-tests</h1>
-<p>Testing a mean against a hypothesized value. We first need to calculate the t-statistic:</p>
+<p>Testing a mean against a hypothesized value. A one-sided test is looking to see if the true mean is greater than or less than a hypothesized value. A two-sided test is looking to see if the true mean is different than a hypothesized value.</p>
+<p>We first need to calculate the t-statistic:</p>
 <p><span class="math display">\[
 t = \frac{\bar{x} - \mu_0}{s_{\bar{x}}}
 \]</span></p>
 <ul>
 <li><span class="math inline">\(H_0\)</span> is rejected when the t-value is more extreme than one would expect to happen by chance when <span class="math inline">\(H_0\)</span> is true</li>
 </ul>
-<section id="example-in-r" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="example-in-r"><span class="header-section-number">5.1</span> Example in R</h2>
+<section id="assumptions" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="assumptions"><span class="header-section-number">5.1</span> Assumptions</h2>
+<p>One-sample t-tests need a large enough sample size for the Central Limit Theorem to hold. If you don’t have sample size, then the population distribution needs to be Normal.</p>
+</section>
+<section id="example-in-r" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="example-in-r"><span class="header-section-number">5.2</span> Example in R</h2>
 <blockquote class="blockquote">
 <p>We want to know if the true Sales Price is different then $178,000.</p>
 <p>The null hypothesis is <span class="math inline">\(H_0\)</span>: <span class="math inline">\(\mu = 178000\)</span> and the alternative is <span class="math inline">\(H_a\)</span>: <span class="math inline">\(\mu \neq 178000\)</span>. <span class="math inline">\(\alpha = 0.05\)</span></p>
@@ -408,8 +412,8 @@ mean of x
 <section id="two-sample-t-tests" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Two-Sample t-tests</h1>
 <p>We are now testing the difference between two means.</p>
-<section id="assumptions" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="assumptions"><span class="header-section-number">6.1</span> Assumptions</h2>
+<section id="assumptions-1" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="assumptions-1"><span class="header-section-number">6.1</span> Assumptions</h2>
 <ul>
 <li>Independent observations</li>
 <li>Normally distributed data for each group</li>

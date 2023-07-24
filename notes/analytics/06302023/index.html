@@ -170,7 +170,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">July 20, 2023</p>
+        <p class="date-modified">July 23, 2023</p>
       </div>
     </div>
       
@@ -185,11 +185,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#pearsons-correlation" id="toc-pearsons-correlation" class="nav-link active" data-scroll-target="#pearsons-correlation"><span class="header-section-number">1</span> Pearson’s Correlation</a>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#pearsons-correlation" id="toc-pearsons-correlation" class="nav-link" data-scroll-target="#pearsons-correlation"><span class="header-section-number">1</span> Pearson’s Correlation</a>
   <ul class="collapse">
   <li><a href="#hypothesis-test-for-correlation" id="toc-hypothesis-test-for-correlation" class="nav-link" data-scroll-target="#hypothesis-test-for-correlation"><span class="header-section-number">1.1</span> Hypothesis Test for Correlation</a></li>
-  <li><a href="#test-of-correlation-in-r" id="toc-test-of-correlation-in-r" class="nav-link" data-scroll-target="#test-of-correlation-in-r"><span class="header-section-number">1.2</span> Test of Correlation in R</a></li>
-  <li><a href="#pearson-in-python" id="toc-pearson-in-python" class="nav-link" data-scroll-target="#pearson-in-python"><span class="header-section-number">1.3</span> Pearson in Python</a></li>
+  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code"><span class="header-section-number">1.2</span> R Code</a></li>
+  <li><a href="#python-code" id="toc-python-code" class="nav-link" data-scroll-target="#python-code"><span class="header-section-number">1.3</span> Python Code</a></li>
   <li><a href="#correlation-does-not-imply-causation" id="toc-correlation-does-not-imply-causation" class="nav-link" data-scroll-target="#correlation-does-not-imply-causation"><span class="header-section-number">1.4</span> Correlation Does NOT Imply Causation</a></li>
   </ul></li>
   <li><a href="#simple-linear-regression" id="toc-simple-linear-regression" class="nav-link" data-scroll-target="#simple-linear-regression"><span class="header-section-number">2</span> Simple Linear Regression</a>
@@ -210,9 +211,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<section id="setup" class="level1 unnumbered">
+<h1 class="unnumbered">Setup</h1>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="st">"blues_clues"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
 <section id="pearsons-correlation" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Pearson’s Correlation</h1>
-<p>Pearson’s correlation measures <em>linear</em> relationships.</p>
+<p>Pearson’s correlation measures <em>linear</em> relationships for continuous variables.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/pearson.png" class="img-fluid figure-img"></p>
@@ -222,47 +233,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="hypothesis-test-for-correlation" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="hypothesis-test-for-correlation"><span class="header-section-number">1.1</span> Hypothesis Test for Correlation</h2>
 <p>Parameter representing population correlation is <span class="math inline">\(\rho\)</span> and is estimated by <span class="math inline">\(r\)</span></p>
+<div class="text-center">
 <p><span class="math inline">\(H_0: \rho = 0\)</span></p>
+<p><span class="math inline">\(H_a: \rho \neq 0\)</span></p>
+</div>
 <p>However, rejecting <span class="math inline">\(H_0\)</span> only means that <span class="math inline">\(\rho\)</span> is not exactly 0 so we need to see if the relationship is practically significant.</p>
 <p>Note that outliers affect correlation and correlation <em>does not</em> imply causation.</p>
 </section>
-<section id="test-of-correlation-in-r" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="test-of-correlation-in-r"><span class="header-section-number">1.2</span> Test of Correlation in R</h2>
+<section id="r-code" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="r-code"><span class="header-section-number">1.2</span> R Code</h2>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AmesHousing)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> <span class="fu">make_ordinal_ames</span>()</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> ames <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>())</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> ames <span class="sc">|&gt;</span> <span class="fu">sample_frac</span>(<span class="fl">0.7</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(ames, train, <span class="at">by =</span> <span class="st">"id"</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AmesHousing)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> <span class="fu">make_ordinal_ames</span>()</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> ames <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>())</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> ames <span class="sc">|&gt;</span> <span class="fu">sample_frac</span>(<span class="fl">0.7</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(ames, train, <span class="at">by =</span> <span class="st">"id"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2051   82</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 879  82</code></pre>
@@ -271,7 +271,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(train<span class="sc">$</span>Gr_Liv_Area, train<span class="sc">$</span>Sale_Price)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(train<span class="sc">$</span>Gr_Liv_Area, train<span class="sc">$</span>Sale_Price)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -287,46 +287,66 @@ sample estimates:
 0.698509 </code></pre>
 </div>
 </div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(train[, <span class="fu">c</span>(<span class="st">"Year_Built"</span>, <span class="st">"Total_Bsmt_SF"</span>, <span class="st">"First_Flr_SF"</span>, <span class="st">"Gr_Liv_Area"</span>, <span class="st">"Sale_Price"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              Year_Built Total_Bsmt_SF First_Flr_SF Gr_Liv_Area Sale_Price
+Year_Built     1.0000000     0.4037104    0.3095407   0.2454325  0.5668889
+Total_Bsmt_SF  0.4037104     1.0000000    0.8120419   0.4643838  0.6276502
+First_Flr_SF   0.3095407     0.8120419    1.0000000   0.5707205  0.6085229
+Gr_Liv_Area    0.2454325     0.4643838    0.5707205   1.0000000  0.6985090
+Sale_Price     0.5668889     0.6276502    0.6085229   0.6985090  1.0000000</code></pre>
+</div>
+</div>
+<p>We can also generate a plot matrix of the variable associations with <code>pairs</code>:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(train[, <span class="fu">c</span>(<span class="st">"Year_Built"</span>, <span class="st">"Total_Bsmt_SF"</span>, <span class="st">"First_Flr_SF"</span>, <span class="st">"Gr_Liv_Area"</span>, <span class="st">"Sale_Price"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
-<section id="pearson-in-python" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="pearson-in-python"><span class="header-section-number">1.3</span> Pearson in Python</h2>
+<section id="python-code" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="python-code"><span class="header-section-number">1.3</span> Python Code</h2>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">"data/AmesHousing.csv"</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>train, test <span class="op">=</span> train_test_split(data, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="dv">123</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>np.corrcoef(train[<span class="st">'Gr Liv Area'</span>], train[<span class="st">'SalePrice'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> r.train</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>np.corrcoef(train[<span class="st">"Gr_Liv_Area"</span>], train[<span class="st">"Sale_Price"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>array([[1.        , 0.69584201],
-       [0.69584201, 1.        ]])</code></pre>
+<pre><code>array([[1.        , 0.69850904],
+       [0.69850904, 1.        ]])</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>np.corrcoef(train[[<span class="st">'Year Built'</span>, <span class="st">'Total Bsmt SF'</span>, <span class="st">'1st Flr SF'</span>, <span class="st">'Gr Liv Area'</span>]], rowvar<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>np.corrcoef(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    train[[<span class="st">"Year_Built"</span>, <span class="st">"Total_Bsmt_SF"</span>, <span class="st">"First_Flr_SF"</span>, <span class="st">"Gr_Liv_Area"</span>, <span class="st">"Sale_Price"</span>]],</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    rowvar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>array([[1.        , 0.42722628, 0.32717559, 0.23863599],
-       [0.42722628, 1.        , 0.80658329, 0.45383515],
-       [0.32717559, 0.80658329, 1.        , 0.57135986],
-       [0.23863599, 0.45383515, 0.57135986, 1.        ]])</code></pre>
+<pre><code>array([[1.        , 0.40371038, 0.3095407 , 0.24543253, 0.56688895],
+       [0.40371038, 1.        , 0.81204187, 0.46438378, 0.62765021],
+       [0.3095407 , 0.81204187, 1.        , 0.57072054, 0.60852293],
+       [0.24543253, 0.46438378, 0.57072054, 1.        , 0.69850904],
+       [0.56688895, 0.62765021, 0.60852293, 0.69850904, 1.        ]])</code></pre>
 </div>
 </div>
 </section>
 <section id="correlation-does-not-imply-causation" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="correlation-does-not-imply-causation"><span class="header-section-number">1.4</span> Correlation Does NOT Imply Causation</h2>
-<p>A strong correlation does not mean that a change in one variable causes a change in the other.</p>
+<p>A strong correlation does not mean that a change in one variable causes a change in the other. Correlations can be misleading if both variables are affected by other variables.</p>
 </section>
 </section>
 <section id="simple-linear-regression" class="level1" data-number="2">
@@ -336,6 +356,7 @@ y = \beta_0 + \beta_1x_i + e_i
 \]</span></p>
 <p>In SLR, correlation is not equal to slope. Two pairs of variables can have the same correlation coeff, but different linear relationships.</p>
 <ul>
+<li><span class="math inline">\(\beta_0 + \beta_1x_1\)</span> makes up the deterministic component</li>
 <li><span class="math inline">\(\beta_0\)</span> is the intercept estimate</li>
 <li><span class="math inline">\(\beta_1\)</span> is the slope estimate</li>
 </ul>
@@ -348,13 +369,12 @@ y = \beta_0 + \beta_1x_i + e_i
 <figcaption class="figure-caption">Variability Explained in SLR</figcaption>
 </figure>
 </div>
-<p>With linear regression, we are trying to minimize a <strong>loss function</strong> called <strong>sum of squared errors</strong>:</p>
+<p>With linear regression, we are trying to minimize a <strong>loss function</strong> called <strong>sum of squared errors</strong>. This is essentially measuring the difference between our predictions and the actual response values we observed in the data.</p>
+<p>We square the differences so they don’t cancel each other out and we have a loss that we can optimize our model on.</p>
 <p><span class="math display">\[
 SSE = \sum_{i=1}^{n} (y_i - \hat{y}_i) ^2
 \]</span></p>
-<ul>
-<li>This makes up the amount of unexplained variability in our model</li>
-</ul>
+<p>SSE makes up the amount of unexplained variability in our model.</p>
 </section>
 <section id="the-baseline-model" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="the-baseline-model"><span class="header-section-number">2.2</span> The Baseline Model</h2>
@@ -362,42 +382,53 @@ SSE = \sum_{i=1}^{n} (y_i - \hat{y}_i) ^2
 <p><span class="math inline">\(H_0: \beta_1 = 0\)</span></p>
 <p><span class="math inline">\(H_a: \beta_1 \neq 0\)</span></p>
 </div>
-<p>For SLR, the global F-Test, parameter t-test and the test of Pearson’s correlation are all equivalent.</p>
-<p>When we can’t reject the null hypothesis we are essentially saying that the independent variable doesn’t explain any of the variability in the response.</p>
+<p>For SLR, the global F-Test, parameter t-test and the test of Pearson’s correlation <strong>are all equivalent</strong>.</p>
+<p>When we can’t reject the null hypothesis we are saying that the independent variable doesn’t explain any of the variability in the response.</p>
 </section>
 <section id="assumptions-of-simple-linear-regression" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="assumptions-of-simple-linear-regression"><span class="header-section-number">2.3</span> Assumptions of Simple Linear Regression</h2>
 <ul>
 <li>Linearity of the mean
 <ul>
-<li>As I change values in the independent variable, the line should go through the mean of the response linearly</li>
+<li>As I change values in the independent variable, the line should go through the different means of the response linearly</li>
+<li>If violated, misspecified model</li>
 </ul></li>
-<li>Errors are normally distributed</li>
-<li>Errors have equal variance (homoskedasticity)</li>
-<li>Errors are independent</li>
+<li>Errors are normally distributed
+<ul>
+<li>If violated, our test results are erroneous</li>
+</ul></li>
+<li>Errors have equal variance (homoskedasticity)
+<ul>
+<li>If violated, standard errors are compromised</li>
+</ul></li>
+<li>Errors are independent
+<ul>
+<li>If violated, standard errors are compromised</li>
+</ul></li>
 </ul>
+<p>There is also an assumption of no perfect collinearity. Under multicollinearity, we can’t believe in our parameter estimates. The parameter estimates would be biased as there are multiple variables supplying the same information.</p>
 <section id="testing-of-assumptions" class="level3" data-number="2.3.1">
 <h3 data-number="2.3.1" class="anchored" data-anchor-id="testing-of-assumptions"><span class="header-section-number">2.3.1</span> Testing of Assumptions</h3>
 <ul>
-<li>Normality can use a histogram, QQ-Plot or normality test</li>
-<li>Equal variances can use residuals versus predicted values</li>
+<li>Normality can be verified using a histogram, QQ-Plot or normality test</li>
+<li>Equal variances can be verified through residuals versus predicted values</li>
 <li>Independence can look at residual plots for potential autocorrelation</li>
 <li>Linearity in the mean can be tested through a residual plot and finding that there is no pattern in residual plot</li>
 </ul>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>slr <span class="ot">&lt;-</span> <span class="fu">lm</span>(Sale_Price <span class="sc">~</span> Gr_Liv_Area, <span class="at">data =</span> train)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(slr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>slr <span class="ot">&lt;-</span> <span class="fu">lm</span>(Sale_Price <span class="sc">~</span> Gr_Liv_Area, <span class="at">data =</span> train)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(slr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(slr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(slr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -423,16 +454,15 @@ F-statistic:  1952 on 1 and 2049 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train.rename(columns<span class="op">=</span>{<span class="st">"Gr Liv Area"</span>: <span class="st">"Gr_Liv_Area"</span>})</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>model_slr <span class="op">=</span> smf.ols(<span class="st">"SalePrice ~ Gr_Liv_Area"</span>, data<span class="op">=</span>train).fit()</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>model_slr.pvalues</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>model_slr <span class="op">=</span> smf.ols(<span class="st">"Sale_Price ~ Gr_Liv_Area"</span>, data<span class="op">=</span>train).fit()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>model_slr.pvalues</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Intercept       8.540663e-05
-Gr_Liv_Area    6.980208e-297
+<pre><code>Intercept       3.754768e-04
+Gr_Liv_Area    4.195282e-300
 dtype: float64</code></pre>
 </div>
 </div>
