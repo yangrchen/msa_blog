@@ -1,11 +1,7 @@
 ---
 title: Model Building and Scoring for Prediction
 date: 07/13/2023
-date-modified: 07/20/2023
-engine: knitr
-editor: visual
-editor_options:
-    chunk_output_type: inline
+0ate-modified: 07/23/2023
 ---
 
 # Model Building
@@ -32,6 +28,7 @@ As the number of variables increases, more problems tend to arise:
 
 -   Assumptions start to fail
 -   Multicollinearity concerns
+    -   Coefficients can vary widely
     -   Variations lead to overfitting
     -   Higher variance than desired
 
@@ -79,7 +76,11 @@ $$
 
 ## R Code
 
+In R, all regularized regression functions have to take in a `model.matrix` instead of the usual `lm`
+
 ```{r}
+#| warning: false
+
 library(tidyverse)
 library(AmesHousing)
 library(car)
@@ -122,16 +123,19 @@ test_y <- train_reg$Sale_Price
 library(glmnet)
 
 # alpha controls the option as to which penalty to use
+# alpha = 0 uses Ridge
 ames_ridge <- glmnet(x = train_x, y = train_y, alpha = 0)
 plot(ames_ridge, xvar = "lambda")
 ```
 
 ## Python Code
-
+<!-- TODO: Add Python Code -->
+::: callout-caution
+TODO: Adding Python regularized regression implementations
+:::
 ```{python}
 train = r.train
 test = r.test
-
 ```
 
 # LASSO Regression
@@ -147,12 +151,24 @@ $$
 
 ## Differences in Effects
 
-LASSO can delete variables whereas Ridge can only get close to 0. Differences in effects are due to differences in penalty. The deletion of variables can actually act as variable selection.
+LASSO can delete variables whereas Ridge can only get close to 0. Differences in effects are due to differences in penalty. The deletion of variables from LASSO can actually act as variable selection.
+
+$$
+\begin{align*}
+\hat{\beta}_{OLS} &= (X^TX)^{-1}X^TY \\
+\hat{\beta}_R &= (X^TX + \lambda I)^{-1}X^TY \\
+\hat{\beta}_L &= (X^TX)^{-1}(X^TY - \lambda I)
+\end{align*}
+$$
+
+If $\lambda = X^TY$, $\hat{\beta}_L$ can be 0
 
 ## R Code
 
 ```{r}
 library(glmnet)
+
+# alpha = 1 sets glmnet to use LASSO
 ames_lasso <- glmnet(x = train_x, y = train_y, alpha = 1)
 plot(ames_lasso, xvar = "lambda")
 ```

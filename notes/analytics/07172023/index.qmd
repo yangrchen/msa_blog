@@ -1,7 +1,7 @@
 ---
 title: Categorical Data Analysis
 date: 07/17/2023
-date-modified: 07/20/2023
+date-modified: 07/23/2023
 ---
 
 Recall: categorical variables are data whose measurement scale is inherently categorical.
@@ -9,6 +9,7 @@ Recall: categorical variables are data whose measurement scale is inherently cat
 Two types: nominal and ordinal. Nominal has no logical ordering and ordianl has a logical ordering.
 
 ```{r}
+#| warning: false
 library(AmesHousing)
 library(tidyverse)
 library(reticulate)

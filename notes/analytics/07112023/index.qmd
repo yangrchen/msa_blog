@@ -1,6 +1,7 @@
 ---
 title: Correlated Error Terms
 date: 07/11/2023
+date-modified: 07/23/2023
 ---
 
 When we're trying to understand correlated error terms, we 
@@ -18,6 +19,8 @@ With time-series data, **autocorrelation** can occur
 and residuals follow a cyclic pattern. Plot residuals
 over time to see if any cyclic trends occur.
 
+![Cyclic Residuals](images/autocorrelation-plot.png)
+
 ## Durbin-Watson Statistic (First-Order)
 
 We can also assess autocorrelation using the 
@@ -34,6 +37,12 @@ $$
     not enough evidence supporting autocorrelation
 -   $d < 2$, possible positive autocorrelation
 -   $d > 2$, possible negative autocorrelation
+
+## Handling Correlated Errors
+
+-   If correlated due to time, perform time series
+-   If correlated due to clustered data, perform a hierarchical model
+-   Longitudinal analysis/panel data
 
 # Influential Points and Outliers
 
@@ -68,9 +77,9 @@ flowchart LR
 Divide the residuals by their standard errors after
 deleting that one observation
 
--   $\abs(SR) > 2$ for datasets with a relatively
+-   $\left|SR\right| > 2$ for datasets with a relatively
 small number of observations
--   $\abs(SR) > 3$ for datasets with relatively large
+-   $\left|SR\right| > 3$ for datasets with relatively large
 number of observations
 
 ### Cook's D
@@ -93,7 +102,7 @@ Measures impact that the $i^{th}$ observation has on
 predicted value
 
 $$
-| DFFITS_i | > 2\sqrt{\frac{p}{n}}
+\left| DFFITS_i \right| > 2\sqrt{\frac{p}{n}}
 $$
 
 ### Hat Values
@@ -132,12 +141,13 @@ One DFBETA per parameter per observation. Helps to explain
 which parameter coefficient the influence most lies.
 
 $$
-| DFBETA_{ij} | > 2 \sqrt{\frac{1}{n}}
+\left| DFBETA_{ij} \right| > 2 \sqrt{\frac{1}{n}}
 $$
 
 ## Scottish Hill Races
 
 ```{r}
+#| warning: false
 library(tidyverse)
 
 url <- "http://www.statsci.org/data/general/hills.txt"
