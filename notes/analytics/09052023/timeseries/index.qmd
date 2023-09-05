@@ -1,0 +1,102 @@
+---
+title: Stationarity
+date: 09/05/2023
+---
+
+# ARMA
+
+ARMA stands for **AutoRegressive Moving Averages**. AR and MA terms are used to model the dependency structure in the data.
+
+ARMA models are based on statistical methods (will assume a distribution). The best model will be found by an iterative process.
+
+## Signal
+
+Models can have singal due to a seasonal pattern or due to trend. They can also have signal due to "correlation structure" which can be in the form of Autoregressive and moving averages.
+
+In order to model the dependency in the data, we need to take care of the **functional form** and any random walks first.
+
+![ARIMA Modeling Flowchart](images/arima-modeling.png)
+
+# No Season and No Trend (Starting Simple)
+
+## Stationarity
+
+To model AR and MA terms, we need to have stationarity first. 
+
+**Weak stationarity** is where there is no predictable pattern, we have constant variance and converges to a constant mean in the "long run."
+
+## Random Walk
+
+$$
+Y_t = Y_{t-1} + \epsilon_t
+$$
+
+The current observation only depends on the previous observation and some error. There is no correlation/dependency throughout the entire series.
+
+If we have a random walk, we try to take differences:
+
+$$
+Y_t - Y_{t-1} = \epsilon_t
+$$
+
+How do we know if we have a random walk or not?
+
+# Unit Root Testing
+
+## Augmented Dickey-Fuller Unit Root Test
+
+Provides a statistical test for detecting a random walk.
+
+::: {.text-center}
+$H_0:$ Differencing is required (non-stationary data; random walk)
+
+$H_a:$ Stationary mean about zero (if the series is centered about 0); Stationary mean otherwise
+:::
+
+Called "unit root test" because it looks to see if the equation with differenced series has a unit root ($\phi = 1$)
+
+$$
+Y_t = \phi Y_{t-1} + \epsilon_t
+$$
+
+Unit roots can exist in models with more than one lag of Y.
+
+-   Lag 0 tests are equivalent to what we have prev. seen
+-   Lag 1 tests consider models with differenced series of Y and first lag of differenced series
+-   Lag 2 tests consider models with differenced series of Y and first and second lag of differenced series
+
+When testing for stationarity, you should go to at least a lag 2 while looking at **ALL** of the tests.
+
+::: {.panel-tabset}
+# R
+
+```{r}
+#| warning: false
+library(aTSA)
+
+file_dir <- "https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/"
+quotes <- read.csv(paste(file_dir, "fpp_insurance.csv", sep = ""))
+quotes_ts <- ts(quotes$Quotes, start = 2002, frequency = 12)
+
+adf.test(quotes_ts)
+```
+
+We look at the type 2 test since our series does not seem to be centered around 0. Based on our p-values we believe that 
+
+# Python
+:::
+
+## ADF Test Process
+
+1.  First decide if you are doing zero mean or single mean test
+2.  Decide how many lags you would like to look at (common in industry to do 3 - 5 lags)
+3.  See if you reject **ANY** of these hypotheses
+4.  If you reject all hypotheses then you are ready to start modeling AR and MA terms
+5.  If you fail to reject at least one, you have a random walk and will take differences and start modeling AR and MA terms on the difference.
+
+## Over-differencing
+
+When you difference and you don't need to difference or take too many differences you create **over-differencing**.
+
+Over-differencing introduces more dependence on error terms in the model. There are more moving average terms that don't really exist.
+
