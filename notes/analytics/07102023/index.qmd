@@ -24,7 +24,7 @@ library(tidyverse)
 library(httpgd)
 library(reticulate)
 
-use_condaenv(condaenv = "blues_clues", required = TRUE)
+use_condaenv(condaenv = "msa", required = TRUE)
 data_path <- "data/Salary.csv"
 salary <- read.csv(data_path)
 par(mfrow = c(2, 2))

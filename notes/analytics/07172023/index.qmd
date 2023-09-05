@@ -15,7 +15,7 @@ library(tidyverse)
 library(reticulate)
 
 set.seed(123)
-use_condaenv("blues_clues")
+use_condaenv("msa")
 ames <- make_ordinal_ames()
 
 ames <- ames %>%

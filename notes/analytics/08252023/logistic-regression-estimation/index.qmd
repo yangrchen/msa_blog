@@ -1,0 +1,182 @@
+---
+title: Estimation Methods for Logistic Regression
+date: 08/25/2023
+---
+
+In logistic regression, the assumptions of residual Normality and constant variance are violated. OLS is not the best method for parameter estimation.
+
+# Maximum Likelihood Estimation
+
+Estimates are obtained with **maximum likelihood estimation (MLE)**. Likelihood function measures how probable a specific grid of $\beta$ values is to have produced you data.
+
+For a binomial target variable:
+
+$$
+L(\beta's|y, x_1, x_2, \cdots) = \prod_{i=1}^n p_i^{y_i}(1 - p_i)^{1 - y_i}
+$$
+
+-   $p_i = \frac{1}{1 + e^{-z}}$
+
+Within this combination of inputs and outputs, what is the best combination of $\beta$ to get our data.
+
+We can work with the log of the likelihood function:
+
+$$
+\log(L) = \sum_{i=1}^n \left[y_i\log(p_i) + (1- y_i)\log(1 - p_i)\right]
+$$
+
+## Likelihood Ratio Tests
+
+Likelihood estimation allows us to do hypothesis testing. If extra predictors don't add information, then a model that includes them shouldn't be substantially more likely than the moel that doesn't include them.
+
+**Likelihood Ratio Test (LRT)** compares the full and reduced models.
+
+![Likelihood Ratio Test](images/likelihood-ratio-test.png)
+
+$L_0$ is the reduced model and $L_1$ is the full model.
+
+::: {.panel-tabset}
+# R
+
+```{r}
+#| warning: false
+library(AmesHousing)
+library(tidyverse)
+library(reticulate)
+
+set.seed(123)
+
+use_condaenv("msa")
+
+ames <- make_ordinal_ames()
+ames <- ames |>
+    mutate(Bonus = ifelse(Sale_Price > 175000, 1, 0))
+train <- sample_frac(ames, 0.7)
+
+logit_model <- glm(Bonus ~ Gr_Liv_Area + factor(Central_Air), data = train, family = binomial(link = "logit"))
+
+logit_model_r <- glm(Bonus ~ 1, data = train, family = binomial(link = "logit"))
+anova(logit_model, logit_model_r, test = "LRT")
+```
+
+# Python
+
+```{python}
+from statsmodels.genmod.families import Binomial
+from statsmodels.genmod.generalized_linear_model import GLM
+import statsmodels.formula.api as smf
+import scipy as sp
+
+ames = r.ames
+train = r.train
+logit_model = GLM.from_formula(
+    "Bonus ~ Gr_Liv_Area + C(Central_Air)", data=train, family=Binomial()
+).fit()
+
+reduced_ll = logit_model.llf
+full_ll = (
+    smf.logit("Bonus ~ Gr_Liv_Area + C(Central_Air) + C(Fireplaces)", data=train)
+    .fit()
+    .llf
+)
+
+LR_stat = -2 * (reduced_ll - full_ll)
+p_val = sp.stats.chi2.sf(LR_stat, 4)
+p_val
+```
+
+:::
+
+In this example, you can think of LRT as comparing these two equations:
+
+$$
+\begin{align*}
+L_1 &= \beta_0 + \beta_1GLA + \beta_2CA + \beta_3F1 \beta_4F_2 + \cdots \\
+L_0 &= \beta_0 + \beta_1GLA + \beta_2CA
+\end{align*}
+$$
+
+Always check the difference in degrees of freedom to double-check if you are comparing the right number of variables (how many levels are in the additional variable you are including?).
+
+## Categorical P-Values
+
+For categorical variables with more than 2 levels we shouldn't evaluate the significance of the entire variable with the individual p-values. Use LRT to compare model with and without the categorical variable since LRT compares the model with ALL the levels included against the model with ALL the levels not included.
+
+```{r}
+logit_model_f <- glm(Bonus ~ Gr_Liv_Area + factor(Central_Air) + factor(Fireplaces), data = train, family = binomial(link = "logit"))
+car::Anova(logit_model_f, test = "LR", type = "III")
+```
+
+# Assumptions
+
+Unlike categorical variables, we need to test for linearity of the continuous variables with the logit.
+
+## General Additive Model (GAM)
+
+The idea: We want to fit the best curve for our target and then we run a statistical test to see if it our fitted curve is any better than just a straight line relationship. If it is better, then our assumption of linearity is not met.
+
+Traditional logistic regression model:
+
+$$
+\log(odds) = \beta_0 + \beta_1x_{1,i} + \cdots + \beta_kx_{k,i}
+$$
+
+GAM logistic regression model:
+
+$$
+\log(odds) = \beta_0 + f_1(x_{1,i}) + \cdots + f_k(x_{k,i})
+$$
+
+::: {.panel-tabset}
+# R
+
+```{r}
+#| warning: false
+
+library(mgcv)
+fit_gam <- gam(Bonus ~ s(Gr_Liv_Area) + factor(Central_Air), data = train, family = binomial(link = "logit"), method = "REML")
+
+summary(fit_gam)
+plot(fit_gam)
+```
+
+The spline p-value is not telling us whether our assumption is met or not. It tells us whether or not the splined variable is significant in the model.
+
+`edf` in the splined variable is the polynomial degree that the fit thinks we should have. In theory, if the relationship was close to a straight line then `edf` would be close to 1.
+
+How do we actually test if our variable satisfies the linearity assumption?
+
+```{r}
+anova(logit_model, fit_gam, test = "Chisq")
+```
+
+If our p-value is significant, then it means our two models are significantly different. If our two models are significantly different, then our curve model is providing more information than a straight line. Assumption is not met.
+
+In conclusion, high p-value means our assumption is met, else not met.
+:::
+
+### Linearity Assumption Failed?
+
+1.  Use GAM logistic model instead with more limited interpretation on variables that break assumption
+2.  Bin the continuous variables that break assumption (keeps interpretation)
+
+![Binning Continuous Variable](images/continuous-binning.png)
+
+```{r}
+train <- train %>%
+    mutate(Gr_Liv_Area_BIN = cut(Gr_Liv_Area, breaks = c(-Inf, 1000, 1500, 3000, 4500, Inf)))
+
+logit_model_bin <- glm(Bonus ~ factor(Gr_Liv_Area_BIN) + factor(Central_Air), data = train, family = binomial())
+summary(logit_model_bin)
+```
+
+Note that binning a continuous variable results in an *ordinal* variable.
+
+# Predicted Values
+
+```{r}
+new_ames <- data.frame(Gr_Liv_Area = c(1500, 2000, 2250, 2500, 3500), Central_Air = c("N", "Y", "Y", "N", "Y"))
+
+new_ames <- data.frame(new_ames, "Pred" = predict(logit_model, newdata = new_ames, type = "response"))
+print(new_ames)
+```

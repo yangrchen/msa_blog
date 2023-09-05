@@ -1,0 +1,144 @@
+---
+title: "Introduction to Logistic Regression Review"
+date: 08/22/2023
+---
+
+Binary classification is a **supervised** algorithm where we are trying to predict one of two target outcomes. Binary classification is one of the most common type of business problems that need solving.
+
+-   Targeted Marketing
+-   Churn Prediction
+-   Probability of Default
+-   Fraud Detection
+
+We will use the Ames dataset again for binary logistic regression.
+
+::: {.panel-tabset}
+# R
+
+```{r}
+#| warning: false
+library(AmesHousing)
+library(tidyverse)
+library(reticulate)
+
+set.seed(123)
+
+use_condaenv("msa")
+
+ames <- make_ordinal_ames()
+ames <- ames |>
+    mutate(Bonus = ifelse(Sale_Price > 175000, 1, 0))
+train <- sample_frac(ames, 0.7)
+```
+
+# Python
+
+```{python}
+ames = r.ames
+```
+
+:::
+
+What is regression actually doing? 
+
+Modeling the *expected* response conditional on the predictors. For a binary response, $y_i$, the expected value is the probability of the event:
+
+$$
+E(y_i) = P(y_i = 1) = p_i
+$$
+
+Why can't we model the following:
+
+$$
+p_i = \beta_0 + \beta_1x_{1,i} + \cdots + \beta_kx_{k,i}
+$$
+
+Probabilities are bounded but linear functions can take on any value. Relationship between probabilities and X is usually nonlinear. Properties of OLS do not hold.
+
+# Logistic Regression Model
+
+$$
+p_i = \frac{1}{1 + e^{-z}}
+$$
+
+-   $z$ is the linear equation with the $\beta_k$
+-   Predicted probability will always be between 0 and 1
+-   Parameter estimates do not enter the model linearly
+-   Rate of change of the probability varies as the X's vary
+
+
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+  
+x = np.linspace(-10, 10, 100)
+z = 1/(1 + np.exp(-x))
+  
+plt.plot(x, z)
+plt.xlabel("x")
+plt.ylabel("Sigmoid(X)")
+plt.show()
+```
+
+To convert back to a linear model, we use the logit function:
+
+$$
+\log(\frac{p_i}{1 - p_i}) = \beta_0 + \beta_1x_{1,i} + \cdots + \beta_kx_{k,i}
+$$
+
+Relationship between parameters and logits are linear. Logits are unbounded.
+
+# Coefficient Interpretations
+
+With a $\hat{\beta}$ change in the logit, we can interpret the change in odds as $e^{\hat{\beta}}$ or as a percentage $100 \cdot (e^{\hat{\beta}} - 1)\%$
+
+::: {.panel-tabset}
+# R
+
+```{r}
+logit_model <- glm(Bonus ~ Gr_Liv_Area + factor(Central_Air), data = train, family = binomial(link = "logit"))
+summary(logit_model)
+```
+
+# Python
+
+```{python}
+import statsmodels.formula.api as smf
+
+train = r.train
+logit_model_py = smf.logit('Bonus ~ Gr_Liv_Area + C(Central_Air)', data=train).fit()
+
+logit_model_py.summary()
+```
+:::
+
+Note that in the output the significance of the `Central_Air` factor is only saying that `Central_Air` is significantly different from the **reference** level (no central air).
+
+![Odds Ratio for Central Air](images/log-odds-interpretation.png)
+
+In a business context, you don't have to necessarily drill down into the specifics of the odds ratio. Your goal is to convey the magnitude of the odds ratio to create a strategy.
+
+::: {.panel-tabset}
+# R
+
+```{r}
+exp(cbind(coef(logit_model), confint(logit_model)))
+```
+
+# Python
+
+```{python}
+odds_ratio = np.exp(logit_model_py.params)
+odds_ratio
+```
+:::
+
+## Amount to Double the Odds
+
+Working through math bckwards allows us to see what increase in square footage is needed for an expected doubling of odds:
+
+$$
+\text{Double Odds} = \frac{\log(2)}{\beta}
+$$
+
+Any odds ratio equal to 1 has no association. Lower than 1 means that the group in denominator has higher odds of the event. Greater than 1 means group in numerator has higher odds of the event.

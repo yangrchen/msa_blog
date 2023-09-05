@@ -2,3 +2,5 @@
 /_site/
 /.vscode/
 .DS_Store
+sql/
+/notes/communication/**

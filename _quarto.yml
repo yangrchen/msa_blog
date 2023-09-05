@@ -12,6 +12,7 @@ website:
       - blog/index.qmd
       - icon: github
         href: https://github.com/yangrchen
+  favicon: favicon.ico
 format:
   html:
     theme: cosmo

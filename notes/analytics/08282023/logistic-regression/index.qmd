@@ -1,0 +1,267 @@
+---
+title: Data Considerations
+date: 08/28/2023
+engine: knitr
+---
+
+The following considerations apply to any binary classification problem.
+
+# Rare Event Modeling
+
+Many algorithms and models have a problem trying to predict small proportions. 5% or smaller in a target category can lead to classification problems. Common situations include fraud, default, marketing response, weather event.
+
+# Telecomm Churn Data Set
+
+::: panel-tabset
+# R
+
+```{r}
+churn <- read.csv("https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/tele_churn.csv")
+```
+
+# Python
+:::
+
+# Rare Event Sampling Correction
+
+![Rare Event Sampling Correction](images/rare-event-sampling.png)
+
+## Oversampling
+
+-   Duplicate current event cases in training set to balance better with non-event cases
+-   Keep test set as original population proportion
+
+Can be a problem because we're "repeating" the signal
+
+::: panel-tabset
+# R
+
+```{r}
+#| warning: false
+
+library(tidyverse)
+
+set.seed(12345)
+
+train_o <- churn %>%
+    sample_frac(0.7) %>%
+    mutate(id = row_number())
+
+# Each positive observation is repeated 10 times
+train_o_T <- train_o %>%
+    filter(churn == TRUE) %>%
+    slice(rep(1:n(), each = 10))
+
+train_o_F <- train_o %>%
+    filter(churn == FALSE)
+
+train_o  <- rbind(train_o_F, train_o_T)
+test_o <- churn[-train_o$id,]
+
+table(train_o$churn)
+table(test_o$churn)
+```
+:::
+
+# Undersampling
+
+-   Randomly sample current non-event cases to keep in the training set to balance with event cases
+-   Keep test set as original population proportion
+
+::: panel-tabset
+# R
+
+```{r}
+set.seed(12345)
+
+train_u <- churn %>%
+    mutate(id = row_number()) %>%
+    group_by(churn) %>%
+    sample_n(104)
+test_u <- churn[-train_u$id, ]
+
+table(train_u$churn)
+table(test_u$churn)
+```
+
+# Python
+:::
+
+# Running the Telecomm Model
+
+```{r}
+logit_model <- glm(churn ~ factor(international.plan) + factor(voice.mail.plan) + total.day.charge + customer.service.calls, data = train_u, family = binomial())
+summary(logit_model)
+```
+
+# Adjustments to Oversampling
+
+![Oversampling Effect](images/oversampling-effect.png)
+
+When sample proportion is out of line with population proportion, we need to adjust to correct the bias.
+
+There are two possible methods:
+
+-   Adjusting the intercept
+-   Weighting observations
+
+## Adjusting the Intercept
+
+Need to correct for bias created by oversampling. Adjustment is only applied to intercept. This creates an unbiased estimate of our probabilities.
+
+$$
+\hat{p}_i = \frac{\hat{p}_i^*\rho_0\pi_1}{(1 - \hat{p}_i^*)\rho_1 + \hat{p}_i^*\rho_0\pi_1}
+$$
+
+-   Population proportion: $\pi_1, \pi_0$
+-   Sample proportion: $\rho_1, \rho_0$
+-   Unadjusted predictions: $\hat{p}_i^*$
+
+::: panel-tabset
+# R
+
+```{r}
+test_u_p_bias <- predict(logit_model, newdata = test_u, type = "response")
+test_u_p <- (test_u_p_bias * (104 / 208) * (154 / 3004)) / ((1 - test_u_p_bias) * (104 / 208) * (2850 / 3004) + test_u_p_bias * (104 / 208) * (154 / 3004))
+
+test_u <- data.frame(test_u, "Pred" = test_u_p)
+
+head(test_u_p)
+```
+:::
+
+## Weighted Observations
+
+Weighting observations adjusts while model is being built instead of after it is built.
+
+We use weighted **maximum likelihood estimation (MLE)** so each observation has potentially different weights to the MLE calculation.
+
+$$
+\text{weight} = \begin{cases}
+1, & y = 1 \\
+\rho_1\pi_0/\rho_0\pi_1, & y = 0
+\end{cases}
+$$
+
+We can think of the 0 as gaining a multiplier of $\frac{\pi_0}{\pi_1}$ per observation in order to get back to the original population proportion. The weight expressed in the above formula is actually $\frac{(\pi_0 / \pi_1)}{(\rho_0 / \rho_1)}$
+
+::: panel-tabset
+# R
+
+```{r}
+train_u$weight <- ifelse(train_u$churn == "TRUE", 1, 18.49)
+logit_model_w <- glm(churn ~ factor(international.plan) + factor(voice.mail.plan) + total.day.charge + customer.service.calls, data = train_u, family = binomial(), weights = weight)
+summary(logit_model_w)
+```
+
+# Python
+:::
+
+We actually get difference significant variables between the adjusted intercept model and the weighted model. When do we use which technique? For the most part, we use weighted.
+
+![Weighted vs. Adjust Intercept](images/weighted-vs-intercept.png)
+
+# Missing Values
+
+When you build a model, observations with missing values are typically dropped. This is referred to as **complete case analysis**. However, this can result in losing a lot of data that could be useful.
+
+Solutions to missing values:
+
+-   Delete
+-   Keep
+-   Replace
+
+## Deleting Variables
+
+If a majority of your data is missing, then consider deleting the variable all together.
+
+More than 50% missing is a good rule of thumb for removing the variable. We may not be confident that the data we do have is good.
+
+## Keeping Variables
+
+Missing values in predictor variables are not necessarily bad. For categorical variables we can add a missing category.
+
+## Replacing Variables
+
+We can estimate a missing value with **imputation**. Not best to do with categorical variables as you can just add a missing category.
+
+Approaches:
+
+1.  Simple mean/median replacement
+2.  Predictive model using other variables (not empirically shown to add value)
+
+If you impute missing continuous values then you need to create a missing value binary flag for each of the continuous variables you impute.
+
+![Imputing Continuous Variables](images/imputing-continuous.png)
+
+## Overall Considerations
+
+Any operations you apply to your training data need to be applied to your test data as well. Early on you should consider creating a pipeline that can apply the transforms you used on the test data when it comes to evaluation.
+
+# Convergence Problems
+
+## Linear Separation
+
+Problems with linear separation have to be considered for categorical variables.
+
+**Complete linear separation** occurs when some combination of the predictors perfectly predict **every** outcome.
+
+|             | Yes |  No |
+|-------------|----:|----:|
+| **Group A** | 100 |   0 |
+| **Group B** |   0 | 150 |
+
+**Quasi-complete separation** occurs when the outcome can be perfectly predicted for only a subset of the data. In this case, Group B is perfectly predicting the **No** category.
+
+|             | Yes |  No |
+|-------------|----:|----:|
+| **Group A** |  77 |  23 |
+| **Group B** |   0 |  50 |
+
+![Convergence Problems](images/convergence-problems.png)
+
+::: panel-tabset
+# R
+
+```{r}
+table(train_u$customer.service.calls, train_u$churn)
+```
+
+Categories 6 and 7 are perfectly predicting churn. We have quasi-complete separation.
+:::
+
+## Solutions
+
+-   **Collapse the categories of the predictor variable to eliminate the 0 cell count**
+-   Penalized maximum likelihood
+-   Eliminate the category altogether (may not be reasonable since the category seems important)
+-   Create a dummy observation that adds to the cell counts
+
+## Thresholding (Ordinal Variables)
+
+| Customer Service Calls | Sample Size |   0 |   1 |
+|-----------------------:|------------:|----:|----:|
+|                      0 |          54 |  29 |  25 |
+|                      1 |          59 |  34 |  25 |
+|                      2 |          43 |  23 |  20 |
+|                      3 |          27 |  15 |  12 |
+|                      4 |          15 |   2 |  13 |
+|                      5 |           5 |   1 |   4 |
+|                      6 |           3 |   0 |   3 |
+|                      7 |           2 |   0 |   2 |
+
+Group 4 - 7 categories together:
+
+| Customer Service Calls | Sample Size |   0 |   1 |
+|-----------------------:|------------:|----:|----:|
+|                      0 |          54 |  29 |  25 |
+|                      1 |          59 |  34 |  25 |
+|                      2 |          43 |  23 |  20 |
+|                      3 |          27 |  15 |  12 |
+|                     4+ |          25 |   3 |  22 |
+
+## Clustering Levels - Greenacre Method (Ordinal Variables)
+
+![Greenacre Method](images/greenacre-method.png)
+
+We select the clustering which results in the least amount of information lost from our original counts. In this case we group B and C together.
