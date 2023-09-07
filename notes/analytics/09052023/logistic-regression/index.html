@@ -146,7 +146,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div class="quarto-title column-body">
       <h1 class="title">Diagnostics and Subset Selection</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">analytics</div>
+                <div class="quarto-category">logistic regression</div>
               </div>
                   </div>
   </div>
@@ -168,6 +168,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </div>
     </div>
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">September 6, 2023</p>
+      </div>
+    </div>
       
     </div>
     
@@ -422,20 +428,34 @@ Bonus ~ factor(Full_Bath) + Garage_Area + Fireplaces + Gr_Liv_Area +
 </section>
 <section id="p-value-vs.-aicbic-metrics" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> P-Value vs.&nbsp;AIC/BIC Metrics</h1>
+<p>P-values are falling out of popularity, but it is primarily because people are not taking into account the <span class="math inline">\(\alpha\)</span> level.</p>
+<p>Mathematically, AIC and BIC for adding or removing variables with stepwise selection is the same thing as using p-values in LRT.</p>
 <p>AIC is not necessarily better than p-values when determining variable significance:</p>
 <p><span class="math display">\[
 AIC = -2\log(L) + 2p
 \]</span></p>
+<ul>
+<li><span class="math inline">\(L\)</span> is the likelihood function</li>
+<li><span class="math inline">\(p\)</span> is the number of variables being estimated in the model</li>
+</ul>
 <p>If a model is better with a lower AIC:</p>
 <p><span class="math display">\[
--2\log(L_{p+1}) + 2(p + 1) &lt; -2\log(L_p) + 2p
+\begin{align*}
+-2\log(L_{p+1}) + 2(p + 1) &amp;&lt; -2\log(L_p) + 2p \\
+2 &amp;&lt; 2(\log(L_{p+1}) - \log(L_p))
+\end{align*}
 \]</span></p>
-<p>AIC does not adjust for sample size as the significance level, <span class="math inline">\(\alpha\)</span>, calculation is determined as:</p>
+<p>Right hand side is an LRT that follows a <span class="math inline">\(\chi^2\)</span> distribution with 1 degree of freedom. The significance level from this LRT can be calculated as:</p>
 <p><span class="math display">\[
 1 - P(\chi_1^2 &gt; 2) = 0.1573
 \]</span></p>
+<p>Notice how this AIC calculation does not account for sample size at all.</p>
 <p>This is a relatively high significance level and for large datasets does not seem like a good technique for selecting variables.</p>
-<p>BIC instead adjusts for sample size:</p>
+<p>Recall the BIC calculation:</p>
+<p><span class="math display">\[
+BIC = -2\log(L) + p\log(n)
+\]</span></p>
+<p>If we work through the math again then we find that BIC adjusts for sample size:</p>
 <p><span class="math display">\[
 1 - P(\chi_1^2 &gt; \log(n)) =\cdots
 \]</span></p>
@@ -457,7 +477,7 @@ AIC = -2\log(L) + 2p
 </ul>
 <section id="deviance" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="deviance"><span class="header-section-number">4.1</span> Deviance</h2>
-<p>The model is a summary of a data set. A <strong>saturated</strong> model fits the data perfectly but is not a useful summary. <strong>Deviance</strong> is a measure of how far the fitted model is from the saturated model–the error. Logistic regression minimizes the sum of squared deviances.</p>
+<p>A <strong>saturated</strong> model is a model that fits the data perfectly by essentially overfitting it. We create a variable for each unique combination of inputs. <strong>Deviance</strong> is a measure of how far the fitted model is from the saturated model–the error. Logistic regression minimizes the sum of squared deviances.</p>
 <p>Deviance residuals tell us how much each observation reduces the deviance.</p>
 </section>
 <section id="influence-statistics" class="level2" data-number="4.2">
@@ -516,7 +536,233 @@ AIC = -2\log(L) + 2p
 </div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.genmod.families <span class="im">import</span> Binomial</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.genmod.generalized_linear_model <span class="im">import</span> GLM</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>log_model <span class="op">=</span> GLM.from_formula(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bonus ~ Gr_Liv_Area + Garage_Area + Fireplaces + C(Full_Bath) + Lot_Area + C(Central_Air) + TotRms_AbvGrd + Gr_Liv_Area:Fireplaces"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>train,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    family<span class="op">=</span>Binomial(),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>).fit()</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>log_model.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Generalized Linear Model Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>Bonus</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>2051</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>GLM</td>
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>2039</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Model Family:</td>
+<td>Binomial</td>
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>11</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Link Function:</td>
+<td>Logit</td>
+<td data-quarto-table-cell-role="th">Scale:</td>
+<td>1.0000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>IRLS</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-655.10</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Wed, 06 Sep 2023</td>
+<td data-quarto-table-cell-role="th">Deviance:</td>
+<td>1310.2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>22:49:11</td>
+<td data-quarto-table-cell-role="th">Pearson chi2:</td>
+<td>5.34e+05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Iterations:</td>
+<td>7</td>
+<td data-quarto-table-cell-role="th">Pseudo R-squ. (CS):</td>
+<td>0.5106</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">z</td>
+<td data-quarto-table-cell-role="th">P&gt;|z|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Intercept</td>
+<td>-9.7344</td>
+<td>1.441</td>
+<td>-6.753</td>
+<td>0.000</td>
+<td>-12.560</td>
+<td>-6.909</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(Full_Bath)[T.1]</td>
+<td>-0.0390</td>
+<td>1.143</td>
+<td>-0.034</td>
+<td>0.973</td>
+<td>-2.279</td>
+<td>2.201</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">C(Full_Bath)[T.2]</td>
+<td>2.3699</td>
+<td>1.143</td>
+<td>2.073</td>
+<td>0.038</td>
+<td>0.129</td>
+<td>4.610</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(Full_Bath)[T.3]</td>
+<td>4.5001</td>
+<td>1.519</td>
+<td>2.963</td>
+<td>0.003</td>
+<td>1.523</td>
+<td>7.477</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">C(Full_Bath)[T.4]</td>
+<td>-1.2645</td>
+<td>2.126</td>
+<td>-0.595</td>
+<td>0.552</td>
+<td>-5.431</td>
+<td>2.902</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(Central_Air)[T.Y]</td>
+<td>2.2895</td>
+<td>0.567</td>
+<td>4.037</td>
+<td>0.000</td>
+<td>1.178</td>
+<td>3.401</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Gr_Liv_Area</td>
+<td>0.0038</td>
+<td>0.000</td>
+<td>8.659</td>
+<td>0.000</td>
+<td>0.003</td>
+<td>0.005</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Garage_Area</td>
+<td>0.0046</td>
+<td>0.000</td>
+<td>9.520</td>
+<td>0.000</td>
+<td>0.004</td>
+<td>0.006</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Fireplaces</td>
+<td>1.9427</td>
+<td>0.542</td>
+<td>3.582</td>
+<td>0.000</td>
+<td>0.880</td>
+<td>3.006</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Lot_Area</td>
+<td>1.568e-05</td>
+<td>1.57e-05</td>
+<td>1.000</td>
+<td>0.317</td>
+<td>-1.51e-05</td>
+<td>4.64e-05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">TotRms_AbvGrd</td>
+<td>-0.5049</td>
+<td>0.080</td>
+<td>-6.342</td>
+<td>0.000</td>
+<td>-0.661</td>
+<td>-0.349</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Gr_Liv_Area:Fireplaces</td>
+<td>-0.0006</td>
+<td>0.000</td>
+<td>-1.859</td>
+<td>0.063</td>
+<td>-0.001</td>
+<td>3.45e-05</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.stats.tests.test_influence</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>log_diag <span class="op">=</span> log_model.get_influence()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>log_diag.summary_frame().head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   dfb_Intercept  dfb_C(Full_Bath)[T.1]  ...  hat_diag  dffits_internal
+0      -0.004889               0.001706  ...  0.003598         0.023667
+1      -0.013708               0.004351  ...  0.011756        -0.167066
+2       0.023485               0.001300  ...  0.006500        -0.135552
+3      -0.002182               0.000401  ...  0.002478         0.008381
+4      -0.000883              -0.000017  ...  0.000711        -0.002877
 
+[5 rows x 16 columns]</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>log_diag.plot_influence()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </div>
 </div>
 </div>
