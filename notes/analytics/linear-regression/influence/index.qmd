@@ -1,0 +1,247 @@
+---
+title: Correlated Error Terms
+date: 07/11/2023
+date-modified: 07/23/2023
+categories:
+    -   correlation
+    -   EDA
+---
+
+When we're trying to understand correlated error terms, we 
+need to know the source of our data:
+
+-   Clustered/grouped data
+-   Observations connected in some way
+-   Complex surveys
+-   Repeated measures
+-   **Data gathered over time**
+
+# Autocorrelation
+
+With time-series data, **autocorrelation** can occur
+and residuals follow a cyclic pattern. Plot residuals
+over time to see if any cyclic trends occur.
+
+![Cyclic Residuals](images/autocorrelation-plot.png)
+
+## Durbin-Watson Statistic (First-Order)
+
+We can also assess autocorrelation using the 
+**Durbin-Watson statistic** which compares a residual
+against the previous time residual over the sum of
+residuals squared.
+
+$$
+d = \frac{\sum_{t=2}^{T} (e_t - e_{t-1})^2}{\sum_{t=1}^{T} e_t^2}
+$$
+
+-   Bounded in $[0, 4]$
+-   When $d=2$, fail to reject $H_0$ and assume there is
+    not enough evidence supporting autocorrelation
+-   $d < 2$, possible positive autocorrelation
+-   $d > 2$, possible negative autocorrelation
+
+## Handling Correlated Errors
+
+-   If correlated due to time, perform time series
+-   If correlated due to clustered data, perform a hierarchical model
+-   Longitudinal analysis/panel data
+
+# Influential Points and Outliers
+
+Two main types of anomalous observations:
+
+-   Outliers: points with large standardized residuals
+-   Leverage Points: point that falls outside the normal
+range (far from the mean) in the possible values of the
+predictor (X-space) and have a large "influence" on the 
+regression line
+
+Don't just focus on residuals of data as residual
+analysis tends to discover outliers instead of
+leverage points.
+
+## Diagnostic Statistics
+
+::: {.text-center}
+```{mermaid}
+flowchart LR
+    A[Detecting Outliers] --> B[Standardized Residuals]
+    A --> C[Studentized Residuals]
+    X[Detecting Influential Obs.] --> D[Cook's D]
+    X --> E[DFFITS]
+    X --> F[DFBETAS]
+    X --> G[Hat Values]
+```
+:::
+
+### Studentized Residuals
+
+Divide the residuals by their standard errors after
+deleting that one observation
+
+-   $\left|SR\right| > 2$ for datasets with a relatively
+small number of observations
+-   $\left|SR\right| > 3$ for datasets with relatively large
+number of observations
+
+### Cook's D
+
+Measures the difference in the regression estimates
+when the $i^{th}$ observation is left out
+
+Cutoff formula:
+
+$$
+D_i > \frac{4}{n - p - 1}
+$$
+
+-   $p$ is the number of parameters including the
+intercept
+
+### DFFITS
+
+Measures impact that the $i^{th}$ observation has on
+predicted value
+
+$$
+\left| DFFITS_i \right| > 2\sqrt{\frac{p}{n}}
+$$
+
+### Hat Values
+
+From the normal equation, the estimate of the parameters
+is:
+
+$$
+b = (X'X)^{-1}X'y
+$$
+
+Estimated line is:
+
+$$
+\hat{y} = X(X'X)^{-1}X'y
+$$
+
+With the hat values being:
+
+$$
+X(X'X)^{-1}X'
+$$
+
+Suggested cutoff is:
+
+$$
+h_{ii} > \frac{2p}{n}
+$$
+
+### DFBETA
+
+Measure of change in the $j^{th}$ parameter estimate with
+deletion of $i^{th}$ observation.
+
+One DFBETA per parameter per observation. Helps to explain
+which parameter coefficient the influence most lies.
+
+$$
+\left| DFBETA_{ij} \right| > 2 \sqrt{\frac{1}{n}}
+$$
+
+## Scottish Hill Races
+
+```{r}
+#| warning: false
+library(tidyverse)
+
+url <- "http://www.statsci.org/data/general/hills.txt"
+races.table <- read.table(url, header = TRUE, sep = "\t")
+
+races.table <- races.table %>%
+    mutate(idx = row_number())
+
+lm.model <- lm(Time ~ Distance + Climb, data = races.table)
+
+ggplot(lm.model, aes(x = races.table$idx, y = rstudent(lm.model))) +
+    geom_point(color = "orange") +
+    geom_line(y = -3) +
+    geom_line(y = 3) +
+    labs(title = "External Studentized Residuals", x = "Observation", y = "Residuals")
+```
+
+## How to Handle Influential Observations
+
+1.  Recheck data to ensure no transcription or data entry
+    errors occurred.
+2.  If data is valid, maybe model is inadequate
+    -   Higher-order terms may be necessary
+    -   Nonlinear model
+3.  Determine robustness of the inference by running
+    analysis with and without influential observations
+4.  Robust Regression
+5.  Weighted Least Squares
+
+# Collinearity
+
+If variables are strongly correlated with each other
+even removing one point can change our model in a
+completely different way.
+
+## Collinearity Diagnostics
+
+We can look at correlation matrix of predictors, but
+there is also the **variance inflation factor** that
+we can consider:
+
+$$
+VIF_i = \frac{1}{1 - R_i^2}
+$$
+
+-   $R_i^2$ is the $R^2$ value with all the other
+variables predicting $x_i$
+-   $VIF > 10$ indicate collinearity
+
+```{r}
+library(car)
+cor(mtcars)
+lm.model <- lm(mpg ~ ., data = mtcars)
+v <- vif(lm.model)
+v[v > 10]
+```
+
+## Dealing with Multicollinearity
+
+-   Exclude redundant independent variables
+-   Redefine variables
+-   Use biased regression techniques (e.g. LASSO)
+-   Center the independent variables in polynomial
+    regression models or models with interaction terms
+    -   Subtract each value of the predictor by the
+        mean of that column
+
+You should be dealing with multicollinearity **before** you do any model selection.
+
+Any time you take or add variables in, you should be
+modifying one at a time and recalculating VIF at each
+step.
+
+# Effective Modeling Cycle
+
+```{mermaid}
+flowchart LR
+    1[Preliminary Analysis] --> 2[Collinearity Detection]
+    2 --> 3[Candidate Model Selection]
+    3 --> 4[Assumption Validation and Influential Observation Detection]
+    4 --> 5[Model Revision]
+    5 -->|Yes| 3
+    5 -->|No| 6[Prediction Testing]
+```
+
+Following the model selection and assumption validation 
+steps, we might consider what is more 
+important--significant p-values in our variables or the 
+total predictive power of the selected model? The answer 
+is it depends. We can take both models, one where the 
+insignificant p-value variables are pruned and one that 
+was selected by the step selection methods, and run them 
+on a validation set. We see which one performs better and 
+go forward with that model.

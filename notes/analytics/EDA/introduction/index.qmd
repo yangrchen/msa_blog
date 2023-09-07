@@ -1,0 +1,333 @@
+---
+title: Exploratory Data Analysis
+date: 06/27/2023
+date-modified: 07/22/2023
+---
+
+# What kind of variables do you have?
+
+Our variables are quantities or qualities of interest. These are also called:
+
+-   Attributes
+-   Features
+-   Predictors/Targets
+-   Factors
+-   Inputs/Outputs
+-   Covariates
+
+## Quantitative Variables 
+
+Quantitative variables have a quantity value associated with them. These are intervals, numerics or ratios.
+
+-   Time
+-   Temperature
+-   Price
+
+## Categorical Variables 
+
+Categorical variables are inherently described by categories instead of quantities.
+
+There are two types of categorical variables:
+
+-   Nominal
+    -   Soda, Milk, Tea
+-   Ordinal
+    -   Have logical orderings associated with them
+    -   Small, Medium, Large
+    -   Binary IS ordinal regardless of the labels
+
+With ordinal variables, you can treat them as either nominal or quantitative. You have to make the decision.
+
+Categorical Dummy Variables:
+
+Small | Medium | Large
+| :-: | :-: | :-:
+1 | 0 | 0
+0 | 1 | 0
+0 | 0 | 1
+
+The table shows an example of **one-hot encoding**. We can achieve this in R using the `onehot` package:
+
+### R Code
+
+```{r}
+library(onehot)
+library(reticulate)
+
+use_condaenv("msa")
+
+set.seed(41)
+dat <- data.frame(
+    y = c(rnorm(10, 2), rnorm(10, 1), rnorm(10, 0)),
+    x1 = factor(rep(c("A", "B", "C"), each = 10)),
+    x2 = factor(rep(c("Z", "X", "Y", "W", "V", "U"), each = 5))
+)
+
+encoder <- onehot(dat)
+dummies <- predict(encoder, dat)
+head(dummies)
+```
+
+### Python Code
+
+```{python}
+import numpy as np
+from numpy import random
+import pandas as pd
+
+x1 = np.repeat(["A", "B", "C"], 10)
+x2 = np.repeat(["Z", "X", "Y", "W", "V", "U"], 5)
+
+random.seed(41)
+y = np.concatenate(
+    [
+        random.normal(2.0, 1.0, 10),
+        random.normal(1.0, 1.0, 10),
+        random.normal(0.0, 1.0, 10),
+    ]
+)
+array = np.array([x1, x2, y])
+array2 = np.transpose(array)
+
+df = pd.DataFrame(data=array2, columns=["x1", "x2", "y"])
+df.head()
+```
+
+```{python}
+one_hot_encoded_data = pd.get_dummies(df, columns=["x1", "x2"])
+one_hot_encoded_data.head()
+```
+
+The levels are given values if treated quantitatively:
+
+Size | Size
+:-: | :-:
+S | 1
+M | 2
+L | 3
+
+In addition, we also could do **optimal scaling** to represent the scale of the ordinal variables. This requires a careful definition of a "1-unit" change in the variable.
+
+Education | Education
+:-: | :-:
+No HS degree | 1
+GED | 2
+HS Diploma | 3
+Bachelors | 10
+Masters | 16
+PhD | 20
+
+# Describing Distributions
+
+-   Center/Location
+-   Spread/Variation
+-   Shape
+-   Anomalous Observations
+
+## Measures of Central Tendency
+
+### Mean
+
+$$
+\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i
+$$
+
+### Median
+
+Middle value. 50th percentile. Unaffected by outliers. In a right-skew, median is lower than the mean. In a left-skew, median is higher than the mean.
+
+### Mode
+
+Most frequent value. Typical for categorical data
+
+## Measures of Location
+
+**Percentiles** are a point, $x_p$, in your data for which $p\%$ of the data is $\leq x_p$.
+
+**Quantiles** are the same thing as percentiles. The 10th percentile is the 0.10 quantile.
+
+## Measures of Spread/Dispersion
+
+**Range** is $\text{max}(data) - \text{min}(data)$
+
+### Interquartile Range
+
+IQR is the difference between third and first quartile. What is the range of the middle 50% of data.
+
+### Variance $\sigma^2$ and Standard Deviation \sigma
+
+Dispersion of the data around the mean. Average squared deviation from the mean. 
+
+$$
+s^2 = \frac{1}{n - 1} \sum_{i=1}^{n} (x_i - \bar{x})^2
+$$
+
+-   The $n - 1$ comes from the degrees of freedom. In theory this will make this an unbiased estimator of the variance.
+
+## Measure of Shape
+
+### Modality
+
+Modality is the number of humps a distribution has. A Normal distribution is unimodal.
+
+### Skew
+
+Is the distribution symmetric? Or does it have a longer tail on one side? 
+
+![Left-skew and Right-skew](images/skew.png)
+
+### Kurtosis
+
+Does the distribution have thicker/thinner tails than a Normal distribution with same mean and variance?
+
+A **leptokurtic** distribution has more data in the tails than a Normal distribution.
+
+A **platykurtic** distribution has less data in the tails than a Normal distribution.
+
+This only makes sense if you have a symmetric distribution.
+
+## The Normal Distribution
+
+A Normal distribution is a distribution that is
+
+-   Symmetric
+-   Fully defined by the mean and standard deviation
+-   Bell-shaped / Unimodal
+-   Mean = Median = Mode
+-   Asymptotic to the x-axis (bounds are $-\infty$ and $\infty$)
+-   Kurtosis = 3 (kurtosis often reported as *excess* kurtosis = kurtosis - 3)
+-   Skew = 0 (there is no skew)
+
+
+```{python}
+# | code-fold: true
+from scipy.stats import norm
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(-4, 4, 100)
+
+mean = 0
+sd = 1
+
+y = norm.pdf(x, mean, sd)
+
+plt.plot(x, y)
+```
+
+# Describing Distributions Part II
+
+Using the **Ames Real Estate Data Set**, we want to try to predict housing sales prices in Iowa. We will also use `ggplot2` for visualization.
+
+```{r}
+library(AmesHousing)
+
+ames <- make_ordinal_ames()
+```
+
+## Graphical Displays of Distributions
+
+### Histograms
+
+Each bar in the histogram represents a *group* of values (**bin**).
+
+The height of the bar represents the frequency of percent of values in the bin. You can specify the number of width of the bins as desired.
+
+#### R Code
+```{r}
+library(ggplot2)
+
+ggplot(ames, aes(x = Sale_Price / 1000)) +
+    geom_histogram(mapping = aes(y = after_stat(density)), alpha = 0.5) +
+    geom_density(alpha = 0.2) +
+    labs(x = "Sales Price (Thousands $)")
+```
+
+#### Python Code
+
+```{python}
+import seaborn as sns
+from pathlib import Path
+
+ames = r.ames
+ax = sns.histplot(x=ames["Sale_Price"] / 1000, kde=True, data=ames, color="blue")
+ax.set(
+    xlabel="Sales Price (Thousands $)",
+    ylabel="Frequency",
+    title="Histogram of Sales Price in Thousands of Dollars",
+)
+```
+
+The distribution is right-skewed so the mean is greater than the median housing price.
+
+### Normal Probability Plots (QQ-Plots)
+
+Used to compare two distributions, typically to verify that a variable is approx. Normal. 
+
+Compare observed quantiles to theoretical quantiles of a Normal distribution with the same mean and variance.
+
+If the points follow the line diagonal line, the distribution is Normal.
+
+![QQ-Plot Problem Indicators](images/qq-plot-problems.png)
+
+-   Quadratic patterns indicate problems with skew
+-   Cubic patterns indicate problems with kurtosis
+
+#### R Code
+
+```{r}
+ggplot(ames, aes(sample = Sale_Price / 1000)) +
+    stat_qq() +
+    stat_qq_line() +
+    labs(x = "theoretical", y = "observed")
+```
+
+#### Python Code
+
+```{python}
+import statsmodels.api as sma
+
+sma.qqplot(ames["Sale_Price"] / 1000, line="45", fit=True)
+```
+
+### Box Plots
+
+![Box Plot](images/box-plot.png)
+
+#### R Code
+
+```{r}
+ggplot(ames, aes(y = Sale_Price / 1000, x = Central_Air, fill = Central_Air)) +
+    geom_boxplot() +
+    labs(y = "Sales Price (Thousands $)", x = "Central Air") +
+    scale_fill_brewer(palette = "Accent") +
+    theme_classic() +
+    coord_flip()
+```
+
+#### Python Code
+
+```{python}
+ax = sns.boxplot(ames, x=ames["Sale_Price"] / 1000)
+ax.set(
+    xlabel="Sales Price (Thousands $)",
+    title="Boxplot of Sales Price in Thousands of Dollars",
+)
+```
+
+```{python}
+ax = sns.catplot(ames, x="Central_Air", y="Sale_Price", kind="box")
+plt.show()
+```
+
+## Defining Anomalous Observations
+
+### Standard Deviations from the Mean
+
+For symmetric distributions and particularly for the Normal distribution, it's common to consider observations more than 3 standard deviations from the mean as anomalous.
+
+### Box-Plot Definition
+
+Box plots define outliers as points that are $1.5 \times IQR$ above the third quartile or less than $1.5 \times IQR$ below the first quartile.
+
+There are more definitions but these are the first couple we are considering now.

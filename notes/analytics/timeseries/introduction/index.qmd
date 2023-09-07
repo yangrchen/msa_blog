@@ -1,0 +1,174 @@
+---
+title: Introduction to Forecasting & Time Series Structure
+date: 08/24/2023
+categories:
+    -   time series
+---
+
+# Time Series Data
+
+Time series is an ordered sequence of observations, typically through **equally spaced** time intervals. If you have a missing interval, you need to impute that period (e.g. Jan, Feb, April; we need to impute March).
+
+```{python}
+# | echo: false
+# | fig-cap: Time Series Use Cases
+
+from IPython.display import Markdown
+from tabulate import tabulate
+
+table = [
+    ["Agriculture", "Crop Production"],
+    ["Economics", "Stock Prices"],
+    ["Engineering", "Electric Signals"],
+    ["Meteorology", "Wind Speeds"],
+    ["Social Sciences", "Crime Rates"],
+]
+
+Markdown(tabulate(table, headers=["Field", "Use Case"]))
+```
+
+We focus on univariate time series data for now.
+
+![Google Stock 2018 - 2023](images/google-stock.png)
+
+# Signal and Noise
+
+Time series is a combination of both **signal** and **noise**. Signal is the explained variation--trend, cycle, seasonality. Noise is our error or the unexplained variation.
+
+# Decomposition
+
+We may want to decompose time series data into a series of components. In most software, in order to decompose we need to have both trend / cycle patterns AND seasonal variation.
+
+Three separate parts:
+
+-   Trend/Cycle patterns
+-   Seasonal variation
+-   Error
+
+
+```{python}
+# | echo: false
+
+table = [
+    ["Additive", "$T_t + S_t + R_t$"],
+    ["Multiplicative", r"$Y_t = T_t \times S_t \times R_t$"],
+]
+
+Markdown(tabulate(table, headers=["Type", "Equation"]))
+```
+
+![Additive vs. Multiplicative](images/decomposition-types.png)
+
+## Seasonally Adjusted Data
+
+An advantage of time series decompositive is that we can create seasonally adjusted data (i.e. remove the "effect of seasonality").
+
+$$
+Y_t - S_t = T_t + R_t
+$$
+
+$$
+\frac{Y_t}{S_t} = T_t \times R_t
+$$
+
+Seasonal length of the time series is the length of one season--how long until the series repeats the "pattern."
+
+# Seasonal and STL Decomposition
+
+::: {.panel-tabset}
+# R
+
+
+# Python
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+from statsmodels.tsa.seasonal import seasonal_decompose
+from statsmodels.tsa.seasonal import STL
+usair = pd.read_csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv")
+
+df = pd.date_range(start='1/1/1990', end='3/1/2008', freq='MS')
+usair.index = pd.to_datetime(df)
+usair.head()
+
+plt.plot(usair['Passengers'])
+plt.xlabel('Date')
+plt.ylabel('Passengers')
+plt.title('Airline Passengers')
+plt.show()
+```
+
+```{python}
+result = seasonal_decompose(usair['Passengers'], model='additive', period=12)
+result.plot()
+plt.show()
+
+result = seasonal_decompose(usair['Passengers'], model='multiplicative', period=12)
+result.plot()
+plt.show()
+```
+
+## STL Decomposition
+
+Seasonal and Trend Decomposition using Loess. Smoothness of the trend is decided by the length of the `seasonal` window that the moving average uses.
+
+```{python}
+stl = STL(usair['Passengers'], period=12)
+res = stl.fit()
+fig = res.plot()
+plt.show()
+```
+
+To pull out the different decomposition components we can concatenate the different decomposition objects returned by the fit:
+
+```{python}
+pd.concat([res.seasonal, res.trend, res.resid], axis=1)
+```
+
+We can also overlay the trend (blue) and seasonally adjusted data (orange) on our time series data:
+
+```{python}
+plt.plot(usair['Passengers'])
+plt.plot(res.trend, color='blue')
+
+seas_adj = usair['Passengers'] - res.seasonal
+
+plt.plot(seas_adj, color='orange')
+plt.xlabel('Time')
+plt.ylabel('Passengers')
+```
+:::
+
+# Decomposition Techniques
+
+Three common techniques for decomposition:
+
+-   Classical Decomposition
+    -   Trend uses moving / rolling average smoothing
+    -   Seasonal uses average de-trended values across seasons
+-   X-13 ARIMA Decomposition
+    -   Trends uses moving / rolling average smoothing
+    -   Seasonal uses moving / rolling average smoothing
+    -   Iteratively repeats above methods and ARIMA modeling
+    -   Can handle outliers
+-   STL (Seasonal and Trend Using LOESS Estimation)
+    -   Uses local regression techniques to estimate trend and seasonality
+    -   Allows changing effects for trend and season
+    -   Adapted to handle outliers
+
+## Cautions
+
+Decomposition will not tell you if have seasonal data nor length of seasonality.
+
+# Measures for Strength of Trend / Seasonality
+
+Measures given by Hyndmana nd Athanasopoulos.
+
+$$
+F_T = \max(0, 1 - \frac{\text{Var}(R_t)}{\text{Var}(T_t + R_t)}) + 2 \cdot \text{Cov}(R_t, T_t)
+$$
+
+$$
+F_S = \max(0, 1 - \frac{\text{Var}(R_t)}{\text{Var}(S_t + R_t)}) + 2 \cdot \text{Cov}(R_t, S_t)
+$$

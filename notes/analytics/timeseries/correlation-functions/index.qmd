@@ -1,0 +1,49 @@
+---
+title: Correlation Functions
+author: Yang Chen
+date: 09/06/2023
+categories:
+    -   time series
+---
+
+When we have a *stationary* distribution we can now look at correlation. If we have a random walk, then we cannot look at the correlation.
+
+Time series is typically analyzed with an assumption that observations have a potential relationship across time. One example is weight over time.
+
+# Autocorrelation
+
+**Autocorrelation** is correlation between two sets of observations in the same series that are separated by $k$ points in time.
+
+An **autocorrelation function** is the function of all autocorrelations between two sets of observations $Y_t$ and $Y_{t-k}$ across time.
+
+$$
+\rho_k = \text{Corr}(Y_t, Y_{t-k})
+$$
+
+![Autocorrelation Function](images/autocorrelation-table.png)
+
+This uses lagged series of previous time periods to calculate the Pearson's correlation between the series. Missing values in lagged series are ignored in the calculation. ACF can suggest that there is seasonality based on the correlation structure.
+
+Suppose that the first autocorrelation, ACF(1) is significant. This implies that two consecutive time points are related to each other. For non-seasonal data, we tend to look up to 10 or 12 lags back. 
+
+## Partial Autocorrelation Function
+
+**Partial correlation** is the correlation between two sets of observations, separated by $k$ points in time, after adjusting for all previous ($1, 2, \cdots, k-1$) autocorrelations.
+
+$$
+\phi_k = \text{Corr}(Y_t, Y_{t-k} | Y_{t-1}, Y_{t-2}, \cdots, Y_{t-k-1})
+$$
+
+![Partial Autocorrelation Function](images/partial-autocorrelation-table.png)
+
+The partial autocorrelation for the $k$th lag is calculated from the regression:
+
+$$
+Y_t = \beta_0 + \phi_1Y_{t-1} + \phi_2Y_{t-2} + \cdots + \phi_kY_{t-k} + \epsilon_t
+$$
+
+The 2nd partial autocorrelation $\phi_2$ is estimated from:
+
+$$
+\hat{Y}_t = \hat{\beta}_0 + \hat{\phi}_1Y_{t-1} + \hat{\phi}_2Y_{t-2}
+$$

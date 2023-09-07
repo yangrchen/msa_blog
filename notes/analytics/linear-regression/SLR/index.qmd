@@ -1,0 +1,162 @@
+---
+title: Ordinary Least Squares Regression
+date: 06/30/2023
+date-modified: 07/23/2023
+---
+
+# Setup {.unnumbered}
+
+```{r}
+#| code-fold: true
+library(reticulate)
+use_condaenv("msa")
+```
+
+# Pearson's Correlation
+
+Pearson's correlation measures *linear* relationships for continuous variables. 
+
+![Pearson's Correlation Scenarios](images/pearson.png)
+
+## Hypothesis Test for Correlation
+
+Parameter representing population correlation is $\rho$ and is estimated by $r$
+
+::: text-center
+$H_0: \rho = 0$
+
+$H_a: \rho \neq 0$
+:::
+
+However, rejecting $H_0$ only means that $\rho$ is not exactly 0 so we need to see if the relationship is practically significant.
+
+Note that outliers affect correlation and correlation *does not* imply causation.
+
+## R Code
+
+```{r train-test split}
+#| warning: false
+
+library(tidyverse)
+library(AmesHousing)
+
+set.seed(123)
+
+ames <- make_ordinal_ames()
+ames <- ames |> mutate(id = row_number())
+train <- ames |> sample_frac(0.7)
+test <- anti_join(ames, train, by = "id")
+
+dim(train)
+dim(test)
+```
+
+```{r r-pearson}
+cor.test(train$Gr_Liv_Area, train$Sale_Price)
+```
+
+```{r r-corr-matrix}
+cor(train[, c("Year_Built", "Total_Bsmt_SF", "First_Flr_SF", "Gr_Liv_Area", "Sale_Price")])
+```
+
+We can also generate a plot matrix of the variable associations with `pairs`:
+
+```{r}
+pairs(train[, c("Year_Built", "Total_Bsmt_SF", "First_Flr_SF", "Gr_Liv_Area", "Sale_Price")])
+```
+
+## Python Code
+
+```{python python-pearson}
+import pandas as pd
+import numpy as np
+
+train = r.train
+
+np.corrcoef(train["Gr_Liv_Area"], train["Sale_Price"])
+np.corrcoef(
+    train[["Year_Built", "Total_Bsmt_SF", "First_Flr_SF", "Gr_Liv_Area", "Sale_Price"]],
+    rowvar=False,
+)
+```
+
+## Correlation Does NOT Imply Causation
+
+A strong correlation does not mean that a change in one variable causes a change in the other. Correlations can be misleading if both variables are affected by other variables.
+
+# Simple Linear Regression
+
+$$
+y = \beta_0 + \beta_1x_i + e_i
+$$
+
+In SLR, correlation is not equal to slope. Two pairs of variables can have the same correlation coeff, but different linear relationships. 
+
+-   $\beta_0 + \beta_1x_1$ makes up the deterministic component
+-   $\beta_0$ is the intercept estimate
+-   $\beta_1$ is the slope estimate
+
+## Explained vs. Unexplained Variability
+
+We are trying to explain variation in the response variable. We can't explain all of it due to random, uncontrollable error but we can model it.
+
+![Variability Explained in SLR](images/variability.png)
+
+With linear regression, we are trying to minimize a **loss function** called **sum of squared errors**. This is essentially measuring the difference between our predictions and the actual response values we observed in the data. 
+
+We square the differences so they don't cancel each other out and we have a loss that we can optimize our model on. 
+
+$$
+SSE = \sum_{i=1}^{n} (y_i - \hat{y}_i) ^2
+$$
+
+SSE makes up the amount of unexplained variability in our model.
+
+## The Baseline Model
+
+::: text-center
+$H_0: \beta_1 = 0$
+
+$H_a: \beta_1 \neq 0$
+:::
+
+For SLR, the global F-Test, parameter t-test and the test of Pearson's correlation **are all equivalent**.
+
+When we can't reject the null hypothesis we are saying that the independent variable doesn't explain any of the variability in the response.
+
+## Assumptions of Simple Linear Regression
+
+-   Linearity of the mean
+    -   As I change values in the independent variable, the line should go through the different means of the response linearly
+    -   If violated, misspecified model
+-   Errors are normally distributed
+    -   If violated, our test results are erroneous
+-   Errors have equal variance (homoskedasticity)
+    -   If violated, standard errors are compromised
+-   Errors are independent
+    -   If violated, standard errors are compromised
+
+There is also an assumption of no perfect collinearity. Under multicollinearity, we can't believe in our parameter estimates. The parameter estimates would be biased as there are multiple variables supplying the same information.
+
+### Testing of Assumptions
+
+-   Normality can be verified using a histogram, QQ-Plot or normality test
+-   Equal variances can be verified through residuals versus predicted values
+-   Independence can look at residual plots for potential autocorrelation
+-   Linearity in the mean can be tested through a residual plot and finding that there is no pattern in residual plot
+
+```{r}
+slr <- lm(Sale_Price ~ Gr_Liv_Area, data = train)
+par(mfrow = c(2, 2))
+
+plot(slr)
+summary(slr)
+```
+
+```{python python-testing-assumptions}
+import statsmodels.formula.api as smf
+
+model_slr = smf.ols("Sale_Price ~ Gr_Liv_Area", data=train).fit()
+
+model_slr.pvalues
+```

@@ -1,6 +1,7 @@
 ---
 title: "Linear Algebra: Introduction"
 date: 08/07/2023
+draft: true
 ---
 
 # Vectors

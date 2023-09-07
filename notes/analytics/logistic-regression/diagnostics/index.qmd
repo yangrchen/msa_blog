@@ -1,0 +1,183 @@
+---
+title: Diagnostics and Subset Selection
+date: 09/05/2023
+date-modified: 09/06/2023
+---
+
+# Setup {.unnumbered}
+
+::: {.panel-tabset}
+# R
+
+```{r}
+#| warning: false
+library(AmesHousing)
+library(tidyverse)
+library(reticulate)
+
+set.seed(123)
+
+use_condaenv("msa")
+
+ames <- make_ordinal_ames()
+ames <- ames |>
+    mutate(Bonus = ifelse(Sale_Price > 175000, 1, 0))
+train <- sample_frac(ames, 0.7)
+```
+
+# Python
+
+```{python}
+ames = r.ames
+train = r.train
+```
+:::
+
+# Subset Selection Methods
+
+Just like with linear regression, we can use normal stepwise selection techniques (forward, backward, stepwise) to get different models.
+
+::: {.panel-tabset}
+# R
+
+```{r}
+full_model <- glm(Bonus ~ Gr_Liv_Area + factor(House_Style) + Garage_Area + Fireplaces + factor(Full_Bath) + factor(Half_Bath) + Lot_Area + factor(Central_Air) + Second_Flr_SF + TotRms_AbvGrd + First_Flr_SF, data = train, family = binomial())
+
+empty_model <- glm(Bonus ~ 1, data = train, family = binomial())
+
+step_model <- step(empty_model, scope = list(lower = formula(empty_model), upper = formula(full_model)), direction = "both")
+```
+:::
+
+We don't use forward selection as much as it cannot remove variables from your model. Instead, we might favor backward selection or stepwise selection. When we decide on our main effects after data exploration, we can create interactions within our subset and use forward selection to see which interactions stay in our model.
+
+![Interactions with Forward Selection](images/forward-selection-interactions.png)
+
+# P-Value vs. AIC/BIC Metrics
+
+P-values are falling out of popularity, but it is primarily because people are not taking into account the $\alpha$ level.
+
+Mathematically, AIC and BIC for adding or removing variables with stepwise selection is the same thing as using p-values in LRT.
+
+AIC is not necessarily better than p-values when determining variable significance:
+
+$$
+AIC = -2\log(L) + 2p
+$$
+
+-   $L$ is the likelihood function
+-   $p$ is the number of variables being estimated in the model
+
+If a model is better with a lower AIC:
+
+$$
+\begin{align*}
+-2\log(L_{p+1}) + 2(p + 1) &< -2\log(L_p) + 2p \\
+2 &< 2(\log(L_{p+1}) - \log(L_p))
+\end{align*}
+$$
+
+Right hand side is an LRT that follows a $\chi^2$ distribution with 1 degree of freedom. The significance level from this LRT can be calculated as:
+
+$$
+1 - P(\chi_1^2 > 2) = 0.1573
+$$
+
+Notice how this AIC calculation does not account for sample size at all.
+
+This is a relatively high significance level and for large datasets does not seem like a good technique for selecting variables.
+
+Recall the BIC calculation:
+
+$$
+BIC = -2\log(L) + p\log(n)
+$$
+
+If we work through the math again then we find that BIC adjusts for sample size:
+
+$$
+1 - P(\chi_1^2 > \log(n)) =\cdots
+$$
+
+![P-Value vs. BIC Selection](images/pvalue-bic.png)
+
+# Diagnostics
+
+Linear regression residuals have properties useful for model diagnostics. In a binary response model setting, we have residuals but they are not as intuitive.
+
+-   Deviance residuals
+-   Partial residuals
+-   Pearson residuals
+-   Etc.
+
+## Deviance
+
+A **saturated** model is a model that fits the data perfectly by essentially overfitting it. We create a variable for each unique combination of inputs. **Deviance** is a measure of how far the fitted model is from the saturated model--the error. Logistic regression minimizes the sum of squared deviances.
+
+Deviance residuals tell us how much each observation reduces the deviance.
+
+## Influence Statistics
+
+-   Cook's D
+    -   Measures the overall impact to the coefficients in the model
+-   DFBETAS
+    -   Measures standardized change in each parameter estimate with deletion of observation
+-   DIFCHISQ
+    -   Measures change in Pearson Chi-square with deletion of observation
+-   DIFDEV
+    -   Measures change in deviance with deletion of the observation
+
+::: {.panel-tabset}
+# R
+
+```{r}
+#| warning: false
+
+library(car)
+
+logit_model <- glm(Bonus ~ Gr_Liv_Area + factor(House_Style) + Garage_Area + Fireplaces + factor(Full_Bath) + Lot_Area + factor(Central_Air) + TotRms_AbvGrd + Gr_Liv_Area:Fireplaces, data = train, family = binomial())
+
+# influence.measures(logit_model)
+```
+
+To plot Cook's D:
+
+```{r}
+plot(logit_model, 4)
+```
+
+To plot DFBETAS:
+
+```{r}
+dfbetasPlots(logit_model, terms = "Gr_Liv_Area", id.n = 5, col = ifelse(logit_model$y == 1, "red", "blue"))
+```
+
+# Python
+
+```{python}
+from statsmodels.genmod.families import Binomial
+from statsmodels.genmod.generalized_linear_model import GLM
+
+log_model = GLM.from_formula(
+    "Bonus ~ Gr_Liv_Area + Garage_Area + Fireplaces + C(Full_Bath) + Lot_Area + C(Central_Air) + TotRms_AbvGrd + Gr_Liv_Area:Fireplaces",
+    data=train,
+    family=Binomial(),
+).fit()
+log_model.summary()
+```
+
+```{python}
+import statsmodels.stats.tests.test_influence
+
+log_diag = log_model.get_influence()
+log_diag.summary_frame().head()
+```
+
+```{python}
+import matplotlib.pyplot as plt
+
+log_diag.plot_influence()
+plt.show()
+```
+:::
+
