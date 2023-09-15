@@ -1,0 +1,168 @@
+---
+title: ARIMA Models
+date: 09/13/2023
+---
+
+# Setup {.unnumbered}
+
+:::{.panel-tabset group = "language"}
+# R
+
+```{r}
+#| warning: false
+library(tidyverse)
+library(tseries)
+library(forecast)
+library(imputeTS)
+
+ebay <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/ebay9899.csv")
+hurricane <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/hurrican.csv")
+```
+
+# Python
+:::
+
+# ARIMA Model
+
+Remember that before you start using any ARMA or ARIMA models you need to have stationary data.
+
+There is nothing to limit both AR and MA processes to be in the model simultaneously. These mixed models are typically used to help reduce the number of parameters needed for good estimation--parsimonious model.
+
+The most basic model with only one lag of each piece with no differencing is ARMA(1, 1) model.
+
+$$
+Y_t = \omega + \phi Y_{t-1} + e_t - \theta e_{t-1}
+$$
+
+ARMA(p, q) denotes mixture models where $p$ is the number of autoregressive terms and $q$ is the number of moving average terms.
+
+ARIMA(p, d, q) represents $p$ autoregressive terms, $d$ number of differences, and $q$ number of moving average terms.
+
+# Correlation Graphs
+
+Characteristics from separate pieces in the model are in the correlation functions. All of the functions tail off exponentially as the lags increase.
+
+# Trending Data
+
+If there is a trend, the current series is **NOT** stationary. Trending series are not stationary because they do no converge to a mean in the long run.
+
+Consider one of two things:
+
+-   Series is stationary about a regression line.
+-   Series is a Random Walk with drift.
+
+## Regression Line Trend
+
+![Trend About a Regression Line](images/trend-regression-line.png)
+
+Once we fit the trend line then our **residuals** are stationary.
+
+A **deterministic trend** is a linear trend like we have done in regression:
+
+$$
+Y_t = \beta_0 + \beta_1 t + \epsilon_t
+$$
+
+-   $t$ is time
+-   Can also fit quadratic, exponential, or any other form of time
+
+## Random Walk with Drift
+
+$$
+Y_t = \omega + Y_{t-1} + e_t
+$$
+
+-   $\omega$ controls the "drift" or trend. If positive, "drift" upward; if negative, "drift" downward.
+
+Random Walk with drift is **NOT** stationary if you remove the trend line. We need to take differences.
+
+## Dickey-Fuller Test for Trend
+
+:::{.text-center}
+$H_0: \phi = 1$. Random walk with drift
+
+$H_a: \left| \phi \right| < 1$. Deterministic trend, not stochastic trend
+:::
+
+Stochastic trend refers to a random walk. Even if we reject the null hypothesis we still have to take care of the trend in some way.
+
+# Ebay Example
+
+Ebay stock data using daily high information. September 1998 - December 1999.
+
+Note the dataset has missing values and we'll see how to see these visually.
+
+:::{.panel-tabset group = "language"}
+# R
+
+```{r}
+daily_high <- ts(ebay$DailyHigh)
+# ADF test is not appropriate when we have missing values
+
+ggplot_na_distribution(daily_high) + labs(y = "Stock prices for Ebay")
+```
+:::
+
+## Different Ways to Interpolate
+
+-   Fit a function between points
+-   Last observation carried forward
+-   Weighted moving average
+-   Summary statistics (e.g. mean or median of the series, but not always recommended)
+-   Random sample
+-   And so on!
+
+:::{.panel-tabset group = "language"}
+# R
+
+```{r}
+library(aTSA)
+
+daily_high <- daily_high %>%
+    na_interpolation(option = "spline")
+
+autoplot(daily_high) + labs(title = "Daily High Stock Quotes", x = "Time", y = "Quotes")
+
+# Now we can perform ADF test
+adf.test(daily_high)
+```
+:::
+
+## Finding Mixed Models (p, q)
+
+Explore correlation plots (ACF, PACF) to see what patterns there are.
+
+What to explore correlations on:
+
+-   If series is stationary, just use series `ggAcf(y.ts)`
+-   If series is a random walk we need to take differences: `diff.y <- diff(y.ts)`
+    -   After taking difference, run ADF test to see if stationary. If not stationary, keep taking additional differences
+-   If series is a random walk with drift, use difference: `diff.y <- diff(y.ts)`
+-   If series is stationary about a line, use residuals: `resid.y <- lm(y ~ time)$resid`
+
+# Model Selection
+
+## Automatic Searches
+
+1.  Plotting Patterns - ACF, PACF
+2.  Automatic Selection Techniques (R and Python)
+    1.  `auto.arima` function
+
+### Recommendations
+
+If there is a trend, test to see if it is a deterministic trend or random walk with drift.
+
+If series has a deterministic trend, fit regression and then use automatic search on **residuals**. Otherwise, send series through automatic procedure (it will fit a difference if there is a trend).
+
+If there is no trend, you can send series through automatic search.
+
+
+:::{.panel-tabset group = "language"}
+# R
+
+```{r}
+max_velocity <- hurricane$MeanVMax
+ggplot_na_distribution(max_velocity) +
+    labs(y = "Mean Max Velocity")
+```
+:::

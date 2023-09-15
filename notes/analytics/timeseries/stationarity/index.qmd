@@ -1,8 +1,6 @@
 ---
 title: Stationarity
 date: 09/05/2023
-categories:
-    -   time series
 ---
 
 # ARMA
@@ -13,7 +11,7 @@ ARMA models are based on statistical methods (will assume a distribution). The b
 
 ## Signal
 
-Models can have singal due to a seasonal pattern or due to trend. They can also have signal due to "correlation structure" which can be in the form of Autoregressive and moving averages.
+Models can have signal due to a seasonal pattern or due to trend. They can also have signal due to "correlation structure" which can be in the form of Autoregressive and moving averages.
 
 In order to model the dependency in the data, we need to take care of the **functional form** and any random walks first.
 

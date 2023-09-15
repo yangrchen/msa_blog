@@ -1,0 +1,430 @@
+---
+title: Pandas Primer 1
+date: 09/14/2023
+highlight-style: github
+---
+
+![All Python Data Scientists Currently](images/pandas.jpeg)
+
+# Setup {.unnumbered}
+
+I won't go into a lot of a detail about the use of virtual environments in Anaconda, but ideally we should have a separate environment for separate projects. If you install everything into a single environment (`base` for example) you can run into hard-to-debug dependency issues when different projects require different versions of your packages.
+
+Open your favorite terminal and run these commands to create a new Anaconda environment called `python-eda` and install `python`, `numpy`, and `pandas`.
+
+```{.bash filename="Terminal"}
+conda create -n python-eda
+conda activate python-eda
+conda install python=3.11 numpy pandas
+```
+
+We'll then import all the packages we'll need to run our delicious code!
+
+```{python}
+import numpy as np
+import pandas as pd
+```
+
+# Introduction
+
+`pandas` is a popular data analysis and manipulation package that is designed for working with tabular or heterogeneous data. Think about it like working on a dataset with many different types of fields: continuous, text, categorical, dates, etc. No images though--we keep it all numerical up in here.
+
+There are two main data structures in `pandas`:
+
+-   **Series**
+-   **DataFrame**
+
+We'll be going over what these two data structures are doing and what operations we can do with them. Long story short: there's a lot, but there's just a few tools you need to move your way around. 
+
+`pandas` is built on top of functionality from `numpy`. Many of the functions and methods that operate on Series and DataFrames work in concordance with `numpy` with techniques like *broadcasting*. A lot of the same operations you can do in `numpy` can also work in `pandas`.
+
+# Series
+
+Series is a one-dimensional *array-like* object with a sequence of values having the **same type** and an array of data labels called the **index**. 
+
+```{python}
+series = pd.Series([1, 2, 3])
+series
+```
+
+## Indexing into Series
+
+Notice how by default each entry in the series is labeled from 0 to $n - 1$. This is the index. We can set our own index for the Series and retrieve values using the index:
+
+```{python}
+series = pd.Series([1, 2, 3], index=['a', 'b', 'c'])
+print(series)
+print(series['b'])
+print(series[['a', 'b']])
+```
+
+The index is ordered according to the data, so we can also slice using the index. Unlike Python lists, both ends are inclusive:
+
+```{python}
+print(series['a':'b'])
+
+# This is similar to saying list[2:0]
+print(series['b':'a'])
+```
+
+## Series Are Similar to Numpy Arrays!
+
+You can use Boolean arrays and do vectorized operations like scalar multiplication just like with `numpy` arrays.
+
+```{python}
+series = pd.Series(np.arange(9))
+
+print(series[series > 5])
+print(series * 5)
+print(np.square(series))
+print(series.argmax())
+```
+
+## Converting Python Dictionaries to Series
+
+We can provide a dictionary as a Series which automatically converts the dictionary keys into the index:
+
+```{python}
+d = {"Apples": 2, "Bananas": 5, "Oranges": 18}
+series = pd.Series(d)
+```
+
+And then back into a dictionary with the `to_dict` method:
+
+```{python}
+series.to_dict()
+```
+
+## Series in Data Analysis
+
+Checking for missing values:
+
+```{python}
+series = pd.Series(d, index = ["Apples", "Bananas", "Mangoes"])
+print(series.isna())
+print(series.notna())
+```
+
+When you add Series together, it automatically aligns the labels together and NAs the values where the indexes are not the same.
+
+```{python}
+d = {"Apples": 60, "Bananas": 20, "Durian": 10, "Avocados": 10}
+series2 = pd.Series(d)
+
+series + series2
+```
+
+## Series Name
+
+A Series index and its data values have a special `name` attribute which integrates with other functionality in `pandas`:
+
+```{python}
+series.name = "count"
+series.index.name = "fruit"
+series
+```
+
+# DataFrame
+
+A DataFrame is a tabular form data structure. It contains an ordered, named collection of columns which can have different types. Think of DataFrames in the same way that you think of structured datasets or even R dataframes!
+
+A DataFrame has a row and column index. How does this relate to series? Essentially, a DataFrame is a dictionary of Series that share the same index.
+
+```{python}
+data = {
+    "is_student": [True, False, True, True, True],
+    "name": ["Bill", "Jill", "Davis", "Cythulianmixseth III", "Jonny"],
+    "score": [10, 20, 30, 20, 10],
+}
+df = pd.DataFrame(data)
+```
+
+## Viewing the First N Rows, Last N Rows
+
+```{python}
+n = 2
+print(df.head(n))
+print(df.tail(n))
+```
+
+## Specifying Columns
+
+Just like Series, you can specify the names of columns. If the column names exist, then the DataFrame will be ordered by the order you specified them. Otherwise, the column will be inserted with NA values.
+
+```{python}
+df2 = pd.DataFrame(data, columns = ["name", "score", "is_student"])
+df2
+```
+
+```{python}
+df2 = pd.DataFrame(data, columns=["a", "b", "is_student"])
+df2
+```
+
+## Retrieving Columns
+
+To retrieve columns, use dictionary-like notation or use the dot notation.
+
+```{python}
+print(df["is_student"])
+print(df.is_student)
+```
+
+:::{.callout-caution}
+# Dot Notation
+
+The main downside of dot notation is that you can't use it if it's not a valid Python variable name, conflicts with method names in DataFrame, or has whitespaces. Learn to not rely on dot notation.
+:::
+
+## Modifying Columns, Adding Columns
+
+You can change column values by assigning a new value. If you assign a Series, then the labels will be aligned to the DataFrame's index and insert NA where index values are not present:
+
+```{python}
+df["score"] = 1.
+df
+```
+
+```{python}
+val = pd.Series([2, 2], index=[2, 4])
+df["score"] = val
+df
+```
+
+Note that any column retrieved from a DataFrame is a view on the data, not a copy. Any modifications to this Series will be reflected in the DataFrame.
+
+```{python}
+score = df["score"]
+score[0] = 1.
+
+# DataFrame is modified as a result of changing the view
+df
+```
+
+## Transpose
+
+To transpose the data:
+
+```{python}
+df.T
+```
+
+:::{.callout-caution}
+Transposing discards column data types of columns do not all have the same type. Transposing back may lose previous type information.
+:::
+
+## DataFrame Column and Index Names
+
+Just like Series, you can name the index and columns of the DataFrame:
+
+```{python}
+df.index.name = "student"
+df.columns.name = "information"
+df
+```
+
+# Indexes
+
+Index objects hold axis labels and other metadata (like axis names). Any labels you use to construct a Series or DataFrame are converted to an Index.
+
+```{python}
+df.index
+```
+
+Index objects are immutable, but they can be accessed like arrays and behave more like fixed sets:
+
+```{python}
+labels = pd.Index(np.arange(4))
+
+series = pd.Series(np.random.randn(4), index=labels)
+
+series.index is labels
+```
+
+```{python}
+labels2 = pd.Index([2, 3, 5, 6])
+print(labels.difference(labels2))
+print(labels.is_unique)
+```
+
+# Essential Functionality
+
+## Reindex
+
+We can modify the Index of a Series or DataFrame using `reindex`:
+
+```{python}
+series2 = series.reindex(['a', 'b', 'c', 'd'])
+series2
+```
+
+We can also fill interpolate values when reindexing with a small subset of labels:
+
+```{python}
+series = pd.Series(["blue", "purple", "yellow"], index=[0, 2, 4])
+series.reindex(np.arange(6), method="ffill")
+```
+
+## Drop Values
+
+```{python}
+series = pd.Series(np.arange(5.0), index=["a", "b", "c", "d", "e"])
+series_drop = series.drop("c")
+
+series_drop
+```
+
+Within a DataFrame, we can drop from the rows or the columns using the `axis` argument:
+
+```{python}
+df = pd.DataFrame(
+    np.arange(16).reshape((4, 4)),
+    index=["Ohio", "Colorado", "Utah", "New York"],
+    columns=["one", "two", "three", "four"],
+)
+
+df
+```
+
+To drop from rows:
+
+```{python}
+df.drop(['Colorado', 'Ohio'])
+```
+
+To drop from columns:
+
+```{python}
+
+df.drop(['two'], axis=1)
+```
+
+Keep in mind these return a **copy** of a DataFrame by default. If you need to save these results then assign them to a variable.
+
+## Indexing, Selection, Filtering
+
+### Indexing
+
+The preferred way to select data by Index labels is by using the special `loc` operator:
+
+```{python}
+series = pd.Series(np.arange(4.0), index=["a", "b", "c", "d"])
+
+series.loc[["b", "a", "d"]]
+```
+
+:::{.callout-note}
+# Book Note
+
+The reason to prefer `loc` is because of the different treatment of integers when indexing with `[]`. Regular `[]`-based indexing will treat integers as labels if the index contains integers, so the behavior differs depending on the data type of the index. - Wes McKinney
+:::
+
+```{python}
+series = pd.Series([1, 2, 3], index=[2, 0, 1])
+series2 = pd.Series([1, 2, 3], index=['a', 'b', 'c'])
+
+print(series[[0, 1, 2]])
+print(series2[[0, 1, 2]])
+```
+
+Note how in the first indexing call the result is executed according to the actual value of the labels, not the integer position. In the second call, the result is executed according to the integer position because the Index is not integer-based. `loc` removes this ambiguity by throwing an error if the Index does not contain integers.
+
+We can also do integer-based indexing using `iloc`:
+
+```{python}
+series2.iloc[0:2]
+```
+
+:::{.callout-note}
+# Book Note
+
+It can be a common newbie error to try to call `loc` or `iloc` like functions rather than "indexing into" them with square brackets. The square bracket notation is used to enable slice operations and to allow for indexing on multiple axes with DataFrame objects. - Wes McKinney
+:::
+
+### Filtering
+
+The most common and convenient way to do filtering in `pandas` is to supply a Boolean array. We can also rows that meet a certain condition using Boolean arrays:
+
+```{python}
+df[df < 5] = 9999
+
+df
+```
+
+### Selection with `loc` and `iloc`
+
+Now here's the juicy part. Remember our SQL lab with Python? Remember having to write several sets of brackets to get the rows and then the columns. `loc` and `iloc` allow you to do both at the same time similar to how we select values in R dataframes:
+
+```{python}
+# Selecting specific indexes
+df.loc[['Colorado', 'New York']]
+```
+
+```{python}
+# Selecting a specific index and two specific columns
+df.loc["Colorado", ["two", "three"]]
+```
+
+And now with `iloc`:
+
+```{python}
+# Selecting indexes based on integer position
+df.iloc[[2, 1]]
+```
+
+```{python}
+# Selecting a specific index and three specific columns using integers
+df.iloc[2, [3, 0, 1]]
+```
+
+We can use Boolean arrays with `loc` but not `iloc`. Here is an example with our SQL lab:
+
+```{python}
+from pathlib import Path
+
+path = Path("data")
+df = pd.read_csv(path / "AWProduct.csv", low_memory=False)
+
+# Select ProductName, DealerPrice where DealerPrice > 10
+df.loc[df["DealerPrice"] > 10, ["ProductName", "DealerPrice"]].head(10)
+```
+
+If we need to select a specific value by row and column label:
+
+```{python}
+df.at[211, "ProductName"]
+```
+
+Or by integer position:
+
+```{python}
+df.iat[211, 0]
+```
+
+# Function Application and Mapping (Preview)
+
+We're starting to get just a little more complicated here, but as long as you understand what functions are doing these next few sections should make sense. Here is just a preview of what we can cover later: function mapping!
+
+At a high level, `pandas` allows us to *apply* custom functions that can accept array-like arguments to entire columns or rows. Now wait, can't we just use for-loops for this? We could, but it wouldn't take advantage of the computational speed-ups we get by utilizing `numpy` and vectorized operations. 
+
+Here is a demonstration of applying normalization to all the values in our data:
+
+```{python}
+data = {
+    "x": {"Yang": 1.0, "Yin": 3.0, "Jupiter": 6.0},
+    "y": {"Yang": 2.0, "Yin": 4.0, "Jupiter": 7.0},
+    "z": {"Yang": 3.0, "Yin": 5.0, "Jupiter": 3.0},
+}
+df = pd.DataFrame(data)
+
+df
+```
+
+
+```{python}
+def normalize(x):
+    return (x - x.mean()) / x.std()
+
+
+df.apply(normalize)
+```

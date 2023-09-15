@@ -123,7 +123,7 @@ Good forecasts should have these characteristics:
 -   Exhibit small forecast errors
 -   Capture the important features of the original time series
 
-## Judment Forecasting
+## Judgment Forecasting
 
 Forecasts are found using quantitative or modeling approaches. However, there are instances where models are not availabe and qualitative or judgment forecast is used. Occasionally, we merge the two together.
 
@@ -131,7 +131,7 @@ Forecasts are found using quantitative or modeling approaches. However, there ar
 
 Goodness-of-fit is calculated on the same sample used to build the model.
 
-A diagnostic statistic calculated using a hold out sample taht was not used in model building is an **accuracy** statistic.
+A diagnostic statistic calculated using a hold out sample that was not used in model building is an **accuracy** statistic.
 
 # Hold Out Sample
 

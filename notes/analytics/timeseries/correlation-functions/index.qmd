@@ -2,8 +2,7 @@
 title: Correlation Functions
 author: Yang Chen
 date: 09/06/2023
-categories:
-    -   time series
+date-modified: 09/11/2023
 ---
 
 When we have a *stationary* distribution we can now look at correlation. If we have a random walk, then we cannot look at the correlation.

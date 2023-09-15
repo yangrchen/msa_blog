@@ -1,6 +1,7 @@
 ---
 title: Model Assessment
 date: 09/07/2023
+date-modified: 09/13/2023
 categories:
     -   modeling
 ---
@@ -150,7 +151,7 @@ Common metrics based on concordance:
 -   Somer's D (Gini): $D_{xy} = 2c - 1$
 -   Kendall's $\tau_\alpha$: $\tau_\alpha = \frac{\text{#concordant} - \text{#discordant}}{\frac{n(n - 1)}{2}}$
 
-::: {.panel-tabset}
+::: {.panel-tabset group="language"}
 # R
 
 ```{r}
@@ -171,7 +172,7 @@ Strict classification-based measures completely discard any information about th
 
 ![Classification Table](images/classification-table.png)
 
-## Sensitivity vs. Specificit$$y
+# Sensitivity vs. Specificity
 
 Of all the actual 1's how many did you get right (**sensitivity**):
 
@@ -186,3 +187,142 @@ TNR = \frac{TN}{TN + FP}
 $$
 
 When we raise the cutoff, we make our model more specific. When we lower the cutoff, we make our model more sensitive.
+
+Always consider the cost of false positives and false negatives when doing classification. When **NOT** considering costs, there are different techniques to "optimize" cut-off.
+
+## Youden J Statistic
+
+$$
+J = \text{Sensitivity} + \text{Specificity} - 1
+$$
+
+False positives and false negatives are weighed equally, so select cut-off that products highest Youden $J$ statistic.
+
+::: {.panel-tabset group="language"}
+# R
+
+```{r}
+train <- train %>%
+    mutate(Bonus_hat = ifelse(p_hat > 0.5, 1, 0))
+
+table(train$Bonus_hat, train$Bonus)
+```
+
+```{r}
+library(ROCit)
+
+logit_meas <- measureit(train$p_hat, train$Bonus, measure = c("ACC", "SENS", "SPEC"))
+```
+
+# Python
+
+:::
+
+## ROC Curve
+
+The ROC curve plots TPR vs. FPR for a grid of thresholds. Area under the curve (AUC or AUROC) summarizes the overall quality of ROC curve. Equivalent to C-statistic.
+
+We want high sensitivity and high specificity.
+<!-- Need to show AUC calculation -->
+
+![ROC Curve](images/roc-curve.png)
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+logit_roc <- rocit(train$p_hat, train$Bonus)
+plot(logit_roc)
+```
+
+```{r}
+plot(logit_roc)$optimal
+```
+
+# Python
+:::
+
+# KS Statistic
+
+The **Two-Sample KS statistic** can determine if there is a difference between two cumulative distribution functions.
+
+::: {.panel-tabset group="language"}
+# R
+
+```{r}
+ksplot(logit_roc)
+```
+
+:::
+
+The two curves represent the CDFs of the distribution of 1's and 0's. The KS statistic, $D$ is the maximum distance between the two curves.
+
+## KS-Statistic or Youden?
+
+$D$ test statistic is used for model comparison. However, it is mathematically equivalent to Youden's J statistic. The point at which we have the maximum $D$ statistic is the optimal cutoff.
+
+# Precision vs. Recall
+
+In a precision-recall perspective, our focus is on the 1's.
+
+**Recall** is the same as sensitivity:
+
+$$
+TPR = \frac{TP}{TP + FN}
+$$
+
+**Precision** is slightly different than specificity:
+
+$$
+PPV = \frac{TP}{TP + FP}
+$$
+
+## Best Cut-off?
+
+Always consider the cost of false positives and false negatives when doing classification.
+
+When not considering costs, many different techniques to "optimize" cutoff.
+
+$$
+F_1 = 2\left(\frac{PPV \cdot TPR}{PPV + TPR}\right)
+$$
+
+Precision and recall are weighted equally, so select cut-off that produces highest $F_1$ score.
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+logit_meas <- measureit(train$p_hat, train$Bonus, measure = c("PREC", "REC", "FSCR"))
+
+fscore_table <- data.frame(Cutoff = logit_meas$Cutoff, FScore = logit_meas$FSCR)
+
+fscore_table %>%
+    arrange(desc(FScore)) %>%
+    head(1)
+```
+
+# Python
+:::
+
+## Precision and Lift
+
+Common calculation in marketing. Great for interpretation around validity of model ranking / classifying observations correctly.
+
+$$
+\text{Lift} = \frac{PPV}{\pi_1}
+$$
+
+-   $\pi_1$ is the proportion of 1's in your original population
+
+The top **depth%** of your customers, based on predicted probability, you get **lift** times as many responses compared to targeting a random sample of **depth%** of your customers.
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+logit_lift <- gainstable(logit_roc)
+logit_lift
+```
+
+:::

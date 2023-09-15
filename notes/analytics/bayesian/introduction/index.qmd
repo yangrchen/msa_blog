@@ -1,0 +1,64 @@
+---
+title: Bayesian Workshop
+date: 09/12/2023
+---
+
+The main difference between Frequentist and Bayesian statistics is how they view population parameters. Bayesian says there is a whole distribution behind these parameters and we are trying to uncover the underlying distribution. We are no longer focused on fixed values.
+
+# Review of Frequentist Ideology
+
+A population parameter is  **fixed**, unknown quantity that we are trying to estimate. Estimate the population parameter with a point estimate.
+
+-   $\mu \longrightarrow \bar{x}$
+-   $p \longrightarrow \hat{p}$
+-   $\beta_1 \longrightarrow \hat{\beta_1}$ 
+
+# Basics of Bayesian Statistics
+
+Population parameters are random variables. We are not estimating a number, but are instead estimating a distribution.
+
+![Frequentist vs. Bayesian](images/freq-vs-bayesian.png)
+
+We assign a **prior distribution** to the parameter (can be informative or noninformative or vague). The data collected is called the **sampling distribution**.
+
+-   Prior distribution denoted as $p(\mu)$
+-   Sampling distribution will be denoted by $p(Y|\mu)$
+-   We put this information together to find the **posterior distribution**, $p(\mu|Y)$
+
+## Bayes Theorem
+
+$$
+P(\mu|Y) = \frac{P(Y|\mu)P(\mu)}{P(Y)}
+$$
+
+## Process
+
+1.  Decide type of data being collected and decide what distribution the data will follow.
+2.  Ask what parameters are needed for this distribution? Pick appropriate priors.
+3.  Get data.
+4.  Use sampling distribution (with data) and prior to get posterior distribution.
+
+## Common Sampling Distributions
+
+-   Normal: Continuous data that can take on negative and positive values
+-   Gamma: Continuous data that can only be positive ($\chi^2$ is a special case)
+-   Binomial: Counting number of successes
+-   Poisson: Count data (number of accidents at an intersection)
+
+## Common Priors
+
+-   Normal:
+    -   $\mu$: Normal
+    -   $\sigma^2$: Gamma or Inverse-Gamma or Uniform
+-   Gamma:
+    -   $\alpha, \beta$: Gamma or Inverse Gamma or Uniform
+-   Binomial:
+    -   $p$: Uniform(0, 1) or Beta
+-   Poisson:
+    -   $\lambda$: Gamma or Uniform
+
+You need hyperparameters for each of these distributions. You can choose them so that these distributions are very spread out.
+
+# Computing the Posterior Distribution
+
+We can simulate posterior distributions using Markov Chain Monte Carlo (MCMC) techniques. Markov chain because each current observation only depends on the previous value. Monte Carlo because it involves randomness to decide each point. The goal is to converge a stationary posterior distribution.
