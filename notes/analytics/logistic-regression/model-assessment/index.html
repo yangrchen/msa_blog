@@ -168,6 +168,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </div>
     </div>
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">September 13, 2023</p>
+      </div>
+    </div>
       
     </div>
     
@@ -195,9 +201,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#concordance" id="toc-concordance" class="nav-link" data-scroll-target="#concordance"><span class="header-section-number">4.1</span> Concordance</a></li>
   </ul></li>
-  <li><a href="#assessing-predictive-power-1" id="toc-assessing-predictive-power-1" class="nav-link" data-scroll-target="#assessing-predictive-power-1"><span class="header-section-number">5</span> Assessing Predictive Power</a>
+  <li><a href="#assessing-predictive-power-1" id="toc-assessing-predictive-power-1" class="nav-link" data-scroll-target="#assessing-predictive-power-1"><span class="header-section-number">5</span> Assessing Predictive Power</a></li>
+  <li><a href="#sensitivity-vs.-specificity" id="toc-sensitivity-vs.-specificity" class="nav-link" data-scroll-target="#sensitivity-vs.-specificity"><span class="header-section-number">6</span> Sensitivity vs.&nbsp;Specificity</a>
   <ul class="collapse">
-  <li><a href="#sensitivity-vs.-specificity" id="toc-sensitivity-vs.-specificity" class="nav-link" data-scroll-target="#sensitivity-vs.-specificity"><span class="header-section-number">5.1</span> Sensitivity vs.&nbsp;Specificit$$y</a></li>
+  <li><a href="#youden-j-statistic" id="toc-youden-j-statistic" class="nav-link" data-scroll-target="#youden-j-statistic"><span class="header-section-number">6.1</span> Youden J Statistic</a></li>
+  <li><a href="#roc-curve" id="toc-roc-curve" class="nav-link" data-scroll-target="#roc-curve"><span class="header-section-number">6.2</span> ROC Curve</a></li>
+  </ul></li>
+  <li><a href="#ks-statistic" id="toc-ks-statistic" class="nav-link" data-scroll-target="#ks-statistic"><span class="header-section-number">7</span> KS Statistic</a>
+  <ul class="collapse">
+  <li><a href="#ks-statistic-or-youden" id="toc-ks-statistic-or-youden" class="nav-link" data-scroll-target="#ks-statistic-or-youden"><span class="header-section-number">7.1</span> KS-Statistic or Youden?</a></li>
+  </ul></li>
+  <li><a href="#precision-vs.-recall" id="toc-precision-vs.-recall" class="nav-link" data-scroll-target="#precision-vs.-recall"><span class="header-section-number">8</span> Precision vs.&nbsp;Recall</a>
+  <ul class="collapse">
+  <li><a href="#best-cut-off" id="toc-best-cut-off" class="nav-link" data-scroll-target="#best-cut-off"><span class="header-section-number">8.1</span> Best Cut-off?</a></li>
+  <li><a href="#precision-and-lift" id="toc-precision-and-lift" class="nav-link" data-scroll-target="#precision-and-lift"><span class="header-section-number">8.2</span> Precision and Lift</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -398,9 +415,9 @@ D = \bar{\hat{p}}_1 - \bar{\hat{p}}_0
 <li>Somer’s D (Gini): <span class="math inline">\(D_{xy} = 2c - 1\)</span></li>
 <li>Kendall’s <span class="math inline">\(\tau_\alpha\)</span>: <span class="math inline">\(\tau_\alpha = \frac{\text{#concordant} - \text{#discordant}}{\frac{n(n - 1)}{2}}\)</span></li>
 </ul>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Python</a></li></ul>
-<div class="tab-content">
+<div class="tab-content" data-group="language">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
 <div class="cell">
 <details open="">
@@ -459,8 +476,9 @@ Attaching package: 'Hmisc'</code></pre>
 <figcaption class="figure-caption">Classification Table</figcaption>
 </figure>
 </div>
-<section id="sensitivity-vs.-specificity" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="sensitivity-vs.-specificity"><span class="header-section-number">5.1</span> Sensitivity vs.&nbsp;Specificit$$y</h2>
+</section>
+<section id="sensitivity-vs.-specificity" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Sensitivity vs.&nbsp;Specificity</h1>
 <p>Of all the actual 1’s how many did you get right (<strong>sensitivity</strong>):</p>
 <p><span class="math display">\[
 TPR = \frac{TP}{TP + FN}
@@ -470,6 +488,200 @@ TPR = \frac{TP}{TP + FN}
 TNR = \frac{TN}{TN + FP}
 \]</span></p>
 <p>When we raise the cutoff, we make our model more specific. When we lower the cutoff, we make our model more sensitive.</p>
+<p>Always consider the cost of false positives and false negatives when doing classification. When <strong>NOT</strong> considering costs, there are different techniques to “optimize” cut-off.</p>
+<section id="youden-j-statistic" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="youden-j-statistic"><span class="header-section-number">6.1</span> Youden J Statistic</h2>
+<p><span class="math display">\[
+J = \text{Sensitivity} + \text{Specificity} - 1
+\]</span></p>
+<p>False positives and false negatives are weighed equally, so select cut-off that products highest Youden <span class="math inline">\(J\)</span> statistic.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Bonus_hat =</span> <span class="fu">ifelse</span>(p_hat <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(train<span class="sc">$</span>Bonus_hat, train<span class="sc">$</span>Bonus)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   
+       0    1
+  0 1062  127
+  1  149  713</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCit)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>logit_meas <span class="ot">&lt;-</span> <span class="fu">measureit</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus, <span class="at">measure =</span> <span class="fu">c</span>(<span class="st">"ACC"</span>, <span class="st">"SENS"</span>, <span class="st">"SPEC"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+
+</div>
+</div>
+</div>
+</section>
+<section id="roc-curve" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="roc-curve"><span class="header-section-number">6.2</span> ROC Curve</h2>
+<p>The ROC curve plots TPR vs.&nbsp;FPR for a grid of thresholds. Area under the curve (AUC or AUROC) summarizes the overall quality of ROC curve. Equivalent to C-statistic.</p>
+<p>We want high sensitivity and high specificity. <!-- Need to show AUC calculation --></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/roc-curve.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">ROC Curve</figcaption>
+</figure>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>logit_roc <span class="ot">&lt;-</span> <span class="fu">rocit</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(logit_roc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(logit_roc)<span class="sc">$</span>optimal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    value       FPR       TPR    cutoff 
+0.7352326 0.1552436 0.8904762 0.4229724 </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="ks-statistic" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> KS Statistic</h1>
+<p>The <strong>Two-Sample KS statistic</strong> can determine if there is a difference between two cumulative distribution functions.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">R</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ksplot</span>(logit_roc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>The two curves represent the CDFs of the distribution of 1’s and 0’s. The KS statistic, <span class="math inline">\(D\)</span> is the maximum distance between the two curves.</p>
+<section id="ks-statistic-or-youden" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="ks-statistic-or-youden"><span class="header-section-number">7.1</span> KS-Statistic or Youden?</h2>
+<p><span class="math inline">\(D\)</span> test statistic is used for model comparison. However, it is mathematically equivalent to Youden’s J statistic. The point at which we have the maximum <span class="math inline">\(D\)</span> statistic is the optimal cutoff.</p>
+</section>
+</section>
+<section id="precision-vs.-recall" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Precision vs.&nbsp;Recall</h1>
+<p>In a precision-recall perspective, our focus is on the 1’s.</p>
+<p><strong>Recall</strong> is the same as sensitivity:</p>
+<p><span class="math display">\[
+TPR = \frac{TP}{TP + FN}
+\]</span></p>
+<p><strong>Precision</strong> is slightly different than specificity:</p>
+<p><span class="math display">\[
+PPV = \frac{TP}{TP + FP}
+\]</span></p>
+<section id="best-cut-off" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="best-cut-off"><span class="header-section-number">8.1</span> Best Cut-off?</h2>
+<p>Always consider the cost of false positives and false negatives when doing classification.</p>
+<p>When not considering costs, many different techniques to “optimize” cutoff.</p>
+<p><span class="math display">\[
+F_1 = 2\left(\frac{PPV \cdot TPR}{PPV + TPR}\right)
+\]</span></p>
+<p>Precision and recall are weighted equally, so select cut-off that produces highest <span class="math inline">\(F_1\)</span> score.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>logit_meas <span class="ot">&lt;-</span> <span class="fu">measureit</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus, <span class="at">measure =</span> <span class="fu">c</span>(<span class="st">"PREC"</span>, <span class="st">"REC"</span>, <span class="st">"FSCR"</span>))</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>fscore_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Cutoff =</span> logit_meas<span class="sc">$</span>Cutoff, <span class="at">FScore =</span> logit_meas<span class="sc">$</span>FSCR)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>fscore_table <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(FScore)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Cutoff    FScore
+1 0.4229724 0.8423423</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+
+</div>
+</div>
+</div>
+</section>
+<section id="precision-and-lift" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="precision-and-lift"><span class="header-section-number">8.2</span> Precision and Lift</h2>
+<p>Common calculation in marketing. Great for interpretation around validity of model ranking / classifying observations correctly.</p>
+<p><span class="math display">\[
+\text{Lift} = \frac{PPV}{\pi_1}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\pi_1\)</span> is the proportion of 1’s in your original population</li>
+</ul>
+<p>The top <strong>depth%</strong> of your customers, based on predicted probability, you get <strong>lift</strong> times as many responses compared to targeting a random sample of <strong>depth%</strong> of your customers.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true">R</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>logit_lift <span class="ot">&lt;-</span> <span class="fu">gainstable</span>(logit_roc)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>logit_lift</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Bucket Obs CObs Depth Resp CResp RespRate CRespRate CCapRate  Lift CLift
+1       1 205  205   0.1  200   200    0.976     0.976    0.238 2.382 2.382
+2       2 205  410   0.2  190   390    0.927     0.951    0.464 2.263 2.323
+3       3 205  615   0.3  167   557    0.815     0.906    0.663 1.989 2.211
+4       4 205  820   0.4  134   691    0.654     0.843    0.823 1.596 2.058
+5       5 206 1026   0.5   92   783    0.447     0.763    0.932 1.090 1.863
+6       6 205 1231   0.6   42   825    0.205     0.670    0.982 0.500 1.636
+7       7 205 1436   0.7   12   837    0.059     0.583    0.996 0.143 1.423
+8       8 205 1641   0.8    1   838    0.005     0.511    0.998 0.012 1.247
+9       9 205 1846   0.9    2   840    0.010     0.455    1.000 0.024 1.111
+10     10 205 2051   1.0    0   840    0.000     0.410    1.000 0.000 1.000</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 
 </section>
