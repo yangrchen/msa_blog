@@ -1,7 +1,6 @@
 ---
 title: Pandas Primer 1
 date: 09/14/2023
-highlight-style: github
 ---
 
 ![All Python Data Scientists Currently](images/pandas.jpeg)

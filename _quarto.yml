@@ -15,5 +15,6 @@ website:
   favicon: favicon.ico
 format:
   html:
+    highlight-style: dracula
     theme: cosmo
     css: styles.css
