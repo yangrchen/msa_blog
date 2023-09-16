@@ -1,0 +1,16 @@
+{
+  "hash": "a73400930217ddd9e4f3fdf14addae02",
+  "result": {
+    "markdown": "---\ntitle: Correlation Functions\nauthor: Yang Chen\ndate: 09/06/2023\ndate-modified: 09/14/2023\n---\n\n\n# Setup {.unnumbered}\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tseries)\nlibrary(forecast)\nlibrary(tidyverse)\n\nY <- read.csv(\"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/ar2.csv\")\n```\n:::\n\n\nWhen we have a *stationary* distribution we can now look at correlation. If we have a random walk, then we cannot look at the correlation.\n\nTime series is typically analyzed with an assumption that observations have a potential relationship across time. One example is weight over time.\n\n# Autocorrelation\n\n**Autocorrelation** is correlation between two sets of observations in the same series that are separated by $k$ points in time.\n\nAn **autocorrelation function** is the function of all autocorrelations between two sets of observations $Y_t$ and $Y_{t-k}$ across time.\n\n$$\n\\rho_k = \\text{Corr}(Y_t, Y_{t-k})\n$$\n\n![Autocorrelation Function](images/autocorrelation-table.png)\n\nThis uses lagged series of previous time periods to calculate the Pearson's correlation between the series. Missing values in lagged series are ignored in the calculation. ACF can suggest that there is seasonality based on the correlation structure.\n\nSuppose that the first autocorrelation, ACF(1) is significant. This implies that two consecutive time points are related to each other. For non-seasonal data, we tend to look up to 10 or 12 lags back. \n\n# Partial Autocorrelation Function\n\n**Partial correlation** is the correlation between two sets of observations, separated by $k$ points in time, after adjusting for all previous ($1, 2, \\cdots, k-1$) autocorrelations. These are conditional correlations.\n\n$$\n\\phi_k = \\text{Corr}(Y_t, Y_{t-k} | Y_{t-1}, Y_{t-2}, \\cdots, Y_{t-k-1})\n$$\n\n![Partial Autocorrelation Function](images/partial-autocorrelation-table.png)\n\nThe partial autocorrelation for the $k$th lag is calculated from the regression:\n\n$$\nY_t = \\beta_0 + \\phi_1Y_{t-1} + \\phi_2Y_{t-2} + \\cdots + \\phi_kY_{t-k} + \\epsilon_t\n$$\n\nThe 2nd partial autocorrelation $\\phi_2$ is estimated from:\n\n$$\n\\hat{Y}_t = \\hat{\\beta}_0 + \\hat{\\phi}_1Y_{t-1} + \\hat{\\phi}_2Y_{t-2}\n$$\n\n:::{.panel-tabset group=\"language\"}\n# R\n\n\n::: {.cell}\n\n```{.r .cell-code}\nacf <- Acf(Y, lag = 10)$acf\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n\n```{.r .cell-code}\npacf <- Pacf(Y, lag = 10)$acf\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-2-2.png){width=672}\n:::\n\n```{.r .cell-code}\nindex <- seq(1, length(pacf))\n\nall_dat <- data.frame(cbind(acf[2:11], pacf, index))\ncolnames(all_dat) <- c(\"acf\", \"pacf\", \"index\")\n\nggplot(all_dat, aes(x = factor(index), y = acf)) +\n    geom_col() +\n    labs(x = \"Lags\")\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-2-3.png){width=672}\n:::\n:::\n\n\n:::",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

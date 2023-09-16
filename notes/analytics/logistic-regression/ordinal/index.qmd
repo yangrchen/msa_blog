@@ -1,0 +1,105 @@
+---
+title: Ordinal Logistic Regression
+date: 09/15/2023
+---
+
+When outcomes are **ordered** we can generalize the binary logistic regression model. Models can also be used when the continuous response variable has a **restricted range** and need to be split into categories.
+
+# Ordinal Logistic Regression
+
+Probability that observation $i$ has **at most** event $j$, $j = 1, \cdots, m$.
+
+We'll be using the "Found the Wallet" data set which contains 195 observations divided between three different classes:
+
+-   Keep Both (1)
+-   Keep Money Only (2)
+-   Return All (3)
+
+## Proportional Odds Model
+
+There are three methods for modeling ordinal logistic regression:
+
+1.  Cumulative Logit Model
+2.  Adjacent Categories Model
+3.  Continuation Ratio Model
+
+By far, the predominant way of doing ordinal logistic regression is the cumulative logit model.
+
+## Cumulative Logits
+
+We are building multiple binary logistic regression models. We have $m$ categories with probabilities ($p_1, p_2, \cdots, p_m$) then cumulative logits are:
+
+$$
+\log\left(\frac{p_{i,1}}{p_{i,2} + p_{i,3} + \cdots + p_{i,m}}\right), \log\left(\frac{p_{i,1} + p_{i,2}}{p_{i,3} = \cdots + p_{i,m}}\right), \cdots, \log\left(\frac{p_{i,1} + \cdots + p_{i,m-1}}{p_m}\right)
+$$
+
+Notice that the sum of all the probabilities 1 through $m$ is equal to 1. The denominator is actually the difference between the cumulative probability and 1!
+
+$$
+\log\left(\frac{p_{i,1}}{1 - p_{i,1}}\right), \log\left(\frac{p_{i,1} + p_{i,2}}{1 - (p_{i,1} + p_{i,2})}\right), \cdots
+$$
+
+This results in $m - 1$ binary logistic regressions. Our new equation for ordinal logistic regression represents the probability that observation $i$ has **at most** event $m$:
+
+$$
+\beta_{0,j} + \beta_1x_{1,i} + \cdots + \beta_kx_{k,i}
+$$
+
+Intercept changes, but slope parameters stays the same (called proportional odds assumption)
+
+# Proportional Odds Model
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+library(MASS)
+
+train <- read.csv("data/wallet.csv")
+train$punish <- factor(train$punish)
+
+clogit_model <- polr(factor(wallet) ~ male + business + punish + explain, method = "logistic", data = train)
+summary(clogit_model)
+```
+
+# Python
+:::
+
+We have to test to see if the slopes are statistically different from each other in the proportional odds model.
+
+:::{.text-center}
+$H_0:$ Proportional Odds Correct (Slopes Equal)
+
+$H_a:$ Proportional Odds Incorrect (Slopes NOT Equal Across Models)
+:::
+
+## Brant Test
+
+```{r}
+library(brant)
+brant(clogit_model)
+```
+
+Proportional odds assumption may not be met for all variables. We have two approaches:
+
+-   Partial Proportional Odds Model (some variables not met)
+-   Multinomial Logistic Regression
+
+## Partial Proportional Odds Model
+
+Keep in mind we have to do the Brant test first to determine which variables should be included in the `parallel` argument. For the sake of completeness, we chose `business` arbitrarily.
+
+```{r}
+library(VGAM)
+
+plogit_model <- vglm(factor(wallet) ~ male + business + punish + explain, data = train, family = cumulative(parallel = FALSE ~ business))
+summary(plogit_model)
+```
+
+# Interpretation
+
+With cumulative logits, increasing right-hand side of the equation leads to an increased log(odds) of **higher** outcome category.
+
+Interpretation is still an odds ratios: $100 \cdot (e^{\hat{\beta}_j} - 1)\%$ higher expected odds of being in a higher category.
+
+In a proportional odds model, there is the same increase in odds across al singular jumps in category. In our data example, males have a coeffcient of -1.0598 so they have **65.35%** lower expected odds of being in a higher ethical category as compared to females.

@@ -35,7 +35,7 @@ Likelihood estimation allows us to do hypothesis testing. If extra predictors do
 
 $L_0$ is the reduced model and $L_1$ is the full model.
 
-::: {.panel-tabset}
+::: {.panel-tabset group="language"}
 # R
 
 ```{r}
@@ -61,6 +61,8 @@ anova(logit_model, logit_model_r, test = "LRT")
 
 # Python
 
+Python provides the Global Likelihood Ratio Test ('LLR p-value') in the model output. 
+
 ```{python}
 from statsmodels.genmod.families import Binomial
 from statsmodels.genmod.generalized_linear_model import GLM
@@ -69,20 +71,12 @@ import scipy as sp
 
 ames = r.ames
 train = r.train
+
 logit_model = GLM.from_formula(
     "Bonus ~ Gr_Liv_Area + C(Central_Air)", data=train, family=Binomial()
 ).fit()
 
-reduced_ll = logit_model.llf
-full_ll = (
-    smf.logit("Bonus ~ Gr_Liv_Area + C(Central_Air) + C(Fireplaces)", data=train)
-    .fit()
-    .llf
-)
-
-LR_stat = -2 * (reduced_ll - full_ll)
-p_val = sp.stats.chi2.sf(LR_stat, 4)
-p_val
+logit_model.summary()
 ```
 
 :::
@@ -102,10 +96,31 @@ Always check the difference in degrees of freedom to double-check if you are com
 
 For categorical variables with more than 2 levels we shouldn't evaluate the significance of the entire variable with the individual p-values. Use LRT to compare model with and without the categorical variable since LRT compares the model with ALL the levels included against the model with ALL the levels not included.
 
+:::{.panel-tabset group="language"}
+# R
+
 ```{r}
 logit_model_f <- glm(Bonus ~ Gr_Liv_Area + factor(Central_Air) + factor(Fireplaces), data = train, family = binomial(link = "logit"))
 car::Anova(logit_model_f, test = "LR", type = "III")
 ```
+
+# Python
+
+In Python, we are comparing the likelihood values from the original model without fireplace and the model with the addition of the `Fireplaces` variable. We have to calculate the LRT by hand using hte following:
+
+```{python}
+reduced_ll = logit_model.llf
+full_ll = (
+    smf.logit("Bonus ~ Gr_Liv_Area + C(Central_Air) + C(Fireplaces)", data=train)
+    .fit()
+    .llf
+)
+
+LR_stat = -2 * (reduced_ll - full_ll)
+p_val = sp.stats.chi2.sf(LR_stat, 4)
+p_val
+```
+:::
 
 # Assumptions
 
@@ -127,7 +142,7 @@ $$
 \log(odds) = \beta_0 + f_1(x_{1,i}) + \cdots + f_k(x_{k,i})
 $$
 
-::: {.panel-tabset}
+::: {.panel-tabset group="language"}
 # R
 
 ```{r}
@@ -153,6 +168,37 @@ anova(logit_model, fit_gam, test = "Chisq")
 If our p-value is significant, then it means our two models are significantly different. If our two models are significantly different, then our curve model is providing more information than a straight line. Assumption is not met.
 
 In conclusion, high p-value means our assumption is met, else not met.
+
+# Python
+
+```{python}
+from statsmodels.gam.api import GLMGam, BSplines
+
+x_spline = train["Gr_Liv_Area"]
+
+bs = BSplines(x_spline, df=5, degree=2)
+gam_model = GLMGam.from_formula(
+    "Bonus ~ C(Central_Air)", data=train, smoother=bs, family=Binomial()
+).fit()
+
+gam_model.summary()
+```
+
+We can compare our spline model with the linear representation of `Gr_Liv_Area` using a Chi-square test to see if any value is added from the spline:
+
+```{python}
+reduced_ll = logit_model.llf
+full_ll = gam_model.llf
+
+LR_statistic = -2 * (reduced_ll - full_ll)
+LR_statistic
+```
+
+```{python}
+p_val = sp.stats.chi2.sf(LR_statistic, 3)
+p_val
+```
+
 :::
 
 ### Linearity Assumption Failed?

@@ -1,6 +1,7 @@
 ---
 title: "ARIMA Models: AR and MA Models"
 date: 09/07/2023
+date-modified: 09/15/2023
 ---
 
 # Setup {.unnumbered}
@@ -34,6 +35,8 @@ Y_{t-1} &= \omega + \phi Y_{t-2} + e_{t-1} \\
 Y_{t-2} &= \omega + \phi Y_{t-3} + e_{t-2}
 \end{align*}
 $$
+
+The $\omega$ in the AR model refers to the mean of the series whereas in the Random Walk equation the $\omega$ refers to drift. Whenever you are not taking a difference, the model will try to fit around the mean.
 
 ## Correlation Functions for AR(1)
 
@@ -214,7 +217,7 @@ ggplot(white_dat, aes(x = factor(Lag), y = pvalues)) +
     labs(title = "Ljung-Box test when this is white noise", x = "Lags", y = "p-values")
 ```
 
-Note that you have to start your tests on the next lag term. In this example we are using AR(2) so our tests start on lag 3.
+Note that you have to start your tests on the next lag term. In this example we are using AR(2) so our tests start on lag 3. In general, the Ljung-Box autocorrelation terms are undefined up to $p + q$ terms.
 
 # Python
 :::

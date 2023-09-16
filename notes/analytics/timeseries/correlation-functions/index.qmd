@@ -2,8 +2,19 @@
 title: Correlation Functions
 author: Yang Chen
 date: 09/06/2023
-date-modified: 09/11/2023
+date-modified: 09/14/2023
 ---
+
+# Setup {.unnumbered}
+
+```{r}
+#| warning: false
+library(tseries)
+library(forecast)
+library(tidyverse)
+
+Y <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/ar2.csv")
+```
 
 When we have a *stationary* distribution we can now look at correlation. If we have a random walk, then we cannot look at the correlation.
 
@@ -25,9 +36,9 @@ This uses lagged series of previous time periods to calculate the Pearson's corr
 
 Suppose that the first autocorrelation, ACF(1) is significant. This implies that two consecutive time points are related to each other. For non-seasonal data, we tend to look up to 10 or 12 lags back. 
 
-## Partial Autocorrelation Function
+# Partial Autocorrelation Function
 
-**Partial correlation** is the correlation between two sets of observations, separated by $k$ points in time, after adjusting for all previous ($1, 2, \cdots, k-1$) autocorrelations.
+**Partial correlation** is the correlation between two sets of observations, separated by $k$ points in time, after adjusting for all previous ($1, 2, \cdots, k-1$) autocorrelations. These are conditional correlations.
 
 $$
 \phi_k = \text{Corr}(Y_t, Y_{t-k} | Y_{t-1}, Y_{t-2}, \cdots, Y_{t-k-1})
@@ -46,3 +57,22 @@ The 2nd partial autocorrelation $\phi_2$ is estimated from:
 $$
 \hat{Y}_t = \hat{\beta}_0 + \hat{\phi}_1Y_{t-1} + \hat{\phi}_2Y_{t-2}
 $$
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+acf <- Acf(Y, lag = 10)$acf
+pacf <- Pacf(Y, lag = 10)$acf
+
+index <- seq(1, length(pacf))
+
+all_dat <- data.frame(cbind(acf[2:11], pacf, index))
+colnames(all_dat) <- c("acf", "pacf", "index")
+
+ggplot(all_dat, aes(x = factor(index), y = acf)) +
+    geom_col() +
+    labs(x = "Lags")
+```
+
+:::

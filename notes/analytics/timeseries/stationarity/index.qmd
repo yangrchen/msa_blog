@@ -81,7 +81,9 @@ quotes_ts <- ts(quotes$Quotes, start = 2002, frequency = 12)
 adf.test(quotes_ts)
 ```
 
-We look at the type 2 test since our series does not seem to be centered around 0. Based on our p-values we believe that 
+Type I tests assuming zero mean, Type II tests assuming single mean, and Type III tests assuming trend.
+
+We look at the type 2 test since our series does not seem to be centered around 0. If we have **atleast one p-value that we fail to reject** at our significance level, then we say that we have a Random Walk.
 
 # Python
 :::

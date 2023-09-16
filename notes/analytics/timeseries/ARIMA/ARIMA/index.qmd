@@ -1,6 +1,7 @@
 ---
 title: ARIMA Models
 date: 09/13/2023
+draft: true
 ---
 
 # Setup {.unnumbered}
@@ -20,6 +21,12 @@ hurricane <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/mas
 ```
 
 # Python
+
+```{python}
+ebay = r.ebay
+hurricane = r.hurricane
+```
+
 :::
 
 # ARIMA Model
@@ -156,8 +163,7 @@ If series has a deterministic trend, fit regression and then use automatic searc
 
 If there is no trend, you can send series through automatic search.
 
-
-:::{.panel-tabset group = "language"}
+:::{.panel-tabset group="language"}
 # R
 
 ```{r}
@@ -165,4 +171,38 @@ max_velocity <- hurricane$MeanVMax
 ggplot_na_distribution(max_velocity) +
     labs(y = "Mean Max Velocity")
 ```
+
+We don't believe there is seasonality in our data so we can be comfortable omitting the missing values. As a rule of thumb, if there is a pattern then we should avoid removing data.
+
+We don't seem to have trend so now we ask: is there stationarity?
+
+```{r}
+max_velocity <- na.omit(max_velocity)
+hurricane_ts <- ts(max_velocity)
+aTSA::adf.test(hurricane_ts)
+```
+
+We look at the Type II test since we have drift from zero mean. We reject all hypotheses so we believe our data is stationary. Let's model AR and MA terms now using automatic search.
+
+```{r}
+model_auto <- auto.arima(hurricane_ts, d = 0)
+summary(model_auto)
+
+ggAcf(model_auto$residuals)
+ggPacf(model_auto$residuals)
+```
+
+Through lots of manual testing we settle on ARIMA(2, 0, 3):
+
+```{r}
+model3 <- Arima(hurricane_ts, order = c(2, 0, 3))
+summary(model3)
+
+ggAcf(model3$residuals)
+ggPacf(model3$residuals)
+```
+
+# Python
 :::
+
+# Forecasting

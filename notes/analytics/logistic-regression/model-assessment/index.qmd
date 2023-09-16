@@ -1,14 +1,14 @@
 ---
 title: Model Assessment
 date: 09/07/2023
-date-modified: 09/13/2023
+date-modified: 09/15/2023
 categories:
     -   modeling
 ---
 
 # Setup {.unnumbered}
 
-::: {.panel-tabset}
+::: {.panel-tabset group="language"}
 # R
 
 ```{r}
@@ -63,7 +63,7 @@ $$
 R_G^2 = 1 - (\frac{L_0}{L_1})^{\frac{2}{n}}
 $$
 
-::: {.panel-tabset}
+::: {.panel-tabset group="language"}
 # R
 
 ```{r}
@@ -83,7 +83,7 @@ print(log_model.pseudo_rsquared())
 ```
 :::
 
-# Assessing Predictive Power
+# Probability Metrics
 
 Logistic regression was originally designed to rank-order probabilities. It *can* be used as a classification model as well.
 
@@ -107,7 +107,7 @@ $$
 
 This is a comparison metric to see which model can separate the 1's and 0's better.
 
-::: {.panel-tabset}
+::: {.panel-tabset group="language"}
 # R
 
 ```{r}
@@ -135,13 +135,13 @@ coef_discrim = p1.mean() - p0.mean()
 ```
 :::
 
-# Rank-order Statistics
+## Rank-order Statistics
 
 How well does a model order predictions? Recall concordance. For a pair of subjects with and without the event, the one **with the event** had the **higher** predicted probability.
 
 Discordance is where for a pair of subjects with and without the event, the one **with the event** had the **lower** predicted probability.
 
-## Concordance
+### Concordance
 
 Interpretation: For all possible (1, 0) pairs, the model assigned the higher predicted probability to the observation with the event $Concordance\%$ of the time.
 
@@ -149,15 +149,18 @@ Common metrics based on concordance:
 
 -   C-Statistic: $c = Concordance\% + \frac{1}{2}Tied\%$
 -   Somer's D (Gini): $D_{xy} = 2c - 1$
--   Kendall's $\tau_\alpha$: $\tau_\alpha = \frac{\text{#concordant} - \text{#discordant}}{\frac{n(n - 1)}{2}}$
+-   Kendall's $\tau_{\alpha}: \tau_{\alpha} = \frac{\text{\#concordant} - \text{\#discordant}}{\frac{n(n - 1)}{2}}$
 
 ::: {.panel-tabset group="language"}
 # R
 
 ```{r}
+#| warning: false
 library(Hmisc)
 somers2(train$p_hat, train$Bonus)
 ```
+
+Our model assigned the higher predicted probability to the observation with the bonus eligible home 94.3% of the time (c-statistic).
 
 # Python
 :::
@@ -172,7 +175,7 @@ Strict classification-based measures completely discard any information about th
 
 ![Classification Table](images/classification-table.png)
 
-# Sensitivity vs. Specificity
+## Sensitivity vs. Specificity
 
 Of all the actual 1's how many did you get right (**sensitivity**):
 
@@ -190,7 +193,7 @@ When we raise the cutoff, we make our model more specific. When we lower the cut
 
 Always consider the cost of false positives and false negatives when doing classification. When **NOT** considering costs, there are different techniques to "optimize" cut-off.
 
-## Youden J Statistic
+### Youden J Statistic
 
 $$
 J = \text{Sensitivity} + \text{Specificity} - 1
@@ -201,67 +204,97 @@ False positives and false negatives are weighed equally, so select cut-off that 
 ::: {.panel-tabset group="language"}
 # R
 
-```{r}
-train <- train %>%
-    mutate(Bonus_hat = ifelse(p_hat > 0.5, 1, 0))
-
-table(train$Bonus_hat, train$Bonus)
-```
+We can use the `ROCit` library to calculate different metrics between our predictions and actual values. We will calculate accuracy (`ACC`), sensitivity (`SENS`), and specificity (`SPEC`).
 
 ```{r}
 library(ROCit)
 
 logit_meas <- measureit(train$p_hat, train$Bonus, measure = c("ACC", "SENS", "SPEC"))
+
+youden_table <- data.frame(Cutoff = logit_meas$Cutoff, Sens = logit_meas$SENS, Spec = logit_meas$SPEC)
+
+youden_table %>% head(10)
+```
+
+We could calculate the Youden index for every cutoff, but we can also use the `rocit` function to calculate the optimal Youden index. The plot shown is the ROC curve which is covered next.
+
+```{r}
+logit_roc <- rocit(train$p_hat, train$Bonus)
+logit_plot <- plot(logit_roc)
+
+logit_plot$optimal
 ```
 
 # Python
 
 :::
 
-## ROC Curve
-
-The ROC curve plots TPR vs. FPR for a grid of thresholds. Area under the curve (AUC or AUROC) summarizes the overall quality of ROC curve. Equivalent to C-statistic.
-
-We want high sensitivity and high specificity.
-<!-- Need to show AUC calculation -->
+### ROC Curve
 
 ![ROC Curve](images/roc-curve.png)
 
+The ROC curve plots sensitivity (TPR) vs. 1 - specificity (FPR) for different cutoff thresholds. In essence, we are trying to **balance sensitivity and specificity**. The "best" ROC curve is one that reaches the upper left hand side as the model would have high levels of sensitivity and specificity. The worst ROC curve is the diagonal line as the model would be just as good randomly assigning events and non-events to our observations. 
+
+The lower left hand side is predicting every observation is a 0. Specificity is high, but sensitivity is 0. The upper right hand side is predicting every observation is a 1. Sensitivity is high, but specificity is 0.
+
+Area under the curve (AUC or AUROC) summarizes the overall quality of ROC curve. Mathematically, AUC is equivalent to the $c$-statistic. AUC curves can be a useful metric in *comparing* models, but they do not necessarily detail how good the model itself is.
+
+$$
+AUC = \%\text{Concordant} + \frac{1}{2}(\%\text{Tied})
+$$
+
+![AUC Calculation Visualized](images/auc-concordance-visual.png)
+
 :::{.panel-tabset group="language"}
 # R
+
+Like with Youden's index, we can plot the AUC curve through the `rocit` function:
 
 ```{r}
 logit_roc <- rocit(train$p_hat, train$Bonus)
 plot(logit_roc)
 ```
 
+We can get the calculated AUC through the summary:
+
 ```{r}
-plot(logit_roc)$optimal
+summary(logit_roc)
 ```
 
 # Python
 :::
 
-# KS Statistic
+### KS Statistic
 
-The **Two-Sample KS statistic** can determine if there is a difference between two cumulative distribution functions.
+The **KS statistic** is a popular metric in the finance and banking industry. The two-sample KS statistic determines whether there is a difference between two cumulative distribution functions. 
+
+In binary classification, the KS statistic is the maximum distance between the distribution functions for the event and non-event groups. The point at which this max distance occurs is the optimal cut-off for the model. 
+
+Remember that this is assuming that the cost for each observation is the same. You should ask the business what costs drive the cut-off decision rather than always select the mathematically optimal cut-off.
+
+$$
+D = \max_{depth}(TPR - FPR) = \max_{depth}(\text{Sensitivity} + \text{Specificity} - 1)
+$$
+
+Note that this is exactly the same as maximizing the Youden index!
 
 ::: {.panel-tabset group="language"}
 # R
 
+To plot the two cumulative distribution functions as well as the maximum distance between the two CDFs we can use `ksplot`:
+
 ```{r}
-ksplot(logit_roc)
+logit_ks <- ksplot(logit_roc)
+logit_ks$"KS Cutoff"
 ```
 
 :::
 
-The two curves represent the CDFs of the distribution of 1's and 0's. The KS statistic, $D$ is the maximum distance between the two curves.
-
-## KS-Statistic or Youden?
+### KS-Statistic or Youden?
 
 $D$ test statistic is used for model comparison. However, it is mathematically equivalent to Youden's J statistic. The point at which we have the maximum $D$ statistic is the optimal cutoff.
 
-# Precision vs. Recall
+## Precision vs. Recall
 
 In a precision-recall perspective, our focus is on the 1's.
 
@@ -325,4 +358,29 @@ logit_lift <- gainstable(logit_roc)
 logit_lift
 ```
 
+Bucket 1 contains the top 10% of homes in terms of probability of being bonus eligible. Bucket 10 contains the 10% of homes with the lowest probabilities. The lift amount in the first row represents how much higher our model is able to predict bonus eligible homes than if you were to randomly select from 10% of the population. Response rate (RespRate) is the proportion of responses the model was able to correctly predict.
+
+Cumulative lift (CLift) on the second row is saying our model is able to predict bonus eligible homes at a 2.32 higher rate than if you were to randomly select from 20% of the population.
+
+CCapRate refers to how many 1's we captured within the top $k\%$ of the data. For example, bucket 1 captured 24% of the 1's in the data.
 :::
+
+## Accuracy and Error
+
+Be careful selecting models based on accuracy and error. If your data has 10% events and 90% non-events then you can have a 90% accurate model by guessing non-events for every observation.
+
+### Accuracy
+
+$$
+\text{Acc} = \frac{TP + TN}{TP + FP + TN + FN}
+$$
+
+### Error
+
+$$
+\text{Error} = \frac{FP + FN}{n}
+$$
+
+# Closing Thoughts On Classification
+
+Classification is a decision that is outside of statistical modeling. Classification assumes cost for each individual is the same. Useful for groups, but be careful about single observation decisions.

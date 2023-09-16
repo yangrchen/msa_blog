@@ -1,6 +1,7 @@
 ---
 title: Data Considerations
 date: 08/28/2023
+date-modified: 09/15/2023
 engine: knitr
 ---
 
@@ -134,7 +135,7 @@ head(test_u_p)
 
 Weighting observations adjusts while model is being built instead of after it is built.
 
-We use weighted **maximum likelihood estimation (MLE)** so each observation has potentially different weights to the MLE calculation.
+We use weighted **maximum likelihood estimation (MLE)** so each observation has potentially different weights to the MLE calculation. The rare event gets a weight of 1 while the non-event gets a weight of $\frac{\rho_1\pi_0}{\rho_0\pi_1}$
 
 $$
 \text{weight} = \begin{cases}
@@ -145,7 +146,7 @@ $$
 
 We can think of the 0 as gaining a multiplier of $\frac{\pi_0}{\pi_1}$ per observation in order to get back to the original population proportion. The weight expressed in the above formula is actually $\frac{(\pi_0 / \pi_1)}{(\rho_0 / \rho_1)}$
 
-::: panel-tabset
+:::{.panel-tabset group="language"}
 # R
 
 ```{r}
@@ -160,6 +161,22 @@ summary(logit_model_w)
 We actually get difference significant variables between the adjusted intercept model and the weighted model. When do we use which technique? For the most part, we use weighted.
 
 ![Weighted vs. Adjust Intercept](images/weighted-vs-intercept.png)
+
+# Categorical Variables and Contrasts
+
+We may be interested in comparing the differences that might exist across categories in a logistic regression model. Through **contrasts** we can compare any two categories or combination of categories that we want.
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+train_u$fcsc <- factor(train_u$customer_service_calls)
+
+logit_model_w_2 <- glm(churn ~ factor(international_plan) + factor(voice_mail_plan) + total_day_charge + fcsc, data = train_u, family = binomial(), weights = weight)
+
+summary(logit_model_w_2)
+```
+:::
 
 # Missing Values
 
