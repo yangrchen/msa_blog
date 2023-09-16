@@ -1,17 +1,48 @@
 ---
 title: Introduction to Forecasting & Time Series Structure
 date: 08/24/2023
-categories:
-    -   time series
+date-modified: 09/16/2023
 ---
+
+# Setup {.unnumbered}
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+#| warning: false
+library(tseries)
+library(forecast)
+library(tidyverse)
+library(reticulate)
+
+use_condaenv("msa")
+
+us_airlines <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv")
+```
+
+# Python
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from statsmodels.tsa.seasonal import seasonal_decompose
+from statsmodels.tsa.seasonal import STL
+
+us_airlines = r.us_airlines
+us_airlines.set_index(pd.date_range(start='1/1/1990', end='3/1/2008', freq='MS'), inplace=True)
+```
+
+:::
 
 # Time Series Data
 
 Time series is an ordered sequence of observations, typically through **equally spaced** time intervals. If you have a missing interval, you need to impute that period (e.g. Jan, Feb, April; we need to impute March).
 
 ```{python}
-# | echo: false
-# | fig-cap: Time Series Use Cases
+#| echo: false
+#| fig-cap: Time Series Use Cases
 
 from IPython.display import Markdown
 from tabulate import tabulate
@@ -29,25 +60,55 @@ Markdown(tabulate(table, headers=["Field", "Use Case"]))
 
 We focus on univariate time series data for now.
 
-![Google Stock 2018 - 2023](images/google-stock.png)
+Software assumes that your data is in chronological order and that the intervals are evenly spaced.
+
+Before doing any analysis, always make sure to plot your data!
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+passenger <- ts(us_airlines$Passengers, start = 1990, frequency = 12)
+
+autoplot(passenger) +
+    labs(title = "Time Series Plot for Passengers", x = "Date", y = "Passengers")
+```
+
+# Python
+
+```{python}
+plt.plot(us_airlines["Passengers"])
+plt.xlabel("Date")
+plt.ylabel("Passengers")
+plt.title("Time Series Plot for Passengers")
+plt.grid()
+plt.show()
+```
+
+:::
+
+:::{layout-ncol=2}
+![Google Stock 2018 - 2023](images/google-stock.png){#fig-google}
+
+![Trend and Seasonality in Time Series](images/trend-and-seasonality.png){#fig-trend-seasonal}
+:::
+
+Time series can have a trend--overall pattern to the data (linear, quadratic, positive, negative, etc.). Notice the cyclic pattern in @fig-trend-seasonal.
 
 # Signal and Noise
 
 Time series is a combination of both **signal** and **noise**. Signal is the explained variation--trend, cycle, seasonality. Noise is our error or the unexplained variation.
 
+We are typically interested in forecasting future values with our time series. We need a model in order to forecast values.
+
+![The Forecasting Process](images/forecasting-cycle.png){#fig-forecasting-cycle}
+
 # Decomposition
 
-We may want to decompose time series data into a series of components. In most software, in order to decompose we need to have both trend / cycle patterns AND seasonal variation.
-
-Three separate parts:
-
--   Trend/Cycle patterns
--   Seasonal variation
--   Error
-
+Decomposition allows us to separate our time series data into **trend, seasonal variation, and error**. In most software, in order to decompose we need to have both trend / cycle patterns AND seasonal variation.
 
 ```{python}
-# | echo: false
+#| echo: false
 
 table = [
     ["Additive", "$T_t + S_t + R_t$"],
@@ -57,11 +118,19 @@ table = [
 Markdown(tabulate(table, headers=["Type", "Equation"]))
 ```
 
-![Additive vs. Multiplicative](images/decomposition-types.png)
+![Additive vs. Multiplicative](images/decomposition-types.png){#fig-add-mul}
+
+$T_t$ is the trend, $S_t$ is the season, $R_t$ is the error. If our time series is multiplicative, then we typically log the series:
+
+$$
+\log(Y_t) = \log(T_t) + \log(S_t) + \log(R_t)
+$$
+
+Now the series is additive.
 
 ## Seasonally Adjusted Data
 
-An advantage of time series decompositive is that we can create seasonally adjusted data (i.e. remove the "effect of seasonality").
+An advantage of time series decomposition is that we can create seasonally adjusted data (i.e. remove the "effect of seasonality").
 
 $$
 Y_t - S_t = T_t + R_t
@@ -75,36 +144,34 @@ Seasonal length of the time series is the length of one season--how long until t
 
 # Seasonal and STL Decomposition
 
-::: {.panel-tabset}
+::: {.panel-tabset group="language"}
 # R
 
+We can plot the the STL decomposition using the `stl` function along with a seasonal window argument:
+
+```{r}
+decomp_stl <- stl(passenger, s.window = 7)
+autoplot(decomp_stl)
+```
+
+The bars on the right of each component represent how much variability is being explained by the component. In R, the smaller the bar the more variability is being explained.
+
+To pull out the actual values of each component:
+
+```{r}
+head(decomp_stl$time.series)
+```
 
 # Python
 
 ```{python}
-import pandas as pd
-import matplotlib.pyplot as plt
-from statsmodels.tsa.seasonal import seasonal_decompose
-from statsmodels.tsa.seasonal import STL
-usair = pd.read_csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv")
-
-df = pd.date_range(start='1/1/1990', end='3/1/2008', freq='MS')
-usair.index = pd.to_datetime(df)
-usair.head()
-
-plt.plot(usair['Passengers'])
-plt.xlabel('Date')
-plt.ylabel('Passengers')
-plt.title('Airline Passengers')
-plt.show()
-```
-
-```{python}
-result = seasonal_decompose(usair['Passengers'], model='additive', period=12)
+result = seasonal_decompose(us_airlines["Passengers"], model="additive", period=12)
 result.plot()
 plt.show()
 
-result = seasonal_decompose(usair['Passengers'], model='multiplicative', period=12)
+result = seasonal_decompose(
+    us_airlines["Passengers"], model="multiplicative", period=12
+)
 result.plot()
 plt.show()
 ```
@@ -114,7 +181,7 @@ plt.show()
 Seasonal and Trend Decomposition using Loess. Smoothness of the trend is decided by the length of the `seasonal` window that the moving average uses.
 
 ```{python}
-stl = STL(usair['Passengers'], period=12)
+stl = STL(us_airlines['Passengers'], period=12)
 res = stl.fit()
 fig = res.plot()
 plt.show()
@@ -129,10 +196,10 @@ pd.concat([res.seasonal, res.trend, res.resid], axis=1)
 We can also overlay the trend (blue) and seasonally adjusted data (orange) on our time series data:
 
 ```{python}
-plt.plot(usair['Passengers'])
+plt.plot(us_airlines['Passengers'])
 plt.plot(res.trend, color='blue')
 
-seas_adj = usair['Passengers'] - res.seasonal
+seas_adj = us_airlines['Passengers'] - res.seasonal
 
 plt.plot(seas_adj, color='orange')
 plt.xlabel('Time')
@@ -144,15 +211,15 @@ plt.ylabel('Passengers')
 
 Three common techniques for decomposition:
 
--   Classical Decomposition
+-   **Classical Decomposition**
     -   Trend uses moving / rolling average smoothing
     -   Seasonal uses average de-trended values across seasons
--   X-13 ARIMA Decomposition
+-   **X-13 ARIMA Decomposition**
     -   Trends uses moving / rolling average smoothing
     -   Seasonal uses moving / rolling average smoothing
     -   Iteratively repeats above methods and ARIMA modeling
     -   Can handle outliers
--   STL (Seasonal and Trend Using LOESS Estimation)
+-   **STL (Seasonal and Trend Using LOESS Estimation)**
     -   Uses local regression techniques to estimate trend and seasonality
     -   Allows changing effects for trend and season
     -   Adapted to handle outliers
