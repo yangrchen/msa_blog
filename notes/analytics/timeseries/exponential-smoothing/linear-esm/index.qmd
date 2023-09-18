@@ -1,18 +1,62 @@
 ---
 title: Linear Trend for Exponential Smoothing
 date: 08/31/2023
-categories:
-    -   time series
+date-modified: 09/17/2023
 ---
+
+# Setup {.unnumbered}
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+#| warning: false
+library(tseries)
+library(forecast)
+library(tidyverse)
+library(aTSA)
+library(reticulate)
+
+use_condaenv("msa")
+
+steel <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/steel.csv")
+us_airlines <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv")
+
+steel_ts <- ts(steel$steelshp, start = 1984, frequency = 12)
+usair_ts <- ts(us_airlines$Passengers, start = 1990, frequency = 12)
+```
+
+# Python
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from statsmodels.tsa.api import Holt
+
+steel = r.steel
+df = pd.date_range("1/1/1984", "12/1/1991", freq="MS")
+steel.set_index(pd.to_datetime(df), inplace=True)
+
+us_airlines = r.us_airlines
+df = pd.date_range(start='1/1/1990', end='3/1/2008', freq='MS')
+us_airlines.set_index(pd.to_datetime(df), inplace=True)
+```
+
+:::
 
 # Linear Trend for Exponential Smoothing
 
-Single Exponential Smoothing can't adequately handle data that is trending up or down.
+Single Exponential Smoothing models can't adequately handle data that is trending up or down.
 
 Multiple ways to incorporate a trend in the ESM:
 
 -   Linear / Holt Exponential Smoothing
 -   Damped Trend Exponential Smoothing
+
+## Linear/Holt Exponential Smoothing
+
+A linear ESM can only handle linear trends. Any trend that is more complicated (e.g. quadratic) cannot be captured effectively.
 
 $$
 \begin{align*}
@@ -22,33 +66,49 @@ T_t &= \gamma(L_t - L_{t - 1}) + (1 - \gamma)T_{t - 1}
 \end{align*}
 $$
 
-Adding a component means we add a new smoothing parameter, $\gamma$. This second component incorporates trending into the model. $h$ is the amount of time we are forecasting ahead.
+-   $h$ is how many time points ahead. Controls how far along the trend we are.
+-   $L_t$, our level component, contains the previous level information plus the previous trend information
+
+Adding a component means we add a new smoothing parameter, $\gamma$. $\gamma$ controls how much emphasis we put on either the most recent trend or the average historical trend. Essentially, each component (level and trend) is doing the exact same thing.
 
 ## Damped Trend Exponential Smoothing
+
+We might believe our trend tapers off eventually. We can *dampen* our trend using the **damped trend exponential smoothing model**.
 
 We have a new dampening parameter incorporated into our model, $\phi$.
 
 $$
-\hat{Y}_{t+h} = L_t + \sum_{i=1}^{h} \phi^i T_t
+\begin{align*}
+\hat{Y}_{t+h} &= L_t + \sum_{i=1}^{h} \phi^i T_t \\
+L_t &= \theta Y_t + (1 - \theta)(L_{t-1} + \phi T_{t-1}) \\
+T_t &= \gamma(L_t - L_{t-1}) + (1 - \gamma)\phi T_{t-1}
+\end{align*}
 $$
 
 -   $0 < \phi < 1$
 
-::: {.panel-tabset}
+::: {.panel-tabset group="language"}
+# R
+
+For regular Holt, we use `holt`:
+
+```{r}
+les_steel <- holt(steel_ts, initial = "optimal", h = 24)
+summary(les_steel)
+```
+
+We can also do a damped trend by setting `damped = TRUE`:
+
+```{r}
+ldes_steel <- holt(steel_ts, initial = "optimal", h = 24, damped = TRUE)
+summary(ldes_steel)
+```
+
+Keep in mind that in both of these outputs, the parameter weights are not telling us whether we have a trend. All they are telling us how much weight is being put on the most recent information vs. how much is put on the average model.
+
 # Python
 
 ```{python}
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from statsmodels.tsa.api import Holt
-
-steel = pd.read_csv(
-    "https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/steel.csv"
-)
-df = pd.date_range("1/1/1984", "12/1/1991", freq="MS")
-steel.set_index(pd.to_datetime(df), inplace=True)
-
 fit = Holt(steel["steelshp"]).fit()
 fit.summary()
 ```
@@ -70,47 +130,77 @@ fit.summary()
 
 ESMs can also be adapted to account for seasonal factors. Seasonal models can be additive or multiplicative in the seasonal effect.
 
--   Holt Winters Additive Exponential Smoothing
--   Holt Winters Multiplicative Exponential Smoothing
+-   Holt-Winters Additive Exponential Smoothing
+-   Holt-Winters Multiplicative Exponential Smoothing
 
-## Additive Model
+## Holt-Winters Additive
 
 $$
 \begin{align*}
 \hat{Y}_{t+h} &= L_t + hT_t + S_{t-p+h} \\
 L_t &= \theta(Y_t - S_{t-p}) + (1 - \theta)(L_{t-1} + T_{t-1}) \\
 T_t &= \gamma(L_t - L_{t-1}) + (1 - \gamma)T_{t-1} \\
-S_t = \delta(Y_t - L_{t-1} - T_{t-1}) + (1 - \delta)(S_{t-p})
+S_t &= \delta(Y_t - L_{t-1} - T_{t-1}) + (1 - \delta)(S_{t-p})
 \end{align*}
 $$
 
 -   $p$ is the length of the season
 
-## Multiplicative Model
+$S_{t-p}$ represents the historical seasonal information. Even after adding a third component, all these components are doing the same thing: **we are adding the weighted naive model plus the weighted historical average for the component**.
 
-$$
-\hat{Y}_{t+h} = (L_t + hT_t)S_{t-p+h}
-$$
+When we talk about the weights for the seasonal piece, the weights stay the same until we move to the next season.
 
-::: {.panel-tabset}
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+hwes_usair <- hw(usair_ts, seasonal = "additive")
+summary(hwes_usair)
+```
+
 # Python
 
 ```{python}
 from statsmodels.tsa.api import ExponentialSmoothing
 
-usair_p = pd.read_csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv")
-df = pd.date_range(start='1/1/1990', end='3/1/2008', freq='MS')
-usair_p.set_index(pd.to_datetime(df), inplace=True)
-
-usair_p['HWES_ADD'] = ExponentialSmoothing(usair_p['Passengers'], trend='add', seasonal='add', seasonal_periods=12).fit().fittedvalues
-
-hw_add = ExponentialSmoothing(usair_p['Passengers'], trend='add', seasonal='add', seasonal_periods=12).fit()
+hw_add = ExponentialSmoothing(
+    us_airlines["Passengers"], trend="add", seasonal="add", seasonal_periods=12
+).fit()
 hw_add.summary()
-
-hw_mult = ExponentialSmoothing(usair_p['Passengers'], trend='add', seasonal='mul', seasonal_periods=12).fit()
-hw_mult.summary()
-
 ```
+
+:::
+
+## Holt-Winters Multiplicative
+
+$$
+\begin{align*}
+\hat{Y}_{t+h} &= (L_t + hT_t)S_{t-p+h} \\
+L_t &= \theta(Y_t/S_{t-p}) + (1 - \theta)(L_{t-1} + T_{t-1}) \\
+T_t &= \gamma(L_t - L_{t-1}) + (1 - \gamma)T_{t-1} \\
+S_t &= \delta(Y_t/(L_{t-1} + T_{t-1})) + (1 - \delta)S_{t-p}
+\end{align*}
+$$
+
+::: {.panel-tabset group="language"}
+# R
+
+```{r}
+hwes_usair <- hw(usair_ts, seasonal = "multiplicative")
+summary(hwes_usair)
+```
+
+Again these are just weights so this does not tell us if we have seasonality or not. We only see how our model is weighting recent information and historical average information.
+
+# Python
+
+```{python}
+hw_mult = ExponentialSmoothing(
+    us_airlines["Passengers"], trend="add", seasonal="mul", seasonal_periods=12
+).fit()
+hw_mult.summary()
+```
+
 :::
 
 # Evaluating Forecasts
@@ -194,4 +284,22 @@ ETS is an automated search procedure that will try to identify the best ESM base
 -   Trend has choices of None, Additive, or Multiplicative (can also have a damped trend)
 -   Seasonal has choices of None, Additive, or Multiplicative
 
-You can choose which one you want or let the computer choose.
+You can choose which one you want or let the computer choose (specify "Z" for each feature, but by default it is automated).
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+ets_usair <- ets(usair_ts)
+summary(ets_usair)
+```
+
+The summary tells us that the model selected is ETS(M, A, M) which means:
+
+-   Error is Multiplicative
+-   Trend is Additive
+-   Seasonality is Multiplicative
+
+# Python
+
+:::
