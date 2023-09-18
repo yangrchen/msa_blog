@@ -1,24 +1,54 @@
 ---
 title: Exponential Smoothing Models
 date: 08/30/2023
-categories:
-    -   time series
+date-modified: 09/16/2023
 ---
+
+# Setup {.unnumbered}
+
+::: {.panel-tabset group="language"}
+# R
+
+```{r}
+#| warning: false
+library(tseries)
+library(forecast)
+library(tidyverse)
+library(aTSA)
+library(reticulate)
+
+use_condaenv("msa")
+
+steel <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/steel.csv")
+```
+
+# Python
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from statsmodels.tsa.api import ExponentialSmoothing, SimpleExpSmoothing
+
+steel = r.steel
+df = pd.date_range("1/1/1984", "12/1/1991", freq="MS")
+steel.set_index(pd.to_datetime(df), inplace=True)
+```
+:::
 
 Time series data assumes that observations at a certain time point depend on previous observations in time.
 
-| Model   | Formula                                     |
-|---------|---------------------------------------------|
-| Naive   | $$                                          
-           \hat{Y}_{t+h} = Y_t                          
-           $$                                           |
-| Average | $$                                          
-           \hat{Y}_{t+h} = \frac{1}{T}\sum_{t=1}^T Y_t  
-           $$                                           |
+:::{.text-center}
+Naive Model: $\hat{Y}_{t+h} = Y_t$
+
+Average Model: $\hat{Y}_{t+h} = \frac{1}{T} \sum_{t=1}^{T} Y_t$
+:::
+
+Exponential smoothing models take a weighted average between these two models.
 
 # Exponential Smoothing
 
-Exponential smoothing takes an average of our data, but uses a *weighted* average instead. Models only require a few parameters.
+Exponential smoothing models (ESM) take an average of our data, but uses a *weighted* average instead. Models only require a few parameters. ESMs are great for one-step ahead forecasting, but not for long-term forecasting.
 
 We cover common types of exponential smoothing:
 
@@ -34,16 +64,19 @@ $$
 \hat{Y}_{t+1} = \theta Y_t + (1 - \theta)\hat{Y}_t
 $$
 
+-   $Y_t$ is the previous observation in the dataset
 -   $\hat{Y}_t$ is the estimate of $Y_t$ (weighted average of prev. observations)
 -   $0 \leq \theta \leq 1$
+
+With exponential smoothing models, we can imagine that a forecasted model was fit over our data. Our model forecasts $\hat{Y}_t$ and we have the actual observation $Y_t$. We calculate the weighted average of these two values to calculate the next value $\hat{Y}_{t+1}$.
 
 $$
 \hat{Y}_{t+1} = \theta Y_t + \theta(1 - \theta)Y_{t - 1} + \theta(1 - \theta)^2Y_{t - 2} + \cdots
 $$
 
-Weights decrease exponentially as we go further back in time so more weight is put on recent observations.
+Weights decrease exponentially as we go further back in time so more weight is put on recent observations. If $\theta$ is close to 1, the most recent observation is emphasized. If $\theta$ is small, then there is more emphasis on the past averages.
 
-![Single Exponential Smoothing Weights](images/single-exponential-smoothing-weights.png)
+![Single Exponential Smoothing Weights](images/single-exponential-smoothing-weights.png){#fig-esm-weights}
 
 ## Component Form
 
@@ -59,9 +92,9 @@ $$
 
 ## Parameter Estimation
 
-Typical method for calculating optimal value of $\theta$ in ESM is one-step ahead forecasts.
+To calculate the optimal value of $\theta$ in ESM, we can run the model with multiple values of $\theta$ between 0 and 1 and find the $\theta$ that minimizes the errors in your forecast.
 
-Value of $\theta$ that minimizes the one-step ahead forecast errors is considered the optimal value:
+The value of $\theta$ that minimizes the one-step ahead forecast errors is considered the optimal value:
 
 $$
 \text{SSE} = \sum_{t=1}^T (Y_t - \hat{Y}_t)^2
@@ -69,7 +102,26 @@ $$
 
 Estimates that are not statistically significant should not be disqualified. Estimates are fine even without normality however normality is needed is trying to construct a confidence interval.
 
-::: {.panel-tabset}
+::: {.panel-tabset group="language"}
+# R
+
+We can create a simple ESM using `ses`. The `h` argument controls how far we want to forecast in the series:
+
+```{r}
+steel_ts <- ts(steel$steelshp, start = 1984, frequency = 12)
+ses_steel <- ses(steel_ts, initial = "simple", h = 24)
+summary(ses_steel)
+```
+
+We can also plot our forecast from our model. The black line shown is our series and the red line is our model. Notice that if we forecast past one-step, we are always forecasting the same value:
+
+```{r}
+autoplot(ses_steel) +
+    autolayer(fitted(ses_steel), series = "Fitted") +
+    ylab("US Steel Shipments") +
+    geom_vline(xintercept = 1992, color = "orange", linetype = "dashed")
+```
+
 # Python
 
 ```{python}
@@ -87,5 +139,4 @@ steel.set_index(pd.to_datetime(df), inplace=True)
 fit = SimpleExpSmoothing(steel["steelshp"]).fit()
 fit.params["smoothing_level"]
 ```
-
 :::

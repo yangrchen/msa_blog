@@ -223,14 +223,15 @@ Three common techniques for decomposition:
     -   Uses local regression techniques to estimate trend and seasonality
     -   Allows changing effects for trend and season
     -   Adapted to handle outliers
+    -   Only handles additive seasonal decomposition
 
 ## Cautions
 
-Decomposition will not tell you if have seasonal data nor length of seasonality.
+Decomposition will not tell you if you have seasonal data nor length of seasonality. To determine seasonality, you can use expert opinions or try to model with and without seasonality and then compare the two.
 
 # Measures for Strength of Trend / Seasonality
 
-Measures given by Hyndmana nd Athanasopoulos.
+Measures given by Hyndman and Athanasopoulos.
 
 $$
 F_T = \max(0, 1 - \frac{\text{Var}(R_t)}{\text{Var}(T_t + R_t)}) + 2 \cdot \text{Cov}(R_t, T_t)
