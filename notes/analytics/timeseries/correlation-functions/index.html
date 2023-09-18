@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -138,7 +172,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">September 11, 2023</p>
+        <p class="date-modified">September 14, 2023</p>
       </div>
     </div>
       
@@ -153,10 +187,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#autocorrelation" id="toc-autocorrelation" class="nav-link active" data-scroll-target="#autocorrelation"><span class="header-section-number">1</span> Autocorrelation</a>
-  <ul class="collapse">
-  <li><a href="#partial-autocorrelation-function" id="toc-partial-autocorrelation-function" class="nav-link" data-scroll-target="#partial-autocorrelation-function"><span class="header-section-number">1.1</span> Partial Autocorrelation Function</a></li>
-  </ul></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#autocorrelation" id="toc-autocorrelation" class="nav-link" data-scroll-target="#autocorrelation"><span class="header-section-number">1</span> Autocorrelation</a></li>
+  <li><a href="#partial-autocorrelation-function" id="toc-partial-autocorrelation-function" class="nav-link" data-scroll-target="#partial-autocorrelation-function"><span class="header-section-number">2</span> Partial Autocorrelation Function</a></li>
   </ul>
 </nav>
     </div>
@@ -166,8 +199,21 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="setup" class="level1 unnumbered">
+<h1 class="unnumbered">Setup</h1>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/ar2.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 <p>When we have a <em>stationary</em> distribution we can now look at correlation. If we have a random walk, then we cannot look at the correlation.</p>
 <p>Time series is typically analyzed with an assumption that observations have a potential relationship across time. One example is weight over time.</p>
+</section>
 <section id="autocorrelation" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Autocorrelation</h1>
 <p><strong>Autocorrelation</strong> is correlation between two sets of observations in the same series that are separated by <span class="math inline">\(k\)</span> points in time.</p>
@@ -183,9 +229,10 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <p>This uses lagged series of previous time periods to calculate the Pearson’s correlation between the series. Missing values in lagged series are ignored in the calculation. ACF can suggest that there is seasonality based on the correlation structure.</p>
 <p>Suppose that the first autocorrelation, ACF(1) is significant. This implies that two consecutive time points are related to each other. For non-seasonal data, we tend to look up to 10 or 12 lags back.</p>
-<section id="partial-autocorrelation-function" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="partial-autocorrelation-function"><span class="header-section-number">1.1</span> Partial Autocorrelation Function</h2>
-<p><strong>Partial correlation</strong> is the correlation between two sets of observations, separated by <span class="math inline">\(k\)</span> points in time, after adjusting for all previous (<span class="math inline">\(1, 2, \cdots, k-1\)</span>) autocorrelations.</p>
+</section>
+<section id="partial-autocorrelation-function" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Partial Autocorrelation Function</h1>
+<p><strong>Partial correlation</strong> is the correlation between two sets of observations, separated by <span class="math inline">\(k\)</span> points in time, after adjusting for all previous (<span class="math inline">\(1, 2, \cdots, k-1\)</span>) autocorrelations. These are conditional correlations.</p>
 <p><span class="math display">\[
 \phi_k = \text{Corr}(Y_t, Y_{t-k} | Y_{t-1}, Y_{t-2}, \cdots, Y_{t-k-1})
 \]</span></p>
@@ -203,9 +250,45 @@ Y_t = \beta_0 + \phi_1Y_{t-1} + \phi_2Y_{t-2} + \cdots + \phi_kY_{t-k} + \epsilo
 <p><span class="math display">\[
 \hat{Y}_t = \hat{\beta}_0 + \hat{\phi}_1Y_{t-1} + \hat{\phi}_2Y_{t-2}
 \]</span></p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>acf <span class="ot">&lt;-</span> <span class="fu">Acf</span>(Y, <span class="at">lag =</span> <span class="dv">10</span>)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pacf <span class="ot">&lt;-</span> <span class="fu">Pacf</span>(Y, <span class="at">lag =</span> <span class="dv">10</span>)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(pacf))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>all_dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(acf[<span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>], pacf, index))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(all_dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"acf"</span>, <span class="st">"pacf"</span>, <span class="st">"index"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(all_dat, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(index), <span class="at">y =</span> acf)) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Lags"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

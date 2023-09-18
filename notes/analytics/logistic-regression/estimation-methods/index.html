@@ -146,6 +146,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div class="quarto-title column-body">
       <h1 class="title">Estimation Methods for Logistic Regression</h1>
                                 <div class="quarto-categories">
+                <div class="quarto-category">analytics</div>
                 <div class="quarto-category">logistic regression</div>
               </div>
                   </div>
@@ -229,9 +230,9 @@ L(\beta's|y, x_1, x_2, \cdots) = \prod_{i=1}^n p_i^{y_i}(1 - p_i)^{1 - y_i}
 </figure>
 </div>
 <p><span class="math inline">\(L_0\)</span> is the reduced model and <span class="math inline">\(L_1\)</span> is the full model.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
-<div class="tab-content">
+<div class="tab-content" data-group="language">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
 <details open="">
@@ -268,6 +269,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Python provides the Global Likelihood Ratio Test (‘LLR p-value’) in the model output.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
@@ -278,33 +280,113 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>ames <span class="op">=</span> r.ames</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> r.train</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>logit_model <span class="op">=</span> GLM.from_formula(</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bonus ~ Gr_Liv_Area + C(Central_Air)"</span>, data<span class="op">=</span>train, family<span class="op">=</span>Binomial()</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>).fit()</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>reduced_ll <span class="op">=</span> logit_model.llf</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>full_ll <span class="op">=</span> (</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    smf.logit(<span class="st">"Bonus ~ Gr_Liv_Area + C(Central_Air) + C(Fireplaces)"</span>, data<span class="op">=</span>train)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    .fit()</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    .llf</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>logit_model <span class="op">=</span> GLM.from_formula(</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bonus ~ Gr_Liv_Area + C(Central_Air)"</span>, data<span class="op">=</span>train, family<span class="op">=</span>Binomial()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>).fit()</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>logit_model.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Warning: Maximum number of iterations has been exceeded.
-         Current function value: 0.425703
-         Iterations: 35
-
-/opt/homebrew/Caskroom/miniconda/base/envs/msa/lib/python3.11/site-packages/statsmodels/base/model.py:607: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
-  warnings.warn("Maximum Likelihood optimization failed to "</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>LR_stat <span class="op">=</span> <span class="op">-</span><span class="dv">2</span> <span class="op">*</span> (reduced_ll <span class="op">-</span> full_ll)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>p_val <span class="op">=</span> sp.stats.chi2.sf(LR_stat, <span class="dv">4</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>p_val</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>8.181135706933704e-13</code></pre>
+<div class="cell-output-display">
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Generalized Linear Model Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>Bonus</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>2051</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>GLM</td>
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>2048</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Model Family:</td>
+<td>Binomial</td>
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Link Function:</td>
+<td>Logit</td>
+<td data-quarto-table-cell-role="th">Scale:</td>
+<td>1.0000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>IRLS</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-904.42</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Fri, 15 Sep 2023</td>
+<td data-quarto-table-cell-role="th">Deviance:</td>
+<td>1808.8</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>16:47:56</td>
+<td data-quarto-table-cell-role="th">Pearson chi2:</td>
+<td>1.98e+07</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Iterations:</td>
+<td>7</td>
+<td data-quarto-table-cell-role="th">Pseudo R-squ. (CS):</td>
+<td>0.3759</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">z</td>
+<td data-quarto-table-cell-role="th">P&gt;|z|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Intercept</td>
+<td>-10.3546</td>
+<td>0.642</td>
+<td>-16.124</td>
+<td>0.000</td>
+<td>-11.613</td>
+<td>-9.096</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(Central_Air)[T.Y]</td>
+<td>3.9519</td>
+<td>0.518</td>
+<td>7.629</td>
+<td>0.000</td>
+<td>2.937</td>
+<td>4.967</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Gr_Liv_Area</td>
+<td>0.0041</td>
+<td>0.000</td>
+<td>20.959</td>
+<td>0.000</td>
+<td>0.004</td>
+<td>0.004</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -322,11 +404,15 @@ L_0 &amp;= \beta_0 + \beta_1GLA + \beta_2CA
 <section id="categorical-p-values" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="categorical-p-values"><span class="header-section-number">1.2</span> Categorical P-Values</h2>
 <p>For categorical variables with more than 2 levels we shouldn’t evaluate the significance of the entire variable with the individual p-values. Use LRT to compare model with and without the categorical variable since LRT compares the model with ALL the levels included against the model with ALL the levels not included.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>logit_model_f <span class="ot">&lt;-</span> <span class="fu">glm</span>(Bonus <span class="sc">~</span> Gr_Liv_Area <span class="sc">+</span> <span class="fu">factor</span>(Central_Air) <span class="sc">+</span> <span class="fu">factor</span>(Fireplaces), <span class="at">data =</span> train, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>))</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(logit_model_f, <span class="at">test =</span> <span class="st">"LR"</span>, <span class="at">type =</span> <span class="st">"III"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>logit_model_f <span class="ot">&lt;-</span> <span class="fu">glm</span>(Bonus <span class="sc">~</span> Gr_Liv_Area <span class="sc">+</span> <span class="fu">factor</span>(Central_Air) <span class="sc">+</span> <span class="fu">factor</span>(Fireplaces), <span class="at">data =</span> train, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(logit_model_f, <span class="at">test =</span> <span class="st">"LR"</span>, <span class="at">type =</span> <span class="st">"III"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Deviance Table (Type III tests)
@@ -338,6 +424,40 @@ factor(Central_Air)    86.81  1  &lt; 2.2e-16 ***
 factor(Fireplaces)     62.61  4  8.181e-13 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p>In Python, we are comparing the likelihood values from the original model without fireplace and the model with the addition of the <code>Fireplaces</code> variable. We have to calculate the LRT by hand using hte following:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>reduced_ll <span class="op">=</span> logit_model.llf</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>full_ll <span class="op">=</span> (</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    smf.logit(<span class="st">"Bonus ~ Gr_Liv_Area + C(Central_Air) + C(Fireplaces)"</span>, data<span class="op">=</span>train)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    .fit()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    .llf</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Warning: Maximum number of iterations has been exceeded.
+         Current function value: 0.425703
+         Iterations: 35
+
+/opt/homebrew/Caskroom/miniconda/base/envs/msa/lib/python3.11/site-packages/statsmodels/base/model.py:607: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  warnings.warn("Maximum Likelihood optimization failed to "</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>LR_stat <span class="op">=</span> <span class="op">-</span><span class="dv">2</span> <span class="op">*</span> (reduced_ll <span class="op">-</span> full_ll)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>p_val <span class="op">=</span> sp.stats.chi2.sf(LR_stat, <span class="dv">4</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>p_val</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>8.181135706933704e-13</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -356,17 +476,17 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p><span class="math display">\[
 \log(odds) = \beta_0 + f_1(x_{1,i}) + \cdots + f_k(x_{k,i})
 \]</span></p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mgcv)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fit_gam <span class="ot">&lt;-</span> <span class="fu">gam</span>(Bonus <span class="sc">~</span> <span class="fu">s</span>(Gr_Liv_Area) <span class="sc">+</span> <span class="fu">factor</span>(Central_Air), <span class="at">data =</span> train, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>), <span class="at">method =</span> <span class="st">"REML"</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_gam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mgcv)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>fit_gam <span class="ot">&lt;-</span> <span class="fu">gam</span>(Bonus <span class="sc">~</span> <span class="fu">s</span>(Gr_Liv_Area) <span class="sc">+</span> <span class="fu">factor</span>(Central_Air), <span class="at">data =</span> train, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>), <span class="at">method =</span> <span class="st">"REML"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_gam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -394,10 +514,10 @@ R-sq.(adj) =   0.43   Deviance explained =   39%
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_gam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_gam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>The spline p-value is not telling us whether our assumption is met or not. It tells us whether or not the splined variable is significant in the model.</p>
@@ -406,7 +526,7 @@ R-sq.(adj) =   0.43   Deviance explained =   39%
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(logit_model, fit_gam, <span class="at">test =</span> <span class="st">"Chisq"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(logit_model, fit_gam, <span class="at">test =</span> <span class="st">"Chisq"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Deviance Table
@@ -422,6 +542,175 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 <p>If our p-value is significant, then it means our two models are significantly different. If our two models are significantly different, then our curve model is providing more information than a straight line. Assumption is not met.</p>
 <p>In conclusion, high p-value means our assumption is met, else not met.</p>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.gam.api <span class="im">import</span> GLMGam, BSplines</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>x_spline <span class="op">=</span> train[<span class="st">"Gr_Liv_Area"</span>]</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>bs <span class="op">=</span> BSplines(x_spline, df<span class="op">=</span><span class="dv">5</span>, degree<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>gam_model <span class="op">=</span> GLMGam.from_formula(</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bonus ~ C(Central_Air)"</span>, data<span class="op">=</span>train, smoother<span class="op">=</span>bs, family<span class="op">=</span>Binomial()</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>).fit()</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>gam_model.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Generalized Linear Model Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>Bonus</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>2051</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>GLMGam</td>
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>2045.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Model Family:</td>
+<td>Binomial</td>
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>5.00</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Link Function:</td>
+<td>Logit</td>
+<td data-quarto-table-cell-role="th">Scale:</td>
+<td>1.0000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>PIRLS</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-846.90</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Fri, 15 Sep 2023</td>
+<td data-quarto-table-cell-role="th">Deviance:</td>
+<td>1693.8</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>16:47:56</td>
+<td data-quarto-table-cell-role="th">Pearson chi2:</td>
+<td>1.84e+03</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Iterations:</td>
+<td>11</td>
+<td data-quarto-table-cell-role="th">Pseudo R-squ. (CS):</td>
+<td>0.4100</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">z</td>
+<td data-quarto-table-cell-role="th">P&gt;|z|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Intercept</td>
+<td>-43.0155</td>
+<td>13.367</td>
+<td>-3.218</td>
+<td>0.001</td>
+<td>-69.215</td>
+<td>-16.816</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(Central_Air)[T.Y]</td>
+<td>3.5085</td>
+<td>0.490</td>
+<td>7.160</td>
+<td>0.000</td>
+<td>2.548</td>
+<td>4.469</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Gr_Liv_Area_s0</td>
+<td>35.2886</td>
+<td>13.706</td>
+<td>2.575</td>
+<td>0.010</td>
+<td>8.425</td>
+<td>62.153</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Gr_Liv_Area_s1</td>
+<td>39.4951</td>
+<td>13.318</td>
+<td>2.966</td>
+<td>0.003</td>
+<td>13.393</td>
+<td>65.597</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Gr_Liv_Area_s2</td>
+<td>45.8674</td>
+<td>13.501</td>
+<td>3.397</td>
+<td>0.001</td>
+<td>19.406</td>
+<td>72.329</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Gr_Liv_Area_s3</td>
+<td>38.8671</td>
+<td>13.376</td>
+<td>2.906</td>
+<td>0.004</td>
+<td>12.651</td>
+<td>65.083</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We can compare our spline model with the linear representation of <code>Gr_Liv_Area</code> using a Chi-square test to see if any value is added from the spline:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>reduced_ll <span class="op">=</span> logit_model.llf</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>full_ll <span class="op">=</span> gam_model.llf</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>LR_statistic <span class="op">=</span> <span class="op">-</span><span class="dv">2</span> <span class="op">*</span> (reduced_ll <span class="op">-</span> full_ll)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>LR_statistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>115.04641517091682</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>p_val <span class="op">=</span> sp.stats.chi2.sf(LR_statistic, <span class="dv">3</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>p_val</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>8.99687925869741e-25</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -440,11 +729,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Gr_Liv_Area_BIN =</span> <span class="fu">cut</span>(Gr_Liv_Area, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">1000</span>, <span class="dv">1500</span>, <span class="dv">3000</span>, <span class="dv">4500</span>, <span class="cn">Inf</span>)))</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>logit_model_bin <span class="ot">&lt;-</span> <span class="fu">glm</span>(Bonus <span class="sc">~</span> <span class="fu">factor</span>(Gr_Liv_Area_BIN) <span class="sc">+</span> <span class="fu">factor</span>(Central_Air), <span class="at">data =</span> train, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(logit_model_bin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Gr_Liv_Area_BIN =</span> <span class="fu">cut</span>(Gr_Liv_Area, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">1000</span>, <span class="dv">1500</span>, <span class="dv">3000</span>, <span class="dv">4500</span>, <span class="cn">Inf</span>)))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>logit_model_bin <span class="ot">&lt;-</span> <span class="fu">glm</span>(Bonus <span class="sc">~</span> <span class="fu">factor</span>(Gr_Liv_Area_BIN) <span class="sc">+</span> <span class="fu">factor</span>(Central_Air), <span class="at">data =</span> train, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(logit_model_bin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -481,10 +770,10 @@ Number of Fisher Scoring iterations: 14</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>new_ames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Gr_Liv_Area =</span> <span class="fu">c</span>(<span class="dv">1500</span>, <span class="dv">2000</span>, <span class="dv">2250</span>, <span class="dv">2500</span>, <span class="dv">3500</span>), <span class="at">Central_Air =</span> <span class="fu">c</span>(<span class="st">"N"</span>, <span class="st">"Y"</span>, <span class="st">"Y"</span>, <span class="st">"N"</span>, <span class="st">"Y"</span>))</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>new_ames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(new_ames, <span class="st">"Pred"</span> <span class="ot">=</span> <span class="fu">predict</span>(logit_model, <span class="at">newdata =</span> new_ames, <span class="at">type =</span> <span class="st">"response"</span>))</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(new_ames)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>new_ames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Gr_Liv_Area =</span> <span class="fu">c</span>(<span class="dv">1500</span>, <span class="dv">2000</span>, <span class="dv">2250</span>, <span class="dv">2500</span>, <span class="dv">3500</span>), <span class="at">Central_Air =</span> <span class="fu">c</span>(<span class="st">"N"</span>, <span class="st">"Y"</span>, <span class="st">"Y"</span>, <span class="st">"N"</span>, <span class="st">"Y"</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>new_ames <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(new_ames, <span class="st">"Pred"</span> <span class="ot">=</span> <span class="fu">predict</span>(logit_model, <span class="at">newdata =</span> new_ames, <span class="at">type =</span> <span class="st">"response"</span>))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(new_ames)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Gr_Liv_Area Central_Air       Pred

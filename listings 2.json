@@ -1,0 +1,64 @@
+[
+  {
+    "listing": "/notes/communication/index.html",
+    "items": [
+      "/notes/communication/08032023/index.html",
+      "/notes/communication/062623/index.html"
+    ]
+  },
+  {
+    "listing": "/blog/index.html",
+    "items": [
+      "/blog/first_weeks/index.html"
+    ]
+  },
+  {
+    "listing": "/notes/primer/index.html",
+    "items": [
+      "/notes/primer/categorical_data/index.html",
+      "/notes/primer/anova/index.html",
+      "/notes/primer/hypothesis_testing/index.html",
+      "/notes/primer/confidence_intervals/index.html",
+      "/notes/primer/probability/index.html",
+      "/notes/primer/fundamental/index.html"
+    ]
+  },
+  {
+    "listing": "/notes/programming/index.html",
+    "items": [
+      "/notes/programming/python/practicum-prep/index.html",
+      "/notes/programming/R/r4ds/intro/index.html",
+      "/notes/programming/R/r4ds/intro_visualization/index.html"
+    ]
+  },
+  {
+    "listing": "/notes/analytics/index.html",
+    "items": [
+      "/notes/analytics/timeseries/ARIMA/ARIMA/index.html",
+      "/notes/analytics/bayesian/introduction/index.html",
+      "/notes/analytics/logistic-regression/model-assessment/index.html",
+      "/notes/analytics/timeseries/ARIMA/ARMA/index.html",
+      "/notes/analytics/timeseries/correlation-functions/index.html",
+      "/notes/analytics/logistic-regression/diagnostics/index.html",
+      "/notes/analytics/timeseries/stationarity/index.html",
+      "/notes/analytics/timeseries/exponential-smoothing/linear-esm/index.html",
+      "/notes/analytics/timeseries/exponential-smoothing/esm/index.html",
+      "/notes/analytics/logistic-regression/data-considerations/index.html",
+      "/notes/analytics/logistic-regression/estimation-methods/index.html",
+      "/notes/analytics/timeseries/introduction/index.html",
+      "/notes/analytics/logistic-regression/intro-review/index.html",
+      "/notes/analytics/logistic-regression/introduction/index.html",
+      "/notes/analytics/EDA/categorical-data/index.html",
+      "/notes/analytics/linear-regression/regularized/index.html",
+      "/notes/analytics/linear-regression/influence/index.html",
+      "/notes/analytics/linear-regression/diagnostics/index.html",
+      "/notes/analytics/linear-regression/model-selection/index.html",
+      "/notes/analytics/linear-regression/MLR/index.html",
+      "/notes/analytics/ANOVA/n-Way/index.html",
+      "/notes/analytics/linear-regression/SLR/index.html",
+      "/notes/analytics/ANOVA/introduction/index.html",
+      "/notes/analytics/EDA/statistical-inference/index.html",
+      "/notes/analytics/EDA/introduction/index.html"
+    ]
+  }
+]

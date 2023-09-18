@@ -171,7 +171,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">September 13, 2023</p>
+        <p class="date-modified">September 15, 2023</p>
       </div>
     </div>
       
@@ -192,30 +192,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#generalized-nagelkerkge-r2" id="toc-generalized-nagelkerkge-r2" class="nav-link" data-scroll-target="#generalized-nagelkerkge-r2"><span class="header-section-number">2.1</span> Generalized / Nagelkerkge <span class="math inline">\(R^2\)</span></a></li>
   </ul></li>
-  <li><a href="#assessing-predictive-power" id="toc-assessing-predictive-power" class="nav-link" data-scroll-target="#assessing-predictive-power"><span class="header-section-number">3</span> Assessing Predictive Power</a>
+  <li><a href="#probability-metrics" id="toc-probability-metrics" class="nav-link" data-scroll-target="#probability-metrics"><span class="header-section-number">3</span> Probability Metrics</a>
   <ul class="collapse">
   <li><a href="#discrimination-vs.-calibration" id="toc-discrimination-vs.-calibration" class="nav-link" data-scroll-target="#discrimination-vs.-calibration"><span class="header-section-number">3.1</span> Discrimination vs.&nbsp;Calibration</a></li>
   <li><a href="#coefficient-of-discrimination" id="toc-coefficient-of-discrimination" class="nav-link" data-scroll-target="#coefficient-of-discrimination"><span class="header-section-number">3.2</span> Coefficient of Discrimination</a></li>
-  </ul></li>
-  <li><a href="#rank-order-statistics" id="toc-rank-order-statistics" class="nav-link" data-scroll-target="#rank-order-statistics"><span class="header-section-number">4</span> Rank-order Statistics</a>
+  <li><a href="#rank-order-statistics" id="toc-rank-order-statistics" class="nav-link" data-scroll-target="#rank-order-statistics"><span class="header-section-number">3.3</span> Rank-order Statistics</a>
   <ul class="collapse">
-  <li><a href="#concordance" id="toc-concordance" class="nav-link" data-scroll-target="#concordance"><span class="header-section-number">4.1</span> Concordance</a></li>
+  <li><a href="#concordance" id="toc-concordance" class="nav-link" data-scroll-target="#concordance"><span class="header-section-number">3.3.1</span> Concordance</a></li>
   </ul></li>
-  <li><a href="#assessing-predictive-power-1" id="toc-assessing-predictive-power-1" class="nav-link" data-scroll-target="#assessing-predictive-power-1"><span class="header-section-number">5</span> Assessing Predictive Power</a></li>
-  <li><a href="#sensitivity-vs.-specificity" id="toc-sensitivity-vs.-specificity" class="nav-link" data-scroll-target="#sensitivity-vs.-specificity"><span class="header-section-number">6</span> Sensitivity vs.&nbsp;Specificity</a>
+  </ul></li>
+  <li><a href="#assessing-predictive-power" id="toc-assessing-predictive-power" class="nav-link" data-scroll-target="#assessing-predictive-power"><span class="header-section-number">4</span> Assessing Predictive Power</a>
   <ul class="collapse">
-  <li><a href="#youden-j-statistic" id="toc-youden-j-statistic" class="nav-link" data-scroll-target="#youden-j-statistic"><span class="header-section-number">6.1</span> Youden J Statistic</a></li>
-  <li><a href="#roc-curve" id="toc-roc-curve" class="nav-link" data-scroll-target="#roc-curve"><span class="header-section-number">6.2</span> ROC Curve</a></li>
-  </ul></li>
-  <li><a href="#ks-statistic" id="toc-ks-statistic" class="nav-link" data-scroll-target="#ks-statistic"><span class="header-section-number">7</span> KS Statistic</a>
+  <li><a href="#sensitivity-vs.-specificity" id="toc-sensitivity-vs.-specificity" class="nav-link" data-scroll-target="#sensitivity-vs.-specificity"><span class="header-section-number">4.1</span> Sensitivity vs.&nbsp;Specificity</a>
   <ul class="collapse">
-  <li><a href="#ks-statistic-or-youden" id="toc-ks-statistic-or-youden" class="nav-link" data-scroll-target="#ks-statistic-or-youden"><span class="header-section-number">7.1</span> KS-Statistic or Youden?</a></li>
+  <li><a href="#youden-j-statistic" id="toc-youden-j-statistic" class="nav-link" data-scroll-target="#youden-j-statistic"><span class="header-section-number">4.1.1</span> Youden J Statistic</a></li>
+  <li><a href="#roc-curve" id="toc-roc-curve" class="nav-link" data-scroll-target="#roc-curve"><span class="header-section-number">4.1.2</span> ROC Curve</a></li>
+  <li><a href="#ks-statistic" id="toc-ks-statistic" class="nav-link" data-scroll-target="#ks-statistic"><span class="header-section-number">4.1.3</span> KS Statistic</a></li>
+  <li><a href="#ks-statistic-or-youden" id="toc-ks-statistic-or-youden" class="nav-link" data-scroll-target="#ks-statistic-or-youden"><span class="header-section-number">4.1.4</span> KS-Statistic or Youden?</a></li>
   </ul></li>
-  <li><a href="#precision-vs.-recall" id="toc-precision-vs.-recall" class="nav-link" data-scroll-target="#precision-vs.-recall"><span class="header-section-number">8</span> Precision vs.&nbsp;Recall</a>
+  <li><a href="#precision-vs.-recall" id="toc-precision-vs.-recall" class="nav-link" data-scroll-target="#precision-vs.-recall"><span class="header-section-number">4.2</span> Precision vs.&nbsp;Recall</a></li>
+  <li><a href="#best-cut-off" id="toc-best-cut-off" class="nav-link" data-scroll-target="#best-cut-off"><span class="header-section-number">4.3</span> Best Cut-off?</a></li>
+  <li><a href="#precision-and-lift" id="toc-precision-and-lift" class="nav-link" data-scroll-target="#precision-and-lift"><span class="header-section-number">4.4</span> Precision and Lift</a></li>
+  <li><a href="#accuracy-and-error" id="toc-accuracy-and-error" class="nav-link" data-scroll-target="#accuracy-and-error"><span class="header-section-number">4.5</span> Accuracy and Error</a>
   <ul class="collapse">
-  <li><a href="#best-cut-off" id="toc-best-cut-off" class="nav-link" data-scroll-target="#best-cut-off"><span class="header-section-number">8.1</span> Best Cut-off?</a></li>
-  <li><a href="#precision-and-lift" id="toc-precision-and-lift" class="nav-link" data-scroll-target="#precision-and-lift"><span class="header-section-number">8.2</span> Precision and Lift</a></li>
+  <li><a href="#accuracy" id="toc-accuracy" class="nav-link" data-scroll-target="#accuracy"><span class="header-section-number">4.5.1</span> Accuracy</a></li>
+  <li><a href="#error" id="toc-error" class="nav-link" data-scroll-target="#error"><span class="header-section-number">4.5.2</span> Error</a></li>
   </ul></li>
+  </ul></li>
+  <li><a href="#closing-thoughts-on-classification" id="toc-closing-thoughts-on-classification" class="nav-link" data-scroll-target="#closing-thoughts-on-classification"><span class="header-section-number">5</span> Closing Thoughts On Classification</a></li>
   </ul>
 </nav>
     </div>
@@ -227,9 +231,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="setup" class="level1 unnumbered">
 <h1 class="unnumbered">Setup</h1>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
-<div class="tab-content">
+<div class="tab-content" data-group="language">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
 <details open="">
@@ -285,9 +289,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><span class="math display">\[
 R_G^2 = 1 - (\frac{L_0}{L_1})^{\frac{2}{n}}
 \]</span></p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Python</a></li></ul>
-<div class="tab-content">
+<div class="tab-content" data-group="language">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
 <details open="">
@@ -345,8 +349,8 @@ R_G^2 = 1 - (\frac{L_0}{L_1})^{\frac{2}{n}}
 </div>
 </section>
 </section>
-<section id="assessing-predictive-power" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Assessing Predictive Power</h1>
+<section id="probability-metrics" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Probability Metrics</h1>
 <p>Logistic regression was originally designed to rank-order probabilities. It <em>can</em> be used as a classification model as well.</p>
 <p>You might want that insight into rank-ordering than you might think. An example is when customers are predicted to buy a product but in reality that are on the fence.</p>
 <section id="discrimination-vs.-calibration" class="level2" data-number="3.1">
@@ -362,9 +366,9 @@ R_G^2 = 1 - (\frac{L_0}{L_1})^{\frac{2}{n}}
 D = \bar{\hat{p}}_1 - \bar{\hat{p}}_0
 \]</span></p>
 <p>This is a comparison metric to see which model can separate the 1’s and 0’s better.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Python</a></li></ul>
-<div class="tab-content">
+<div class="tab-content" data-group="language">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <div class="cell">
 <details open="">
@@ -401,19 +405,18 @@ D = \bar{\hat{p}}_1 - \bar{\hat{p}}_0
 </div>
 </div>
 </section>
-</section>
-<section id="rank-order-statistics" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Rank-order Statistics</h1>
+<section id="rank-order-statistics" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="rank-order-statistics"><span class="header-section-number">3.3</span> Rank-order Statistics</h2>
 <p>How well does a model order predictions? Recall concordance. For a pair of subjects with and without the event, the one <strong>with the event</strong> had the <strong>higher</strong> predicted probability.</p>
 <p>Discordance is where for a pair of subjects with and without the event, the one <strong>with the event</strong> had the <strong>lower</strong> predicted probability.</p>
-<section id="concordance" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="concordance"><span class="header-section-number">4.1</span> Concordance</h2>
+<section id="concordance" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="concordance"><span class="header-section-number">3.3.1</span> Concordance</h3>
 <p>Interpretation: For all possible (1, 0) pairs, the model assigned the higher predicted probability to the observation with the event <span class="math inline">\(Concordance\%\)</span> of the time.</p>
 <p>Common metrics based on concordance:</p>
 <ul>
 <li>C-Statistic: <span class="math inline">\(c = Concordance\% + \frac{1}{2}Tied\%\)</span></li>
 <li>Somer’s D (Gini): <span class="math inline">\(D_{xy} = 2c - 1\)</span></li>
-<li>Kendall’s <span class="math inline">\(\tau_\alpha\)</span>: <span class="math inline">\(\tau_\alpha = \frac{\text{#concordant} - \text{#discordant}}{\frac{n(n - 1)}{2}}\)</span></li>
+<li>Kendall’s <span class="math inline">\(\tau_{\alpha}: \tau_{\alpha} = \frac{\text{\#concordant} - \text{\#discordant}}{\frac{n(n - 1)}{2}}\)</span></li>
 </ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Python</a></li></ul>
@@ -422,36 +425,15 @@ D = \bar{\hat{p}}_1 - \bar{\hat{p}}_0
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Hmisc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'Hmisc'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:DescTools':
-
-    %nin%, Label, Mean, Quantile</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:dplyr':
-
-    src, summarize</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    format.pval, units</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">somers2</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Hmisc)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">somers2</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>           C          Dxy            n      Missing 
    0.9428394    0.8856789 2051.0000000    0.0000000 </code></pre>
 </div>
 </div>
+<p>Our model assigned the higher predicted probability to the observation with the bonus eligible home 94.3% of the time (c-statistic).</p>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
 
@@ -460,8 +442,9 @@ Attaching package: 'Hmisc'</code></pre>
 </div>
 </section>
 </section>
-<section id="assessing-predictive-power-1" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Assessing Predictive Power</h1>
+</section>
+<section id="assessing-predictive-power" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Assessing Predictive Power</h1>
 <p>We want our model to correctly classify events and non-events. <strong>Classification</strong> forces the model to predict either 1 or 0 based on whether the predicted probability exceeds some threshold.</p>
 <p>Strict classification-based measures completely discard any information about the actual quality of the model’s predicted probablities.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -476,9 +459,8 @@ Attaching package: 'Hmisc'</code></pre>
 <figcaption class="figure-caption">Classification Table</figcaption>
 </figure>
 </div>
-</section>
-<section id="sensitivity-vs.-specificity" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Sensitivity vs.&nbsp;Specificity</h1>
+<section id="sensitivity-vs.-specificity" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="sensitivity-vs.-specificity"><span class="header-section-number">4.1</span> Sensitivity vs.&nbsp;Specificity</h2>
 <p>Of all the actual 1’s how many did you get right (<strong>sensitivity</strong>):</p>
 <p><span class="math display">\[
 TPR = \frac{TP}{TP + FN}
@@ -489,8 +471,8 @@ TNR = \frac{TN}{TN + FP}
 \]</span></p>
 <p>When we raise the cutoff, we make our model more specific. When we lower the cutoff, we make our model more sensitive.</p>
 <p>Always consider the cost of false positives and false negatives when doing classification. When <strong>NOT</strong> considering costs, there are different techniques to “optimize” cut-off.</p>
-<section id="youden-j-statistic" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="youden-j-statistic"><span class="header-section-number">6.1</span> Youden J Statistic</h2>
+<section id="youden-j-statistic" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="youden-j-statistic"><span class="header-section-number">4.1.1</span> Youden J Statistic</h3>
 <p><span class="math display">\[
 J = \text{Sensitivity} + \text{Specificity} - 1
 \]</span></p>
@@ -499,28 +481,50 @@ J = \text{Sensitivity} + \text{Specificity} - 1
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Python</a></li></ul>
 <div class="tab-content" data-group="language">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<p>We can use the <code>ROCit</code> library to calculate different metrics between our predictions and actual values. We will calculate accuracy (<code>ACC</code>), sensitivity (<code>SENS</code>), and specificity (<code>SPEC</code>).</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Bonus_hat =</span> <span class="fu">ifelse</span>(p_hat <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(train<span class="sc">$</span>Bonus_hat, train<span class="sc">$</span>Bonus)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCit)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>logit_meas <span class="ot">&lt;-</span> <span class="fu">measureit</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus, <span class="at">measure =</span> <span class="fu">c</span>(<span class="st">"ACC"</span>, <span class="st">"SENS"</span>, <span class="st">"SPEC"</span>))</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>youden_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Cutoff =</span> logit_meas<span class="sc">$</span>Cutoff, <span class="at">Sens =</span> logit_meas<span class="sc">$</span>SENS, <span class="at">Spec =</span> logit_meas<span class="sc">$</span>SPEC)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>youden_table <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>   
-       0    1
-  0 1062  127
-  1  149  713</code></pre>
+<pre><code>      Cutoff        Sens      Spec
+1        Inf 0.000000000 1.0000000
+2  0.9999996 0.000000000 0.9991742
+3  0.9999963 0.001190476 0.9991742
+4  0.9999952 0.002380952 0.9991742
+5  0.9999786 0.003571429 0.9991742
+6  0.9999653 0.004761905 0.9991742
+7  0.9999573 0.005952381 0.9991742
+8  0.9999546 0.007142857 0.9991742
+9  0.9999381 0.008333333 0.9991742
+10 0.9998792 0.009523810 0.9991742</code></pre>
 </div>
 </div>
+<p>We could calculate the Youden index for every cutoff, but we can also use the <code>rocit</code> function to calculate the optimal Youden index. The plot shown is the ROC curve which is covered next.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCit)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>logit_meas <span class="ot">&lt;-</span> <span class="fu">measureit</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus, <span class="at">measure =</span> <span class="fu">c</span>(<span class="st">"ACC"</span>, <span class="st">"SENS"</span>, <span class="st">"SPEC"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>logit_roc <span class="ot">&lt;-</span> <span class="fu">rocit</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>logit_plot <span class="ot">&lt;-</span> <span class="fu">plot</span>(logit_roc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>logit_plot<span class="sc">$</span>optimal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    value       FPR       TPR    cutoff 
+0.7352326 0.1552436 0.8904762 0.4229724 </code></pre>
+</div>
 </div>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
@@ -529,41 +533,53 @@ J = \text{Sensitivity} + \text{Specificity} - 1
 </div>
 </div>
 </section>
-<section id="roc-curve" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="roc-curve"><span class="header-section-number">6.2</span> ROC Curve</h2>
-<p>The ROC curve plots TPR vs.&nbsp;FPR for a grid of thresholds. Area under the curve (AUC or AUROC) summarizes the overall quality of ROC curve. Equivalent to C-statistic.</p>
-<p>We want high sensitivity and high specificity. <!-- Need to show AUC calculation --></p>
+<section id="roc-curve" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="roc-curve"><span class="header-section-number">4.1.2</span> ROC Curve</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/roc-curve.png" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">ROC Curve</figcaption>
 </figure>
 </div>
+<p>The ROC curve plots sensitivity (TPR) vs.&nbsp;1 - specificity (FPR) for different cutoff thresholds. In essence, we are trying to <strong>balance sensitivity and specificity</strong>. The “best” ROC curve is one that reaches the upper left hand side as the model would have high levels of sensitivity and specificity. The worst ROC curve is the diagonal line as the model would be just as good randomly assigning events and non-events to our observations.</p>
+<p>The lower left hand side is predicting every observation is a 0. Specificity is high, but sensitivity is 0. The upper right hand side is predicting every observation is a 1. Sensitivity is high, but specificity is 0.</p>
+<p>Area under the curve (AUC or AUROC) summarizes the overall quality of ROC curve. Mathematically, AUC is equivalent to the <span class="math inline">\(c\)</span>-statistic. AUC curves can be a useful metric in <em>comparing</em> models, but they do not necessarily detail how good the model itself is.</p>
+<p><span class="math display">\[
+AUC = \%\text{Concordant} + \frac{1}{2}(\%\text{Tied})
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/auc-concordance-visual.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">AUC Calculation Visualized</figcaption>
+</figure>
+</div>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">Python</a></li></ul>
 <div class="tab-content" data-group="language">
 <div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<p>Like with Youden’s index, we can plot the AUC curve through the <code>rocit</code> function:</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>logit_roc <span class="ot">&lt;-</span> <span class="fu">rocit</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(logit_roc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>logit_roc <span class="ot">&lt;-</span> <span class="fu">rocit</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(logit_roc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>We can get the calculated AUC through the summary:</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(logit_roc)<span class="sc">$</span>optimal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(logit_roc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
-</div>
 <div class="cell-output cell-output-stdout">
-<pre><code>    value       FPR       TPR    cutoff 
-0.7352326 0.1552436 0.8904762 0.4229724 </code></pre>
+<pre><code>                            
+ Method used: empirical     
+ Number of positive(s): 840 
+ Number of negative(s): 1211
+ Area under curve: 0.9428   </code></pre>
 </div>
 </div>
 </div>
@@ -573,34 +589,47 @@ J = \text{Sensitivity} + \text{Specificity} - 1
 </div>
 </div>
 </section>
-</section>
-<section id="ks-statistic" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> KS Statistic</h1>
-<p>The <strong>Two-Sample KS statistic</strong> can determine if there is a difference between two cumulative distribution functions.</p>
+<section id="ks-statistic" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="ks-statistic"><span class="header-section-number">4.1.3</span> KS Statistic</h3>
+<p>The <strong>KS statistic</strong> is a popular metric in the finance and banking industry. The two-sample KS statistic determines whether there is a difference between two cumulative distribution functions.</p>
+<p>In binary classification, the KS statistic is the maximum distance between the distribution functions for the event and non-event groups. The point at which this max distance occurs is the optimal cut-off for the model.</p>
+<p>Remember that this is assuming that the cost for each observation is the same. You should ask the business what costs drive the cut-off decision rather than always select the mathematically optimal cut-off.</p>
+<p><span class="math display">\[
+D = \max_{depth}(TPR - FPR) = \max_{depth}(\text{Sensitivity} + \text{Specificity} - 1)
+\]</span></p>
+<p>Note that this is exactly the same as maximizing the Youden index!</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">R</a></li></ul>
 <div class="tab-content" data-group="language">
 <div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<p>To plot the two cumulative distribution functions as well as the maximum distance between the two CDFs we can use <code>ksplot</code>:</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ksplot</span>(logit_roc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>logit_ks <span class="ot">&lt;-</span> <span class="fu">ksplot</span>(logit_roc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>logit_ks<span class="sc">$</span><span class="st">"KS Cutoff"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4229724</code></pre>
 </div>
 </div>
 </div>
 </div>
-<p>The two curves represent the CDFs of the distribution of 1’s and 0’s. The KS statistic, <span class="math inline">\(D\)</span> is the maximum distance between the two curves.</p>
-<section id="ks-statistic-or-youden" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="ks-statistic-or-youden"><span class="header-section-number">7.1</span> KS-Statistic or Youden?</h2>
+</div>
+</section>
+<section id="ks-statistic-or-youden" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="ks-statistic-or-youden"><span class="header-section-number">4.1.4</span> KS-Statistic or Youden?</h3>
 <p><span class="math inline">\(D\)</span> test statistic is used for model comparison. However, it is mathematically equivalent to Youden’s J statistic. The point at which we have the maximum <span class="math inline">\(D\)</span> statistic is the optimal cutoff.</p>
 </section>
 </section>
-<section id="precision-vs.-recall" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Precision vs.&nbsp;Recall</h1>
+<section id="precision-vs.-recall" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="precision-vs.-recall"><span class="header-section-number">4.2</span> Precision vs.&nbsp;Recall</h2>
 <p>In a precision-recall perspective, our focus is on the 1’s.</p>
 <p><strong>Recall</strong> is the same as sensitivity:</p>
 <p><span class="math display">\[
@@ -610,8 +639,9 @@ TPR = \frac{TP}{TP + FN}
 <p><span class="math display">\[
 PPV = \frac{TP}{TP + FP}
 \]</span></p>
-<section id="best-cut-off" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="best-cut-off"><span class="header-section-number">8.1</span> Best Cut-off?</h2>
+</section>
+<section id="best-cut-off" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="best-cut-off"><span class="header-section-number">4.3</span> Best Cut-off?</h2>
 <p>Always consider the cost of false positives and false negatives when doing classification.</p>
 <p>When not considering costs, many different techniques to “optimize” cutoff.</p>
 <p><span class="math display">\[
@@ -625,13 +655,13 @@ F_1 = 2\left(\frac{PPV \cdot TPR}{PPV + TPR}\right)
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>logit_meas <span class="ot">&lt;-</span> <span class="fu">measureit</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus, <span class="at">measure =</span> <span class="fu">c</span>(<span class="st">"PREC"</span>, <span class="st">"REC"</span>, <span class="st">"FSCR"</span>))</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>fscore_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Cutoff =</span> logit_meas<span class="sc">$</span>Cutoff, <span class="at">FScore =</span> logit_meas<span class="sc">$</span>FSCR)</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>fscore_table <span class="sc">%&gt;%</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(FScore)) <span class="sc">%&gt;%</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>logit_meas <span class="ot">&lt;-</span> <span class="fu">measureit</span>(train<span class="sc">$</span>p_hat, train<span class="sc">$</span>Bonus, <span class="at">measure =</span> <span class="fu">c</span>(<span class="st">"PREC"</span>, <span class="st">"REC"</span>, <span class="st">"FSCR"</span>))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>fscore_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Cutoff =</span> logit_meas<span class="sc">$</span>Cutoff, <span class="at">FScore =</span> logit_meas<span class="sc">$</span>FSCR)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>fscore_table <span class="sc">%&gt;%</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(FScore)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Cutoff    FScore
@@ -645,8 +675,8 @@ F_1 = 2\left(\frac{PPV \cdot TPR}{PPV + TPR}\right)
 </div>
 </div>
 </section>
-<section id="precision-and-lift" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="precision-and-lift"><span class="header-section-number">8.2</span> Precision and Lift</h2>
+<section id="precision-and-lift" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="precision-and-lift"><span class="header-section-number">4.4</span> Precision and Lift</h2>
 <p>Common calculation in marketing. Great for interpretation around validity of model ranking / classifying observations correctly.</p>
 <p><span class="math display">\[
 \text{Lift} = \frac{PPV}{\pi_1}
@@ -662,8 +692,8 @@ F_1 = 2\left(\frac{PPV \cdot TPR}{PPV + TPR}\right)
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>logit_lift <span class="ot">&lt;-</span> <span class="fu">gainstable</span>(logit_roc)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>logit_lift</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>logit_lift <span class="ot">&lt;-</span> <span class="fu">gainstable</span>(logit_roc)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>logit_lift</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Bucket Obs CObs Depth Resp CResp RespRate CRespRate CCapRate  Lift CLift
@@ -679,12 +709,35 @@ F_1 = 2\left(\frac{PPV \cdot TPR}{PPV + TPR}\right)
 10     10 205 2051   1.0    0   840    0.000     0.410    1.000 0.000 1.000</code></pre>
 </div>
 </div>
+<p>Bucket 1 contains the top 10% of homes in terms of probability of being bonus eligible. Bucket 10 contains the 10% of homes with the lowest probabilities. The lift amount in the first row represents how much higher our model is able to predict bonus eligible homes than if you were to randomly select from 10% of the population. Response rate (RespRate) is the proportion of responses the model was able to correctly predict.</p>
+<p>Cumulative lift (CLift) on the second row is saying our model is able to predict bonus eligible homes at a 2.32 higher rate than if you were to randomly select from 20% of the population.</p>
+<p>CCapRate refers to how many 1’s we captured within the top <span class="math inline">\(k\%\)</span> of the data. For example, bucket 1 captured 24% of the 1’s in the data.</p>
 </div>
 </div>
 </div>
-
-
 </section>
+<section id="accuracy-and-error" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="accuracy-and-error"><span class="header-section-number">4.5</span> Accuracy and Error</h2>
+<p>Be careful selecting models based on accuracy and error. If your data has 10% events and 90% non-events then you can have a 90% accurate model by guessing non-events for every observation.</p>
+<section id="accuracy" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="accuracy"><span class="header-section-number">4.5.1</span> Accuracy</h3>
+<p><span class="math display">\[
+\text{Acc} = \frac{TP + TN}{TP + FP + TN + FN}
+\]</span></p>
+</section>
+<section id="error" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="error"><span class="header-section-number">4.5.2</span> Error</h3>
+<p><span class="math display">\[
+\text{Error} = \frac{FP + FN}{n}
+\]</span></p>
+</section>
+</section>
+</section>
+<section id="closing-thoughts-on-classification" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Closing Thoughts On Classification</h1>
+<p>Classification is a decision that is outside of statistical modeling. Classification assumes cost for each individual is the same. Useful for groups, but be careful about single observation decisions.</p>
+
+
 </section>
 
 </main> <!-- /main -->

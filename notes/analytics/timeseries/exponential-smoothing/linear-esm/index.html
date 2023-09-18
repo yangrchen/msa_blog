@@ -96,9 +96,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -149,6 +146,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div class="quarto-title column-body">
       <h1 class="title">Linear Trend for Exponential Smoothing</h1>
                                 <div class="quarto-categories">
+                <div class="quarto-category">analytics</div>
                 <div class="quarto-category">time series</div>
               </div>
                   </div>
@@ -171,6 +169,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </div>
     </div>
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">September 17, 2023</p>
+      </div>
+    </div>
       
     </div>
     
@@ -183,18 +187,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#linear-trend-for-exponential-smoothing" id="toc-linear-trend-for-exponential-smoothing" class="nav-link active" data-scroll-target="#linear-trend-for-exponential-smoothing"><span class="header-section-number">1</span> Linear Trend for Exponential Smoothing</a>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#linear-trend-for-exponential-smoothing" id="toc-linear-trend-for-exponential-smoothing" class="nav-link" data-scroll-target="#linear-trend-for-exponential-smoothing"><span class="header-section-number">1</span> Linear Trend for Exponential Smoothing</a>
   <ul class="collapse">
-  <li><a href="#damped-trend-exponential-smoothing" id="toc-damped-trend-exponential-smoothing" class="nav-link" data-scroll-target="#damped-trend-exponential-smoothing"><span class="header-section-number">1.1</span> Damped Trend Exponential Smoothing</a></li>
+  <li><a href="#linearholt-exponential-smoothing" id="toc-linearholt-exponential-smoothing" class="nav-link" data-scroll-target="#linearholt-exponential-smoothing"><span class="header-section-number">1.1</span> Linear/Holt Exponential Smoothing</a></li>
+  <li><a href="#damped-trend-exponential-smoothing" id="toc-damped-trend-exponential-smoothing" class="nav-link" data-scroll-target="#damped-trend-exponential-smoothing"><span class="header-section-number">1.2</span> Damped Trend Exponential Smoothing</a></li>
   </ul></li>
   <li><a href="#seasonal-exponential-smoothing" id="toc-seasonal-exponential-smoothing" class="nav-link" data-scroll-target="#seasonal-exponential-smoothing"><span class="header-section-number">2</span> Seasonal Exponential Smoothing</a>
   <ul class="collapse">
-  <li><a href="#additive-model" id="toc-additive-model" class="nav-link" data-scroll-target="#additive-model"><span class="header-section-number">2.1</span> Additive Model</a></li>
-  <li><a href="#multiplicative-model" id="toc-multiplicative-model" class="nav-link" data-scroll-target="#multiplicative-model"><span class="header-section-number">2.2</span> Multiplicative Model</a></li>
+  <li><a href="#holt-winters-additive" id="toc-holt-winters-additive" class="nav-link" data-scroll-target="#holt-winters-additive"><span class="header-section-number">2.1</span> Holt-Winters Additive</a></li>
+  <li><a href="#holt-winters-multiplicative" id="toc-holt-winters-multiplicative" class="nav-link" data-scroll-target="#holt-winters-multiplicative"><span class="header-section-number">2.2</span> Holt-Winters Multiplicative</a></li>
   </ul></li>
   <li><a href="#evaluating-forecasts" id="toc-evaluating-forecasts" class="nav-link" data-scroll-target="#evaluating-forecasts"><span class="header-section-number">3</span> Evaluating Forecasts</a>
   <ul class="collapse">
-  <li><a href="#judment-forecasting" id="toc-judment-forecasting" class="nav-link" data-scroll-target="#judment-forecasting"><span class="header-section-number">3.1</span> Judment Forecasting</a></li>
+  <li><a href="#judgment-forecasting" id="toc-judgment-forecasting" class="nav-link" data-scroll-target="#judgment-forecasting"><span class="header-section-number">3.1</span> Judgment Forecasting</a></li>
   <li><a href="#accuracy-vs.-goodness-of-fit" id="toc-accuracy-vs.-goodness-of-fit" class="nav-link" data-scroll-target="#accuracy-vs.-goodness-of-fit"><span class="header-section-number">3.2</span> Accuracy vs.&nbsp;Goodness-of-Fit</a></li>
   </ul></li>
   <li><a href="#hold-out-sample" id="toc-hold-out-sample" class="nav-link" data-scroll-target="#hold-out-sample"><span class="header-section-number">4</span> Hold Out Sample</a></li>
@@ -216,14 +222,64 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<section id="setup" class="level1 unnumbered">
+<h1 class="unnumbered">Setup</h1>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(aTSA)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="st">"msa"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>steel <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/steel.csv"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>us_airlines <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>steel_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(steel<span class="sc">$</span>steelshp, <span class="at">start =</span> <span class="dv">1984</span>, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>usair_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(us_airlines<span class="sc">$</span>Passengers, <span class="at">start =</span> <span class="dv">1990</span>, <span class="at">frequency =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.api <span class="im">import</span> Holt</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>steel <span class="op">=</span> r.steel</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.date_range(<span class="st">"1/1/1984"</span>, <span class="st">"12/1/1991"</span>, freq<span class="op">=</span><span class="st">"MS"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>steel.set_index(pd.to_datetime(df), inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>us_airlines <span class="op">=</span> r.us_airlines</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.date_range(start<span class="op">=</span><span class="st">'1/1/1990'</span>, end<span class="op">=</span><span class="st">'3/1/2008'</span>, freq<span class="op">=</span><span class="st">'MS'</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>us_airlines.set_index(pd.to_datetime(df), inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section id="linear-trend-for-exponential-smoothing" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Linear Trend for Exponential Smoothing</h1>
-<p>Single Exponential Smoothing can’t adequately handle data that is trending up or down.</p>
+<p>Single Exponential Smoothing models can’t adequately handle data that is trending up or down.</p>
 <p>Multiple ways to incorporate a trend in the ESM:</p>
 <ul>
 <li>Linear / Holt Exponential Smoothing</li>
 <li>Damped Trend Exponential Smoothing</li>
 </ul>
+<section id="linearholt-exponential-smoothing" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="linearholt-exponential-smoothing"><span class="header-section-number">1.1</span> Linear/Holt Exponential Smoothing</h2>
+<p>A linear ESM can only handle linear trends. Any trend that is more complicated (e.g.&nbsp;quadratic) cannot be captured effectively.</p>
 <p><span class="math display">\[
 \begin{align*}
 \hat{Y}_{t + h} &amp;= L_t + hT_t \\
@@ -231,38 +287,167 @@ L_t &amp;= \theta Y_t + (1 - \theta)(L_{t - 1} + T_{t - 1}) \\
 T_t &amp;= \gamma(L_t - L_{t - 1}) + (1 - \gamma)T_{t - 1}
 \end{align*}
 \]</span></p>
-<p>Adding a component means we add a new smoothing parameter, <span class="math inline">\(\gamma\)</span>. This second component incorporates trending into the model. <span class="math inline">\(h\)</span> is the amount of time we are forecasting ahead.</p>
-<section id="damped-trend-exponential-smoothing" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="damped-trend-exponential-smoothing"><span class="header-section-number">1.1</span> Damped Trend Exponential Smoothing</h2>
+<ul>
+<li><span class="math inline">\(h\)</span> is how many time points ahead. Controls how far along the trend we are.</li>
+<li><span class="math inline">\(L_t\)</span>, our level component, contains the previous level information plus the previous trend information</li>
+</ul>
+<p>Adding a component means we add a new smoothing parameter, <span class="math inline">\(\gamma\)</span>. <span class="math inline">\(\gamma\)</span> controls how much emphasis we put on either the most recent trend or the average historical trend. Essentially, each component (level and trend) is doing the exact same thing.</p>
+</section>
+<section id="damped-trend-exponential-smoothing" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="damped-trend-exponential-smoothing"><span class="header-section-number">1.2</span> Damped Trend Exponential Smoothing</h2>
+<p>We might believe our trend tapers off eventually. We can <em>dampen</em> our trend using the <strong>damped trend exponential smoothing model</strong>.</p>
 <p>We have a new dampening parameter incorporated into our model, <span class="math inline">\(\phi\)</span>.</p>
 <p><span class="math display">\[
-\hat{Y}_{t+h} = L_t + \sum_{i=1}^{h} \phi^i T_t
+\begin{align*}
+\hat{Y}_{t+h} &amp;= L_t + \sum_{i=1}^{h} \phi^i T_t \\
+L_t &amp;= \theta Y_t + (1 - \theta)(L_{t-1} + \phi T_{t-1}) \\
+T_t &amp;= \gamma(L_t - L_{t-1}) + (1 - \gamma)\phi T_{t-1}
+\end{align*}
 \]</span></p>
 <ul>
 <li><span class="math inline">\(0 &lt; \phi &lt; 1\)</span></li>
 </ul>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="cell" data-execution_count="1">
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p>For regular Holt, we use <code>holt</code>:</p>
+<div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.api <span class="im">import</span> Holt</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>steel <span class="op">=</span> pd.read_csv(</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/steel.csv"</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.date_range(<span class="st">"1/1/1984"</span>, <span class="st">"12/1/1991"</span>, freq<span class="op">=</span><span class="st">"MS"</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>steel.set_index(pd.to_datetime(df), inplace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> Holt(steel[<span class="st">"steelshp"</span>]).fit()</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>fit.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>les_steel <span class="ot">&lt;-</span> <span class="fu">holt</span>(steel_ts, <span class="at">initial =</span> <span class="st">"optimal"</span>, <span class="at">h =</span> <span class="dv">24</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(les_steel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Forecast method: Holt's method
+
+Model Information:
+Holt's method 
+
+Call:
+ holt(y = steel_ts, h = 24, initial = "optimal") 
+
+  Smoothing parameters:
+    alpha = 0.4329 
+    beta  = 1e-04 
+
+  Initial states:
+    l = 6678.9989 
+    b = -0.0651 
+
+  sigma:  471.4322
+
+     AIC     AICc      BIC 
+1626.001 1626.667 1638.822 
+
+Error measures:
+                    ME     RMSE      MAE        MPE     MAPE      MASE
+Training set -4.167318 461.5062 369.9177 -0.4760441 5.818476 0.8423858
+                    ACF1
+Training set -0.03556298
+
+Forecasts:
+         Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+Jan 1992       6495.463 5891.298 7099.627 5571.472 7419.453
+Feb 1992       6495.357 5836.979 7153.736 5488.455 7502.260
+Mar 1992       6495.252 5786.775 7203.730 5411.729 7578.775
+Apr 1992       6495.147 5739.865 7250.429 5340.043 7650.251
+May 1992       6495.042 5695.672 7294.412 5272.511 7717.573
+Jun 1992       6494.937 5653.768 7336.106 5208.479 7781.395
+Jul 1992       6494.832 5613.826 7375.838 5147.450 7842.214
+Aug 1992       6494.727 5575.592 7413.861 5089.032 7900.421
+Sep 1992       6494.622 5538.862 7450.381 5032.914 7956.330
+Oct 1992       6494.516 5503.468 7485.565 4978.839 8010.194
+Nov 1992       6494.411 5469.273 7519.549 4926.598 8062.225
+Dec 1992       6494.306 5436.161 7552.452 4876.013 8112.600
+Jan 1993       6494.201 5404.033 7584.369 4826.933 8161.470
+Feb 1993       6494.096 5372.805 7615.387 4779.229 8208.963
+Mar 1993       6493.991 5342.404 7645.578 4732.791 8255.191
+Apr 1993       6493.886 5312.767 7675.005 4687.520 8300.252
+May 1993       6493.781 5283.837 7703.725 4643.331 8344.230
+Jun 1993       6493.675 5255.565 7731.786 4600.149 8387.202
+Jul 1993       6493.570 5227.907 7759.234 4557.905 8429.235
+Aug 1993       6493.465 5200.824 7786.106 4516.541 8470.389
+Sep 1993       6493.360 5174.281 7812.439 4476.003 8510.718
+Oct 1993       6493.255 5148.246 7838.264 4436.241 8550.269
+Nov 1993       6493.150 5122.689 7863.611 4397.211 8589.089
+Dec 1993       6493.045 5097.585 7888.504 4358.874 8627.216</code></pre>
+</div>
+</div>
+<p>We can also do a damped trend by setting <code>damped = TRUE</code>:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ldes_steel <span class="ot">&lt;-</span> <span class="fu">holt</span>(steel_ts, <span class="at">initial =</span> <span class="st">"optimal"</span>, <span class="at">h =</span> <span class="dv">24</span>, <span class="at">damped =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ldes_steel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Forecast method: Damped Holt's method
+
+Model Information:
+Damped Holt's method 
+
+Call:
+ holt(y = steel_ts, h = 24, damped = TRUE, initial = "optimal") 
+
+  Smoothing parameters:
+    alpha = 0.4202 
+    beta  = 1e-04 
+    phi   = 0.9083 
+
+  Initial states:
+    l = 6692.5352 
+    b = -54.4181 
+
+  sigma:  472.702
+
+     AIC     AICc      BIC 
+1627.468 1628.412 1642.854 
+
+Error measures:
+                   ME     RMSE     MAE        MPE     MAPE     MASE        ACF1
+Training set 8.669068 460.2275 367.178 -0.2689588 5.765085 0.836147 -0.02936686
+
+Forecasts:
+         Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+Jan 1992       6504.538 5898.746 7110.330 5578.059 7431.017
+Feb 1992       6504.482 5847.350 7161.614 5499.485 7509.479
+Mar 1992       6504.432 5799.671 7209.192 5426.594 7582.269
+Apr 1992       6504.386 5755.003 7253.768 5358.304 7650.467
+May 1992       6504.344 5712.838 7295.850 5293.839 7714.849
+Jun 1992       6504.306 5672.796 7335.817 5232.621 7775.992
+Jul 1992       6504.272 5634.585 7373.958 5174.201 7834.342
+Aug 1992       6504.241 5597.976 7410.505 5118.229 7890.252
+Sep 1992       6504.212 5562.783 7445.642 5064.420 7944.005
+Oct 1992       6504.187 5528.852 7479.521 5012.541 7995.832
+Nov 1992       6504.163 5496.057 7512.269 4962.398 8045.928
+Dec 1992       6504.142 5464.292 7543.992 4913.829 8094.455
+Jan 1993       6504.123 5433.465 7574.780 4866.693 8141.552
+Feb 1993       6504.105 5403.498 7604.712 4820.871 8187.339
+Mar 1993       6504.089 5374.322 7633.856 4776.260 8231.919
+Apr 1993       6504.075 5345.879 7662.271 4732.767 8275.383
+May 1993       6504.062 5318.115 7690.008 4690.313 8317.810
+Jun 1993       6504.050 5290.985 7717.114 4648.827 8359.272
+Jul 1993       6504.039 5264.447 7743.631 4608.247 8399.831
+Aug 1993       6504.029 5238.464 7769.594 4568.514 8439.544
+Sep 1993       6504.020 5213.002 7795.038 4529.578 8478.462
+Oct 1993       6504.012 5188.032 7819.992 4491.394 8516.630
+Nov 1993       6504.005 5163.526 7844.483 4453.919 8554.090
+Dec 1993       6503.998 5139.459 7868.537 4417.116 8590.880</code></pre>
+</div>
+</div>
+<p>Keep in mind that in both of these outputs, the parameter weights are not telling us whether we have a trend. All they are telling us how much weight is being put on the most recent information vs.&nbsp;how much is put on the average model.</p>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> Holt(steel[<span class="st">"steelshp"</span>]).fit()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fit.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
 <table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Holt Model Results</caption>
 <tbody>
@@ -300,13 +485,13 @@ T_t &amp;= \gamma(L_t - L_{t - 1}) + (1 - \gamma)T_{t - 1}
 <td data-quarto-table-cell-role="th">Seasonal Periods:</td>
 <td>None</td>
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Thu, 07 Sep 2023</td>
+<td>Sun, 17 Sep 2023</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Box-Cox:</td>
 <td>False</td>
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>11:01:41</td>
+<td>22:40:36</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Box-Cox Coeff.:</td>
@@ -352,12 +537,12 @@ T_t &amp;= \gamma(L_t - L_{t - 1}) + (1 - \gamma)T_{t - 1}
 </table>
 </div>
 </div>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fit.forecast(<span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fit.forecast(<span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-stdout">
 <pre><code>1992-01-01    6394.260299
 1992-02-01    6375.055005
 1992-03-01    6355.849712
@@ -386,13 +571,13 @@ Freq: MS, dtype: float64</code></pre>
 </div>
 </div>
 <p>We can run a damped trend using the <code>damped_trend</code> parameter:</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> Holt(steel[<span class="st">"steelshp"</span>], damped_trend<span class="op">=</span><span class="va">True</span>).fit()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fit.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> Holt(steel[<span class="st">"steelshp"</span>], damped_trend<span class="op">=</span><span class="va">True</span>).fit()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>fit.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output-display">
 <table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Holt Model Results</caption>
 <tbody>
@@ -430,13 +615,13 @@ Freq: MS, dtype: float64</code></pre>
 <td data-quarto-table-cell-role="th">Seasonal Periods:</td>
 <td>None</td>
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Thu, 07 Sep 2023</td>
+<td>Sun, 17 Sep 2023</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Box-Cox:</td>
 <td>False</td>
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>11:01:41</td>
+<td>22:40:36</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Box-Cox Coeff.:</td>
@@ -497,64 +682,382 @@ Freq: MS, dtype: float64</code></pre>
 <h1 data-number="2"><span class="header-section-number">2</span> Seasonal Exponential Smoothing</h1>
 <p>ESMs can also be adapted to account for seasonal factors. Seasonal models can be additive or multiplicative in the seasonal effect.</p>
 <ul>
-<li>Holt Winters Additive Exponential Smoothing</li>
-<li>Holt Winters Multiplicative Exponential Smoothing</li>
+<li>Holt-Winters Additive Exponential Smoothing</li>
+<li>Holt-Winters Multiplicative Exponential Smoothing</li>
 </ul>
-<section id="additive-model" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="additive-model"><span class="header-section-number">2.1</span> Additive Model</h2>
+<section id="holt-winters-additive" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="holt-winters-additive"><span class="header-section-number">2.1</span> Holt-Winters Additive</h2>
 <p><span class="math display">\[
 \begin{align*}
 \hat{Y}_{t+h} &amp;= L_t + hT_t + S_{t-p+h} \\
 L_t &amp;= \theta(Y_t - S_{t-p}) + (1 - \theta)(L_{t-1} + T_{t-1}) \\
 T_t &amp;= \gamma(L_t - L_{t-1}) + (1 - \gamma)T_{t-1} \\
-S_t = \delta(Y_t - L_{t-1} - T_{t-1}) + (1 - \delta)(S_{t-p})
+S_t &amp;= \delta(Y_t - L_{t-1} - T_{t-1}) + (1 - \delta)(S_{t-p})
 \end{align*}
 \]</span></p>
 <ul>
 <li><span class="math inline">\(p\)</span> is the length of the season</li>
 </ul>
-</section>
-<section id="multiplicative-model" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="multiplicative-model"><span class="header-section-number">2.2</span> Multiplicative Model</h2>
-<p><span class="math display">\[
-\hat{Y}_{t+h} = (L_t + hT_t)S_{t-p+h}
-\]</span></p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="cell" data-execution_count="4">
+<p><span class="math inline">\(S_{t-p}\)</span> represents the historical seasonal information. Even after adding a third component, all these components are doing the same thing: <strong>we are adding the weighted naive model plus the weighted historical average for the component</strong>.</p>
+<p>When we talk about the weights for the seasonal piece, the weights stay the same until we move to the next season.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.api <span class="im">import</span> ExponentialSmoothing</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>usair_p <span class="op">=</span> pd.read_csv(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv"</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.date_range(start<span class="op">=</span><span class="st">'1/1/1990'</span>, end<span class="op">=</span><span class="st">'3/1/2008'</span>, freq<span class="op">=</span><span class="st">'MS'</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>usair_p.set_index(pd.to_datetime(df), inplace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>usair_p[<span class="st">'HWES_ADD'</span>] <span class="op">=</span> ExponentialSmoothing(usair_p[<span class="st">'Passengers'</span>], trend<span class="op">=</span><span class="st">'add'</span>, seasonal<span class="op">=</span><span class="st">'add'</span>, seasonal_periods<span class="op">=</span><span class="dv">12</span>).fit().fittedvalues</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>hw_add <span class="op">=</span> ExponentialSmoothing(usair_p[<span class="st">'Passengers'</span>], trend<span class="op">=</span><span class="st">'add'</span>, seasonal<span class="op">=</span><span class="st">'add'</span>, seasonal_periods<span class="op">=</span><span class="dv">12</span>).fit()</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>hw_add.summary()</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>hw_mult <span class="op">=</span> ExponentialSmoothing(usair_p[<span class="st">'Passengers'</span>], trend<span class="op">=</span><span class="st">'add'</span>, seasonal<span class="op">=</span><span class="st">'mul'</span>, seasonal_periods<span class="op">=</span><span class="dv">12</span>).fit()</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>hw_mult.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>hwes_usair <span class="ot">&lt;-</span> <span class="fu">hw</span>(usair_ts, <span class="at">seasonal =</span> <span class="st">"additive"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(hwes_usair)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>/opt/homebrew/Caskroom/miniconda/base/envs/msa/lib/python3.11/site-packages/statsmodels/tsa/holtwinters/model.py:917: ConvergenceWarning:
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Forecast method: Holt-Winters' additive method
 
-Optimization failed to converge. Check mle_retvals.
+Model Information:
+Holt-Winters' additive method 
 
-/opt/homebrew/Caskroom/miniconda/base/envs/msa/lib/python3.11/site-packages/statsmodels/tsa/holtwinters/model.py:917: ConvergenceWarning:
+Call:
+ hw(y = usair_ts, seasonal = "additive") 
 
-Optimization failed to converge. Check mle_retvals.
+  Smoothing parameters:
+    alpha = 0.5967 
+    beta  = 1e-04 
+    gamma = 1e-04 
 
-/opt/homebrew/Caskroom/miniconda/base/envs/msa/lib/python3.11/site-packages/statsmodels/tsa/holtwinters/model.py:917: ConvergenceWarning:
+  Initial states:
+    l = 38384.1383 
+    b = 171.3139 
+    s = -1607.408 -2735.133 -266.9438 -4488.589 6259.346 6626.648
+           4166.006 1369.769 250.523 2806.828 -6741.171 -5639.874
 
-Optimization failed to converge. Check mle_retvals.
-</code></pre>
+  sigma:  1949.79
+
+     AIC     AICc      BIC 
+4515.651 4518.696 4573.265 
+
+Error measures:
+                    ME     RMSE      MAE        MPE     MAPE      MASE
+Training set -84.80235 1877.214 1168.093 -0.2917412 2.495749 0.4389788
+                   ACF1
+Training set 0.06636172
+
+Forecasts:
+         Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+Apr 2008       65005.38 62506.62 67504.13 61183.86 68826.90
+May 2008       66294.00 63384.09 69203.92 61843.67 70744.34
+Jun 2008       69259.75 65989.86 72529.64 64258.88 74260.62
+Jul 2008       71890.05 68295.96 75484.15 66393.36 77386.74
+Aug 2008       71692.11 67800.64 75583.59 65740.62 77643.61
+Sep 2008       61113.61 56945.83 65281.39 54739.54 67487.68
+Oct 2008       65504.72 61077.76 69931.67 58734.27 72275.16
+Nov 2008       63206.01 58534.16 67877.87 56061.02 70351.00
+Dec 2008       64502.98 59598.36 69407.60 57002.01 72003.95
+Jan 2009       60640.36 55513.46 65767.26 52799.44 68481.28
+Feb 2009       59708.43 54368.43 65048.44 51541.60 67875.27
+Mar 2009       69425.67 63880.68 74970.66 60945.34 77906.01
+Apr 2009       67038.85 61296.05 72781.64 58255.99 75821.70
+May 2009       68327.47 62393.46 74261.49 59252.18 77402.76
+Jun 2009       71293.22 65173.90 77412.54 61934.53 80651.91
+Jul 2009       73923.52 67624.29 80222.75 64289.67 83557.37
+Aug 2009       73725.58 67251.38 80199.79 63824.14 83627.03
+Sep 2009       63147.08 56502.45 69791.72 52984.99 73309.17
+Oct 2009       67538.18 60727.34 74349.03 57121.89 77954.48
+Nov 2009       65239.48 58266.32 72212.64 54574.96 75904.01
+Dec 2009       66536.45 59404.62 73668.27 55629.26 77443.63
+Jan 2010       62673.83 55386.73 69960.92 51529.18 73818.47
+Feb 2010       61741.90 54302.73 69181.07 50364.67 73119.13
+Mar 2010       71459.14 63870.89 79047.39 59853.92 83064.36</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.api <span class="im">import</span> ExponentialSmoothing</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>hw_add <span class="op">=</span> ExponentialSmoothing(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    us_airlines[<span class="st">"Passengers"</span>], trend<span class="op">=</span><span class="st">"add"</span>, seasonal<span class="op">=</span><span class="st">"add"</span>, seasonal_periods<span class="op">=</span><span class="dv">12</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>).fit()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>/opt/homebrew/Caskroom/miniconda/base/envs/msa/lib/python3.11/site-packages/statsmodels/tsa/holtwinters/model.py:917: ConvergenceWarning: Optimization failed to converge. Check mle_retvals.
+  warnings.warn(</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>hw_add.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>ExponentialSmoothing Model Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>Passengers</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>219</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>ExponentialSmoothing</td>
+<td data-quarto-table-cell-role="th">SSE</td>
+<td>818443222.270</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Optimized:</td>
+<td>True</td>
+<td data-quarto-table-cell-role="th">AIC</td>
+<td>3346.312</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Trend:</td>
+<td>Additive</td>
+<td data-quarto-table-cell-role="th">BIC</td>
+<td>3400.537</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Seasonal:</td>
+<td>Additive</td>
+<td data-quarto-table-cell-role="th">AICC</td>
+<td>3349.732</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Seasonal Periods:</td>
+<td>12</td>
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Sun, 17 Sep 2023</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Box-Cox:</td>
+<td>False</td>
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>22:40:36</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Box-Cox Coeff.:</td>
+<td>None</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coeff</td>
+<td data-quarto-table-cell-role="th">code</td>
+<td data-quarto-table-cell-role="th">optimized</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">smoothing_level</td>
+<td>0.3939286</td>
+<td>alpha</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">smoothing_trend</td>
+<td>0.0218849</td>
+<td>beta</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">smoothing_seasonal</td>
+<td>0.3305844</td>
+<td>gamma</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">initial_level</td>
+<td>38232.794</td>
+<td>l.0</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">initial_trend</td>
+<td>-95.864899</td>
+<td>b.0</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">initial_seasons.0</td>
+<td>-4632.4028</td>
+<td>s.0</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">initial_seasons.1</td>
+<td>-6032.6319</td>
+<td>s.1</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">initial_seasons.2</td>
+<td>494.52431</td>
+<td>s.2</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">initial_seasons.3</td>
+<td>-873.71528</td>
+<td>s.3</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">initial_seasons.4</td>
+<td>368.01389</td>
+<td>s.4</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">initial_seasons.5</td>
+<td>3047.9618</td>
+<td>s.5</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">initial_seasons.6</td>
+<td>5402.8993</td>
+<td>s.6</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">initial_seasons.7</td>
+<td>7100.5243</td>
+<td>s.7</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">initial_seasons.8</td>
+<td>-1505.9653</td>
+<td>s.8</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">initial_seasons.9</td>
+<td>325.04514</td>
+<td>s.9</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">initial_seasons.10</td>
+<td>-2405.4861</td>
+<td>s.10</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">initial_seasons.11</td>
+<td>-1288.7674</td>
+<td>s.11</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="holt-winters-multiplicative" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="holt-winters-multiplicative"><span class="header-section-number">2.2</span> Holt-Winters Multiplicative</h2>
+<p><span class="math display">\[
+\begin{align*}
+\hat{Y}_{t+h} &amp;= (L_t + hT_t)S_{t-p+h} \\
+L_t &amp;= \theta(Y_t/S_{t-p}) + (1 - \theta)(L_{t-1} + T_{t-1}) \\
+T_t &amp;= \gamma(L_t - L_{t-1}) + (1 - \gamma)T_{t-1} \\
+S_t &amp;= \delta(Y_t/(L_{t-1} + T_{t-1})) + (1 - \delta)S_{t-p}
+\end{align*}
+\]</span></p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>hwes_usair <span class="ot">&lt;-</span> <span class="fu">hw</span>(usair_ts, <span class="at">seasonal =</span> <span class="st">"multiplicative"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(hwes_usair)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Forecast method: Holt-Winters' multiplicative method
+
+Model Information:
+Holt-Winters' multiplicative method 
+
+Call:
+ hw(y = usair_ts, seasonal = "multiplicative") 
+
+  Smoothing parameters:
+    alpha = 0.4372 
+    beta  = 1e-04 
+    gamma = 0.2075 
+
+  Initial states:
+    l = 38293.1221 
+    b = 173.9926 
+    s = 0.9658 0.962 1.0064 0.9745 1.1393 1.0801
+           1.0368 0.9994 1.0012 1.0401 0.8799 0.9146
+
+  sigma:  0.0381
+
+     AIC     AICc      BIC 
+4504.228 4507.272 4561.842 
+
+Error measures:
+                    ME     RMSE      MAE       MPE     MAPE      MASE      ACF1
+Training set -113.1889 1848.797 1090.105 -0.383246 2.303162 0.4096702 0.1713934
+
+Forecasts:
+         Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+Apr 2008       65528.49 62329.64 68727.34 60636.28 70420.70
+May 2008       66821.29 63262.13 70380.46 61378.02 72264.57
+Jun 2008       70075.52 66056.65 74094.40 63929.19 76221.86
+Jul 2008       73144.30 68671.62 77616.98 66303.93 79984.68
+Aug 2008       71313.29 66698.66 75927.92 64255.83 78370.76
+Sep 2008       58655.19 54662.55 62647.83 52548.97 64761.40
+Oct 2008       64544.10 59944.79 69143.41 57510.06 71578.13
+Nov 2008       62554.65 57906.98 67202.32 55446.66 69662.65
+Dec 2008       63629.25 58716.73 68541.77 56116.20 71142.30
+Jan 2009       59379.95 54629.79 64130.10 52115.21 66644.68
+Feb 2009       57852.76 53069.42 62636.10 50537.28 65168.25
+Mar 2009       70682.78 64655.56 76710.00 61464.94 79900.62
+Apr 2009       67606.25 61473.18 73739.32 58226.52 76985.97
+May 2009       68934.51 62519.04 75349.97 59122.89 78746.12
+Jun 2009       72285.87 65393.58 79178.16 61745.02 82826.72
+Jul 2009       75445.45 68084.46 82806.44 64187.79 86703.11
+Aug 2009       73551.02 66215.90 80886.14 62332.92 84769.12
+Sep 2009       60490.96 54330.83 66651.08 51069.86 69912.06
+Oct 2009       66558.97 59644.04 73473.89 55983.50 77134.43
+Nov 2009       64502.39 57671.58 71333.21 54055.56 74949.22
+Dec 2009       65605.36 58528.93 72681.80 54782.90 76427.83
+Jan 2010       61219.37 54498.44 67940.31 50940.59 71498.16
+Feb 2010       59640.30 52980.57 66300.04 49455.12 69825.49
+Mar 2010       72861.19 64590.90 81131.47 60212.88 85509.49</code></pre>
+</div>
+</div>
+<p>Again these are just weights so this does not tell us if we have seasonality or not. We only see how our model is weighting recent information and historical average information.</p>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>hw_mult <span class="op">=</span> ExponentialSmoothing(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    us_airlines[<span class="st">"Passengers"</span>], trend<span class="op">=</span><span class="st">"add"</span>, seasonal<span class="op">=</span><span class="st">"mul"</span>, seasonal_periods<span class="op">=</span><span class="dv">12</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>).fit()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>/opt/homebrew/Caskroom/miniconda/base/envs/msa/lib/python3.11/site-packages/statsmodels/tsa/holtwinters/model.py:917: ConvergenceWarning: Optimization failed to converge. Check mle_retvals.
+  warnings.warn(</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>hw_mult.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
 <table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>ExponentialSmoothing Model Results</caption>
 <tbody>
@@ -592,13 +1095,13 @@ Optimization failed to converge. Check mle_retvals.
 <td data-quarto-table-cell-role="th">Seasonal Periods:</td>
 <td>12</td>
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Thu, 07 Sep 2023</td>
+<td>Sun, 17 Sep 2023</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Box-Cox:</td>
 <td>False</td>
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>11:01:41</td>
+<td>22:40:37</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Box-Cox Coeff.:</td>
@@ -736,14 +1239,14 @@ Optimization failed to converge. Check mle_retvals.
 <li>Exhibit small forecast errors</li>
 <li>Capture the important features of the original time series</li>
 </ul>
-<section id="judment-forecasting" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="judment-forecasting"><span class="header-section-number">3.1</span> Judment Forecasting</h2>
+<section id="judgment-forecasting" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="judgment-forecasting"><span class="header-section-number">3.1</span> Judgment Forecasting</h2>
 <p>Forecasts are found using quantitative or modeling approaches. However, there are instances where models are not availabe and qualitative or judgment forecast is used. Occasionally, we merge the two together.</p>
 </section>
 <section id="accuracy-vs.-goodness-of-fit" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="accuracy-vs.-goodness-of-fit"><span class="header-section-number">3.2</span> Accuracy vs.&nbsp;Goodness-of-Fit</h2>
 <p>Goodness-of-fit is calculated on the same sample used to build the model.</p>
-<p>A diagnostic statistic calculated using a hold out sample taht was not used in model building is an <strong>accuracy</strong> statistic.</p>
+<p>A diagnostic statistic calculated using a hold out sample that was not used in model building is an <strong>accuracy</strong> statistic.</p>
 </section>
 </section>
 <section id="hold-out-sample" class="level1" data-number="4">
@@ -817,7 +1320,58 @@ Optimization failed to converge. Check mle_retvals.
 <li>Trend has choices of None, Additive, or Multiplicative (can also have a damped trend)</li>
 <li>Seasonal has choices of None, Additive, or Multiplicative</li>
 </ul>
-<p>You can choose which one you want or let the computer choose.</p>
+<p>You can choose which one you want or let the computer choose (specify “Z” for each feature, but by default it is automated).</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ets_usair <span class="ot">&lt;-</span> <span class="fu">ets</span>(usair_ts)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ets_usair)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>ETS(M,A,M) 
+
+Call:
+ ets(y = usair_ts) 
+
+  Smoothing parameters:
+    alpha = 0.475 
+    beta  = 1e-04 
+    gamma = 4e-04 
+
+  Initial states:
+    l = 38293.0747 
+    b = 139.4654 
+    s = 0.9673 0.9469 0.9968 0.921 1.1302 1.1314
+           1.0727 1.0189 1.0021 1.0556 0.8676 0.8897
+
+  sigma:  0.036
+
+     AIC     AICc      BIC 
+4479.269 4482.314 4536.884 
+
+Training set error measures:
+                    ME     RMSE      MAE        MPE     MAPE      MASE
+Training set -43.69617 1738.229 1036.209 -0.2029043 2.161854 0.3894156
+                  ACF1
+Training set 0.1747747</code></pre>
+</div>
+</div>
+<p>The summary tells us that the model selected is ETS(M, A, M) which means:</p>
+<ul>
+<li>Error is Multiplicative</li>
+<li>Trend is Additive</li>
+<li>Seasonality is Multiplicative</li>
+</ul>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+
+</div>
+</div>
+</div>
 
 
 </section>
