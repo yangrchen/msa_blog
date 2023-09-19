@@ -2,10 +2,13 @@
 title: Correlation Functions
 author: Yang Chen
 date: 09/06/2023
-date-modified: 09/14/2023
+date-modified: 09/17/2023
 ---
 
 # Setup {.unnumbered}
+
+:::{.panel-tabset group="language"}
+# R
 
 ```{r}
 #| warning: false
@@ -16,37 +19,49 @@ library(tidyverse)
 Y <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/ar2.csv")
 ```
 
+# Python
+
+:::
+
 When we have a *stationary* distribution we can now look at correlation. If we have a random walk, then we cannot look at the correlation.
 
 Time series is typically analyzed with an assumption that observations have a potential relationship across time. One example is weight over time.
 
 # Autocorrelation
 
-**Autocorrelation** is correlation between two sets of observations in the same series that are separated by $k$ points in time.
+**Autocorrelation** is correlation between two sets of observations in the same series that are separated by $k$ points in time. This correlation includes all correlations between time point $t$ and $t - k$
 
-An **autocorrelation function** is the function of all autocorrelations between two sets of observations $Y_t$ and $Y_{t-k}$ across time.
+An **autocorrelation function** is the function of all autocorrelations between two sets of observations $Y_t$ and $Y_{t-k}$ across time. 
 
 $$
 \rho_k = \text{Corr}(Y_t, Y_{t-k})
 $$
 
-![Autocorrelation Function](images/autocorrelation-table.png)
+![Autocorrelation Function](images/autocorrelation-table.png){#fig-acf-table}
 
 This uses lagged series of previous time periods to calculate the Pearson's correlation between the series. Missing values in lagged series are ignored in the calculation. ACF can suggest that there is seasonality based on the correlation structure.
 
 Suppose that the first autocorrelation, ACF(1) is significant. This implies that two consecutive time points are related to each other. For non-seasonal data, we tend to look up to 10 or 12 lags back. 
 
+![Autocorrelation Function Graph](images/autocorrelation-graph.png){#fig-acf-graph}
+
+What we can see in the plot is the ACF vs. the 
+
+For non-seasonal time series, we typically go back 10-12 lags. With seasonality, we have a pattern throughout time so we deal with seasonality differently.
+
 # Partial Autocorrelation Function
 
-**Partial correlation** is the correlation between two sets of observations, separated by $k$ points in time, after adjusting for all previous ($1, 2, \cdots, k-1$) autocorrelations. These are conditional correlations.
+**Partial correlation** is the correlation between two sets of observations, separated by $k$ points in time, after removing all previous ($1, 2, \cdots, k-1$) autocorrelations. Essentially, these are conditional correlations that are showing the direct influence of a previous lag on the current value. 
+
+This correlation does not include all the correlations between time point $t$ and $t-k$--we are only including direct effects.
 
 $$
 \phi_k = \text{Corr}(Y_t, Y_{t-k} | Y_{t-1}, Y_{t-2}, \cdots, Y_{t-k-1})
 $$
 
-![Partial Autocorrelation Function](images/partial-autocorrelation-table.png)
+![Partial Autocorrelation Function](images/partial-autocorrelation-table.png){#fig-pacf-table}
 
-The partial autocorrelation for the $k$th lag is calculated from the regression:
+The partial autocorrelation for the $k$th lag is calculated from fitting a regression. The regression conditions on the other lags in the model through the individual weights:
 
 $$
 Y_t = \beta_0 + \phi_1Y_{t-1} + \phi_2Y_{t-2} + \cdots + \phi_kY_{t-k} + \epsilon_t
@@ -70,9 +85,10 @@ index <- seq(1, length(pacf))
 all_dat <- data.frame(cbind(acf[2:11], pacf, index))
 colnames(all_dat) <- c("acf", "pacf", "index")
 
-ggplot(all_dat, aes(x = factor(index), y = acf)) +
-    geom_col() +
-    labs(x = "Lags")
+ggAcf(Y)
+ggPacf(Y)
 ```
+
+If we use `ggAcf` or `ggPacf`, then we get confidence intervals on the plot that give us a guidance for which lags have autocorrelations that are significantly different from 0.
 
 :::

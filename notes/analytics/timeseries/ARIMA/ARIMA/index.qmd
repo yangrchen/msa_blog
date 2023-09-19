@@ -1,6 +1,7 @@
 ---
 title: ARIMA Models
 date: 09/13/2023
+date-modified: 09/18/2023
 draft: true
 ---
 
@@ -202,7 +203,12 @@ ggAcf(model3$residuals)
 ggPacf(model3$residuals)
 ```
 
+We can have the `Arima` function not estimate terms that do not seem significant based off our correlation functions by providing a vector of `NA` or `0` to the `fixed` parameter.
+
 # Python
+
 :::
 
 # Forecasting
+
+Time series are focused on forecasting future values. When comparing models, we might prefer a model that does better on the validation data than on another metric like AIC. However, be careful about overfitting to the validation data. 
