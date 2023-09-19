@@ -1,7 +1,7 @@
 ---
 title: "ARIMA Models: AR and MA Models"
 date: 09/07/2023
-date-modified: 09/15/2023
+date-modified: 09/19/2023
 ---
 
 # Setup {.unnumbered}
@@ -26,7 +26,7 @@ x <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/MA2.
 
 Forecast a series based solely on the past values of $Y_t$. We are trying to model the lags of our Y terms.
 
-We are focusing on the most basic case where there is only one lag value of $Y_t$--the AR(1) model.
+We are focusing on the most basic case where there is only one lag value of $Y_t$--the AR(1) model. In daily data, today depends on yesterday, yesterday depends on the day before.
 
 $$
 \begin{align*}
@@ -36,20 +36,31 @@ Y_{t-2} &= \omega + \phi Y_{t-3} + e_{t-2}
 \end{align*}
 $$
 
-The $\omega$ in the AR model refers to the mean of the series whereas in the Random Walk equation the $\omega$ refers to drift. Whenever you are not taking a difference, the model will try to fit around the mean.
+The relationship goes back in time. The model assumes that the correlation structure exists throughout the whole series. 
+
+The $\omega$ in the AR model refers to the average of the series whereas in the Random Walk equation the $\omega$ refers to drift. Whenever you are not taking a difference, the model will try to fit around the mean.
+
+## Difference Between ESM and AR(1)
+
+ESMs are weighting the previous information with the average model. AR(1) only takes into account the previous value. AR(1) uses a restricted maximum likelihood estimator to estimate the weights. 
 
 ## Correlation Functions for AR(1)
 
 ACF decreases exponentially as the number of lags increases. However, the PACF has a significant spike at the first lag, followed by nothing after.
 
-![AR(1)-ACF](images/AR(1)-ACF.png)
+![AR(1)-ACF](images/AR(1)-ACF.png){#fig-ar1-acf}
 
-![AR(1)-PACF](images/AR(1)-PACF.png)
+![AR(1)-PACF](images/AR(1)-PACF.png){#fig-ar1-pacf}
 
-Overall, the effect of shocks last over a long period of time. However, the effect of shocks that happened long ago has little effect on the present IF the value for $|\phi| < 1$. Stationarity--the dependence of previous observations declines over time.
+$|\phi| < 1$ has to be true for stationarity. Overall, the effect of shocks last over a long period of time. However, the effect of shocks that happened long ago has little effect on the present IF the value for $|\phi| < 1$. Stationarity--the dependence of previous observations declines over time.
 
--   If $\phi = 1$, then we have a Random Walk and NOT AR model
+-   If $\phi = 1$, then we have a Random Walk and NOT an AR model
+    -   $Y_t = 1 \cdot Y_{t-1} + e_t$ which is the Random Walk equation
 -   If $\phi > 1$, then today depends on tomorrow which does not make sense
+
+If we have a random walk then our correlation graphs are useless in determining correlation structure. See @fig-rw-acf for an example of a Random Walk ACF.
+
+![Random Walk ACF](images/randomwalk-autocorrelation.png){#fig-rw-acf}
 
 ## AR(2) Model
 
@@ -59,7 +70,7 @@ $$
 Y_t = \omega + \phi_1Y_{t-1} + \phi_2Y_{t-2} + e_t
 $$
 
-AR(2) models have a pattern in PACF plots for when it comes to stationarity (2 spikes). The effect of shocks that happened long ago has little effect on the present if the value for $\left| \phi_1 + \phi_2 \right| < 1$
+AR(2) models have a pattern in PACF plots for when it comes to stationarity (2 spikes). The effect of shocks that happened long ago has little effect on the present if the value for $\left| \phi_1 + \phi_2 \right| < 1$. We have more restrictions on our $\phi$ weights.
 
 ## AR(p) Model
 
@@ -70,6 +81,8 @@ Y_t = \omega + \phi_1Y_{t-1} + \phi_2Y_{t-2} + \cdots + \phi_pY_{t-p} + e_t
 $$
 
 If the model is just an AR model, then the PACF has significant spikes at hte lags up to $p$ lags, followed by nothing after.
+
+There are more complicated restrictions on $\phi_i$'s. If your software warns you about convergence issues or warnings, then you have to try a different model.
 
 ::: {.panel-tabset group="language"}
 # R
@@ -82,11 +95,13 @@ ggAcf(Y_ARIMA$residuals)
 ggPacf(Y_ARIMA$residuals)
 ```
 
+Notice that we are doing the correlation functions on the **residuals**. If you have modeled the correlation structure, then you should only have small amounts of noise left. Residual analysis gives us an idea of whether we have more modeling to do: if large spikes in our residuals exist, then we have not modeled all the autocorrelation. 
+
 # Python
 
 :::
 
-The coefficients from the AR(2) model are not very interpretable. If you are reporting to a client you would just say that you fit an AR(2) model.
+The coefficients from AR models are **not very interpretable**. If you are reporting to a client you would just say that you fit an AR(p) model. Note that we can still overfit in ARMA models. We prefer parsimonious, simpler models over complicated models that capture every bit of autocorrelation.
 
 # Moving Average Models
 
@@ -106,7 +121,7 @@ In the MA model, we do not have the same restrictions as AR models (but do want 
 
 The ACF has a significant spike at the first lag, followed by nothing after.
 
-PACF decreases exponentially as the number of lags increases. For $q$ > 1, however, these patterns do not imply as the model becomes more complicated.
+PACF decreases exponentially as the number of lags increases. For $q$ > 1, however, these patterns do not apply as the model becomes more complicated.
 
 ## MA(q)
 
@@ -123,12 +138,16 @@ ACF has significant spikes at lags up to lag $q$, followed by nothing after.
 ::: {.panel-tabset group="language"}
 # R
 
-MA(2) Model
+We can plot the ACF and PACF for a simulated MA(2) model:
 
 ```{r}
 ggAcf(x)
 ggPacf(x)
 ```
+
+In a purely MA(2) model, we see the two spikes in the first two lags in the ACF plot.
+
+Note that in `ggplot` the plots have lag 0 truncated since it does not provide us any valuable information.
 
 ```{r}
 x_ts <- ts(x)
@@ -139,20 +158,31 @@ ggPacf(x_ARIMA$residuals)
 ```
 
 # Python
+
 :::
 
-Note that we can compare the AIC/BIC between AR, MA, or ARIMA models but we cannot compare them to the metrics given by ESM models.
+We don't have any large spikes in our residual plots so our model effectively captures the autocorrelation structure.
+
+Note that we can compare the AIC/BIC between AR, MA, or ARIMA models but we cannot compare them to the metrics given by ESM models as there may be different ways the metrics are being calculated across different algorithms.
 
 # AR and MA Model Notes
 
 -   Any AR(p) model can be rewritten as an MA($\infty$).
 -   If any MA(q) model is invertible, then this MA(q) model can be rewritten as an AR($\infty$).
--   Software should warn you if model is not invertible, if there is no convergence or any other issues... pay attention to the warnings you encounter.
+-   Software should warn you if model is not invertible, if there is no convergence, or any other issues. You should change your model if this is the case.
 -   Parameters can have different signs based on how it parameterizes equations.
+
+## PACF/ACF for Identifying Model Terms
+
+**PACF is useful for identifying the order of AR terms** in a time series model. PACF measures **the direct relationship** between the current value at time $t$ and a value at time $t - k$ without the influence of other lags. 
+
+However, **MA processes do not exhibit a direct relationship** between the current observations and its past values. MA processes involve linear combinations of error terms with coefficients applied to past error terms. This makes it difficult to assess the relationship using PACF because the influence of past values is not straightforward.
+
+Instead, we use **ACF to identify the order of MA terms**. If we see a signficant spike at lag $k$, then we may want to consider adding in $q = k$ terms to the MA portion of our model.
 
 # White Noise
 
-White noise is essentially the independent errors that we are left iwth after modeling the signal.
+White noise is essentially the independent errors that we are left with after modeling the signal.
 
 White noise time series have errors that have the following characteristics:
 
@@ -173,7 +203,7 @@ $H_0:$ Series has no autocorrelation.
 $H_a:$ One or more autocorrelations up to lag $m$ are not zero.
 :::
 
-Essentially, rejecting our null hypothesis means that more modeling should be done.
+Essentially, rejecting our null hypothesis means that more modeling should be done. When looking at nonseasonal data, we typically go back around 10 lags.
 
 $$
 \chi_m^2 = n(n + 2) \sum_{k=1}^{m} \frac{\beta_k^2}{n - k}
@@ -181,6 +211,8 @@ $$
 
 ::: {.panel-tabset group="language"}
 # R
+
+For `Box.test`, there is a parameter `fitdf` that you want to specify. The degrees of freedom change depending on what kind of vector we are trying to test. If `fitdf = 0` then we are specifying the test on the original time series data. If `fitdf = p + q` (where p is number of AR terms and q is number of MA terms) then we are specifying the test on the residuals of our fitted model.
 
 Looking at original data first: 
 
@@ -209,6 +241,9 @@ white_lb <- rep(NA, 10)
 for (i in 3:10) {
     white_lb[i] <- Box.test(Y_ARIMA$residuals, lag = i, type = "Ljung-Box", fitdf = 2)$p.value
 }
+
+# We index our lags at the p+q+1 lag.
+# For an AR(2), we index at 3
 white_dat <- data.frame(cbind(white_lb[3:10], index1[3:10]))
 colnames(white_dat) <- c("pvalues", "Lag")
 
@@ -217,7 +252,8 @@ ggplot(white_dat, aes(x = factor(Lag), y = pvalues)) +
     labs(title = "Ljung-Box test when this is white noise", x = "Lags", y = "p-values")
 ```
 
-Note that you have to start your tests on the next lag term. In this example we are using AR(2) so our tests start on lag 3. In general, the Ljung-Box autocorrelation terms are undefined up to $p + q$ terms.
+Note that you have to start your tests on the next lag term than the number of lags in your model. In this example we are using AR(2) so our tests start on lag 3. In general, the Ljung-Box autocorrelation terms are undefined up to $p + q$ terms.
 
 # Python
+
 :::
