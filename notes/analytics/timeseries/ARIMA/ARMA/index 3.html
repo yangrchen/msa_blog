@@ -172,7 +172,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">September 19, 2023</p>
+        <p class="date-modified">September 15, 2023</p>
       </div>
     </div>
       
@@ -191,10 +191,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#notation" id="toc-notation" class="nav-link" data-scroll-target="#notation"><span class="header-section-number">1</span> Notation</a></li>
   <li><a href="#autoregressive-models" id="toc-autoregressive-models" class="nav-link" data-scroll-target="#autoregressive-models"><span class="header-section-number">2</span> Autoregressive Models</a>
   <ul class="collapse">
-  <li><a href="#difference-between-esm-and-ar1" id="toc-difference-between-esm-and-ar1" class="nav-link" data-scroll-target="#difference-between-esm-and-ar1"><span class="header-section-number">2.1</span> Difference Between ESM and AR(1)</a></li>
-  <li><a href="#correlation-functions-for-ar1" id="toc-correlation-functions-for-ar1" class="nav-link" data-scroll-target="#correlation-functions-for-ar1"><span class="header-section-number">2.2</span> Correlation Functions for AR(1)</a></li>
-  <li><a href="#ar2-model" id="toc-ar2-model" class="nav-link" data-scroll-target="#ar2-model"><span class="header-section-number">2.3</span> AR(2) Model</a></li>
-  <li><a href="#arp-model" id="toc-arp-model" class="nav-link" data-scroll-target="#arp-model"><span class="header-section-number">2.4</span> AR(p) Model</a></li>
+  <li><a href="#correlation-functions-for-ar1" id="toc-correlation-functions-for-ar1" class="nav-link" data-scroll-target="#correlation-functions-for-ar1"><span class="header-section-number">2.1</span> Correlation Functions for AR(1)</a></li>
+  <li><a href="#ar2-model" id="toc-ar2-model" class="nav-link" data-scroll-target="#ar2-model"><span class="header-section-number">2.2</span> AR(2) Model</a></li>
+  <li><a href="#arp-model" id="toc-arp-model" class="nav-link" data-scroll-target="#arp-model"><span class="header-section-number">2.3</span> AR(p) Model</a></li>
   </ul></li>
   <li><a href="#moving-average-models" id="toc-moving-average-models" class="nav-link" data-scroll-target="#moving-average-models"><span class="header-section-number">3</span> Moving Average Models</a>
   <ul class="collapse">
@@ -203,10 +202,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#maq" id="toc-maq" class="nav-link" data-scroll-target="#maq"><span class="header-section-number">3.3</span> MA(q)</a></li>
   <li><a href="#correlation-functions-for-maq" id="toc-correlation-functions-for-maq" class="nav-link" data-scroll-target="#correlation-functions-for-maq"><span class="header-section-number">3.4</span> Correlation Functions for MA(q)</a></li>
   </ul></li>
-  <li><a href="#ar-and-ma-model-notes" id="toc-ar-and-ma-model-notes" class="nav-link" data-scroll-target="#ar-and-ma-model-notes"><span class="header-section-number">4</span> AR and MA Model Notes</a>
-  <ul class="collapse">
-  <li><a href="#pacfacf-for-identifying-model-terms" id="toc-pacfacf-for-identifying-model-terms" class="nav-link" data-scroll-target="#pacfacf-for-identifying-model-terms"><span class="header-section-number">4.1</span> PACF/ACF for Identifying Model Terms</a></li>
-  </ul></li>
+  <li><a href="#ar-and-ma-model-notes" id="toc-ar-and-ma-model-notes" class="nav-link" data-scroll-target="#ar-and-ma-model-notes"><span class="header-section-number">4</span> AR and MA Model Notes</a></li>
   <li><a href="#white-noise" id="toc-white-noise" class="nav-link" data-scroll-target="#white-noise"><span class="header-section-number">5</span> White Noise</a>
   <ul class="collapse">
   <li><a href="#ljung-box-chi2-test-for-white-noise" id="toc-ljung-box-chi2-test-for-white-noise" class="nav-link" data-scroll-target="#ljung-box-chi2-test-for-white-noise"><span class="header-section-number">5.1</span> Ljung-Box <span class="math inline">\(\chi^2\)</span> Test for White Noise</a></li>
@@ -245,7 +241,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="autoregressive-models" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Autoregressive Models</h1>
 <p>Forecast a series based solely on the past values of <span class="math inline">\(Y_t\)</span>. We are trying to model the lags of our Y terms.</p>
-<p>We are focusing on the most basic case where there is only one lag value of <span class="math inline">\(Y_t\)</span>–the AR(1) model. In daily data, today depends on yesterday, yesterday depends on the day before.</p>
+<p>We are focusing on the most basic case where there is only one lag value of <span class="math inline">\(Y_t\)</span>–the AR(1) model.</p>
 <p><span class="math display">\[
 \begin{align*}
 Y_t &amp;= \omega + \phi Y_{t-1} + e_t \\
@@ -253,59 +249,42 @@ Y_{t-1} &amp;= \omega + \phi Y_{t-2} + e_{t-1} \\
 Y_{t-2} &amp;= \omega + \phi Y_{t-3} + e_{t-2}
 \end{align*}
 \]</span></p>
-<p>The relationship goes back in time. The model assumes that the correlation structure exists throughout the whole series.</p>
-<p>The <span class="math inline">\(\omega\)</span> in the AR model refers to the average of the series whereas in the Random Walk equation the <span class="math inline">\(\omega\)</span> refers to drift. Whenever you are not taking a difference, the model will try to fit around the mean.</p>
-<section id="difference-between-esm-and-ar1" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="difference-between-esm-and-ar1"><span class="header-section-number">2.1</span> Difference Between ESM and AR(1)</h2>
-<p>ESMs are weighting the previous information with the average model. AR(1) only takes into account the previous value. AR(1) uses a restricted maximum likelihood estimator to estimate the weights.</p>
-</section>
-<section id="correlation-functions-for-ar1" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="correlation-functions-for-ar1"><span class="header-section-number">2.2</span> Correlation Functions for AR(1)</h2>
+<section id="correlation-functions-for-ar1" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="correlation-functions-for-ar1"><span class="header-section-number">2.1</span> Correlation Functions for AR(1)</h2>
 <p>ACF decreases exponentially as the number of lags increases. However, the PACF has a significant spike at the first lag, followed by nothing after.</p>
-<div id="fig-ar1-acf" class="quarto-figure quarto-figure-center anchored">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/AR(1)-ACF.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: AR(1)-ACF</figcaption>
+<figcaption class="figure-caption">AR(1)-ACF</figcaption>
 </figure>
 </div>
-<div id="fig-ar1-pacf" class="quarto-figure quarto-figure-center anchored">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/AR(1)-PACF.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: AR(1)-PACF</figcaption>
+<figcaption class="figure-caption">AR(1)-PACF</figcaption>
 </figure>
 </div>
-<p><span class="math inline">\(|\phi| &lt; 1\)</span> has to be true for stationarity. Overall, the effect of shocks last over a long period of time. However, the effect of shocks that happened long ago has little effect on the present IF the value for <span class="math inline">\(|\phi| &lt; 1\)</span>. Stationarity–the dependence of previous observations declines over time.</p>
+<p>Overall, the effect of shocks last over a long period of time. However, the effect of shocks that happened long ago has little effect on the present IF the value for <span class="math inline">\(|\phi| &lt; 1\)</span>. Stationarity–the dependence of previous observations declines over time.</p>
 <ul>
-<li>If <span class="math inline">\(\phi = 1\)</span>, then we have a Random Walk and NOT an AR model
-<ul>
-<li><span class="math inline">\(Y_t = 1 \cdot Y_{t-1} + e_t\)</span> which is the Random Walk equation</li>
-</ul></li>
+<li>If <span class="math inline">\(\phi = 1\)</span>, then we have a Random Walk and NOT AR model</li>
 <li>If <span class="math inline">\(\phi &gt; 1\)</span>, then today depends on tomorrow which does not make sense</li>
 </ul>
-<p>If we have a random walk then our correlation graphs are useless in determining correlation structure. See <a href="#fig-rw-acf">Figure&nbsp;3</a> for an example of a Random Walk ACF.</p>
-<div id="fig-rw-acf" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/randomwalk-autocorrelation.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Random Walk ACF</figcaption>
-</figure>
-</div>
 </section>
-<section id="ar2-model" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="ar2-model"><span class="header-section-number">2.3</span> AR(2) Model</h2>
+<section id="ar2-model" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="ar2-model"><span class="header-section-number">2.2</span> AR(2) Model</h2>
 <p>A time series that is a linear function of 2 past values plus error is an AR process of order 2:</p>
 <p><span class="math display">\[
 Y_t = \omega + \phi_1Y_{t-1} + \phi_2Y_{t-2} + e_t
 \]</span></p>
-<p>AR(2) models have a pattern in PACF plots for when it comes to stationarity (2 spikes). The effect of shocks that happened long ago has little effect on the present if the value for <span class="math inline">\(\left| \phi_1 + \phi_2 \right| &lt; 1\)</span>. We have more restrictions on our <span class="math inline">\(\phi\)</span> weights.</p>
+<p>AR(2) models have a pattern in PACF plots for when it comes to stationarity (2 spikes). The effect of shocks that happened long ago has little effect on the present if the value for <span class="math inline">\(\left| \phi_1 + \phi_2 \right| &lt; 1\)</span></p>
 </section>
-<section id="arp-model" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="arp-model"><span class="header-section-number">2.4</span> AR(p) Model</h2>
+<section id="arp-model" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="arp-model"><span class="header-section-number">2.3</span> AR(p) Model</h2>
 <p>Time series that is a linear function of <span class="math inline">\(p\)</span> past values plus error is called AR process or order <span class="math inline">\(p\)</span>.</p>
 <p><span class="math display">\[
 Y_t = \omega + \phi_1Y_{t-1} + \phi_2Y_{t-2} + \cdots + \phi_pY_{t-p} + e_t
 \]</span></p>
 <p>If the model is just an AR model, then the PACF has significant spikes at hte lags up to <span class="math inline">\(p\)</span> lags, followed by nothing after.</p>
-<p>There are more complicated restrictions on <span class="math inline">\(\phi_i\)</span>’s. If your software warns you about convergence issues or warnings, then you have to try a different model.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
 <div class="tab-content" data-group="language">
@@ -329,14 +308,13 @@ Y_t = \omega + \phi_1Y_{t-1} + \phi_2Y_{t-2} + \cdots + \phi_pY_{t-p} + e_t
 <p><img src="index_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Notice that we are doing the correlation functions on the <strong>residuals</strong>. If you have modeled the correlation structure, then you should only have small amounts of noise left. Residual analysis gives us an idea of whether we have more modeling to do: if large spikes in our residuals exist, then we have not modeled all the autocorrelation.</p>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 
 </div>
 </div>
 </div>
-<p>The coefficients from AR models are <strong>not very interpretable</strong>. If you are reporting to a client you would just say that you fit an AR(p) model. Note that we can still overfit in ARMA models. We prefer parsimonious, simpler models over complicated models that capture every bit of autocorrelation.</p>
+<p>The coefficients from the AR(2) model are not very interpretable. If you are reporting to a client you would just say that you fit an AR(2) model.</p>
 </section>
 </section>
 <section id="moving-average-models" class="level1" data-number="3">
@@ -353,7 +331,7 @@ Y_t = \omega + e_t - \theta e_{t-1}
 <section id="correlation-functions-for-ma1" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="correlation-functions-for-ma1"><span class="header-section-number">3.2</span> Correlation Functions for MA(1)</h2>
 <p>The ACF has a significant spike at the first lag, followed by nothing after.</p>
-<p>PACF decreases exponentially as the number of lags increases. For <span class="math inline">\(q\)</span> &gt; 1, however, these patterns do not apply as the model becomes more complicated.</p>
+<p>PACF decreases exponentially as the number of lags increases. For <span class="math inline">\(q\)</span> &gt; 1, however, these patterns do not imply as the model becomes more complicated.</p>
 </section>
 <section id="maq" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="maq"><span class="header-section-number">3.3</span> MA(q)</h2>
@@ -369,7 +347,7 @@ Y_t = \omega + e_t - \theta_1e_{t-1} - \theta_2e_{t-2} - \cdots - \theta_qe_{t-q
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Python</a></li></ul>
 <div class="tab-content" data-group="language">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<p>We can plot the ACF and PACF for a simulated MA(2) model:</p>
+<p>MA(2) Model</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
@@ -386,8 +364,6 @@ Y_t = \omega + e_t - \theta_1e_{t-1} - \theta_2e_{t-2} - \cdots - \theta_qe_{t-q
 <p><img src="index_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>In a purely MA(2) model, we see the two spikes in the first two lags in the ACF plot.</p>
-<p>Note that in <code>ggplot</code> the plots have lag 0 truncated since it does not provide us any valuable information.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
@@ -434,8 +410,7 @@ Training set -0.002299708</code></pre>
 </div>
 </div>
 </div>
-<p>We don’t have any large spikes in our residual plots so our model effectively captures the autocorrelation structure.</p>
-<p>Note that we can compare the AIC/BIC between AR, MA, or ARIMA models but we cannot compare them to the metrics given by ESM models as there may be different ways the metrics are being calculated across different algorithms.</p>
+<p>Note that we can compare the AIC/BIC between AR, MA, or ARIMA models but we cannot compare them to the metrics given by ESM models.</p>
 </section>
 </section>
 <section id="ar-and-ma-model-notes" class="level1" data-number="4">
@@ -443,19 +418,13 @@ Training set -0.002299708</code></pre>
 <ul>
 <li>Any AR(p) model can be rewritten as an MA(<span class="math inline">\(\infty\)</span>).</li>
 <li>If any MA(q) model is invertible, then this MA(q) model can be rewritten as an AR(<span class="math inline">\(\infty\)</span>).</li>
-<li>Software should warn you if model is not invertible, if there is no convergence, or any other issues. You should change your model if this is the case.</li>
+<li>Software should warn you if model is not invertible, if there is no convergence or any other issues… pay attention to the warnings you encounter.</li>
 <li>Parameters can have different signs based on how it parameterizes equations.</li>
 </ul>
-<section id="pacfacf-for-identifying-model-terms" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="pacfacf-for-identifying-model-terms"><span class="header-section-number">4.1</span> PACF/ACF for Identifying Model Terms</h2>
-<p><strong>PACF is useful for identifying the order of AR terms</strong> in a time series model. PACF measures <strong>the direct relationship</strong> between the current value at time <span class="math inline">\(t\)</span> and a value at time <span class="math inline">\(t - k\)</span> without the influence of other lags.</p>
-<p>However, <strong>MA processes do not exhibit a direct relationship</strong> between the current observations and its past values. MA processes involve linear combinations of error terms with coefficients applied to past error terms. This makes it difficult to assess the relationship using PACF because the influence of past values is not straightforward.</p>
-<p>Instead, we use <strong>ACF to identify the order of MA terms</strong>. If we see a signficant spike at lag <span class="math inline">\(k\)</span>, then we may want to consider adding in <span class="math inline">\(q = k\)</span> terms to the MA portion of our model.</p>
-</section>
 </section>
 <section id="white-noise" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> White Noise</h1>
-<p>White noise is essentially the independent errors that we are left with after modeling the signal.</p>
+<p>White noise is essentially the independent errors that we are left iwth after modeling the signal.</p>
 <p>White noise time series have errors that have the following characteristics:</p>
 <ul>
 <li>Follow a Normal distribution.</li>
@@ -471,7 +440,7 @@ Training set -0.002299708</code></pre>
 <p><span class="math inline">\(H_0:\)</span> Series has no autocorrelation.</p>
 <p><span class="math inline">\(H_a:\)</span> One or more autocorrelations up to lag <span class="math inline">\(m\)</span> are not zero.</p>
 </div>
-<p>Essentially, rejecting our null hypothesis means that more modeling should be done. When looking at nonseasonal data, we typically go back around 10 lags.</p>
+<p>Essentially, rejecting our null hypothesis means that more modeling should be done.</p>
 <p><span class="math display">\[
 \chi_m^2 = n(n + 2) \sum_{k=1}^{m} \frac{\beta_k^2}{n - k}
 \]</span></p>
@@ -479,7 +448,6 @@ Training set -0.002299708</code></pre>
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Python</a></li></ul>
 <div class="tab-content" data-group="language">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<p>For <code>Box.test</code>, there is a parameter <code>fitdf</code> that you want to specify. The degrees of freedom change depending on what kind of vector we are trying to test. If <code>fitdf = 0</code> then we are specifying the test on the original time series data. If <code>fitdf = p + q</code> (where p is number of AR terms and q is number of MA terms) then we are specifying the test on the residuals of our fitted model.</p>
 <p>Looking at original data first:</p>
 <div class="cell">
 <details open="">
@@ -512,21 +480,18 @@ Training set -0.002299708</code></pre>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">10</span>) {</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    white_lb[i] <span class="ot">&lt;-</span> <span class="fu">Box.test</span>(Y_ARIMA<span class="sc">$</span>residuals, <span class="at">lag =</span> i, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>, <span class="at">fitdf =</span> <span class="dv">2</span>)<span class="sc">$</span>p.value</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># We index our lags at the p+q+1 lag.</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># For an AR(2), we index at 3</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>white_dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(white_lb[<span class="dv">3</span><span class="sc">:</span><span class="dv">10</span>], index1[<span class="dv">3</span><span class="sc">:</span><span class="dv">10</span>]))</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(white_dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"pvalues"</span>, <span class="st">"Lag"</span>)</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(white_dat, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Lag), <span class="at">y =</span> pvalues)) <span class="sc">+</span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Ljung-Box test when this is white noise"</span>, <span class="at">x =</span> <span class="st">"Lags"</span>, <span class="at">y =</span> <span class="st">"p-values"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>white_dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(white_lb[<span class="dv">3</span><span class="sc">:</span><span class="dv">10</span>], index1[<span class="dv">3</span><span class="sc">:</span><span class="dv">10</span>]))</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(white_dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"pvalues"</span>, <span class="st">"Lag"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(white_dat, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Lag), <span class="at">y =</span> pvalues)) <span class="sc">+</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Ljung-Box test when this is white noise"</span>, <span class="at">x =</span> <span class="st">"Lags"</span>, <span class="at">y =</span> <span class="st">"p-values"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Note that you have to start your tests on the next lag term than the number of lags in your model. In this example we are using AR(2) so our tests start on lag 3. In general, the Ljung-Box autocorrelation terms are undefined up to <span class="math inline">\(p + q\)</span> terms.</p>
+<p>Note that you have to start your tests on the next lag term. In this example we are using AR(2) so our tests start on lag 3.</p>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
 

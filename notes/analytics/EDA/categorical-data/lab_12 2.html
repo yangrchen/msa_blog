@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="dcterms.date" content="2023-09-06">
+<meta name="dcterms.date" content="2023-07-17">
 
-<title>Yang MSA - Correlation Functions</title>
+<title>Yang MSA - Lab 12</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,10 +144,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Correlation Functions</h1>
+      <h1 class="title">Lab 12</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analytics</div>
-                <div class="quarto-category">time series</div>
+                <div class="quarto-category">EDA</div>
               </div>
                   </div>
   </div>
@@ -165,16 +165,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 6, 2023</p>
+        <p class="date">July 17, 2023</p>
       </div>
     </div>
     
-      <div>
-      <div class="quarto-title-meta-heading">Modified</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date-modified">September 17, 2023</p>
-      </div>
-    </div>
       
     </div>
     
@@ -187,9 +181,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#autocorrelation" id="toc-autocorrelation" class="nav-link" data-scroll-target="#autocorrelation"><span class="header-section-number">1</span> Autocorrelation</a></li>
-  <li><a href="#partial-autocorrelation-function" id="toc-partial-autocorrelation-function" class="nav-link" data-scroll-target="#partial-autocorrelation-function"><span class="header-section-number">2</span> Partial Autocorrelation Function</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section"><span class="header-section-number">1</span> 1</a>
+  <ul class="collapse">
+  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a"><span class="header-section-number">1.1</span> a</a></li>
+  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b"><span class="header-section-number">1.2</span> b</a></li>
+  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c"><span class="header-section-number">1.3</span> c</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -199,121 +196,173 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="setup" class="level1 unnumbered">
-<h1 class="unnumbered">Setup</h1>
-<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
-<div class="tab-content" data-group="language">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/ar2.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>safety <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/safety.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-
-</div>
-</div>
-</div>
-<p>When we have a <em>stationary</em> distribution we can now look at correlation. If we have a random walk, then we cannot look at the correlation.</p>
-<p>Time series is typically analyzed with an assumption that observations have a potential relationship across time. One example is weight over time.</p>
+<section id="section" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> 1</h1>
+<section id="a" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="a"><span class="header-section-number">1.1</span> a</h2>
+<ul>
+<li><code>Unsafe</code> is ordinal</li>
+<li><code>Type</code> is nominal</li>
+<li><code>Region</code> is ordinal</li>
+<li><code>Weight</code> is ordinal</li>
+<li><code>Size</code> is ordinal</li>
+</ul>
 </section>
-<section id="autocorrelation" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Autocorrelation</h1>
-<p><strong>Autocorrelation</strong> is correlation between two sets of observations in the same series that are separated by <span class="math inline">\(k\)</span> points in time. This correlation includes all correlations between time point <span class="math inline">\(t\)</span> and <span class="math inline">\(t - k\)</span></p>
-<p>An <strong>autocorrelation function</strong> is the function of all autocorrelations between two sets of observations <span class="math inline">\(Y_t\)</span> and <span class="math inline">\(Y_{t-k}\)</span> across time.</p>
-<p><span class="math display">\[
-\rho_k = \text{Corr}(Y_t, Y_{t-k})
-\]</span></p>
-<div id="fig-acf-table" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/autocorrelation-table.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Autocorrelation Function</figcaption>
-</figure>
-</div>
-<p>This uses lagged series of previous time periods to calculate the Pearson’s correlation between the series. Missing values in lagged series are ignored in the calculation. ACF can suggest that there is seasonality based on the correlation structure.</p>
-<p>Suppose that the first autocorrelation, ACF(1) is significant. This implies that two consecutive time points are related to each other. For non-seasonal data, we tend to look up to 10 or 12 lags back.</p>
-<div id="fig-acf-graph" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/autocorrelation-graph.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Autocorrelation Function Graph</figcaption>
-</figure>
-</div>
-<p>What we can see in the plot is the ACF vs.&nbsp;the</p>
-<p>For non-seasonal time series, we typically go back 10-12 lags. With seasonality, we have a pattern throughout time so we deal with seasonality differently.</p>
-</section>
-<section id="partial-autocorrelation-function" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Partial Autocorrelation Function</h1>
-<p><strong>Partial correlation</strong> is the correlation between two sets of observations, separated by <span class="math inline">\(k\)</span> points in time, after removing all previous (<span class="math inline">\(1, 2, \cdots, k-1\)</span>) autocorrelations. Essentially, these are conditional correlations that are showing the direct influence of a previous lag on the current value.</p>
-<p>This correlation does not include all the correlations between time point <span class="math inline">\(t\)</span> and <span class="math inline">\(t-k\)</span>–we are only including direct effects.</p>
-<p><span class="math display">\[
-\phi_k = \text{Corr}(Y_t, Y_{t-k} | Y_{t-1}, Y_{t-2}, \cdots, Y_{t-k-1})
-\]</span></p>
-<div id="fig-pacf-table" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/partial-autocorrelation-table.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Partial Autocorrelation Function</figcaption>
-</figure>
-</div>
-<p>The partial autocorrelation for the <span class="math inline">\(k\)</span>th lag is calculated from fitting a regression. The regression conditions on the other lags in the model through the individual weights:</p>
-<p><span class="math display">\[
-Y_t = \beta_0 + \phi_1Y_{t-1} + \phi_2Y_{t-2} + \cdots + \phi_kY_{t-k} + \epsilon_t
-\]</span></p>
-<p>The 2nd partial autocorrelation <span class="math inline">\(\phi_2\)</span> is estimated from:</p>
-<p><span class="math display">\[
-\hat{Y}_t = \hat{\beta}_0 + \hat{\phi}_1Y_{t-1} + \hat{\phi}_2Y_{t-2}
-\]</span></p>
-<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li></ul>
-<div class="tab-content" data-group="language">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<section id="b" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="b"><span class="header-section-number">1.2</span> b</h2>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>acf <span class="ot">&lt;-</span> <span class="fu">Acf</span>(Y, <span class="at">lag =</span> <span class="dv">10</span>)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(safety<span class="sc">$</span>Region, safety<span class="sc">$</span>Unsafe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<div class="cell-output cell-output-stdout">
+<pre><code>           
+             0  1
+  Asia      20 15
+  N America 46 15</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pacf <span class="ot">&lt;-</span> <span class="fu">Pacf</span>(Y, <span class="at">lag =</span> <span class="dv">10</span>)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(safety) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> Region, <span class="at">fill =</span> <span class="fu">factor</span>(Unsafe)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
+<p><img src="lab_12_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ul>
+<li>Percentage of cars classified as unsafe in the Asia region is 42.9 percent</li>
+<li>Percentage of cars classified as safe in the North America region is 75.4 percent</li>
+<li>Appropriate test to use is Mantel-Haenszel
+<ul>
+<li><span class="math inline">\(H_0:\)</span> No linear association, <span class="math inline">\(H_a:\)</span> Linear association exists</li>
+</ul></li>
+</ul>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vcdExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: vcd</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: grid</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: gnm</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'vcdExtra'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    summarise</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(pacf))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>all_dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(acf[<span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>], pacf, index))</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(all_dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"acf"</span>, <span class="st">"pacf"</span>, <span class="st">"index"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggAcf</span>(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DescTools)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">CMHtest</span>(<span class="fu">table</span>(safety<span class="sc">$</span>Region, safety<span class="sc">$</span>Unsafe))<span class="sc">$</span>table[<span class="dv">1</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid" width="672"></p>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Chisq         Df       Prob 
+3.41813924 1.00000000 0.06448366 </code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggPacf</span>(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">OddsRatio</span>(<span class="fu">table</span>(safety<span class="sc">$</span>Region, safety<span class="sc">$</span>Unsafe))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-4.png" class="img-fluid" width="672"></p>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4347826</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(safety<span class="sc">$</span>Region, safety<span class="sc">$</span>Unsafe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>           
+             0  1
+  Asia      20 15
+  N America 46 15</code></pre>
 </div>
 </div>
-<p>If we use <code>ggAcf</code> or <code>ggPacf</code>, then we get confidence intervals on the plot that give us a guidance for which lags have autocorrelations that are significantly different from 0.</p>
+<ul>
+<li>At an <span class="math inline">\(\alpha\)</span> level of 0.05, we do not reject the null hypothesis that there is no linear association between <code>Region</code> and <code>Safety</code></li>
+<li>There are 0.435 times the odds to be safe if it’s in the Asia region</li>
+</ul>
+</section>
+<section id="c" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="c"><span class="header-section-number">1.3</span> c</h2>
+<p>Appropriate test is Mantel-Haenszel</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CMHtest</span>(<span class="fu">table</span>(safety<span class="sc">$</span>Size, safety<span class="sc">$</span>Unsafe))<span class="sc">$</span>table[<span class="dv">1</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Chisq           Df         Prob 
+2.770978e+01 1.000000e+00 1.409484e-07 </code></pre>
 </div>
 </div>
+<ul>
+<li>We reject the null hypothesis that there is no linear association between the two variables</li>
+</ul>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="fu">ordered</span>(safety<span class="sc">$</span>Size)), </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">as.numeric</span>(<span class="fu">ordered</span>(safety<span class="sc">$</span>Unsafe)), </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"spearman"</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in cor.test.default(x = as.numeric(ordered(safety$Size)), y =
+as.numeric(ordered(safety$Unsafe)), : Cannot compute exact p-value with ties</code></pre>
 </div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Spearman's rank correlation rho
+
+data:  as.numeric(ordered(safety$Size)) and as.numeric(ordered(safety$Unsafe))
+S = 227423, p-value = 1.136e-08
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.5424769 </code></pre>
+</div>
+</div>
+<ul>
+<li>It’s not too strong at <span class="math inline">\(\rho = -0.542\)</span></li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

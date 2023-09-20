@@ -30,11 +30,14 @@
     ]
   },
   {
-    "listing": "/notes/programming/index.html",
+    "listing": "/notes/primer/index.html",
     "items": [
-      "/notes/programming/python/practicum-prep/index.html",
-      "/notes/programming/R/r4ds/intro/index.html",
-      "/notes/programming/R/r4ds/intro_visualization/index.html"
+      "/notes/primer/categorical_data/index.html",
+      "/notes/primer/anova/index.html",
+      "/notes/primer/hypothesis_testing/index.html",
+      "/notes/primer/confidence_intervals/index.html",
+      "/notes/primer/probability/index.html",
+      "/notes/primer/fundamental/index.html"
     ]
   },
   {
@@ -44,14 +47,11 @@
     ]
   },
   {
-    "listing": "/notes/primer/index.html",
+    "listing": "/notes/programming/index.html",
     "items": [
-      "/notes/primer/categorical_data/index.html",
-      "/notes/primer/anova/index.html",
-      "/notes/primer/hypothesis_testing/index.html",
-      "/notes/primer/confidence_intervals/index.html",
-      "/notes/primer/probability/index.html",
-      "/notes/primer/fundamental/index.html"
+      "/notes/programming/python/practicum-prep/index.html",
+      "/notes/programming/R/r4ds/intro/index.html",
+      "/notes/programming/R/r4ds/intro_visualization/index.html"
     ]
   },
   {

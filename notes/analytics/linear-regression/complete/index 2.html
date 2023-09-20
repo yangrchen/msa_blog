@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="dcterms.date" content="2023-09-06">
+<meta name="dcterms.date" content="2023-07-12">
 
-<title>Yang MSA - Correlation Functions</title>
+<title>Yang MSA - Complete Example</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -97,8 +97,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -144,10 +142,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Correlation Functions</h1>
+      <h1 class="title">Complete Example</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">analytics</div>
-                <div class="quarto-category">time series</div>
+                <div class="quarto-category">EDA</div>
+                <div class="quarto-category">modeling</div>
               </div>
                   </div>
   </div>
@@ -165,16 +163,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 6, 2023</p>
+        <p class="date">July 12, 2023</p>
       </div>
     </div>
     
-      <div>
-      <div class="quarto-title-meta-heading">Modified</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date-modified">September 17, 2023</p>
-      </div>
-    </div>
       
     </div>
     
@@ -187,9 +179,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#autocorrelation" id="toc-autocorrelation" class="nav-link" data-scroll-target="#autocorrelation"><span class="header-section-number">1</span> Autocorrelation</a></li>
-  <li><a href="#partial-autocorrelation-function" id="toc-partial-autocorrelation-function" class="nav-link" data-scroll-target="#partial-autocorrelation-function"><span class="header-section-number">2</span> Partial Autocorrelation Function</a></li>
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link active" data-scroll-target="#exploratory-data-analysis"><span class="header-section-number">1</span> Exploratory Data Analysis</a></li>
+  <li><a href="#multicollinearity" id="toc-multicollinearity" class="nav-link" data-scroll-target="#multicollinearity"><span class="header-section-number">2</span> Multicollinearity</a></li>
   </ul>
 </nav>
     </div>
@@ -199,117 +190,182 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="setup" class="level1 unnumbered">
-<h1 class="unnumbered">Setup</h1>
-<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
-<div class="tab-content" data-group="language">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<section id="exploratory-data-analysis" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Exploratory Data Analysis</h1>
+<ul>
+<li>Explore variables univariately</li>
+<li>Anything that looks unusual?</li>
+<li>Missing values?</li>
+<li>Data types</li>
+</ul>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/ar2.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AppliedPredictiveModeling)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(FuelEconomy)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cars2010)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    EngDispl         NumCyl        Transmission       FE       
+ Min.   :1.000   Min.   : 2.000   S6     :213   Min.   :17.50  
+ 1st Qu.:2.400   1st Qu.: 4.000   M6     :167   1st Qu.:29.09  
+ Median :3.500   Median : 6.000   A4     :143   Median :34.51  
+ Mean   :3.507   Mean   : 5.971   A6     :126   Mean   :34.71  
+ 3rd Qu.:4.300   3rd Qu.: 8.000   A5     :114   3rd Qu.:39.20  
+ Max.   :8.400   Max.   :16.000   M5     :101   Max.   :69.64  
+                                  (Other):243                  
+         AirAspirationMethod    NumGears      TransLockup     TransCreeperGear 
+ NaturallyAspirated:921      Min.   :1.000   Min.   :0.0000   Min.   :0.00000  
+ Supercharged      : 18      1st Qu.:5.000   1st Qu.:0.0000   1st Qu.:0.00000  
+ Turbocharged      :168      Median :6.000   Median :1.0000   Median :0.00000  
+                             Mean   :5.268   Mean   :0.6802   Mean   :0.04878  
+                             3rd Qu.:6.000   3rd Qu.:1.0000   3rd Qu.:0.00000  
+                             Max.   :8.000   Max.   :1.0000   Max.   :1.00000  
+                                                                               
+                  DriveDesc   IntakeValvePerCyl ExhaustValvesPerCyl
+ AllWheelDrive         :205   Min.   :0.000     Min.   :0.000      
+ FourWheelDrive        :159   1st Qu.:2.000     1st Qu.:2.000      
+ ParttimeFourWheelDrive: 11   Median :2.000     Median :2.000      
+ TwoWheelDriveFront    :382   Mean   :1.862     Mean   :1.837      
+ TwoWheelDriveRear     :350   3rd Qu.:2.000     3rd Qu.:2.000      
+                              Max.   :3.000     Max.   :2.000      
+                                                                   
+                    CarlineClassDesc VarValveTiming    VarValveLift   
+ SpecialPurposeVehicleSUV4WD:170     Min.   :0.0000   Min.   :0.0000  
+ CompactCars                :145     1st Qu.:1.0000   1st Qu.:0.0000  
+ MidsizeCars                :135     Median :1.0000   Median :0.0000  
+ SpecialPurposeVehicleSUV2WD:133     Mean   :0.8229   Mean   :0.1671  
+ SubcompactCars             :116     3rd Qu.:1.0000   3rd Qu.:0.0000  
+ LargeCars                  : 75     Max.   :1.0000   Max.   :1.0000  
+ (Other)                    :333                                      </code></pre>
 </div>
 </div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+</section>
+<section id="multicollinearity" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Multicollinearity</h1>
+<p>See if multicollinearity is an issue. If so, how do you want to deal with it?</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(cars2010[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">13</span>, <span class="dv">14</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                       EngDispl       NumCyl          FE     NumGears
+EngDispl             1.00000000  0.906260027 -0.78739383  0.211730489
+NumCyl               0.90626003  1.000000000 -0.74021798  0.288711440
+FE                  -0.78739383 -0.740217981  1.00000000 -0.211284876
+NumGears             0.21173049  0.288711440 -0.21128488  1.000000000
+TransLockup          0.22839513  0.208771908 -0.27193887  0.001353611
+TransCreeperGear     0.02666562  0.025520828 -0.06962168  0.043595219
+IntakeValvePerCyl   -0.42235745 -0.248509452  0.28034403  0.177960634
+ExhaustValvesPerCyl -0.47843804 -0.339851831  0.33565285  0.152819250
+VarValveTiming      -0.06825603  0.005399291  0.12495278  0.090839722
+VarValveLift        -0.08657142 -0.059461008  0.09621127  0.130719422
+                     TransLockup TransCreeperGear IntakeValvePerCyl
+EngDispl             0.228395128       0.02666562       -0.42235745
+NumCyl               0.208771908       0.02552083       -0.24850945
+FE                  -0.271938867      -0.06962168        0.28034403
+NumGears             0.001353611       0.04359522        0.17796063
+TransLockup          1.000000000       0.09232848       -0.13132599
+TransCreeperGear     0.092328478       1.00000000       -0.07767916
+IntakeValvePerCyl   -0.131325993      -0.07767916        1.00000000
+ExhaustValvesPerCyl -0.158326003      -0.17071584        0.91148782
+VarValveTiming      -0.094772029      -0.23553440        0.24082398
+VarValveLift        -0.097809395      -0.10143857        0.15485588
+                    ExhaustValvesPerCyl VarValveTiming VarValveLift
+EngDispl                     -0.4784380   -0.068256030  -0.08657142
+NumCyl                       -0.3398518    0.005399291  -0.05946101
+FE                            0.3356529    0.124952779   0.09621127
+NumGears                      0.1528193    0.090839722   0.13071942
+TransLockup                  -0.1583260   -0.094772029  -0.09780940
+TransCreeperGear             -0.1707158   -0.235534402  -0.10143857
+IntakeValvePerCyl             0.9114878    0.240823978   0.15485588
+ExhaustValvesPerCyl           1.0000000    0.279339052   0.17538900
+VarValveTiming                0.2793391    1.000000000   0.05553603
+VarValveLift                  0.1753890    0.055536033   1.00000000</code></pre>
+</div>
+</div>
+<ul>
+<li>Going to remove <code>NumCyl</code> and <code>IntakeValvePerCyl</code> due to high multicollinearity and other variables are more correlated</li>
+</ul>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: carData</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'car'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
 
+    recode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    some</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>cars2010<span class="fl">.1</span> <span class="ot">&lt;-</span> cars2010[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">10</span>)]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>collin.test <span class="ot">&lt;-</span> <span class="fu">lm</span>(FE <span class="sc">~</span> ., <span class="at">data =</span> cars2010<span class="fl">.1</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vif</span>(collin.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                          GVIF Df GVIF^(1/(2*Df))
+EngDispl              2.492719  1        1.578835
+Transmission        327.630688 15        1.212959
+AirAspirationMethod   1.442853  2        1.095987
+NumGears             26.097874  1        5.108608
+TransLockup           3.015590  1        1.736545
+TransCreeperGear      1.210922  1        1.100419
+DriveDesc             9.381876  4        1.322928
+ExhaustValvesPerCyl   2.085180  1        1.444015
+CarlineClassDesc     22.735388 16        1.102547
+VarValveTiming        1.339877  1        1.157531
+VarValveLift          1.416643  1        1.190228</code></pre>
 </div>
 </div>
-</div>
-<p>When we have a <em>stationary</em> distribution we can now look at correlation. If we have a random walk, then we cannot look at the correlation.</p>
-<p>Time series is typically analyzed with an assumption that observations have a potential relationship across time. One example is weight over time.</p>
-</section>
-<section id="autocorrelation" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Autocorrelation</h1>
-<p><strong>Autocorrelation</strong> is correlation between two sets of observations in the same series that are separated by <span class="math inline">\(k\)</span> points in time. This correlation includes all correlations between time point <span class="math inline">\(t\)</span> and <span class="math inline">\(t - k\)</span></p>
-<p>An <strong>autocorrelation function</strong> is the function of all autocorrelations between two sets of observations <span class="math inline">\(Y_t\)</span> and <span class="math inline">\(Y_{t-k}\)</span> across time.</p>
-<p><span class="math display">\[
-\rho_k = \text{Corr}(Y_t, Y_{t-k})
-\]</span></p>
-<div id="fig-acf-table" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/autocorrelation-table.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Autocorrelation Function</figcaption>
-</figure>
-</div>
-<p>This uses lagged series of previous time periods to calculate the Pearson’s correlation between the series. Missing values in lagged series are ignored in the calculation. ACF can suggest that there is seasonality based on the correlation structure.</p>
-<p>Suppose that the first autocorrelation, ACF(1) is significant. This implies that two consecutive time points are related to each other. For non-seasonal data, we tend to look up to 10 or 12 lags back.</p>
-<div id="fig-acf-graph" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/autocorrelation-graph.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Autocorrelation Function Graph</figcaption>
-</figure>
-</div>
-<p>What we can see in the plot is the ACF vs.&nbsp;the</p>
-<p>For non-seasonal time series, we typically go back 10-12 lags. With seasonality, we have a pattern throughout time so we deal with seasonality differently.</p>
-</section>
-<section id="partial-autocorrelation-function" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Partial Autocorrelation Function</h1>
-<p><strong>Partial correlation</strong> is the correlation between two sets of observations, separated by <span class="math inline">\(k\)</span> points in time, after removing all previous (<span class="math inline">\(1, 2, \cdots, k-1\)</span>) autocorrelations. Essentially, these are conditional correlations that are showing the direct influence of a previous lag on the current value.</p>
-<p>This correlation does not include all the correlations between time point <span class="math inline">\(t\)</span> and <span class="math inline">\(t-k\)</span>–we are only including direct effects.</p>
-<p><span class="math display">\[
-\phi_k = \text{Corr}(Y_t, Y_{t-k} | Y_{t-1}, Y_{t-2}, \cdots, Y_{t-k-1})
-\]</span></p>
-<div id="fig-pacf-table" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/partial-autocorrelation-table.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Partial Autocorrelation Function</figcaption>
-</figure>
-</div>
-<p>The partial autocorrelation for the <span class="math inline">\(k\)</span>th lag is calculated from fitting a regression. The regression conditions on the other lags in the model through the individual weights:</p>
-<p><span class="math display">\[
-Y_t = \beta_0 + \phi_1Y_{t-1} + \phi_2Y_{t-2} + \cdots + \phi_kY_{t-k} + \epsilon_t
-\]</span></p>
-<p>The 2nd partial autocorrelation <span class="math inline">\(\phi_2\)</span> is estimated from:</p>
-<p><span class="math display">\[
-\hat{Y}_t = \hat{\beta}_0 + \hat{\phi}_1Y_{t-1} + \hat{\phi}_2Y_{t-2}
-\]</span></p>
-<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li></ul>
-<div class="tab-content" data-group="language">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<ul>
+<li>Will also get rid of <code>Transmission</code></li>
+</ul>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>acf <span class="ot">&lt;-</span> <span class="fu">Acf</span>(Y, <span class="at">lag =</span> <span class="dv">10</span>)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cars2010<span class="fl">.1</span> <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pacf <span class="ot">&lt;-</span> <span class="fu">Pacf</span>(Y, <span class="at">lag =</span> <span class="dv">10</span>)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(pacf))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>all_dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(acf[<span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>], pacf, index))</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(all_dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"acf"</span>, <span class="st">"pacf"</span>, <span class="st">"index"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggAcf</span>(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid" width="672"></p>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggPacf</span>(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-4.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>If we use <code>ggAcf</code> or <code>ggPacf</code>, then we get confidence intervals on the plot that give us a guidance for which lags have autocorrelations that are significantly different from 0.</p>
-</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     EngDispl
+1088      4.7
+1089      4.7
+1090      4.2
+1091      4.2
+1092      5.2
+1093      5.2</code></pre>
 </div>
 </div>
 

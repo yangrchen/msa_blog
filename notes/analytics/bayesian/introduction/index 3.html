@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="dcterms.date" content="2023-09-06">
+<meta name="dcterms.date" content="2023-09-12">
 
-<title>Yang MSA - Correlation Functions</title>
+<title>Yang MSA - Bayesian Workshop</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -144,10 +110,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Correlation Functions</h1>
+      <h1 class="title">Bayesian Workshop</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analytics</div>
-                <div class="quarto-category">time series</div>
               </div>
                   </div>
   </div>
@@ -165,16 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 6, 2023</p>
+        <p class="date">September 12, 2023</p>
       </div>
     </div>
     
-      <div>
-      <div class="quarto-title-meta-heading">Modified</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date-modified">September 17, 2023</p>
-      </div>
-    </div>
       
     </div>
     
@@ -187,9 +146,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#autocorrelation" id="toc-autocorrelation" class="nav-link" data-scroll-target="#autocorrelation"><span class="header-section-number">1</span> Autocorrelation</a></li>
-  <li><a href="#partial-autocorrelation-function" id="toc-partial-autocorrelation-function" class="nav-link" data-scroll-target="#partial-autocorrelation-function"><span class="header-section-number">2</span> Partial Autocorrelation Function</a></li>
+  <li><a href="#review-of-frequentist-ideology" id="toc-review-of-frequentist-ideology" class="nav-link active" data-scroll-target="#review-of-frequentist-ideology"><span class="header-section-number">1</span> Review of Frequentist Ideology</a></li>
+  <li><a href="#basics-of-bayesian-statistics" id="toc-basics-of-bayesian-statistics" class="nav-link" data-scroll-target="#basics-of-bayesian-statistics"><span class="header-section-number">2</span> Basics of Bayesian Statistics</a>
+  <ul class="collapse">
+  <li><a href="#bayes-theorem" id="toc-bayes-theorem" class="nav-link" data-scroll-target="#bayes-theorem"><span class="header-section-number">2.1</span> Bayes Theorem</a></li>
+  <li><a href="#process" id="toc-process" class="nav-link" data-scroll-target="#process"><span class="header-section-number">2.2</span> Process</a></li>
+  <li><a href="#common-sampling-distributions" id="toc-common-sampling-distributions" class="nav-link" data-scroll-target="#common-sampling-distributions"><span class="header-section-number">2.3</span> Common Sampling Distributions</a></li>
+  <li><a href="#common-priors" id="toc-common-priors" class="nav-link" data-scroll-target="#common-priors"><span class="header-section-number">2.4</span> Common Priors</a></li>
+  </ul></li>
+  <li><a href="#computing-the-posterior-distribution" id="toc-computing-the-posterior-distribution" class="nav-link" data-scroll-target="#computing-the-posterior-distribution"><span class="header-section-number">3</span> Computing the Posterior Distribution</a></li>
   </ul>
 </nav>
     </div>
@@ -199,119 +164,82 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="setup" class="level1 unnumbered">
-<h1 class="unnumbered">Setup</h1>
-<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
-<div class="tab-content" data-group="language">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/ar2.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-
-</div>
-</div>
-</div>
-<p>When we have a <em>stationary</em> distribution we can now look at correlation. If we have a random walk, then we cannot look at the correlation.</p>
-<p>Time series is typically analyzed with an assumption that observations have a potential relationship across time. One example is weight over time.</p>
+<p>The main difference between Frequentist and Bayesian statistics is how they view population parameters. Bayesian says there is a whole distribution behind these parameters and we are trying to uncover the underlying distribution. We are no longer focused on fixed values.</p>
+<section id="review-of-frequentist-ideology" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Review of Frequentist Ideology</h1>
+<p>A population parameter is <strong>fixed</strong>, unknown quantity that we are trying to estimate. Estimate the population parameter with a point estimate.</p>
+<ul>
+<li><span class="math inline">\(\mu \longrightarrow \bar{x}\)</span></li>
+<li><span class="math inline">\(p \longrightarrow \hat{p}\)</span></li>
+<li><span class="math inline">\(\beta_1 \longrightarrow \hat{\beta_1}\)</span></li>
+</ul>
 </section>
-<section id="autocorrelation" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Autocorrelation</h1>
-<p><strong>Autocorrelation</strong> is correlation between two sets of observations in the same series that are separated by <span class="math inline">\(k\)</span> points in time. This correlation includes all correlations between time point <span class="math inline">\(t\)</span> and <span class="math inline">\(t - k\)</span></p>
-<p>An <strong>autocorrelation function</strong> is the function of all autocorrelations between two sets of observations <span class="math inline">\(Y_t\)</span> and <span class="math inline">\(Y_{t-k}\)</span> across time.</p>
+<section id="basics-of-bayesian-statistics" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Basics of Bayesian Statistics</h1>
+<p>Population parameters are random variables. We are not estimating a number, but are instead estimating a distribution.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/freq-vs-bayesian.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Frequentist vs.&nbsp;Bayesian</figcaption>
+</figure>
+</div>
+<p>We assign a <strong>prior distribution</strong> to the parameter (can be informative or noninformative or vague). The data collected is called the <strong>sampling distribution</strong>.</p>
+<ul>
+<li>Prior distribution denoted as <span class="math inline">\(p(\mu)\)</span></li>
+<li>Sampling distribution will be denoted by <span class="math inline">\(p(Y|\mu)\)</span></li>
+<li>We put this information together to find the <strong>posterior distribution</strong>, <span class="math inline">\(p(\mu|Y)\)</span></li>
+</ul>
+<section id="bayes-theorem" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="bayes-theorem"><span class="header-section-number">2.1</span> Bayes Theorem</h2>
 <p><span class="math display">\[
-\rho_k = \text{Corr}(Y_t, Y_{t-k})
+P(\mu|Y) = \frac{P(Y|\mu)P(\mu)}{P(Y)}
 \]</span></p>
-<div id="fig-acf-table" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/autocorrelation-table.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Autocorrelation Function</figcaption>
-</figure>
-</div>
-<p>This uses lagged series of previous time periods to calculate the Pearson’s correlation between the series. Missing values in lagged series are ignored in the calculation. ACF can suggest that there is seasonality based on the correlation structure.</p>
-<p>Suppose that the first autocorrelation, ACF(1) is significant. This implies that two consecutive time points are related to each other. For non-seasonal data, we tend to look up to 10 or 12 lags back.</p>
-<div id="fig-acf-graph" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/autocorrelation-graph.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Autocorrelation Function Graph</figcaption>
-</figure>
-</div>
-<p>What we can see in the plot is the ACF vs.&nbsp;the</p>
-<p>For non-seasonal time series, we typically go back 10-12 lags. With seasonality, we have a pattern throughout time so we deal with seasonality differently.</p>
 </section>
-<section id="partial-autocorrelation-function" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Partial Autocorrelation Function</h1>
-<p><strong>Partial correlation</strong> is the correlation between two sets of observations, separated by <span class="math inline">\(k\)</span> points in time, after removing all previous (<span class="math inline">\(1, 2, \cdots, k-1\)</span>) autocorrelations. Essentially, these are conditional correlations that are showing the direct influence of a previous lag on the current value.</p>
-<p>This correlation does not include all the correlations between time point <span class="math inline">\(t\)</span> and <span class="math inline">\(t-k\)</span>–we are only including direct effects.</p>
-<p><span class="math display">\[
-\phi_k = \text{Corr}(Y_t, Y_{t-k} | Y_{t-1}, Y_{t-2}, \cdots, Y_{t-k-1})
-\]</span></p>
-<div id="fig-pacf-table" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/partial-autocorrelation-table.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Partial Autocorrelation Function</figcaption>
-</figure>
-</div>
-<p>The partial autocorrelation for the <span class="math inline">\(k\)</span>th lag is calculated from fitting a regression. The regression conditions on the other lags in the model through the individual weights:</p>
-<p><span class="math display">\[
-Y_t = \beta_0 + \phi_1Y_{t-1} + \phi_2Y_{t-2} + \cdots + \phi_kY_{t-k} + \epsilon_t
-\]</span></p>
-<p>The 2nd partial autocorrelation <span class="math inline">\(\phi_2\)</span> is estimated from:</p>
-<p><span class="math display">\[
-\hat{Y}_t = \hat{\beta}_0 + \hat{\phi}_1Y_{t-1} + \hat{\phi}_2Y_{t-2}
-\]</span></p>
-<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li></ul>
-<div class="tab-content" data-group="language">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>acf <span class="ot">&lt;-</span> <span class="fu">Acf</span>(Y, <span class="at">lag =</span> <span class="dv">10</span>)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pacf <span class="ot">&lt;-</span> <span class="fu">Pacf</span>(Y, <span class="at">lag =</span> <span class="dv">10</span>)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(pacf))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>all_dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(acf[<span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>], pacf, index))</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(all_dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"acf"</span>, <span class="st">"pacf"</span>, <span class="st">"index"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggAcf</span>(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid" width="672"></p>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggPacf</span>(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-4.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>If we use <code>ggAcf</code> or <code>ggPacf</code>, then we get confidence intervals on the plot that give us a guidance for which lags have autocorrelations that are significantly different from 0.</p>
-</div>
-</div>
-</div>
+<section id="process" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="process"><span class="header-section-number">2.2</span> Process</h2>
+<ol type="1">
+<li>Decide type of data being collected and decide what distribution the data will follow.</li>
+<li>Ask what parameters are needed for this distribution? Pick appropriate priors.</li>
+<li>Get data.</li>
+<li>Use sampling distribution (with data) and prior to get posterior distribution.</li>
+</ol>
+</section>
+<section id="common-sampling-distributions" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="common-sampling-distributions"><span class="header-section-number">2.3</span> Common Sampling Distributions</h2>
+<ul>
+<li>Normal: Continuous data that can take on negative and positive values</li>
+<li>Gamma: Continuous data that can only be positive (<span class="math inline">\(\chi^2\)</span> is a special case)</li>
+<li>Binomial: Counting number of successes</li>
+<li>Poisson: Count data (number of accidents at an intersection)</li>
+</ul>
+</section>
+<section id="common-priors" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="common-priors"><span class="header-section-number">2.4</span> Common Priors</h2>
+<ul>
+<li>Normal:
+<ul>
+<li><span class="math inline">\(\mu\)</span>: Normal</li>
+<li><span class="math inline">\(\sigma^2\)</span>: Gamma or Inverse-Gamma or Uniform</li>
+</ul></li>
+<li>Gamma:
+<ul>
+<li><span class="math inline">\(\alpha, \beta\)</span>: Gamma or Inverse Gamma or Uniform</li>
+</ul></li>
+<li>Binomial:
+<ul>
+<li><span class="math inline">\(p\)</span>: Uniform(0, 1) or Beta</li>
+</ul></li>
+<li>Poisson:
+<ul>
+<li><span class="math inline">\(\lambda\)</span>: Gamma or Uniform</li>
+</ul></li>
+</ul>
+<p>You need hyperparameters for each of these distributions. You can choose them so that these distributions are very spread out.</p>
+</section>
+</section>
+<section id="computing-the-posterior-distribution" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Computing the Posterior Distribution</h1>
+<p>We can simulate posterior distributions using Markov Chain Monte Carlo (MCMC) techniques. Markov chain because each current observation only depends on the previous value. Monte Carlo because it involves randomness to decide each point. The goal is to converge a stationary posterior distribution.</p>
 
 
 </section>

@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="dcterms.date" content="2023-09-06">
+<meta name="dcterms.date" content="2023-09-15">
 
-<title>Yang MSA - Correlation Functions</title>
+<title>Yang MSA - Ordinal Logistic Regression</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,10 +144,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Correlation Functions</h1>
+      <h1 class="title">Ordinal Logistic Regression</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analytics</div>
-                <div class="quarto-category">time series</div>
+                <div class="quarto-category">logistic regression</div>
               </div>
                   </div>
   </div>
@@ -165,16 +165,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 6, 2023</p>
+        <p class="date">September 15, 2023</p>
       </div>
     </div>
     
-      <div>
-      <div class="quarto-title-meta-heading">Modified</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date-modified">September 17, 2023</p>
-      </div>
-    </div>
       
     </div>
     
@@ -187,9 +181,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#autocorrelation" id="toc-autocorrelation" class="nav-link" data-scroll-target="#autocorrelation"><span class="header-section-number">1</span> Autocorrelation</a></li>
-  <li><a href="#partial-autocorrelation-function" id="toc-partial-autocorrelation-function" class="nav-link" data-scroll-target="#partial-autocorrelation-function"><span class="header-section-number">2</span> Partial Autocorrelation Function</a></li>
+  <li><a href="#ordinal-logistic-regression" id="toc-ordinal-logistic-regression" class="nav-link active" data-scroll-target="#ordinal-logistic-regression"><span class="header-section-number">1</span> Ordinal Logistic Regression</a>
+  <ul class="collapse">
+  <li><a href="#proportional-odds-model" id="toc-proportional-odds-model" class="nav-link" data-scroll-target="#proportional-odds-model"><span class="header-section-number">1.1</span> Proportional Odds Model</a></li>
+  <li><a href="#cumulative-logits" id="toc-cumulative-logits" class="nav-link" data-scroll-target="#cumulative-logits"><span class="header-section-number">1.2</span> Cumulative Logits</a></li>
+  </ul></li>
+  <li><a href="#proportional-odds-model-1" id="toc-proportional-odds-model-1" class="nav-link" data-scroll-target="#proportional-odds-model-1"><span class="header-section-number">2</span> Proportional Odds Model</a>
+  <ul class="collapse">
+  <li><a href="#brant-test" id="toc-brant-test" class="nav-link" data-scroll-target="#brant-test"><span class="header-section-number">2.1</span> Brant Test</a></li>
+  <li><a href="#partial-proportional-odds-model" id="toc-partial-proportional-odds-model" class="nav-link" data-scroll-target="#partial-proportional-odds-model"><span class="header-section-number">2.2</span> Partial Proportional Odds Model</a></li>
+  </ul></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">3</span> Interpretation</a></li>
   </ul>
 </nav>
     </div>
@@ -199,8 +201,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="setup" class="level1 unnumbered">
-<h1 class="unnumbered">Setup</h1>
+<p>When outcomes are <strong>ordered</strong> we can generalize the binary logistic regression model. Models can also be used when the continuous response variable has a <strong>restricted range</strong> and need to be split into categories.</p>
+<section id="ordinal-logistic-regression" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Ordinal Logistic Regression</h1>
+<p>Probability that observation <span class="math inline">\(i\)</span> has <strong>at most</strong> event <span class="math inline">\(j\)</span>, <span class="math inline">\(j = 1, \cdots, m\)</span>.</p>
+<p>We’ll be using the “Found the Wallet” data set which contains 195 observations divided between three different classes:</p>
+<ul>
+<li>Keep Both (1)</li>
+<li>Keep Money Only (2)</li>
+<li>Return All (3)</li>
+</ul>
+<section id="proportional-odds-model" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="proportional-odds-model"><span class="header-section-number">1.1</span> Proportional Odds Model</h2>
+<p>There are three methods for modeling ordinal logistic regression:</p>
+<ol type="1">
+<li>Cumulative Logit Model</li>
+<li>Adjacent Categories Model</li>
+<li>Continuation Ratio Model</li>
+</ol>
+<p>By far, the predominant way of doing ordinal logistic regression is the cumulative logit model.</p>
+</section>
+<section id="cumulative-logits" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="cumulative-logits"><span class="header-section-number">1.2</span> Cumulative Logits</h2>
+<p>We are building multiple binary logistic regression models. We have <span class="math inline">\(m\)</span> categories with probabilities (<span class="math inline">\(p_1, p_2, \cdots, p_m\)</span>) then cumulative logits are:</p>
+<p><span class="math display">\[
+\log\left(\frac{p_{i,1}}{p_{i,2} + p_{i,3} + \cdots + p_{i,m}}\right), \log\left(\frac{p_{i,1} + p_{i,2}}{p_{i,3} = \cdots + p_{i,m}}\right), \cdots, \log\left(\frac{p_{i,1} + \cdots + p_{i,m-1}}{p_m}\right)
+\]</span></p>
+<p>Notice that the sum of all the probabilities 1 through <span class="math inline">\(m\)</span> is equal to 1. The denominator is actually the difference between the cumulative probability and 1!</p>
+<p><span class="math display">\[
+\log\left(\frac{p_{i,1}}{1 - p_{i,1}}\right), \log\left(\frac{p_{i,1} + p_{i,2}}{1 - (p_{i,1} + p_{i,2})}\right), \cdots
+\]</span></p>
+<p>This results in <span class="math inline">\(m - 1\)</span> binary logistic regressions. Our new equation for ordinal logistic regression represents the probability that observation <span class="math inline">\(i\)</span> has <strong>at most</strong> event <span class="math inline">\(m\)</span>:</p>
+<p><span class="math display">\[
+\beta_{0,j} + \beta_1x_{1,i} + \cdots + \beta_kx_{k,i}
+\]</span></p>
+<p>Intercept changes, but slope parameters stays the same (called proportional odds assumption)</p>
+</section>
+</section>
+<section id="proportional-odds-model-1" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Proportional Odds Model</h1>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
 <div class="tab-content" data-group="language">
@@ -208,12 +247,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/ar2.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/wallet.csv"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>train<span class="sc">$</span>punish <span class="ot">&lt;-</span> <span class="fu">factor</span>(train<span class="sc">$</span>punish)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>clogit_model <span class="ot">&lt;-</span> <span class="fu">polr</span>(<span class="fu">factor</span>(wallet) <span class="sc">~</span> male <span class="sc">+</span> business <span class="sc">+</span> punish <span class="sc">+</span> explain, <span class="at">method =</span> <span class="st">"logistic"</span>, <span class="at">data =</span> train)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(clogit_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Re-fitting to get Hessian</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+polr(formula = factor(wallet) ~ male + business + punish + explain, 
+    data = train, method = "logistic")
+
+Coefficients:
+           Value Std. Error t value
+male     -1.0598     0.3274  -3.237
+business -0.7389     0.3556  -2.078
+punish2  -0.6276     0.4048  -1.551
+punish3  -1.4031     0.4823  -2.909
+explain   1.0519     0.3408   3.086
+
+Intercepts:
+    Value   Std. Error t value
+1|2 -2.5679  0.4190    -6.1287
+2|3 -0.7890  0.3709    -2.1273
+
+Residual Deviance: 307.3349 
+AIC: 321.3349 </code></pre>
+</div>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
@@ -221,97 +287,108 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>When we have a <em>stationary</em> distribution we can now look at correlation. If we have a random walk, then we cannot look at the correlation.</p>
-<p>Time series is typically analyzed with an assumption that observations have a potential relationship across time. One example is weight over time.</p>
-</section>
-<section id="autocorrelation" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Autocorrelation</h1>
-<p><strong>Autocorrelation</strong> is correlation between two sets of observations in the same series that are separated by <span class="math inline">\(k\)</span> points in time. This correlation includes all correlations between time point <span class="math inline">\(t\)</span> and <span class="math inline">\(t - k\)</span></p>
-<p>An <strong>autocorrelation function</strong> is the function of all autocorrelations between two sets of observations <span class="math inline">\(Y_t\)</span> and <span class="math inline">\(Y_{t-k}\)</span> across time.</p>
-<p><span class="math display">\[
-\rho_k = \text{Corr}(Y_t, Y_{t-k})
-\]</span></p>
-<div id="fig-acf-table" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/autocorrelation-table.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Autocorrelation Function</figcaption>
-</figure>
+<p>We have to test to see if the slopes are statistically different from each other in the proportional odds model.</p>
+<div class="text-center">
+<p><span class="math inline">\(H_0:\)</span> Proportional Odds Correct (Slopes Equal)</p>
+<p><span class="math inline">\(H_a:\)</span> Proportional Odds Incorrect (Slopes NOT Equal Across Models)</p>
 </div>
-<p>This uses lagged series of previous time periods to calculate the Pearson’s correlation between the series. Missing values in lagged series are ignored in the calculation. ACF can suggest that there is seasonality based on the correlation structure.</p>
-<p>Suppose that the first autocorrelation, ACF(1) is significant. This implies that two consecutive time points are related to each other. For non-seasonal data, we tend to look up to 10 or 12 lags back.</p>
-<div id="fig-acf-graph" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/autocorrelation-graph.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Autocorrelation Function Graph</figcaption>
-</figure>
-</div>
-<p>What we can see in the plot is the ACF vs.&nbsp;the</p>
-<p>For non-seasonal time series, we typically go back 10-12 lags. With seasonality, we have a pattern throughout time so we deal with seasonality differently.</p>
-</section>
-<section id="partial-autocorrelation-function" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Partial Autocorrelation Function</h1>
-<p><strong>Partial correlation</strong> is the correlation between two sets of observations, separated by <span class="math inline">\(k\)</span> points in time, after removing all previous (<span class="math inline">\(1, 2, \cdots, k-1\)</span>) autocorrelations. Essentially, these are conditional correlations that are showing the direct influence of a previous lag on the current value.</p>
-<p>This correlation does not include all the correlations between time point <span class="math inline">\(t\)</span> and <span class="math inline">\(t-k\)</span>–we are only including direct effects.</p>
-<p><span class="math display">\[
-\phi_k = \text{Corr}(Y_t, Y_{t-k} | Y_{t-1}, Y_{t-2}, \cdots, Y_{t-k-1})
-\]</span></p>
-<div id="fig-pacf-table" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/partial-autocorrelation-table.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Partial Autocorrelation Function</figcaption>
-</figure>
-</div>
-<p>The partial autocorrelation for the <span class="math inline">\(k\)</span>th lag is calculated from fitting a regression. The regression conditions on the other lags in the model through the individual weights:</p>
-<p><span class="math display">\[
-Y_t = \beta_0 + \phi_1Y_{t-1} + \phi_2Y_{t-2} + \cdots + \phi_kY_{t-k} + \epsilon_t
-\]</span></p>
-<p>The 2nd partial autocorrelation <span class="math inline">\(\phi_2\)</span> is estimated from:</p>
-<p><span class="math display">\[
-\hat{Y}_t = \hat{\beta}_0 + \hat{\phi}_1Y_{t-1} + \hat{\phi}_2Y_{t-2}
-\]</span></p>
-<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li></ul>
-<div class="tab-content" data-group="language">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<section id="brant-test" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="brant-test"><span class="header-section-number">2.1</span> Brant Test</h2>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>acf <span class="ot">&lt;-</span> <span class="fu">Acf</span>(Y, <span class="at">lag =</span> <span class="dv">10</span>)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brant)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">brant</span>(clogit_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<div class="cell-output cell-output-stdout">
+<pre><code>-------------------------------------------- 
+Test for    X2  df  probability 
+-------------------------------------------- 
+Omnibus     5.46    5   0.36
+male        0.51    1   0.47
+business    0.58    1   0.45
+punish2     0.99    1   0.32
+punish3     2.81    1   0.09
+explain     0.25    1   0.62
+-------------------------------------------- 
+
+H0: Parallel Regression Assumption holds</code></pre>
+</div>
+</div>
+<p>Proportional odds assumption may not be met for all variables. We have two approaches:</p>
+<ul>
+<li>Partial Proportional Odds Model (some variables not met)</li>
+<li>Multinomial Logistic Regression</li>
+</ul>
+</section>
+<section id="partial-proportional-odds-model" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="partial-proportional-odds-model"><span class="header-section-number">2.2</span> Partial Proportional Odds Model</h2>
+<p>Keep in mind we have to do the Brant test first to determine which variables should be included in the <code>parallel</code> argument. For the sake of completeness, we chose <code>business</code> arbitrarily.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(VGAM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: stats4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: splines</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pacf <span class="ot">&lt;-</span> <span class="fu">Pacf</span>(Y, <span class="at">lag =</span> <span class="dv">10</span>)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plogit_model <span class="ot">&lt;-</span> <span class="fu">vglm</span>(<span class="fu">factor</span>(wallet) <span class="sc">~</span> male <span class="sc">+</span> business <span class="sc">+</span> punish <span class="sc">+</span> explain, <span class="at">data =</span> train, <span class="at">family =</span> <span class="fu">cumulative</span>(<span class="at">parallel =</span> <span class="cn">FALSE</span> <span class="sc">~</span> business))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in eval(slot(family, "initialize")): response should be ordinal---see
+ordered()</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(pacf))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>all_dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(acf[<span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>], pacf, index))</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(all_dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"acf"</span>, <span class="st">"pacf"</span>, <span class="st">"index"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggAcf</span>(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(plogit_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid" width="672"></p>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+vglm(formula = factor(wallet) ~ male + business + punish + explain, 
+    family = cumulative(parallel = FALSE ~ business), data = train)
+
+Coefficients: 
+              Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept):1  -2.6695     0.4466  -5.978 2.26e-09 ***
+(Intercept):2  -0.7730     0.3678  -2.102  0.03557 *  
+male            1.0707     0.3258   3.287  0.00101 ** 
+business:1      0.9722     0.4789   2.030  0.04236 *  
+business:2      0.6376     0.3810   1.674  0.09423 .  
+punish2         0.6300     0.4008   1.572  0.11594    
+punish3         1.3956     0.4727   2.952  0.00316 ** 
+explain        -1.0532     0.3413  -3.086  0.00203 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Names of linear predictors: logitlink(P[Y&lt;=1]), logitlink(P[Y&lt;=2])
+
+Residual deviance: 306.8392 on 382 degrees of freedom
+
+Log-likelihood: -153.4196 on 382 degrees of freedom
+
+Number of Fisher scoring iterations: 5 
+
+No Hauck-Donner effect found in any of the estimates
+
+
+Exponentiated coefficients:
+      male business:1 business:2    punish2    punish3    explain 
+ 2.9174165  2.6438481  1.8918696  1.8776731  4.0373205  0.3488076 </code></pre>
 </div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggPacf</span>(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-4.png" class="img-fluid" width="672"></p>
 </div>
-</div>
-<p>If we use <code>ggAcf</code> or <code>ggPacf</code>, then we get confidence intervals on the plot that give us a guidance for which lags have autocorrelations that are significantly different from 0.</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+<section id="interpretation" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Interpretation</h1>
+<p>With cumulative logits, increasing right-hand side of the equation leads to an increased log(odds) of <strong>higher</strong> outcome category.</p>
+<p>Interpretation is still an odds ratios: <span class="math inline">\(100 \cdot (e^{\hat{\beta}_j} - 1)\%\)</span> higher expected odds of being in a higher category.</p>
+<p>In a proportional odds model, there is the same increase in odds across al singular jumps in category. In our data example, males have a coeffcient of -1.0598 so they have <strong>65.35%</strong> lower expected odds of being in a higher ethical category as compared to females.</p>
 
 
 </section>

@@ -169,12 +169,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </div>
     </div>
     
-      <div>
-      <div class="quarto-title-meta-heading">Modified</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date-modified">September 18, 2023</p>
-      </div>
-    </div>
       
     </div>
     
@@ -188,27 +182,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#arima-model" id="toc-arima-model" class="nav-link" data-scroll-target="#arima-model"><span class="header-section-number">1</span> ARIMA Model</a></li>
-  <li><a href="#correlation-graphs" id="toc-correlation-graphs" class="nav-link" data-scroll-target="#correlation-graphs"><span class="header-section-number">2</span> Correlation Graphs</a></li>
-  <li><a href="#trending-data" id="toc-trending-data" class="nav-link" data-scroll-target="#trending-data"><span class="header-section-number">3</span> Trending Data</a>
+  <li><a href="#python" id="toc-python" class="nav-link" data-scroll-target="#python"><span class="header-section-number">1</span> Python</a></li>
+  <li><a href="#arima-model" id="toc-arima-model" class="nav-link" data-scroll-target="#arima-model"><span class="header-section-number">2</span> ARIMA Model</a></li>
+  <li><a href="#correlation-graphs" id="toc-correlation-graphs" class="nav-link" data-scroll-target="#correlation-graphs"><span class="header-section-number">3</span> Correlation Graphs</a></li>
+  <li><a href="#trending-data" id="toc-trending-data" class="nav-link" data-scroll-target="#trending-data"><span class="header-section-number">4</span> Trending Data</a>
   <ul class="collapse">
-  <li><a href="#regression-line-trend" id="toc-regression-line-trend" class="nav-link" data-scroll-target="#regression-line-trend"><span class="header-section-number">3.1</span> Regression Line Trend</a></li>
-  <li><a href="#random-walk-with-drift" id="toc-random-walk-with-drift" class="nav-link" data-scroll-target="#random-walk-with-drift"><span class="header-section-number">3.2</span> Random Walk with Drift</a></li>
-  <li><a href="#dickey-fuller-test-for-trend" id="toc-dickey-fuller-test-for-trend" class="nav-link" data-scroll-target="#dickey-fuller-test-for-trend"><span class="header-section-number">3.3</span> Dickey-Fuller Test for Trend</a></li>
+  <li><a href="#regression-line-trend" id="toc-regression-line-trend" class="nav-link" data-scroll-target="#regression-line-trend"><span class="header-section-number">4.1</span> Regression Line Trend</a></li>
+  <li><a href="#random-walk-with-drift" id="toc-random-walk-with-drift" class="nav-link" data-scroll-target="#random-walk-with-drift"><span class="header-section-number">4.2</span> Random Walk with Drift</a></li>
+  <li><a href="#dickey-fuller-test-for-trend" id="toc-dickey-fuller-test-for-trend" class="nav-link" data-scroll-target="#dickey-fuller-test-for-trend"><span class="header-section-number">4.3</span> Dickey-Fuller Test for Trend</a></li>
   </ul></li>
-  <li><a href="#ebay-example" id="toc-ebay-example" class="nav-link" data-scroll-target="#ebay-example"><span class="header-section-number">4</span> Ebay Example</a>
+  <li><a href="#ebay-example" id="toc-ebay-example" class="nav-link" data-scroll-target="#ebay-example"><span class="header-section-number">5</span> Ebay Example</a>
   <ul class="collapse">
-  <li><a href="#different-ways-to-interpolate" id="toc-different-ways-to-interpolate" class="nav-link" data-scroll-target="#different-ways-to-interpolate"><span class="header-section-number">4.1</span> Different Ways to Interpolate</a></li>
-  <li><a href="#finding-mixed-models-p-q" id="toc-finding-mixed-models-p-q" class="nav-link" data-scroll-target="#finding-mixed-models-p-q"><span class="header-section-number">4.2</span> Finding Mixed Models (p, q)</a></li>
+  <li><a href="#different-ways-to-interpolate" id="toc-different-ways-to-interpolate" class="nav-link" data-scroll-target="#different-ways-to-interpolate"><span class="header-section-number">5.1</span> Different Ways to Interpolate</a></li>
+  <li><a href="#finding-mixed-models-p-q" id="toc-finding-mixed-models-p-q" class="nav-link" data-scroll-target="#finding-mixed-models-p-q"><span class="header-section-number">5.2</span> Finding Mixed Models (p, q)</a></li>
   </ul></li>
-  <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection"><span class="header-section-number">5</span> Model Selection</a>
+  <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection"><span class="header-section-number">6</span> Model Selection</a>
   <ul class="collapse">
-  <li><a href="#automatic-searches" id="toc-automatic-searches" class="nav-link" data-scroll-target="#automatic-searches"><span class="header-section-number">5.1</span> Automatic Searches</a>
+  <li><a href="#automatic-searches" id="toc-automatic-searches" class="nav-link" data-scroll-target="#automatic-searches"><span class="header-section-number">6.1</span> Automatic Searches</a>
   <ul class="collapse">
-  <li><a href="#recommendations" id="toc-recommendations" class="nav-link" data-scroll-target="#recommendations"><span class="header-section-number">5.1.1</span> Recommendations</a></li>
+  <li><a href="#recommendations" id="toc-recommendations" class="nav-link" data-scroll-target="#recommendations"><span class="header-section-number">6.1.1</span> Recommendations</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#forecasting" id="toc-forecasting" class="nav-link" data-scroll-target="#forecasting"><span class="header-section-number">6</span> Forecasting</a></li>
+  <li><a href="#forecasting" id="toc-forecasting" class="nav-link" data-scroll-target="#forecasting"><span class="header-section-number">7</span> Forecasting</a></li>
   </ul>
 </nav>
     </div>
@@ -220,10 +215,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="setup" class="level1 unnumbered">
 <h1 class="unnumbered">Setup</h1>
-<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
-<div class="tab-content" data-group="language">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>:::{.panel-tabset group = “language”} # R</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
@@ -236,8 +228,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>hurricane <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/hurrican.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+</section>
+<section id="python" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Python</h1>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
@@ -245,12 +238,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>hurricane <span class="op">=</span> r.hurricane</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-</div>
-</div>
-</div>
+<p>:::</p>
 </section>
-<section id="arima-model" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> ARIMA Model</h1>
+<section id="arima-model" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> ARIMA Model</h1>
 <p>Remember that before you start using any ARMA or ARIMA models you need to have stationary data.</p>
 <p>There is nothing to limit both AR and MA processes to be in the model simultaneously. These mixed models are typically used to help reduce the number of parameters needed for good estimation–parsimonious model.</p>
 <p>The most basic model with only one lag of each piece with no differencing is ARMA(1, 1) model.</p>
@@ -260,20 +251,20 @@ Y_t = \omega + \phi Y_{t-1} + e_t - \theta e_{t-1}
 <p>ARMA(p, q) denotes mixture models where <span class="math inline">\(p\)</span> is the number of autoregressive terms and <span class="math inline">\(q\)</span> is the number of moving average terms.</p>
 <p>ARIMA(p, d, q) represents <span class="math inline">\(p\)</span> autoregressive terms, <span class="math inline">\(d\)</span> number of differences, and <span class="math inline">\(q\)</span> number of moving average terms.</p>
 </section>
-<section id="correlation-graphs" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Correlation Graphs</h1>
+<section id="correlation-graphs" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Correlation Graphs</h1>
 <p>Characteristics from separate pieces in the model are in the correlation functions. All of the functions tail off exponentially as the lags increase.</p>
 </section>
-<section id="trending-data" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Trending Data</h1>
+<section id="trending-data" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Trending Data</h1>
 <p>If there is a trend, the current series is <strong>NOT</strong> stationary. Trending series are not stationary because they do no converge to a mean in the long run.</p>
 <p>Consider one of two things:</p>
 <ul>
 <li>Series is stationary about a regression line.</li>
 <li>Series is a Random Walk with drift.</li>
 </ul>
-<section id="regression-line-trend" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="regression-line-trend"><span class="header-section-number">3.1</span> Regression Line Trend</h2>
+<section id="regression-line-trend" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="regression-line-trend"><span class="header-section-number">4.1</span> Regression Line Trend</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/trend-regression-line.png" class="img-fluid figure-img"></p>
@@ -290,8 +281,8 @@ Y_t = \beta_0 + \beta_1 t + \epsilon_t
 <li>Can also fit quadratic, exponential, or any other form of time</li>
 </ul>
 </section>
-<section id="random-walk-with-drift" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="random-walk-with-drift"><span class="header-section-number">3.2</span> Random Walk with Drift</h2>
+<section id="random-walk-with-drift" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="random-walk-with-drift"><span class="header-section-number">4.2</span> Random Walk with Drift</h2>
 <p><span class="math display">\[
 Y_t = \omega + Y_{t-1} + e_t
 \]</span></p>
@@ -300,8 +291,8 @@ Y_t = \omega + Y_{t-1} + e_t
 </ul>
 <p>Random Walk with drift is <strong>NOT</strong> stationary if you remove the trend line. We need to take differences.</p>
 </section>
-<section id="dickey-fuller-test-for-trend" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="dickey-fuller-test-for-trend"><span class="header-section-number">3.3</span> Dickey-Fuller Test for Trend</h2>
+<section id="dickey-fuller-test-for-trend" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="dickey-fuller-test-for-trend"><span class="header-section-number">4.3</span> Dickey-Fuller Test for Trend</h2>
 <div class="text-center">
 <p><span class="math inline">\(H_0: \phi = 1\)</span>. Random walk with drift</p>
 <p><span class="math inline">\(H_a: \left| \phi \right| &lt; 1\)</span>. Deterministic trend, not stochastic trend</p>
@@ -309,8 +300,8 @@ Y_t = \omega + Y_{t-1} + e_t
 <p>Stochastic trend refers to a random walk. Even if we reject the null hypothesis we still have to take care of the trend in some way.</p>
 </section>
 </section>
-<section id="ebay-example" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Ebay Example</h1>
+<section id="ebay-example" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Ebay Example</h1>
 <p>Ebay stock data using daily high information. September 1998 - December 1999.</p>
 <p>Note the dataset has missing values and we’ll see how to see these visually.</p>
 <p>:::{.panel-tabset group = “language”} # R</p>
@@ -327,8 +318,8 @@ Y_t = \omega + Y_{t-1} + e_t
 </div>
 </div>
 <p>:::</p>
-<section id="different-ways-to-interpolate" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="different-ways-to-interpolate"><span class="header-section-number">4.1</span> Different Ways to Interpolate</h2>
+<section id="different-ways-to-interpolate" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="different-ways-to-interpolate"><span class="header-section-number">5.1</span> Different Ways to Interpolate</h2>
 <ul>
 <li>Fit a function between points</li>
 <li>Last observation carried forward</li>
@@ -411,8 +402,8 @@ Note: in fact, p.value = 0.01 means p.value &lt;= 0.01 </code></pre>
 </div>
 <p>:::</p>
 </section>
-<section id="finding-mixed-models-p-q" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="finding-mixed-models-p-q"><span class="header-section-number">4.2</span> Finding Mixed Models (p, q)</h2>
+<section id="finding-mixed-models-p-q" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="finding-mixed-models-p-q"><span class="header-section-number">5.2</span> Finding Mixed Models (p, q)</h2>
 <p>Explore correlation plots (ACF, PACF) to see what patterns there are.</p>
 <p>What to explore correlations on:</p>
 <ul>
@@ -426,10 +417,10 @@ Note: in fact, p.value = 0.01 means p.value &lt;= 0.01 </code></pre>
 </ul>
 </section>
 </section>
-<section id="model-selection" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Model Selection</h1>
-<section id="automatic-searches" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="automatic-searches"><span class="header-section-number">5.1</span> Automatic Searches</h2>
+<section id="model-selection" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Model Selection</h1>
+<section id="automatic-searches" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="automatic-searches"><span class="header-section-number">6.1</span> Automatic Searches</h2>
 <ol type="1">
 <li>Plotting Patterns - ACF, PACF</li>
 <li>Automatic Selection Techniques (R and Python)
@@ -437,15 +428,15 @@ Note: in fact, p.value = 0.01 means p.value &lt;= 0.01 </code></pre>
 <li><code>auto.arima</code> function</li>
 </ol></li>
 </ol>
-<section id="recommendations" class="level3" data-number="5.1.1">
-<h3 data-number="5.1.1" class="anchored" data-anchor-id="recommendations"><span class="header-section-number">5.1.1</span> Recommendations</h3>
+<section id="recommendations" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="recommendations"><span class="header-section-number">6.1.1</span> Recommendations</h3>
 <p>If there is a trend, test to see if it is a deterministic trend or random walk with drift.</p>
 <p>If series has a deterministic trend, fit regression and then use automatic search on <strong>residuals</strong>. Otherwise, send series through automatic procedure (it will fit a difference if there is a trend).</p>
 <p>If there is no trend, you can send series through automatic search.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Python</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
 <details open="">
 <summary>Code</summary>
@@ -575,9 +566,8 @@ Training set -0.0003383851</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>We can have the <code>Arima</code> function not estimate terms that do not seem significant based off our correlation functions by providing a vector of <code>NA</code> or <code>0</code> to the <code>fixed</code> parameter.</p>
 </div>
-<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 
 </div>
 </div>
@@ -585,8 +575,8 @@ Training set -0.0003383851</code></pre>
 </section>
 </section>
 </section>
-<section id="forecasting" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Forecasting</h1>
+<section id="forecasting" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Forecasting</h1>
 
 
 </section>
