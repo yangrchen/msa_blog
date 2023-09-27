@@ -1,0 +1,190 @@
+---
+title: Seasonality Models
+date: 09/27/2023
+---
+
+# Setup {.unnumbered}
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r setup}
+#| warning: false
+library(aTSA)
+library(tseries)
+library(forecast)
+library(tidyverse)
+library(reticulate)
+
+use_condaenv("msa")
+
+usairlines <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv")
+passenger <- ts(usairlines$Passengers, start = 1990, frequency = 12)
+```
+
+# Python
+
+```{python}
+import pandas as pd
+import numpy as np
+import statsmodels.api as sma
+from statsmodels.tsa.seasonal import STL
+from statsmodels.tsa.arima_model import ARIMA
+from statsmodels.tsa.holtwinters import SimpleExpSmoothing, Holt, ExponentialSmoothing
+
+usair = r.usairlines
+df = pd.date_range(start='1/1/1990', end='3/1/2008', freq='MS')
+usair.index = pd.to_datetime(df)
+
+train = usair.head(207)
+test = usair.tail(12)
+```
+
+:::
+
+# Review
+
+## Exponential Smoothing Model Forecasts
+
+In the short term, exponential smoothing models can be great at forecasting one-step ahead. For seasonal models, the one-step ahead is a whole season ahead.
+
+## Stationarity
+
+Stationary means that any time could be the mean. Eventually our data converges to a mean.
+
+We need consistency of mean and variance. If there are significant changes in mean (trending) or seasonality then the data is **NOT** stationary.
+
+## ARIMA Models
+
+AR is forecasting a series based on the past values in the series--called **lags**. With AR terms, the actual past observations inform the prediction in the next time period.
+
+MA is forecasting a series based solely on past errors--called **error lags**. With MA terms, the mistake you made in the last observation informs what your prediction is in the next time period.
+
+Typically, we write ARIMA as:
+
+$$
+\text{ARIMA}(p, d, q)
+$$
+
+-   $p$ is the number of AR terms
+-   $d$ is the number of first differences
+-   $q$ is the number of MA terms
+
+## Seasonality
+
+There is no formal test for seasonality. You have to plot your overall data to see if you believe seasonality exists.
+
+# Using the US Passengers Data
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r train-test-split}
+train <- subset(passenger, end = length(passenger) - 12)
+test <- subset(passenger, start = length(passenger) - 11)
+
+decomp_stl <- stl(train, s.window = 7)
+plot(decomp_stl)
+```
+
+# Python
+
+
+
+:::
+
+To decide how large our test set should be, we use the length of forecast we are interested in. In this case, we are interested in the next year forecast so the length of test will be 12 months.
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r holt-winters-model}
+hwes_usair_train <- hw(train, seasonal = "multiplicative", initial = "optimal", h = 12)
+autoplot(hwes_usair_train) +
+    autolayer(fitted(hwes_usair_train), series = "fitted") +
+    ylab("Airlines Passengers") +
+    geom_vline(xintercept = 2007.25, color = "orange", linetype = "dashed")
+
+hw_error <- test - hwes_usair_train$mean
+
+hw_mae <- mean(abs(hw_error))
+hw_mape <- mean(abs(hw_error) / abs(test)) * 100
+```
+
+Is this a good MAPE? We don't know, but exponential smoothing models make a good baseline to compare other models to.
+
+# Python
+
+:::
+
+:::{.panel-tabset group="language"}
+# R
+
+# Python
+
+:::
+
+# Seasonality
+
+**Seasonality** is the component of time series that reprsents the effects of seasonal variation. However, just because you have something that repeats every year (e.g. chocolate sales in February) does not mean that it is seasonal. A **seasonal period ($S$)** is the length of time that the season occurs. For monthly data, $S = 12$.
+
+Seasonal data means that no matter where you are in a season, that seasonal wave will repeat itself.
+
+By defiinition, seasonal data is not stationary. Mathematically, stationarity is if you take any window of time to your data, the average stays the same. See @fig-stationary-windows for an example.
+
+![Seasonality is Not Stationary](images/stationary-windows.png){#fig-stationary-windows}
+
+# Seasonal ARIMA Models
+
+Similar to trend, seasonality can be solved with deterministic or stochastic solutions.
+
+**Deterministic** uses seasonal dummy variables, Fourier transforms, and predictor variables. **Stochastic** uses seasonal differences. We always have to make our data stationary first before modeling.
+
+# Seasonal Unit-Root Testing
+
+We can perform the **Canova-Hansen** test to evaluate whether a unit root exists for seasonal data.
+
+:::{.text-center}
+$H_0$: Deterministic Seasonality (Differencing will not help)
+
+$H_a$: Stochastic Seasonality (Differencing needed)
+:::
+
+No good formal tests for seasons beyond 24. Every time we take a difference we essentially create a whole new distribution. Taking one difference and taking one difference of up to 12 lags are not similar.
+
+If we face this situation, then we should try both paths and see which model predicts better.
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r checking-seasonal-diffs}
+train %>% nsdiffs()
+```
+
+```{r plotting-seasonal-diff}
+cbind("Airlines Passengers" = train, "Annual change in Passengers" = diff(train, 12)) %>%
+    autoplot(facets = TRUE) +
+    labs(x = "Time", y = "") +
+    ggtitle("Comparison of Difference Data to Original")
+```
+
+This result tells us that we should take one **seasonal** difference. After we take our seasonal difference (12 lags) then we need to check for **regular** differences afterwards.
+
+```{r checking-regular-diffs}
+train %>%
+    diff(lag = 12) %>%
+    ndiffs()
+```
+
+This result tells us that we should take 0 regular differences after taking the seasonal difference. No trend, no seasonality, so we believe our data is now stationary.
+
+# Python
+
+:::
+
+# Deterministic Solutions
+
+## Seasonal Dummy Variables
+
+For a time series with $S$ periods within a season, there will be **S - 1** dummy variables, one for each period (and one accounted for with the intercept).
+
