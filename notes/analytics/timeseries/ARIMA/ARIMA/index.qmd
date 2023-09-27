@@ -1,7 +1,7 @@
 ---
 title: ARIMA Models
 date: 09/13/2023
-date-modified: 09/18/2023
+date-modified: 09/19/2023
 draft: true
 ---
 

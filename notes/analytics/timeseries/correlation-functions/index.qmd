@@ -2,7 +2,7 @@
 title: Correlation Functions
 author: Yang Chen
 date: 09/06/2023
-date-modified: 09/17/2023
+date-modified: 09/19/2023
 ---
 
 # Setup {.unnumbered}
@@ -44,8 +44,6 @@ This uses lagged series of previous time periods to calculate the Pearson's corr
 Suppose that the first autocorrelation, ACF(1) is significant. This implies that two consecutive time points are related to each other. For non-seasonal data, we tend to look up to 10 or 12 lags back. 
 
 ![Autocorrelation Function Graph](images/autocorrelation-graph.png){#fig-acf-graph}
-
-What we can see in the plot is the ACF vs. the 
 
 For non-seasonal time series, we typically go back 10-12 lags. With seasonality, we have a pattern throughout time so we deal with seasonality differently.
 
