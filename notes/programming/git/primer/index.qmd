@@ -1,0 +1,417 @@
+---
+title: Git Basics
+date: 09/20/2023
+engine: knitr
+---
+
+# Getting Started
+
+You'll need to have Git installed on your computer first before, well... using Git. 
+
+You can find an installation for your operating system on the [Git website](https://git-scm.com/downloads). Whichever way you install Git, make sure you install the application to your PATH if given the option to do so. For Windows, make sure to select **"Use Git from the Windows Command Prompt"** option.
+
+We'll be using the (dreaded) command line! It's useful to get comfortable working your way around the command line even while graphical user interface (GUI) apps exist like Github Desktop. Command lines are fairly agnostic and during the practicum we don't have the luxury of using Github Desktop anyhow. 
+
+It's not scary; it's not magic. It's just carpal tunnel waiting to happen.
+
+:::{.panel-tabset group="os-terminals"}
+# Windows
+
+Some of the basic terminal commands aren't named the same between Unix and Windows terminals. If you want one-to-one compatibility between the non-Git commands here, then you can use **Git Bash**.
+
+If you installed Git Bash, then you can search for it in your applications and run this. All the commands I show will be available there and will run.
+
+Otherwise, Windows has Command Prompt or Powershell depending on what you prefer. You can run Command Prompt by either looking for it in your apps or searching `cmd` after hitting `Win` + `R`.
+
+Check to see that you have Git installed:
+
+```{bash filename="Terminal"}
+git -v
+```
+
+# MacOS
+
+MacOS has a native **Terminal** app that you can search for by using Spotlight (`⌘` + `Space`). 
+
+Check to see that you have Git installed:
+
+```{bash filename="Terminal"}
+git -v
+```
+:::
+
+# Git as a Version Control System
+
+Git is a **distributed version control system (DVCS)**. What this means is that every user computer **clones the server file repository along with that repository's history**. Even if the server repository goes down, we still have the cloned repositories that we can use to back up the server. Contrast this to a **centralized** repository where we're constantly pushing and pulling files from a single centralized server.
+
+Git works a little differently from other VCS in that it takes **snapshots** of your files every time you commit your work. Each snapshot represents the state of your files at any given commit. Many older VCS take a **delta-based** approach which show you what files changes have been made from the base files. Snapshots allow for clear representations of a project's history at any commit and direct comparisons between two different commits. 
+
+If a file hasn't changed, then Git provides a reference to the last identical file to save space. Essentially, we're not just saving changes we have our own mini filesystem and that gives us a lot of opportunity.
+
+That's about as much background into version control systems as I'll go into. Let's run some commands!
+
+![Centralized vs. Distributed Version Control](images/vcs-type-diagrams.jpeg){#fig-centralized-distributed-vcs}
+
+# Basic Git Workflow
+
+We'll be working with a pre-existing repository. You won't be able to push changes to the server without being a collaborator, but all the commands I will be showing here apply all the same.
+
+The basic workflow goes something like this:
+
+```{mermaid}
+flowchart LR
+    A[Pull/Clone repository] --> B[Do some work]
+    B --> C[Stage/Unstage changes]
+    C --> D[Commit your work]
+    D --> E[Push your work to the server]
+```
+
+We'll also go over how to view the commit history, see differences between files, and monitor other useful activity.
+
+# Cloning a Repository
+
+**Cloning** a repository refers to getting a copy of an existing Git repository from the server. We use `git clone <repository-link>` to grab a full copy of the files along with file history. You should see a new directory with the repository's name.
+
+Let's clone the example repository now and change into the directory:
+
+```{bash filename="Terminal"}
+git clone https://github.com/msa2024-hackers/msa-share20-gitdemo.git
+```
+
+```{r}
+knitr::opts_knit$set(root.dir = "msa-share20-gitdemo")
+```
+
+:::{.panel-tabset group="os-terminals"}
+# Windows
+```{.bash filename="Terminal"}
+dir
+cd msa-share20-gitdemo
+```
+
+```{}
+...
+msa-share20-gitdemo
+```
+
+```{.bash filename="Terminal"}
+dir
+```
+
+```{}
+README.md
+a.txt
+b.txt
+c.txt
+dont-run-this.py
+```
+
+# MacOS
+
+```{.bash filename="Terminal"}
+ls
+cd msa-share20-gitdemo
+```
+
+```{}
+...
+msa-share20-gitdemo
+```
+
+```{bash filename="Terminal"}
+ls
+```
+
+:::
+
+You now have a clone of the server repository on your local machine and you can start committing (making snapshots) of any work you do!
+
+# Tracking Your Work
+
+Files have two states: **untracked** and **tracked**. 
+
+## Tracked Files
+
+**Tracked files** are any files that you add to your staging area--also called the **index**--or were in the previous snapshot. 
+
+For example, all the files we listed out (e.g. {a-b}.txt) from the `ls` command came from the current snapshot of the repository so they are already tracked. If we had created a local repository from scratch using `git init` then every file would initially start untracked.
+
+Tracked files have three sub-states:
+
+-   Unmodified
+-   Modified
+-   Staged
+
+## Untracked Files
+
+**Untracked files** are any files not in the last snapshot and not in the staging area.
+
+![Git Staging Lifecycle](images/git-stage-lifecycle.jpeg){#fig-staging-lifecycle}
+
+## Check File Status
+
+How can we see what state our files are in? There's the handy dandy `git status` command!
+
+```{bash filename="Terminal"}
+git status
+```
+
+We haven't changed added, modified, or staged any files yet. Let's do that now:
+
+:::{.panel-tabset group="os-terminals"}
+# Windows
+
+```{.bash filename="Terminal"}
+copy crazy-cats.txt+
+git status
+```
+
+```{}
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+    crazy-cats.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+```
+
+# MacOS
+
+```{bash filename="Terminal"}
+touch crazy-cats.txt
+git status
+```
+:::
+
+`crazy-cats.txt` is currently untracked. And like the blackbox magician is suggesting, we can use `git add` to track the file:
+
+```{bash filename="Terminal"}
+git add crazy-cats.txt
+git status
+```
+
+The argument for `git add <arg>` can take in a path name for a file or a directory. If it's a directory, then the command recursively adds all files in the directory:
+
+:::{.panel-tabset group="os-terminals"}
+# Windows
+
+```{.bash filename="Terminal"}
+mkdir crazy-pets
+copy crazy-pets/crazy-dogs.txt+
+```
+
+# MacOS
+
+```{bash filename="Terminal"}
+mkdir crazy-pets
+touch crazy-pets/crazy-dogs.txt
+```
+:::
+
+```{bash filename="Terminal"}
+git add crazy-pets
+git status
+```
+
+Note that when you `git add` you are staging files at the **current state the file was in at the time of the command**. What this means is that if you make any additional changes that you want to be committed then you should rerun the `git add` command: 
+
+```{bash filename="Terminal"}
+echo "meow" >> crazy-cats.txt
+echo "bbbb" >> b.txt
+git status
+```
+
+`crazy-cats.txt` shows up again under **"Changes not staged for commit"** because we started tracking the last state of the file ("Changed to be commited") but we now have a new current working state which is different.
+
+`git status` also has a shorthand flag `-s` which is less verbose:
+
+```{bash filename="Terminal"}
+git status -s
+```
+
+- `M` stands for modified
+- `A` stands for added
+- `??` stand for untracked
+
+The left hand column refers to the file status in the staging area while the right hand column refers to the file status in the working tree. For example, `MM` would stand for a modified file in both the staging area and the working tree.
+
+I made a change to `b.txt` but I "forgot" about it and don't actually want to commit it. I also changed my mind about staging `crazy-cats.txt`. What can I do?
+
+# Restoring / Undoing Your Work
+
+So far we have learned how to track and stage our work. However, let's say we staged a file or set of files that we don't actually want to stage. 
+
+We use `git restore --staged <path>` to unstage a file. 
+
+```{bash filename="Terminal"}
+git restore --staged crazy-cats.txt
+git status
+```
+
+If we leave out the `--staged` flag then the restore command can actually restore a file to the last committed version--this will discard any uncommitted local changes you made to a file.
+
+:::{.callout-warning}
+`git restore` for discarding local changes cannot be undone. Make sure you actually don't need the changes before running this command.
+:::
+
+```{bash filename="Terminal"}
+git restore b.txt
+git status -s
+```
+
+:::{.callout-note}
+`git restore` was introduced in Git v.2.23.0. Previously, we had to use `git reset HEAD <file>` to unstage files and `git checkout -- <file>` to discard changes in the working directory.
+:::
+
+# Committing Your Work
+
+Whenever we **commit** our work, we can think of Git as writing the state of our files in the staging area--the snapshot--into a logbook. Glory to us; our work will go down into the pages of (our specific codebase repository) history!
+
+`git commit` creates a new commit from our staged files. If you just run the command without any additional flags then it will open up some editor (e.g. Vim, nano, etc.) for you to view your commit and write a message for it. In this case, I will only show you the shorthand for creating a commit with a message describing the changes.
+
+```{bash filename="Terminal"}
+git commit -m "Story X: Added crazy-pets files"
+```
+
+The output tells us some useful information like which branch the commit we committed on, the commit ID, and the types of changes we made. Once we make an official commit, we can always revert to or compare with it. 
+
+If we want to skip the staging area and automatically stage every file that was already tracked before the commit (e.g. modified files) then we can use `git commit -a`. If you want to combine the `-m` and `-a` flag the command would look like this:
+
+```{.bash filename="Terminal"}
+git commit -am "Story A: Automatically staging cool stuff"
+```
+
+:::{.callout-note}
+There are special git commands `git rm` and `git mv` to account for removing or moving files. However, those operations follow the same general process as adding and modifying files. We do some work, add our changes to the staging area, and then make a commit for them.
+:::
+
+# Viewing Commits
+
+We use `git log` to read the logbook of past commits. Commits show up in reverse chronological order.
+
+```{bash}
+git log
+```
+
+To view the first `n` commits:
+
+```{bash}
+git log -2
+```
+
+However, we're not just limited to the default output. There are a variety of options that we have to display different types of information. For example, if we want to see some stats (number of added lines, modifications, etc.) for each commit we can use the `--stat` flag:
+
+```{bash}
+git log --stat
+```
+
+We can also output a completely custom output using the `--pretty=format` setting which lets you put in format specifiers:
+
+```{bash}
+git log --pretty=format:"%h / %an / %ad"
+```
+
+In this case I'm outputting the abbreviated commit hash, the author name, and the date of the commit. A few useful specifiers are listed in @tbl-format-specifiers.
+
+| Specifier | Description of Output
+| -------- | ---------------------
+| `%H`     | Commit hash
+| `%h`     | Abbreviated commit hash
+| `%T`     | Tree hash
+| `%t`     | Abbreviated tree hash
+| `%P`     | Parent hashes
+| `%p`     | Abbreviated parent hashes
+| `%an`    | Author name
+| `%ae`    | Author email
+| `%ad`    | Author date
+| `%cn`    | Committer name
+| `%ce`    | Committer email
+| `%cd`    | Committer date
+| `%cr`    | Committer date, relative
+| `%s`     | Subject
+
+: Useful Format Specifiers {#tbl-format-specifiers}
+
+A really useful feature is being able to specify a file path to see only commits that involve that file:
+
+```{bash filename="Terminal"}
+git log -- dont-run-this.py
+```
+
+# Pushing Your Work to a Remote
+
+Remote repositories are repositories hosted on the Internet or another network. Although we typically think of remote repositories as being on a separate machine, you can actually have a remote repository locally. 
+
+If you recall the DVCS diagram, each of those separate cloned repositories could be a remote. However, in a single team use case like our practicum we might just have a single remote that we are pushing and pulling from. 
+
+Remote repositories are what make collaboration possible. If we know how to use remotes then we can effectively work between different users while having a reliable codebase to work on.
+
+To see your remotes, run `git remote`. The `-v` flag shows the URLs that the remote shortnames refer to:
+
+```{bash filename="Terminal"}
+git remote
+git remote -v
+```
+
+## Adding a Remote
+
+If we want to manually add a new remote we can use `git remote add <remote-name> <URL>`
+
+```{bash filename="Terminal"}
+git remote add yang https://github.com/msa2024-hackers/msa-share20-gitdemo.git
+git remote -v
+```
+
+## Fetching / Pulling a Remote
+
+We need some way to get the work that others have pushed up to the remotes you have configured. To do that, we use `git fetch` or `git pull`.
+
+The fundamental difference between these two commands is that **fetching** downloads the data to your local repository **but it doesn't automatically merge it with your working directory**. You have to manually merge it in yourself. **Pulling** will both fetch and then merge the changes into your working directory. 
+
+There is a more nuanced explanation to this difference, but for a basic workflow a single team will most likely only have to use `git pull`.
+
+```{bash filename="Terminal"}
+git pull
+```
+
+## Removing a Remote
+
+To remove a remote, we use `git remote remove <remote-name>`:
+
+```{bash filename="Terminal"}
+git remote remove yang
+```
+
+## Pushing to a Remote
+
+Finally! The last command and then we're one step closer to Git mastery! 
+
+To share our work with a remote repository, we **push** to the upstream. We use `git push <remote> <branch>` to push our code to the remote. Branches are outside the scope of this article, but you typically have the `main` branch when you clone a repository by default.
+
+```{.bash filename="Terminal"}
+git push origin main
+```
+
+Again, if you were working with a repository that you had write permissions to then you could navigate over to Github or the designated Git server and find your work on the remote repository!
+
+# Conclusion
+
+Git is an effective solution to version control that allows multiple users to monitor and contribute to codebases in a stable manner. For a basic workflow, you will pull the new changes, do some work, make a commit, and then push out your changes for others to view and use. There are **a lot** of features to Git--the ones I'm showing here can still get you very far.
+
+However, don't think of this workflow as your ultimate solution for file collaboration in Git. Effective communication is still necessary to make sure you don't clobber each other's work. Make sure to carefully review commits and if necessary look farther into Git's documentation to iron out any issues / scale up as the collaboration grows more complex.
+
+<!-- Cells to run for cleanup -->
+
+```{r}
+#| echo: false
+#| output: false
+knitr::opts_knit$set(root.dir = ".")
+```
+
+```{bash}
+#| echo: false
+#| output: false
+rm -r msa-share20-gitdemo
+```
