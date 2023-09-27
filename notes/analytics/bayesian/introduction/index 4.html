@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="description" content="Notes on Python, R and fun little experiments using software!">
+<meta name="dcterms.date" content="2023-09-12">
 
-<title>Yang MSA - Programming</title>
+<title>Yang MSA - Bayesian Workshop</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,25 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<link href="../../favicon.ico" rel="icon">
-<script src="../../site_libs/quarto-listing/list.min.js"></script>
-<script src="../../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../favicon.ico" rel="icon">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -64,40 +62,11 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="../../../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -107,7 +76,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Yang MSA</span>
     </a>
   </div>
@@ -118,11 +87,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../notes/index.html" rel="" target="">
+    <a class="nav-link" href="../../../../notes/index.html" rel="" target="">
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../blog/index.html" rel="" target="">
+    <a class="nav-link" href="../../../../blog/index.html" rel="" target="">
  <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
@@ -140,15 +109,10 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Programming</h1>
-                  <div>
-        <div class="description">
-          Notes on Python, R and fun little experiments using software!
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">programming</div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Bayesian Workshop</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">analytics</div>
               </div>
                   </div>
   </div>
@@ -163,177 +127,124 @@ ul.task-list li input[type="checkbox"] {
             </div>
     </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 12, 2023</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(4)</span></div><div class="category" data-category="programming">programming <span class="quarto-category-count">(4)</span></div><div class="category" data-category="python">python <span class="quarto-category-count">(1)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#review-of-frequentist-ideology" id="toc-review-of-frequentist-ideology" class="nav-link active" data-scroll-target="#review-of-frequentist-ideology"><span class="header-section-number">1</span> Review of Frequentist Ideology</a></li>
+  <li><a href="#basics-of-bayesian-statistics" id="toc-basics-of-bayesian-statistics" class="nav-link" data-scroll-target="#basics-of-bayesian-statistics"><span class="header-section-number">2</span> Basics of Bayesian Statistics</a>
+  <ul class="collapse">
+  <li><a href="#bayes-theorem" id="toc-bayes-theorem" class="nav-link" data-scroll-target="#bayes-theorem"><span class="header-section-number">2.1</span> Bayes Theorem</a></li>
+  <li><a href="#process" id="toc-process" class="nav-link" data-scroll-target="#process"><span class="header-section-number">2.2</span> Process</a></li>
+  <li><a href="#common-sampling-distributions" id="toc-common-sampling-distributions" class="nav-link" data-scroll-target="#common-sampling-distributions"><span class="header-section-number">2.3</span> Common Sampling Distributions</a></li>
+  <li><a href="#common-priors" id="toc-common-priors" class="nav-link" data-scroll-target="#common-priors"><span class="header-section-number">2.4</span> Common Priors</a></li>
+  </ul></li>
+  <li><a href="#computing-the-posterior-distribution" id="toc-computing-the-posterior-distribution" class="nav-link" data-scroll-target="#computing-the-posterior-distribution"><span class="header-section-number">3</span> Computing the Posterior Distribution</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
+<p>The main difference between Frequentist and Bayesian statistics is how they view population parameters. Bayesian says there is a whole distribution behind these parameters and we are trying to uncover the underlying distribution. We are no longer focused on fixed values.</p>
+<section id="review-of-frequentist-ideology" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Review of Frequentist Ideology</h1>
+<p>A population parameter is <strong>fixed</strong>, unknown quantity that we are trying to estimate. Estimate the population parameter with a point estimate.</p>
+<ul>
+<li><span class="math inline">\(\mu \longrightarrow \bar{x}\)</span></li>
+<li><span class="math inline">\(p \longrightarrow \hat{p}\)</span></li>
+<li><span class="math inline">\(\beta_1 \longrightarrow \hat{\beta_1}\)</span></li>
+</ul>
+</section>
+<section id="basics-of-bayesian-statistics" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Basics of Bayesian Statistics</h1>
+<p>Population parameters are random variables. We are not estimating a number, but are instead estimating a distribution.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/freq-vs-bayesian.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Frequentist vs.&nbsp;Bayesian</figcaption>
+</figure>
+</div>
+<p>We assign a <strong>prior distribution</strong> to the parameter (can be informative or noninformative or vague). The data collected is called the <strong>sampling distribution</strong>.</p>
+<ul>
+<li>Prior distribution denoted as <span class="math inline">\(p(\mu)\)</span></li>
+<li>Sampling distribution will be denoted by <span class="math inline">\(p(Y|\mu)\)</span></li>
+<li>We put this information together to find the <strong>posterior distribution</strong>, <span class="math inline">\(p(\mu|Y)\)</span></li>
+</ul>
+<section id="bayes-theorem" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="bayes-theorem"><span class="header-section-number">2.1</span> Bayes Theorem</h2>
+<p><span class="math display">\[
+P(\mu|Y) = \frac{P(Y|\mu)P(\mu)}{P(Y)}
+\]</span></p>
+</section>
+<section id="process" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="process"><span class="header-section-number">2.2</span> Process</h2>
+<ol type="1">
+<li>Decide type of data being collected and decide what distribution the data will follow.</li>
+<li>Ask what parameters are needed for this distribution? Pick appropriate priors.</li>
+<li>Get data.</li>
+<li>Use sampling distribution (with data) and prior to get posterior distribution.</li>
+</ol>
+</section>
+<section id="common-sampling-distributions" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="common-sampling-distributions"><span class="header-section-number">2.3</span> Common Sampling Distributions</h2>
+<ul>
+<li>Normal: Continuous data that can take on negative and positive values</li>
+<li>Gamma: Continuous data that can only be positive (<span class="math inline">\(\chi^2\)</span> is a special case)</li>
+<li>Binomial: Counting number of successes</li>
+<li>Poisson: Count data (number of accidents at an intersection)</li>
+</ul>
+</section>
+<section id="common-priors" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="common-priors"><span class="header-section-number">2.4</span> Common Priors</h2>
+<ul>
+<li>Normal:
+<ul>
+<li><span class="math inline">\(\mu\)</span>: Normal</li>
+<li><span class="math inline">\(\sigma^2\)</span>: Gamma or Inverse-Gamma or Uniform</li>
+</ul></li>
+<li>Gamma:
+<ul>
+<li><span class="math inline">\(\alpha, \beta\)</span>: Gamma or Inverse Gamma or Uniform</li>
+</ul></li>
+<li>Binomial:
+<ul>
+<li><span class="math inline">\(p\)</span>: Uniform(0, 1) or Beta</li>
+</ul></li>
+<li>Poisson:
+<ul>
+<li><span class="math inline">\(\lambda\)</span>: Gamma or Uniform</li>
+</ul></li>
+</ul>
+<p>You need hyperparameters for each of these distributions. You can choose them so that these distributions are very spread out.</p>
+</section>
+</section>
+<section id="computing-the-posterior-distribution" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Computing the Posterior Distribution</h1>
+<p>We can simulate posterior distributions using Markov Chain Monte Carlo (MCMC) techniques. Markov chain because each current observation only depends on the previous value. Monte Carlo because it involves randomness to decide each point. The goal is to converge a stationary posterior distribution.</p>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="programming" data-listing-date-sort="1695182400000" data-listing-file-modified-sort="1695788771870" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12">
-<div class="thumbnail">
-<p><a href="../../notes/programming/git/primer/index.html"> <p class="card-img-top"><img src="git/primer/images/vcs-type-diagrams.jpeg"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/programming/git/primer/index.html">
-<h3 class="no-anchor listing-title">
-Git Basics
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('programming'); return false;">
-programming
-</div>
-</div>
-<a href="../../notes/programming/git/primer/index.html">
-<div class="listing-description">
-You’ll need to have Git installed on your computer first before, well… using Git.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/programming/git/primer/index.html">
-<div class="listing-date">
-Sep 20, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="programming,python" data-listing-date-sort="1694664000000" data-listing-file-modified-sort="1694878148880" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
-<div class="thumbnail">
-<p><a href="../../notes/programming/python/practicum-prep/index.html"> <p class="card-img-top"><img src="python/practicum-prep/images/pandas.jpeg"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/programming/python/practicum-prep/index.html">
-<h3 class="no-anchor listing-title">
-Pandas Primer 1
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('programming'); return false;">
-programming
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('python'); return false;">
-python
-</div>
-</div>
-<a href="../../notes/programming/python/practicum-prep/index.html">
-<div class="listing-description">
-I won’t go into a lot of a detail…<code></code>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/programming/python/practicum-prep/index.html">
-<div class="listing-date">
-Sep 14, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="programming" data-listing-date-sort="1687838400000" data-listing-file-modified-sort="1688702356548" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
-<div class="thumbnail">
-<p><a href="../../notes/programming/R/r4ds/intro/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/programming/R/r4ds/intro/index.html">
-<h3 class="no-anchor listing-title">
-r4ds: Introduction
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('programming'); return false;">
-programming
-</div>
-</div>
-<a href="../../notes/programming/R/r4ds/intro/index.html">
-<div class="listing-description">
-These notes are based on the second edition of the R for Data Science book by Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/programming/R/r4ds/intro/index.html">
-<div class="listing-date">
-Jun 27, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="programming" data-listing-date-sort="1687838400000" data-listing-file-modified-sort="1688702356549" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
-<div class="thumbnail">
-<p><a href="../../notes/programming/R/r4ds/intro_visualization/index.html"> <p class="card-img-top"><img src="R/r4ds/intro_visualization/index_files/figure-html/unnamed-chunk-5-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/programming/R/r4ds/intro_visualization/index.html">
-<h3 class="no-anchor listing-title">
-r4ds: Visualization Introduction
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('programming'); return false;">
-programming
-</div>
-</div>
-<a href="../../notes/programming/R/r4ds/intro_visualization/index.html">
-<div class="listing-description">
-The book focuses on utilizing <code>ggplot2</code> to build out data visualizations. The underlying system of the package is the <strong>grammar of graphics</strong> which builds up visuals through…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/programming/R/r4ds/intro_visualization/index.html">
-<div class="listing-date">
-Jun 27, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
