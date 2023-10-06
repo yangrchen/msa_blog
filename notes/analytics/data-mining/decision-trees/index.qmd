@@ -1,0 +1,176 @@
+---
+title: Classification and Regression Trees (CART)
+date: 10/02/2023
+---
+
+A decision tree has a **root node** and a series of nodes splitting off from the node based on rules on the variables in the data. We typically use a binary tree as it shows empirically good results than $n$-ary tree.
+
+Leaf nodes are the final output of decision tree models.
+
+![Decision Tree Visualized](images/decision-tree.png){#fig-decision-tree}
+
+Notes on decision trees:
+
+-   Interpretable
+-   List of decisions that predict the outcome that are easy to implement
+-   Allow for nonlinear associations
+-   Allow for interactions
+-   Can handle missing values
+-   Are greedy algorithms (picks the "best" split and settles on that split without going back)
+
+# Classification Trees
+
+Classification trees have an ordinal or categorical target. To determine the quality of a node, we use **purity**.
+
+Purity of a node is looking at how "homogeneous" the node is with respect to the target variable. @fig-purity shows an example of how purity is measured for the root node and one of the child nodes.
+
+![Classification Tree Purity](images/decision-tree-purity.png){#fig-purity}
+
+# Building the Tree Overview
+
+<!-- Need to put mermaid tables here -->
+A tree is built by recursively partioning the training data into successively *purer* subsets. Partiioning is done according to some condition which results in a binary split.
+
+For categorical predictors, we need to put categories into two groups. An example for a predictor with A, B, and C levels is A vs. B and C or B vs. A and C.
+
+For ordinal and quantitative variables, need to find the best value to split on. Data is "binned" into two groups and need to determine best way to bin based on the target.
+
+# Selecting the Best Split
+
+![Measures of Purity](images/purity-scale.png){#fig-purity-scale}
+
+For a binary tree, a 50-50 split is the lowest purity we could have. The highest purity is 1.00 which means the node only contains a single level.
+
+How do we choose the best split?
+
+Let $p(i|t)$ represent the the fraction of records belonging to class $i$ at a given node $t$. Let $c$ be the number of classes in a target variable.
+
+Two common measures for **impurity** are **entropy** and **Gini's impurity**.
+## Entropy
+
+$$
+-\sum_{i=1}^c p(i|t)\log_2p(i|t)
+$$
+
+## Gini's Impurity
+
+$$
+1 - \sum_{i=1}^{c} [p(i|t)]^2
+$$
+
+## Gain
+
+The impurity of nodes is involved in calculating the **gain** of a node. Gain is measuring how much impurity we have reduced due to the split. We want gain to be high as it represents a significant difference in impurity.
+
+$$
+\Delta = I(t) = (\frac{n_L}{n}I(t_L) + \frac{n_R}{n}I(t_R))
+$$
+
+-   $\Delta$ is the gain
+-   $I(t)$ is the impurity of a parent node
+-   $I(t_L)$  and $I(t_R)$ are impurity in the left and right children nodes, respectively
+
+Gain uses a weighted average between the impurity of the two children nodes.
+
+# Building Process
+
+1.  Compute the gain for all possible splits and select the best one.
+2.  Repeat process recursively until some stopping condition is met
+    1.  No splits meet some minimum Gain
+    2.  All leaves have some minimum number of observations
+    3.  A stopping condition is a way of *prepruning* the tree
+3.  Prune Tree
+
+Pruning a tree refers to removing leaves / nodes in a bottom-up fashion, cutting splits with lowest gain first, while optimizing performance on validation data.
+
+:::{.panel-tabset group="language"}
+# R
+
+In R, the children nodes are numbered $2n$ (left) and $2n + 1$ (right). The root node starts at number 1.
+
+```{r}
+library(rpart)
+library(reticulate)
+
+use_condaenv("msa")
+set.seed(7515)
+
+load("data/breast_cancer.Rdata")
+perm <- sample(1:699)
+BC_randomOrder <- BCdata[perm, ]
+train <- BC_randomOrder[1:floor(0.75 * 699), ]
+test <- BC_randomOrder[(floor(0.75 * 699) + 1):699, ]
+```
+
+```{r}
+BC_tree <- rpart(Target ~ . - ID, data = train, method = "class", parms = list(split = "gini"))
+BC_tree
+```
+
+# Python
+
+```{python}
+import numpy as np
+import pandas as pd
+from sklearn import tree
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
+
+bcdata = r.BCdata
+
+X = bcdata.iloc[:, 1:10]
+y = bcdata["Target"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, random_state=49865, test_size=0.25, shuffle=True
+)
+
+class_tree = tree.DecisionTreeClassifier(criterion="entropy", max_depth=3).fit(
+    X_train, y_train
+)
+
+y_pred = class_tree.predict(X_test)
+
+conf = confusion_matrix(y_test, y_pred)
+print(conf)
+```
+
+```{python}
+tree.plot_tree(class_tree)
+```
+
+:::
+
+# Evaluating Tree Models
+:::{.panel-tabset}
+# R
+
+```{r}
+tscores <- predict(BC_tree, type = "class")
+scores <- predict(BC_tree, test, type = "class")
+
+# Training misclassification rate
+sum(tscores != train$Target) / nrow(train)
+
+# Test misclassification rate
+sum(scores != test$Target) / nrow(test)
+```
+
+```{r}
+library(rpart.plot)
+
+rpart.plot(BC_tree)
+```
+:::
+
+# Regression Trees
+
+Same idea as classification trees but now our target is continuous. We no longer use Information / Gini since it no longers makes sense in this case. Instead, we are now trying to reduce the average sum of squares in each leaf.
+
+In each node, the average of the observations will be calculated which is the predicted value for that node.
+
+```{r}
+library(datasets)
+library(mfp)
+data(bodyfat)
+```

@@ -1,6 +1,7 @@
 ---
 title: Seasonality Models
 date: 09/27/2023
+date-modified: 10/06/2023
 ---
 
 # Setup {.unnumbered}
@@ -150,7 +151,7 @@ $H_0$: Deterministic Seasonality (Differencing will not help)
 $H_a$: Stochastic Seasonality (Differencing needed)
 :::
 
-No good formal tests for seasons beyond 24. Every time we take a difference we essentially create a whole new distribution. Taking one difference and taking one difference of up to 12 lags are not similar.
+No good formal tests for seasons beyond 24 time periods. Frequency is only a notion of how many times the data should "repeat" itself. Every time we take a difference we essentially create a whole new distribution. Taking one difference and taking one difference of up to 12 lags are not similar.
 
 If we face this situation, then we should try both paths and see which model predicts better.
 
@@ -188,3 +189,282 @@ This result tells us that we should take 0 regular differences after taking the 
 
 For a time series with $S$ periods within a season, there will be **S - 1** dummy variables, one for each period (and one accounted for with the intercept).
 
+-   Monthly Data
+    -   One dummy variable for each month (S = 12)
+-   Weekly Data
+    -   One dummy variable for each day of week (S = 7)
+-   Hourly Data
+    -   One dummy variable for each hour (S = 24)
+
+### Example Model
+
+$$
+Y_t = \beta_0 + \beta_1JAN + \beta_2FEB + \cdots + \beta_11NOV + e_t
+$$
+
+-   $\beta_0 + \beta_M$ is the effect of the $M$th month
+-   $\beta_0$ is the effect of December
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+month <- rep(0, length(train))
+month <- month + 1:12
+
+M <- factor(month)
+M <- relevel(M, ref = "12")
+```
+
+```{r}
+season_lm <- lm(train ~ M)
+summary(season_lm)
+```
+
+We can model with a deterministic solution by supplying a model matrix of our dummy-encoded months. `seasonal = FALSE` because we are trying to account for seasonality manually with our deterministic approach.
+
+```{r}
+m_matrix <- model.matrix(~M)
+trend <- 1:length(train)
+
+sd_arima <- auto.arima(train, xreg = m_matrix[, 2:12], method = "ML", seasonal = FALSE)
+summary(sd_arima)
+```
+
+The `auto.arima` function built a linear regression and then an ARIMA(1, 1, 1) on the residuals from the linear regression.
+
+# Python
+
+:::
+
+### Advantages and Disadvantages
+
+Advantages:
+
+-   Interpretability on the effects of different parts of the season
+-   Straight forward to implement
+
+Disadvantages:
+
+-   Especially long or complex seasons are hard to deal with
+    -   More than 24 periods in a season is computationally burdensome
+    -   Some seasons are complex (365.25 days in a year, 52.17 weeks in a year)
+-  Seasonal effects remain constant 
+
+## Fourier Transforms
+
+Fourier showed that series of **sine and cosine terms** of the right frequencies approximate periodic series.
+
+![Periodic Series](images/fourier-waves.png){#fig-periodic-series}
+
+The idea is that we add Fourier variables to a regression model predicting the target to remove the seasonal pattern.
+
+![Fourier Variables](images/fourier-variables.png){#fig-fourier-variables}
+
+In @fig-fourier-variables, $S$ is the frequency or length of the season. The multiplier refers to how many times we want the curves to repeat per season. We are going to continue adding *pairs* of cosine and sine terms until we have one half of a season. With odd-number frequencies, we go up to $\text{floor}(\frac{S}{2})$ terms.
+
+If you add the same number of Fourier variables as you have seasonal dummy variables, you will get the same predictions. However, typically do not need all the Fourier variables, especially with large values of $S$.
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+plots <- list()
+for (i in seq(6)) {
+    fit <- auto.arima(train,
+        xreg = fourier(train, K = i),
+        seasonal = FALSE, lambda = NULL
+    )
+
+    plots[[i]] <- autoplot(forecast(fit, xreg = fourier(train, K = i, h = 12))) +
+        xlab(paste("K=", i, "   BIC=", round(fit[["bic"]], 2))) +
+        ylab("") +
+        ylim(30000, 80000)
+}
+gridExtra::grid.arrange(
+    plots[[1]], plots[[2]], plots[[3]],
+    plots[[4]], plots[[5]], plots[[6]],
+    nrow = 3
+)
+```
+
+The $K$ parameter controls how many *pairs* of Fourier terms we are adding. We can record the BIC values to see how many pairs of terms provides our best model. If the best number of pairs is $\frac{S}{2}$, then one term in the last pair will be left out which is the intercept.
+
+:::
+
+### Advantages and Disadvantages
+
+Advantages:
+
+-   Can handle long and complex seasonality
+    -   If multiple seasons, just add more Fourier variables to account for them
+
+Disadvantages:
+
+-   Trial and error for "right" amount of Fourier variables to use
+-   No interpretable value
+-   Effect of season remains constant
+
+## Predictor Variables for Seasonality
+
+Last approach to account for seasonality in data is to use other predictor variables that have matching season.
+
+Modeling these variables against the target might remove seasonality.
+
+### Advantages and Disadvantages
+
+Advantages:
+
+-   Can handle long and complex seasonality
+    -   If multiple seasons, just add more variables to account for them
+-   Interpretation still holds
+    -   Can easily measure and interpret effects from these variables
+
+Disadvantages:
+
+-   Trial and error for "right" variables to use
+-   Might not have predictor variables to use in this context
+
+# Modeling Residuals
+
+After removing seasonality through deterministic approaches, the residuals are modeled with Seasonal ARIMA models. We still might need seasonal effects even though season is removed.
+
+If you have data that you believe might show trend AND seasonality. You should address seasonality first as it might take care of trend. Addressing trend first will never address seasonality as well.
+
+# Stochastic Solution (Differencing)
+
+With seasonal differences, you are taking the difference between some observation $Y_t$ and the observation one season prior $Y_{t-S}$.
+
+After removing the seasonality through stochastic approaches, the remaining differences are modeled with Seasonal ARIMA models:
+
+$$
+Y_t - Y_{t-S} = \textcolor{red}{W_t}
+$$
+
+-   $W_t$ is modeled with Seasonal ARIMA
+
+```{r}
+train %>%
+    diff(lag = 12) %>%
+    ggtsdisplay()
+```
+
+Our seasonal length, $S$, is 12 so we take a difference with `lag = 12`. In practice, we want at least 3 seasons in our data because differencing completely removes the first season.
+
+## Limitations
+
+Hard to evaluate stochastic effects for long and complex seasons. Most statistical tests cannot evaluate seasons past 12 or 24 time periods.
+
+For long and complex seasons it's best to approach them with deterministic solutions.
+
+# Seasonal ARIMA
+
+$$
+\text{ARIMA}(p, d, q)(P, D, Q)_S
+$$
+
+Seasonal ARIMA has an extra set of terms: $P, D, Q$ and $S$. $S$ represents the length of the season so if we take any seasonal differences we are taking the difference between the current observations and the observations $S$ time periods back. See @fig-seasonal-ARIMA-example for an example of a seasonal $\text{ARIMA}(1, 0, 1)(2, 1, 0)_{12}$
+
+![Seasonal ARIMA Example](images/seasonal-ARIMA-notation.png){#fig-seasonal-ARIMA-example}
+
+Seasonal ARIMA models have the same structure and approach as regular ARIMA with AR and MA patterns in the PACF and ACF.
+
+The pattern is on the **seasonal lag** instead of the individual lags.
+
+:::{layout-ncol=2}
+![ARIMA(0, 0, 0)(0, 0, 1), S = 12 Plots](images/s-arima-pacf.png){#fig-Q1}
+
+![ARIMA(0, 0, 0)(1, 0, 0), S = 12 Plots](images/s-arima-acf.png){#fig-P1}
+:::
+
+In order to determine P, D, Q terms, look for spikes at the $S$ lag term. Figuring out p, d, q terms is the same as the regular ARIMA.
+
+Note that in the `Arima` function, the length of seasonality is inferred from the `ts` object we supply to it.
+
+```{r}
+train %>%
+    Arima(order = c(1, 0, 0), seasonal = c(1, 1, 1)) %>%
+    residuals() %>%
+    ggtsdisplay()
+```
+
+```{r}
+s_arima <- Arima(train, order = c(1, 0, 0), seasonal = c(1, 1, 1))
+summary(s_arima)
+
+# Check residuals provides us the Ljung-Box test
+checkresiduals(s_arima)
+```
+
+We can also use `auto.arima` to check for an automated seasonal ARIMA:
+
+```{r}
+s_arima <- auto.arima(train, method = "ML", seasonal = TRUE)
+summary(s_arima)
+checkresiduals(s_arima)
+```
+
+## Multiple Differences
+
+Models can contain both unit roots and seasonal unit roots. After removing the seasonal unit root through differencing to get $W_t$, ordinary differences can be calculated.
+
+### Limitations
+
+-   Hard to evaluate stochastic effects for long and complex seasons
+-   Most statistical tetss for stochastic vs. deterministic can not handle past 12 or 24 periods in season
+-   For long / complex seasons, best to approach with deterministic solutions
+
+# Multiplicative vs. Additive
+
+![Multiplicative vs. Additive](images/mult-vs-add.png){#fig-mult-vs-add}
+
+## Backshift Operator (B)
+
+The backshift operator is the mathematical operator to convert observations to their lags:
+
+$$
+\begin{align*}
+\text{B}(Y_t) &= Y_{t-1} \\
+\text{B}^2(Y_t) &= \text{B}(Y_{t-1}) = Y_{t-2}
+\end{align*}
+$$
+
+## Structures to Seasons
+
+Additive:
+
+$$
+\begin{align*}
+(1 - \alpha_1\text{B} - \alpha_2\text{B}^{12})Y_t &= e_t \\
+Y_t - \alpha_1\text{B}(Y_t) - \alpha_2\text{B}^{12}(Y_t) &= e_t \\
+Y_t - \alpha_1Y_{t-1} - \alpha_2Y_{t-12} = e_t
+\end{align*}
+$$
+
+Multiplicative:
+
+$$
+\begin{align*}
+(1 - \alpha_1\text{B})(1 - \alpha_2\text{B}^{12})Y_t &= e_t \\
+(1 - \alpha_1\text{B} - \alpha_2\text{B}^{12} + \alpha_1\alpha_2\text{B}^{13})Y_t &= e_t
+\end{align*}
+$$
+
+What do the correlation plots look like for additive vs. multiplicative seasonality?
+
+![Multiplicative vs. Additive Correlation Plots](images/mult-vs-add-plots.png){#fig-mult-vs-add-plots}
+
+In @fig-mult-vs-add-plots, we can see that for multiplicative seasonality there are spikes around the lag at $S = 12$. It does not matter which directions the spikes are moving in, just as long as there are spikes adjacent to the seasonal lag.
+
+By default, R assumes multiplicative seasonality. If you want to force additive, then you have to 0 out the seasonal terms and then manually assign all the lags you do want:
+
+```{r}
+s_arima <- Arima(
+    train,
+    order = c(1, 0, 13),
+    seasonal = c(0, 1, 0),
+    fixed = c(NA, NA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NA, NA),
+    method = "ML"
+)
+summary(s_arima)
+```

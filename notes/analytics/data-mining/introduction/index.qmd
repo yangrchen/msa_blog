@@ -1,0 +1,236 @@
+---
+title: Introduction to Data Mining and Association Analysis
+date: 09/27/2023
+---
+
+# Splitting Data
+
+When doing a supervised technique, it is important to split the data into training, validation, and test sets. We want the model to be generalizable and predict equally well on out-of-sample data.
+
+If we're using an unsupervised technique like clustering analysis, it is not necessary to split the data.
+
+How do you know when you do NOT have enough data? There are no hard rules, but it's good to have at least 10 observations per variable.
+
+## Training / Validation
+
+Use the training data to build your model. Evaluate and tune the model based on how it performs on the validation data (careful not to train on the validation data). Do not report accuracy measures from the training data--best to state on the **test** data.
+
+Model creation should be on the training data and the applied to validation to see if you might need to enhance it. Once a final model is chosen, retrain the model on training + validation data to finalize parameters. Use this model to run on the test data.
+
+Before deployment, you can use ALL data to update parameters.
+
+# K-Fold Cross Validation
+
+1.  Divide your data into $k$ equally-sized folds
+2.  For each fold, train the model on all other data, using htat fold as a validation set
+3.  Record measures of error / accuracy
+4.  In the end, report summary of error / accuracy
+5.  Use that report summary to choose a model
+
+![10-fold Cross Validation Example](images/10-fold-cv.png){#fig-10-fold}
+
+# Bootstrapping
+
+**Bootstrapping** holds the assumption that the data we have is all the information we have for the population. The idea is to keep sampling the data **with replacement** and the **same sample size** to estimate the distribution of the quantity of interest.
+
+![Bootstrap Resampling](images/bootstrap-resampling.png){#fig-bootstrap-resampling}
+
+The assumptions of bootstrapping are that the samples are **representative** and they observations are **independent**.
+
+## Variability of the Median
+
+Want to estimate the standard error of the median. We could also do this for any other statistic:
+
+1.  Get a bootstrap sample of the data (sample with replacement)
+2.  Calculate statistic of interest
+3.  Repeat steps 1 and 2 over and over to get the distribution of the median
+4.  Get quantiles of the distribution
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r bootstrap-median}
+#| warning: false
+library(datasets)
+library(tidyverse)
+
+act_med <- median(co2)
+boot_med <- vector(length = 10000)
+for (i in 1:length(boot_med)) {
+    boot_samp <- sample(co2, replace = TRUE)
+    boot_med[i] <- median(boot_samp)
+}
+
+sd(boot_med)
+act_med
+quantile(boot_med, probs = c(0.025, 0.975))
+ggplot(data.frame(boot_med), aes(x = boot_med)) +
+    geom_histogram() +
+    labs(x = "Bootstrap Sample", y = "Frequency")
+```
+
+# Python
+
+:::
+
+## Using Bootstrap to Test Significant Differences
+
+We can use bootstrap to get the distribution of differences in medians (we can see if confidence interval includes 0).
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r ames-bootstrap-median}
+library(AmesHousing)
+ames <- make_ordinal_ames()
+
+diff_stat <- vector(length = 10000)
+yes <- ames %>%
+    filter(Central_Air == "Y") %>%
+    pull(Sale_Price)
+
+no <- ames %>%
+    filter(Central_Air == "N") %>%
+    pull(Sale_Price)
+
+for (i in 1:10000) {
+    yes_vec <- median(sample(yes, length(yes), replace = TRUE))
+    no_vec <- median(sample(no, length(no), replace = TRUE))
+}
+diff_stat[i] <- yes_vec - no_vec
+```
+
+# Python
+
+:::
+
+# Adjusting P-Values
+
+If you are doing a lot of hypothesis testing, then you need to be aware of inflating your Type I error. Family-wise error rate is the same idea as we are controlling the overall probability of making a Type I error. 
+
+**Bonferroni adjustment** correct for this by multiplying p-values by the number of tests you are doing--these are adjusted p-values.
+
+## False Discovery Rate (FDR)
+
+Recall that significance level, $\alpha$, controls the Type I error rate for an individual hypothesis.
+
+The **false discovery rate** controls the **rate** of Type I errors. This is the expected proportion of "false discoveries".
+
+# Dealing with Transactional Data
+
+Transactional data is long and has many rows per modeling observation. For example, the same person could have multiple bank deposits in the table.
+
+Typically, the solution for modeling with transactional data is to "roll it up" so it has one row per observation modeled. We transform the data from long to **wide** by grouping the data.
+
+# Data Cleaning
+
+## Missing Values
+
+**Highly Recommend:** Create a flag to indicate which values are missing and which ones are not (sometimes, missingness is informative)
+
+**Numeric:** Consider how much of the variable is missing (if over 50% consider how much information this variable is giving). If you want to keep the variable, you can either impute values or bin the variables and create a separate bin for missing values.
+
+**Categorical / Ordinal:** Consider creating a "bin" for missing values, but if too much is missing this can be a HUGE bin.
+
+In any case, you have to always explore your data to see if the route you took is sensible.
+
+![Imputing Missing Values](images/imputing-missing.png){#fig-imputing-missing}
+
+# Transformations and Standardizations
+
+## Binning Numeric Variables
+
+### Unsupervised Approaches
+One unsupervised approach is to bin the variable based on equal-width bins. Each bin has the same width in variable values, but each bin has different number of observations.
+
+We can also do **equal depth** where we take percentiles of the population and each bin has the same number of observations.
+
+### Supervised Approaches
+
+We can use target variable info to "optimally" bin numeric variables for prediction. WE typically do this in classification problems. 
+
+Decision trees can also create these bins or we can use weight of evidence.
+
+## Standardization and Normalization
+
+Standardization in statistics transform units to "number of standard deviations away from the mean" to put variables on the same scale:
+
+$$
+\frac{x - \bar{x}}{\sigma_x}
+$$
+
+There are many different ways to standardize / normalize:
+
+-   Range standardization
+-   Min-Max standardization
+-   Divide by 2-nomr, 1-norm, divide by sum
+
+# Association Analysis
+
+Association analysis looks at relationships between items. How often do we see these items occurring together?
+
+This is an unsupervised approach as there is no target or outcome variable for training. For example, based on a set of product orders association analysis gives us sets of products that are likely to be purchased together.
+
+In order to find these relationships, you need to have your transactional data rolled up by ID. `{bread, egg, oat packet, papaya}  1`
+
+We have **rules** that we are focused on quantifying: Butter $\longrightarrow$ Bread is interpreted as for those who buy butter, do they tend to also buy bread? The left hand side is the **antecedent** and the right hand side is the **consequent**.
+
+## Quantifying Association Rules
+
+1.  Support: $P(A \cap B)$ measures how often we find instances of this rule in the data
+2.  Confidence: $P(B|A) = \frac{P(A \cap B)}{P(A)}$ measures what percent of transactions containing A also contain B
+3.  Lift: $\frac{P(B|A)}{P(B)} = \frac{P(A \cap B)}{P(A)P(B)}$ measures how much **more likely we are to buy B given that we also buy A than we are to buy B at random**
+    -  Want lift values greater than 1
+
+## Post-Hoc
+
+:::{.text-center}
+Product A $\longrightarrow$ Product B
+:::
+
+Product B as a consequent helps us determine what can be done to boost its sales. Product A as an antecedent helps us determine what other products would be affected by changes to product A.
+
+## Direction of Association
+
+Either direction has the same support and same lift, but **different confidence**. We do not say those who buy A will then buy B.
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+#| warning: false
+library(arules)
+library(tidyverse)
+library(reticulate)
+
+use_condaenv("msa")
+
+temp_dat <- read.table("https://raw.githubusercontent.com/sjsimmo2/DataMining-Fall/master/Grocery1.csv", sep = ",", header = TRUE)
+```
+
+```{r}
+trans_dat <- as(split(temp_dat$Grocery, temp_dat$ID), "transactions")
+inspect(trans_dat)
+```
+
+Always make sure to check labels:
+
+```{r}
+trans_dat@itemInfo$labels
+```
+
+We can create an item frequency plot for the top 3 items:
+
+```{r}
+itemFrequencyPlot(trans_dat, topN = 3, type = "absolute")
+```
+
+Now we have our transaction table and we can get the rules using the `apriori` function:
+
+```{r}
+rules <- apriori(trans_dat, parameter = list(supp = 0.1, conf = 0.001, target = "rules"))
+rules <- sort(rules, by = "confidence", decreasing = TRUE)
+inspect(rules[1:4])
+```
+
+:::
