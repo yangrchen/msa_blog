@@ -13,12 +13,7 @@ dependencies:
   - ipython
   - tabulate
   - scikit-learn
-  - rpy2
   - statsforecast
   - pytest
-  - pandasql
-  - psycopg2
-  - spacy
-  - nltk
   - mlxtend
 prefix: /opt/homebrew/Caskroom/miniconda/base/envs/msa
