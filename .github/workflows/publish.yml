@@ -44,8 +44,10 @@ jobs:
           python-version: 3.11.5
       
       - name: Install Conda dependencies
-        run: |
-          $CONDA/bin/conda env update --file environment.yml --name base
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: build
+          environment-file: environment.yml
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
