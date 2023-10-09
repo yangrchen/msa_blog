@@ -1,1 +1,1 @@
-Sitemap: https://yangrchen.github.io/msa_blog/sitemap.xml
+Sitemap: https://github.com/yangrchen/msa_blog/sitemap.xml
