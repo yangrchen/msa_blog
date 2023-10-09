@@ -1,0 +1,114 @@
+---
+title: Clustering
+date: 10/06/2023
+---
+
+**Clustering** is an unsupervised approach to modeling where the goal is to partition the data into groups.
+
+-   Observations within a cluster are similar in some sense
+-   Observations in difference clusters are different in some sense
+
+There is no one-size-fits-all solutions, but there are good and bad cluster solutions. No method works best all the time. Keep in mind that clustering uses **ALL** the variables you provide it and clusters should add some business value.
+
+# Examples of Clustering
+
+-   Customer segmentation: Groups of customers with similar shopping or buying patterns
+-   Dimension reduction: Cluster individuals together and use cluster variable as proxy for demographic or behavioral variables
+-   Gather stores with similar characteristics for sales forecasting
+-   Find topics in text data
+-   Find communities in social networks
+
+# Hard vs. Fuzzy
+
+**Hard** clustering is characterized by objects only belonging to one cluster. **Fuzzy** clustering is characterized by objects having the capability to belong to more than one cluster (usually with some probability).
+
+Hard:
+
+-   k-means
+-   DBSCAN
+-   Hierarchical
+
+Fuzzy:
+
+-   Fuzzy C-means
+-   Gaussian Mixture Models / Expectation-Maximization
+
+# Hierarchical vs. Flat
+
+**Hierarchical** clusters form a tree so you can visually see which clusters are most similar to each other. **Flat** clusters are created according to some apriori process, usually iteratively updating cluster assignments.
+
+Hierarchical is expensive when you have a large dataset.
+
+# K-Means
+
+K-Means revolves around using **centroids**. Centroids are "centers of clusters" or the means of a group of observations.
+
+![K-Means Clustering](images/k-means.png){#fig-k-means}
+
+With K-Means we are trying to minimize the sum of squared distances from each point to its cluster centroid.
+
+$$
+\sum_{C_k}\sum_{x_i \in C_k} \lVert x_i - c_k \rVert^2
+$$
+
+## Algorithm
+
+1.  Randomly initialize **k** points.
+2.  Assign each data point to the closest seed point.
+3.  The seed point then represents a cluster of data.
+4.  Reset seed points to be the centroids of the cluster by taking the **average** of all data points belonging to the cluster.
+5.  Repeat steps 2-4 updating the cluster centroids until they do not change.
+
+How can we determine the number of clusters we should use?
+
+We can use an "elbow" plot to find a place where the marginal benefit to objective function for adding a cluster becomes small.
+
+![Elbow Plot](images/elbow-plot.png){#fig-elbow-plot}
+
+## Advantages vs. Disadvantages
+
+Advantages:
+
+-   Modest time/storage requirements
+-   Shown you can terminate method after small number of iterations with good results
+-   Good for wide variety of data types
+
+Disadvantages
+
+-   Dependent on initialization (different runs can provide different results)
+-   Can be sensitive to outliers as we are based centroids on the average of points
+    -   Consider using k-medoids
+-   Have to input the number of clusters
+-   Difficulty detecting non-spheroidal (globular) clusters
+
+## Preprocessing
+
+You will need to do data epxloration before trying to cluster the data.
+
+-   Missing Values
+    -   You will need to impute or remove missing values for the variable
+-   Categorical Variables
+    -   Do you need to bin categorical variables?
+    -   You need to one-hot encode before putting them into algorithm
+-   Continuous Variables
+    -   If outliers or heavy skewness, potentially consider transformation
+    -   At a minimum, center the continuous variables after any transformations are made
+
+You can try clustering on original data or you can try it on PCA of the variables, particularly if the data is big.
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+library(ggplot2)
+
+par(mfrow = c(2, 2))
+hist(USArrests$Murder)
+hist(USArrests$Assault)
+hist(USArrests$Rape)
+hist(USArrests$UrbanPop)
+```
+
+# Python
+
+:::

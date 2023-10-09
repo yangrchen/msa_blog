@@ -1,6 +1,7 @@
 ---
 title: Classification and Regression Trees (CART)
 date: 10/02/2023
+date-modified: 10/06/2023
 ---
 
 A decision tree has a **root node** and a series of nodes splitting off from the node based on rules on the variables in the data. We typically use a binary tree as it shows empirically good results than $n$-ary tree.
@@ -16,7 +17,7 @@ Notes on decision trees:
 -   Allow for nonlinear associations
 -   Allow for interactions
 -   Can handle missing values
--   Are greedy algorithms (picks the "best" split and settles on that split without going back)
+-   Are greedy algorithms (picks the "best" split at each point and settles on that split without going back)
 
 # Classification Trees
 
@@ -46,6 +47,7 @@ How do we choose the best split?
 Let $p(i|t)$ represent the the fraction of records belonging to class $i$ at a given node $t$. Let $c$ be the number of classes in a target variable.
 
 Two common measures for **impurity** are **entropy** and **Gini's impurity**.
+
 ## Entropy
 
 $$
@@ -113,7 +115,7 @@ BC_tree
 import numpy as np
 import pandas as pd
 from sklearn import tree
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import confusion_matrix
 
 bcdata = r.BCdata
@@ -128,21 +130,12 @@ X_train, X_test, y_train, y_test = train_test_split(
 class_tree = tree.DecisionTreeClassifier(criterion="entropy", max_depth=3).fit(
     X_train, y_train
 )
-
-y_pred = class_tree.predict(X_test)
-
-conf = confusion_matrix(y_test, y_pred)
-print(conf)
-```
-
-```{python}
-tree.plot_tree(class_tree)
 ```
 
 :::
 
 # Evaluating Tree Models
-:::{.panel-tabset}
+:::{.panel-tabset group="language"}
 # R
 
 ```{r}
@@ -161,6 +154,21 @@ library(rpart.plot)
 
 rpart.plot(BC_tree)
 ```
+
+# Python
+
+```{python}
+y_pred = class_tree.predict(X_test)
+
+conf = confusion_matrix(y_test, y_pred)
+print(conf)
+
+```
+
+```{python}
+tree.plot_tree(class_tree)
+```
+
 :::
 
 # Regression Trees
@@ -169,8 +177,110 @@ Same idea as classification trees but now our target is continuous. We no longer
 
 In each node, the average of the observations will be calculated which is the predicted value for that node.
 
+:::{.panel-tabset group="language"}
+# R
+
 ```{r}
-library(datasets)
-library(mfp)
-data(bodyfat)
+data(bodyfat, package = "TH.data")
+
+set.seed(13172)
+
+sample <- sample.int(n = nrow(bodyfat), size = floor(0.75 * nrow(bodyfat)), replace = FALSE)
+train <- bodyfat[sample, ]
+test <- bodyfat[-sample, ]
 ```
+
+```{r}
+body_model <- rpart(DEXfat ~ age + waistcirc + hipcirc + elbowbreadth + kneebreadth, data = train, control = rpart.control(minsplit = 10))
+summary(body_model)
+printcp(body_model)
+```
+
+# Python
+
+```{python}
+train = r.train
+test = r.test
+
+X_train = train[["age", "waistcirc", "hipcirc", "elbowbreadth", "kneebreadth"]]
+X_test = test[["age", "waistcirc", "hipcirc", "elbowbreadth", "kneebreadth"]]
+y_train = train["DEXfat"]
+y_test = test["DEXfat"]
+
+regressor = tree.DecisionTreeRegressor(random_state=12356, max_depth=4)
+reg_tree = regressor.fit(X_train, y_train)
+```
+
+```{python}
+importance = regressor.feature_importances_
+
+for i, v in enumerate(importance):
+    print(f"Feature {i}, Score: {v:.5f}")
+```
+
+:::
+
+## Pruning Tree
+
+To prune the tree, there are different criteria that we can use. Two of the common methods:
+
+-   Go to the minimum value of "xerror" (cross-validation error)
+-   Use the 1-SE rule
+    -   Use the standard error of the crossvalidation error to find what is within 1 standard error of the lowest value and prune to that value
+
+
+In R, we select the CP of the node we want to prune to:
+
+```{r}
+body_model2 <- prune(body_model, cp = 0.013112)
+printcp(body_model2)
+```
+
+# Advantages and Disadvantages
+
+Advantages:
+
+-   Explainability
+-   Can handle missing values
+-   Can be used for variable selection
+-   Great for ensembles
+-   No assumptions to verify
+-   Generally immune to scale of input variables / standardization
+-   Generally immune to the effect of outliers or high leverage observations
+-   Can handle correlated inputs
+
+Disadvantages:
+
+-   Simplistic regression / decision surface
+-   All variables are forced to interact
+-   Greedy algorithm
+    -   Cannot return globally optimal tree
+-   Can be unstable (sensitive to small changes in input) both when training and making predictions
+
+# Conditional Trees
+
+Conditional trees select the best variable based on which variable is **most associated with the response** with p-value adjustment. Once selected, the optimal split is chosen for that variable.
+
+```{r}
+library(partykit)
+set.seed(7515)
+perm <- sample(1:699)
+BC_randomOrder <- BCdata[perm, ]
+train <- BC_randomOrder[1:floor(0.75 * 699), ]
+model1 <- ctree(Target ~ . - ID, data = train)
+plot(model1)
+```
+
+Conditional trees can be used to find bins by creating a model with the variable you want to bin:
+
+```{r}
+model2 <- ctree(Target ~ Size, data = train)
+plot(model2)
+```
+
+In this case the bins are:
+
+-   Size $\leq$ 1
+-   1 < Size $\leq$ 2
+-   2 < Size $\leq$ 3
+-   And so on!

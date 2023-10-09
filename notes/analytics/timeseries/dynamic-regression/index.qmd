@@ -1,0 +1,66 @@
+---
+title: Dynamic Regression Models
+date: 10/06/2023
+---
+
+# Regression with ARIMA Errors
+
+External information can make better forecasts as well as potentially account for trend and seasonality.
+
+We can incorporate predictor variables through a regression:
+
+$$
+Y_t = \beta_0 + \beta_1X_{1,t} + \cdots + \beta_kX_{k,t} + Z_t
+$$
+
+We model the $Z_t$ error term with an ARIMA model. A regression with ARIMA(1, 0, 1) errors would have:
+
+$$
+Z_t = \omega + \phi_1Z_{t-1} + e_t + \theta_1e_{t-1}
+$$
+
+-   $e_t$ represents the white noise
+
+# Intervention Variables
+
+An **intervention variable** is an indicator variable that contains discrete values that flag the occurrence of an event affecting the response series:
+
+-   Valentine's Day while selling chocolate
+-   A special sales promotion raises sales
+
+## Use Cases
+
+-   Model and forecast the response series
+-   Analyze the impact of the intervention
+
+## Types
+
+1.  Point / Pulse Interventions
+2.  Step Interventions
+3.  Ramp Interventions
+
+## Point Interventions
+
+![Point Interventions](images/pulse-intervention.png){#fig-point-intervention}
+
+In @fig-point-intervention we see a special sales promotion that occurs suddenly. How do we account for this? All we have to do is create a binary variable that indicates the intervention.
+
+We model the impact through a coefficient in the model:
+
+$$
+Y_t = \beta_0 + \beta_1I_t + Z_t
+$$
+
+## Step Interventions
+
+The idea of a step intervention is that we make a permanent step in our data and the change continues on from that time on. 
+
+![Step Inteventions](images/step-intervention.png){#fig-step-intervention}
+
+Any time period after the step is indicated by a 1 in the intervention variable. If we had multiple step events then we would have a variable for each one.
+
+With intervention events, you need to have data prior to the intervention and after the intervention. Otherwise, you have no notion of change between the periods.
+
+$$
+Y_t = \beta_0 + \beta_1I_t + Z_t
+$$
