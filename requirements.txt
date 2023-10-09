@@ -26,7 +26,6 @@ confection==0.1.3
 contourpy==1.1.0
 cycler==0.11.0
 cymem==2.0.8
-dataclasses==0.8
 debugpy==1.6.8
 decorator==5.1.1
 defusedxml==0.7.1
