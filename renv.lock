@@ -58,17 +58,6 @@
       ],
       "Hash": "289bb398054bef2251287a6ce7fe336c"
     },
-    "ClustOfVar": {
-      "Package": "ClustOfVar",
-      "Version": "1.1",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "PCAmixdata",
-        "R"
-      ],
-      "Hash": "06fcf7ed02004ed745f7f811774630d0"
-    },
     "DBI": {
       "Package": "DBI",
       "Version": "1.1.3",
@@ -269,16 +258,6 @@
         "stats"
       ],
       "Hash": "963ab8fbaf980a5b081ed40419081439"
-    },
-    "PCAmixdata": {
-      "Package": "PCAmixdata",
-      "Version": "3.1",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "graphics"
-      ],
-      "Hash": "5024a88c1027688a4601497262505ca1"
     },
     "QuickJSR": {
       "Package": "QuickJSR",
