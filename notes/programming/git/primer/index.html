@@ -383,7 +383,7 @@ dont-run-this.py</code></pre>
 <p><strong>Untracked files</strong> are any files not in the last snapshot and not in the staging area.</p>
 <div id="fig-staging-lifecycle" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="images/git-stage-lifecycle.jpeg" class="img-fluid figure-img"></p>
+<p><img src="images/git-stage-lifecycle.png" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Figure&nbsp;2: Git Staging Lifecycle</figcaption>
 </figure>
 </div>
@@ -644,7 +644,7 @@ Note
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Story X: Added crazy-pets files"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[main df04cae] Story X: Added crazy-pets files
+<pre><code>[main f047857] Story X: Added crazy-pets files
  1 file changed, 0 insertions(+), 0 deletions(-)
  create mode 100644 crazy-pets/crazy-dogs.txt</code></pre>
 </div>
@@ -680,9 +680,9 @@ Note
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>commit df04cae56661c192d9f5663c28a544e6db6f3f3a
+<pre><code>commit f047857f904ecf1d392dc5663696b8eb1e877eb0
 Author: yangrchen &lt;yangrc.chen@gmail.com&gt;
-Date:   Tue Oct 10 21:11:11 2023 -0400
+Date:   Wed Oct 11 10:04:54 2023 -0400
 
     Story X: Added crazy-pets files
 
@@ -718,9 +718,9 @@ Date:   Thu Sep 21 22:20:00 2023 -0400
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log <span class="at">-2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>commit df04cae56661c192d9f5663c28a544e6db6f3f3a
+<pre><code>commit f047857f904ecf1d392dc5663696b8eb1e877eb0
 Author: yangrchen &lt;yangrc.chen@gmail.com&gt;
-Date:   Tue Oct 10 21:11:11 2023 -0400
+Date:   Wed Oct 11 10:04:54 2023 -0400
 
     Story X: Added crazy-pets files
 
@@ -738,9 +738,9 @@ Date:   Thu Sep 21 22:47:53 2023 -0400
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--stat</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>commit df04cae56661c192d9f5663c28a544e6db6f3f3a
+<pre><code>commit f047857f904ecf1d392dc5663696b8eb1e877eb0
 Author: yangrchen &lt;yangrc.chen@gmail.com&gt;
-Date:   Tue Oct 10 21:11:11 2023 -0400
+Date:   Wed Oct 11 10:04:54 2023 -0400
 
     Story X: Added crazy-pets files
 
@@ -792,7 +792,7 @@ Date:   Thu Sep 21 22:20:00 2023 -0400
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--pretty</span><span class="op">=</span>format:<span class="st">"%h / %an / %ad"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>df04cae / yangrchen / Tue Oct 10 21:11:11 2023 -0400
+<pre><code>f047857 / yangrchen / Wed Oct 11 10:04:54 2023 -0400
 e788bdc / yangrchen / Thu Sep 21 22:47:53 2023 -0400
 01de929 / yangrchen / Thu Sep 21 22:47:30 2023 -0400
 9545b4c / yangrchen / Thu Sep 21 22:45:43 2023 -0400

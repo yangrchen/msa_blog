@@ -189,6 +189,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#advantages-vs.-disadvantages" id="toc-advantages-vs.-disadvantages" class="nav-link" data-scroll-target="#advantages-vs.-disadvantages"><span class="header-section-number">4.2</span> Advantages vs.&nbsp;Disadvantages</a></li>
   <li><a href="#preprocessing" id="toc-preprocessing" class="nav-link" data-scroll-target="#preprocessing"><span class="header-section-number">4.3</span> Preprocessing</a></li>
   </ul></li>
+  <li><a href="#silhouette-method" id="toc-silhouette-method" class="nav-link" data-scroll-target="#silhouette-method"><span class="header-section-number">5</span> Silhouette Method</a></li>
+  <li><a href="#hierarchical-clustering" id="toc-hierarchical-clustering" class="nav-link" data-scroll-target="#hierarchical-clustering"><span class="header-section-number">6</span> Hierarchical Clustering</a>
+  <ul class="collapse">
+  <li><a href="#hierarchical-algorithm" id="toc-hierarchical-algorithm" class="nav-link" data-scroll-target="#hierarchical-algorithm"><span class="header-section-number">6.1</span> Hierarchical Algorithm</a></li>
+  <li><a href="#linkages" id="toc-linkages" class="nav-link" data-scroll-target="#linkages"><span class="header-section-number">6.2</span> Linkages</a>
+  <ul class="collapse">
+  <li><a href="#single-linkage" id="toc-single-linkage" class="nav-link" data-scroll-target="#single-linkage"><span class="header-section-number">6.2.1</span> Single Linkage</a></li>
+  <li><a href="#complete-linkage" id="toc-complete-linkage" class="nav-link" data-scroll-target="#complete-linkage"><span class="header-section-number">6.2.2</span> Complete Linkage</a></li>
+  <li><a href="#centroid-linkage" id="toc-centroid-linkage" class="nav-link" data-scroll-target="#centroid-linkage"><span class="header-section-number">6.2.3</span> Centroid Linkage</a></li>
+  <li><a href="#average-linkage" id="toc-average-linkage" class="nav-link" data-scroll-target="#average-linkage"><span class="header-section-number">6.2.4</span> Average Linkage</a></li>
+  <li><a href="#wards-method" id="toc-wards-method" class="nav-link" data-scroll-target="#wards-method"><span class="header-section-number">6.2.5</span> Ward’s Method</a></li>
+  </ul></li>
+  <li><a href="#advantages-and-disadvantages" id="toc-advantages-and-disadvantages" class="nav-link" data-scroll-target="#advantages-and-disadvantages"><span class="header-section-number">6.3</span> Advantages and Disadvantages</a></li>
+  </ul></li>
+  <li><a href="#dbscan" id="toc-dbscan" class="nav-link" data-scroll-target="#dbscan"><span class="header-section-number">7</span> DBSCAN</a></li>
+  <li><a href="#variable-clustering" id="toc-variable-clustering" class="nav-link" data-scroll-target="#variable-clustering"><span class="header-section-number">8</span> Variable Clustering</a></li>
   </ul>
 </nav>
     </div>
@@ -311,18 +327,84 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(gridExtra)</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># library(ggplot2)</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># grid.arrange(</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     grobs = list(</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#         hist(USArrests$Murder),</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         hist(USArrests$Assault),</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#         hist(USArrests$Rape),</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#         hist(USArrests$UrbanPop)</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     ),</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#     ncol = 2</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(USArrests<span class="sc">$</span>Murder)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(USArrests<span class="sc">$</span>Assault)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(USArrests<span class="sc">$</span>Rape)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(USArrests<span class="sc">$</span>UrbanPop)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/explore-plots-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>arrest_scal <span class="ot">&lt;-</span> <span class="fu">scale</span>(USArrests)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>clus2 <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(arrest_scal, <span class="at">centers =</span> <span class="dv">2</span>, <span class="at">nstart =</span> <span class="dv">25</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>clus2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>K-means clustering with 2 clusters of sizes 30, 20
+
+Cluster means:
+     Murder    Assault   UrbanPop       Rape
+1 -0.669956 -0.6758849 -0.1317235 -0.5646433
+2  1.004934  1.0138274  0.1975853  0.8469650
+
+Clustering vector:
+       Alabama         Alaska        Arizona       Arkansas     California 
+             2              2              2              1              2 
+      Colorado    Connecticut       Delaware        Florida        Georgia 
+             2              1              1              2              2 
+        Hawaii          Idaho       Illinois        Indiana           Iowa 
+             1              1              2              1              1 
+        Kansas       Kentucky      Louisiana          Maine       Maryland 
+             1              1              2              1              2 
+ Massachusetts       Michigan      Minnesota    Mississippi       Missouri 
+             1              2              1              2              2 
+       Montana       Nebraska         Nevada  New Hampshire     New Jersey 
+             1              1              2              1              1 
+    New Mexico       New York North Carolina   North Dakota           Ohio 
+             2              2              2              1              1 
+      Oklahoma         Oregon   Pennsylvania   Rhode Island South Carolina 
+             1              1              1              1              2 
+  South Dakota      Tennessee          Texas           Utah        Vermont 
+             1              2              2              1              1 
+      Virginia     Washington  West Virginia      Wisconsin        Wyoming 
+             1              1              1              1              1 
+
+Within cluster sum of squares by cluster:
+[1] 56.11445 46.74796
+ (between_SS / total_SS =  47.5 %)
+
+Available components:
+
+[1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+[6] "betweenss"    "size"         "iter"         "ifault"      </code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(clus2, <span class="at">data =</span> arrest_scal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/pca-plot-1.png" class="img-fluid" width="672"></p>
+</div>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
@@ -330,9 +412,244 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="silhouette-method" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Silhouette Method</h1>
+<p><strong>Silhouette</strong> is another method to define the number of clusters to use. This method estimates how well each observations falls within its cluster (distance point is to all other points in cluster and compare it to distance from that point to points in other clusters).</p>
+<p>We want to find the number of clusters that <strong>maximizes this ratio</strong>.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_nbclust</span>(arrest_scal, kmeans, <span class="at">method =</span> <span class="st">"silhouette"</span>, <span class="at">k.max =</span> <span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>From silhouette, the optimal number of clusters selected is 2.</p>
+<p>We can profile our original data by attaching the clusters to it:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>profile_kmeans <span class="ot">&lt;-</span> <span class="fu">cbind</span>(USArrests, clus2<span class="sc">$</span>cluster)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>all_k <span class="ot">&lt;-</span> profile_kmeans <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(clus2<span class="sc">$</span>cluster) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">mean_assault =</span> <span class="fu">mean</span>(Assault), <span class="at">mean_murder =</span> <span class="fu">mean</span>(Murder), <span class="at">mean_rape =</span> <span class="fu">mean</span>(Rape), <span class="at">mean_pop =</span> <span class="fu">mean</span>(UrbanPop))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>all_k</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  `clus2$cluster` mean_assault mean_murder mean_rape mean_pop
+            &lt;int&gt;        &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1               1         114.        4.87      15.9     63.6
+2               2         255.       12.2       29.2     68.4</code></pre>
+</div>
+</div>
+</section>
+<section id="hierarchical-clustering" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Hierarchical Clustering</h1>
+<p>Every point starts as its own cluster and then we build up clusters as hierarchies. There are several different distant measures we can use, but the two we focus on are <strong>Euclidean distance</strong> and <strong>Manhattan distance</strong>.</p>
+<p>Euclidean distance:</p>
+<p><span class="math display">\[
+\sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2}
+\]</span></p>
+<p>Manhattan distance:</p>
+<p><span class="math display">\[
+|x_1 - x_2| + |y_1 - y_2|
+\]</span></p>
+<section id="hierarchical-algorithm" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="hierarchical-algorithm"><span class="header-section-number">6.1</span> Hierarchical Algorithm</h2>
+<ol type="1">
+<li>Each point starts as its own cluster (<span class="math inline">\(n\)</span> clusters).</li>
+<li>Calculate the distance between each point using the distance measure.</li>
+<li>Choose two points that are the closest and form a cluster (<span class="math inline">\(n - 1\)</span> clusters).</li>
+<li>Calculate distance between all single points and all clustered points.</li>
+<li>Find smallest distance and combine to form a cluster.</li>
+</ol>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/hierarchical-step-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Hierarchical Clustering Step 1</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/hierarchical-step-2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Hierarchical Clustering Step 2</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Once all points are part of a multi-point cluster we then need to agglomerate clusters.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/hierarchical-agglom.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Hierarchical Clustering Agglomerative</figcaption>
+</figure>
+</div>
+</section>
+<section id="linkages" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="linkages"><span class="header-section-number">6.2</span> Linkages</h2>
+<p>How do we measure the distance between a point / cluster and a cluster?</p>
+<section id="single-linkage" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="single-linkage"><span class="header-section-number">6.2.1</span> Single Linkage</h3>
+<p>Distance between the closest points in the clusters.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/single-linkage.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Single Linkage</figcaption>
+</figure>
+</div>
+</section>
+<section id="complete-linkage" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="complete-linkage"><span class="header-section-number">6.2.2</span> Complete Linkage</h3>
+<p>Distance between the farthest points in the clusters.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/complete-linkage.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Complete Linkage</figcaption>
+</figure>
+</div>
+</section>
+<section id="centroid-linkage" class="level3" data-number="6.2.3">
+<h3 data-number="6.2.3" class="anchored" data-anchor-id="centroid-linkage"><span class="header-section-number">6.2.3</span> Centroid Linkage</h3>
+<p>Distance between the centroids (means) of each cluster.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/centroid-linkage.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Centroid Linkage</figcaption>
+</figure>
+</div>
+</section>
+<section id="average-linkage" class="level3" data-number="6.2.4">
+<h3 data-number="6.2.4" class="anchored" data-anchor-id="average-linkage"><span class="header-section-number">6.2.4</span> Average Linkage</h3>
+<p>Average distance between all points in clusters.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/average-linkage.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Average Linkage</figcaption>
+</figure>
+</div>
+</section>
+<section id="wards-method" class="level3" data-number="6.2.5">
+<h3 data-number="6.2.5" class="anchored" data-anchor-id="wards-method"><span class="header-section-number">6.2.5</span> Ward’s Method</h3>
+<p>Minimize SSE within the cluster compared to the centroid.</p>
+<p><span class="math display">\[
+\sum_{j=1}^{N_i} \lvert x_j - c_i \rvert^2
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/wards-method.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Ward’s Method</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="advantages-and-disadvantages" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="advantages-and-disadvantages"><span class="header-section-number">6.3</span> Advantages and Disadvantages</h2>
+<p>Advantages:</p>
+<ul>
+<li>Creates hierarchy that can help choose the number of clusters and examine how those clusters relate to each other.</li>
+<li>Do NOT need to know number of clusters apriori</li>
+</ul>
+<p>Disadvantages:</p>
+<ul>
+<li>Computationally intensive, large storage reqs., not good for large datasets.</li>
+<li>Lacks global objective function: only makes decision based on local criteria.</li>
+<li>Greedy algorithm. Merging decisions are final once a point is assigned to a cluster.</li>
+<li>Poor performance on noisy or high-dimensional data like text.</li>
+</ul>
+<p>At the end of the day, you should always evaluate clustering algorithms based on how it makes sense in the business context.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/hierarchical-options.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Hierarchical Clustering Options</figcaption>
+</figure>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cluster)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>dist_assault <span class="ot">&lt;-</span> <span class="fu">dist</span>(arrest_scal, <span class="at">method =</span> <span class="st">"euclidean"</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>h1_comp_eucl <span class="ot">&lt;-</span> <span class="fu">agnes</span>(dist_assault, <span class="at">method =</span> <span class="st">"complete"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pltree</span>(h1_comp_eucl, <span class="at">cex =</span> <span class="fl">0.6</span>, <span class="at">hang =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">main =</span> <span class="st">"Dendrogram of agnes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can also get the agglomerative coefficient which measures how strong the clustering structure is (want values close to 1):</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(h1_comp_eucl<span class="sc">$</span>ac)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8531583</code></pre>
+</div>
+</div>
+<p>Loop through possibilities of linkage methods:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>method <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">average =</span> <span class="st">"average"</span>, <span class="at">single =</span> <span class="st">"single"</span>, <span class="at">complete =</span> <span class="st">"complete"</span>, <span class="at">ward =</span> <span class="st">"ward"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>ac <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">agnes</span>(dist_assault, <span class="at">method =</span> x)<span class="sc">$</span>ac</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(method, ac)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>$average
+[1] 0.7379371
+
+$single
+[1] 0.6276128
+
+$complete
+[1] 0.8531583
+
+$ward
+[1] 0.934621</code></pre>
+</div>
+</div>
+<p>Although we can find the best mathematical cluster here, we want the best algorithm for business sense. Explore profiles to see which makes the most sense.</p>
+</section>
+</section>
+<section id="dbscan" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> DBSCAN</h1>
+<p>Density-based spatial clustering of applications with noise. Groups together points that are close to each other based on a distance measure, a minimum number of points (“neighbors”), and a “neighborhood about each point.”</p>
+<p>Points not near other points are deemed outliers. A cluster of points must have a minimum number of points around it to be considered a cluster.</p>
+</section>
+<section id="variable-clustering" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Variable Clustering</h1>
+<p>Cluster variables that are related to reduce redundancies or multicollinearity. This is also a form of dimension reduction. Variable clustering uses eigenvalues to identify similar values and assess the goodness of the partition.</p>
+<p>In R, the package is <code>ClustOfVar</code>. R can handle quantitative and qualitative variables, but you need to split these into two data matrices first.</p>
+<!-- ```{r}
+library(readr)
+library(ClustOfVar)
+telco <- read_csv("https://raw.githubusercontent.com/sjsimmo2/DataMining-Fall/master/TelcoChurn.csv")
+
+telco[is.na(telco)] = 0
+quant_var <- telco[,c(3,6,19,20)]
+qual_var <- telco[,c(2,4,5,6:18)]
+
+var_clust_h <- hclustvar(quant_var, qual_var)
+stab <- stability(var_clust_h, B=50)
+plot(stab)
+``` -->
+
+
 </section>
 
 </main> <!-- /main -->
