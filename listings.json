@@ -35,14 +35,15 @@
     ]
   },
   {
-    "listing": "/notes/primer/index.html",
+    "listing": "/notes/communication/index.html",
     "items": [
-      "/notes/primer/categorical_data/index.html",
-      "/notes/primer/anova/index.html",
-      "/notes/primer/hypothesis_testing/index.html",
-      "/notes/primer/confidence_intervals/index.html",
-      "/notes/primer/probability/index.html",
-      "/notes/primer/fundamental/index.html"
+      "/notes/communication/062623/index.html"
+    ]
+  },
+  {
+    "listing": "/blog/index.html",
+    "items": [
+      "/blog/first_weeks/index.html"
     ]
   },
   {
@@ -55,15 +56,14 @@
     ]
   },
   {
-    "listing": "/blog/index.html",
+    "listing": "/notes/primer/index.html",
     "items": [
-      "/blog/first_weeks/index.html"
-    ]
-  },
-  {
-    "listing": "/notes/communication/index.html",
-    "items": [
-      "/notes/communication/062623/index.html"
+      "/notes/primer/categorical_data/index.html",
+      "/notes/primer/anova/index.html",
+      "/notes/primer/hypothesis_testing/index.html",
+      "/notes/primer/confidence_intervals/index.html",
+      "/notes/primer/probability/index.html",
+      "/notes/primer/fundamental/index.html"
     ]
   }
 ]

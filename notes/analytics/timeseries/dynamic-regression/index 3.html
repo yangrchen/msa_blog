@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="description" content="MSA Summer Primer 2023 Notes">
+<meta name="dcterms.date" content="2023-10-06">
 
-<title>Yang MSA - Primer</title>
+<title>Yang MSA - Dynamic Regression Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,25 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<link href="../../favicon.ico" rel="icon">
-<script src="../../site_libs/quarto-listing/list.min.js"></script>
-<script src="../../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../favicon.ico" rel="icon">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -64,40 +62,11 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="../../../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -107,7 +76,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Yang MSA</span>
     </a>
   </div>
@@ -118,11 +87,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../notes/index.html" rel="" target="">
+    <a class="nav-link" href="../../../../notes/index.html" rel="" target="">
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../blog/index.html" rel="" target="">
+    <a class="nav-link" href="../../../../blog/index.html" rel="" target="">
  <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
@@ -140,15 +109,11 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Primer</h1>
-                  <div>
-        <div class="description">
-          MSA Summer Primer 2023 Notes
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">primer</div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Dynamic Regression Models</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">analytics</div>
+                <div class="quarto-category">time series</div>
               </div>
                   </div>
   </div>
@@ -163,256 +128,113 @@ ul.task-list li input[type="checkbox"] {
             </div>
     </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 6, 2023</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(6)</span></div><div class="category" data-category="hypothesis testing">hypothesis testing <span class="quarto-category-count">(1)</span></div><div class="category" data-category="primer">primer <span class="quarto-category-count">(6)</span></div><div class="category" data-category="probability">probability <span class="quarto-category-count">(1)</span></div><div class="category" data-category="statistics">statistics <span class="quarto-category-count">(2)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#regression-with-arima-errors" id="toc-regression-with-arima-errors" class="nav-link active" data-scroll-target="#regression-with-arima-errors"><span class="header-section-number">1</span> Regression with ARIMA Errors</a></li>
+  <li><a href="#intervention-variables" id="toc-intervention-variables" class="nav-link" data-scroll-target="#intervention-variables"><span class="header-section-number">2</span> Intervention Variables</a>
+  <ul class="collapse">
+  <li><a href="#use-cases" id="toc-use-cases" class="nav-link" data-scroll-target="#use-cases"><span class="header-section-number">2.1</span> Use Cases</a></li>
+  <li><a href="#types" id="toc-types" class="nav-link" data-scroll-target="#types"><span class="header-section-number">2.2</span> Types</a></li>
+  <li><a href="#point-interventions" id="toc-point-interventions" class="nav-link" data-scroll-target="#point-interventions"><span class="header-section-number">2.3</span> Point Interventions</a></li>
+  <li><a href="#step-interventions" id="toc-step-interventions" class="nav-link" data-scroll-target="#step-interventions"><span class="header-section-number">2.4</span> Step Interventions</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
+<section id="regression-with-arima-errors" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Regression with ARIMA Errors</h1>
+<p>External information can make better forecasts as well as potentially account for trend and seasonality.</p>
+<p>We can incorporate predictor variables through a regression:</p>
+<p><span class="math display">\[
+Y_t = \beta_0 + \beta_1X_{1,t} + \cdots + \beta_kX_{k,t} + Z_t
+\]</span></p>
+<p>We model the <span class="math inline">\(Z_t\)</span> error term with an ARIMA model. A regression with ARIMA(1, 0, 1) errors would have:</p>
+<p><span class="math display">\[
+Z_t = \omega + \phi_1Z_{t-1} + e_t + \theta_1e_{t-1}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(e_t\)</span> represents the white noise</li>
+</ul>
+</section>
+<section id="intervention-variables" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Intervention Variables</h1>
+<p>An <strong>intervention variable</strong> is an indicator variable that contains discrete values that flag the occurrence of an event affecting the response series:</p>
+<ul>
+<li>Valentine’s Day while selling chocolate</li>
+<li>A special sales promotion raises sales</li>
+</ul>
+<section id="use-cases" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="use-cases"><span class="header-section-number">2.1</span> Use Cases</h2>
+<ul>
+<li>Model and forecast the response series</li>
+<li>Analyze the impact of the intervention</li>
+</ul>
+</section>
+<section id="types" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="types"><span class="header-section-number">2.2</span> Types</h2>
+<ol type="1">
+<li>Point / Pulse Interventions</li>
+<li>Step Interventions</li>
+<li>Ramp Interventions</li>
+</ol>
+</section>
+<section id="point-interventions" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="point-interventions"><span class="header-section-number">2.3</span> Point Interventions</h2>
+<div id="fig-point-intervention" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/pulse-intervention.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Point Interventions</figcaption>
+</figure>
+</div>
+<p>In <a href="#fig-point-intervention">Figure&nbsp;1</a> we see a special sales promotion that occurs suddenly. How do we account for this? All we have to do is create a binary variable that indicates the intervention.</p>
+<p>We model the impact through a coefficient in the model:</p>
+<p><span class="math display">\[
+Y_t = \beta_0 + \beta_1I_t + Z_t
+\]</span></p>
+</section>
+<section id="step-interventions" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="step-interventions"><span class="header-section-number">2.4</span> Step Interventions</h2>
+<p>The idea of a step intervention is that we make a permanent step in our data and the change continues on from that time on.</p>
+<div id="fig-step-intervention" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/step-intervention.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Step Inteventions</figcaption>
+</figure>
+</div>
+<p>Any time period after the step is indicated by a 1 in the intervention variable. If we had multiple step events then we would have a variable for each one.</p>
+<p>With intervention events, you need to have data prior to the intervention and after the intervention. Otherwise, you have no notion of change between the periods.</p>
+<p><span class="math display">\[
+Y_t = \beta_0 + \beta_1I_t + Z_t
+\]</span></p>
 
 
+</section>
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="primer" data-listing-date-sort="1686700800000" data-listing-file-modified-sort="1696987555206" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
-<div class="thumbnail">
-<p><a href="../../notes/primer/categorical_data/index.html"> <p class="card-img-top"><img src="categorical_data/index_files/figure-html/fig-chi-square-output-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/categorical_data/index.html">
-<h3 class="no-anchor listing-title">
-Categorical Data Analysis
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-</div>
-<a href="../../notes/primer/categorical_data/index.html">
-<div class="listing-description">
-In categorical data analysis, we use qualitative data types which describes data whose measurement scale is by categorical.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/categorical_data/index.html">
-<div class="listing-date">
-Jun 14, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="primer" data-listing-date-sort="1686528000000" data-listing-file-modified-sort="1696987555206" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15">
-<div class="thumbnail">
-<p><a href="../../notes/primer/anova/index.html"> <p class="card-img-top"><img src="anova/images/one_way_anova_table.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/anova/index.html">
-<h3 class="no-anchor listing-title">
-Analysis of Variance
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-</div>
-<a href="../../notes/primer/anova/index.html">
-<div class="listing-description">
-One sample hypothesis…<strong></strong>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/anova/index.html">
-<div class="listing-date">
-Jun 12, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="primer,hypothesis testing,statistics" data-listing-date-sort="1686096000000" data-listing-file-modified-sort="1696987555214" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
-<div class="thumbnail">
-<p><a href="../../notes/primer/hypothesis_testing/index.html"> <p class="card-img-top"><img src="hypothesis_testing/index_files/figure-html/cell-2-output-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/hypothesis_testing/index.html">
-<h3 class="no-anchor listing-title">
-Hypothesis Testing
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('hypothesis testing'); return false;">
-hypothesis testing
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('statistics'); return false;">
-statistics
-</div>
-</div>
-<a href="../../notes/primer/hypothesis_testing/index.html">
-<div class="listing-description">
-According to the CLT, the the mean has a sampling distribution that follows a Normal distribution as long as the sample size is large enough.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/hypothesis_testing/index.html">
-<div class="listing-date">
-Jun 7, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="primer,statistics" data-listing-date-sort="1685404800000" data-listing-file-modified-sort="1696987555206" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
-<div class="thumbnail">
-<p><a href="../../notes/primer/confidence_intervals/index.html"> <p class="card-img-top"><img src="confidence_intervals/index_files/figure-html/cell-2-output-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/confidence_intervals/index.html">
-<h3 class="no-anchor listing-title">
-Confidence Intervals
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('statistics'); return false;">
-statistics
-</div>
-</div>
-<a href="../../notes/primer/confidence_intervals/index.html">
-<div class="listing-description">
-Point estimators cannot be expected to provide exact values of population parameters. <strong>Intervals</strong> provide…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/confidence_intervals/index.html">
-<div class="listing-date">
-May 30, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="primer,probability" data-listing-date-sort="1684800000000" data-listing-file-modified-sort="1696987555214" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
-<div class="thumbnail">
-<p><a href="../../notes/primer/probability/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/probability/index.html">
-<h3 class="no-anchor listing-title">
-Probability
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('probability'); return false;">
-probability
-</div>
-</div>
-<a href="../../notes/primer/probability/index.html">
-<div class="listing-description">
-<strong>Probability</strong> is a numerical measure of the likelihood of that event’s occurrence. It takes on a value in the interval <span class="math inline">\([0, 1]\)</span>.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/probability/index.html">
-<div class="listing-date">
-May 23, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="primer" data-listing-date-sort="1684713600000" data-listing-file-modified-sort="1696987555214" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
-<div class="thumbnail">
-<p><a href="../../notes/primer/fundamental/index.html"> <p class="card-img-top"><img src="fundamental/images/simple-random-sampling.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/fundamental/index.html">
-<h3 class="no-anchor listing-title">
-Fundamental Statistical Concepts
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-</div>
-<a href="../../notes/primer/fundamental/index.html">
-<div class="listing-description">
-There are three main pieces to statistics:
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/fundamental/index.html">
-<div class="listing-date">
-May 22, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

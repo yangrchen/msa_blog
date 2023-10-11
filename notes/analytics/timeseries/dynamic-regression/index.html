@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -135,6 +169,12 @@ ul.task-list li input[type="checkbox"] {
       </div>
     </div>
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">October 10, 2023</p>
+      </div>
+    </div>
       
     </div>
     
@@ -147,14 +187,23 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#regression-with-arima-errors" id="toc-regression-with-arima-errors" class="nav-link active" data-scroll-target="#regression-with-arima-errors"><span class="header-section-number">1</span> Regression with ARIMA Errors</a></li>
-  <li><a href="#intervention-variables" id="toc-intervention-variables" class="nav-link" data-scroll-target="#intervention-variables"><span class="header-section-number">2</span> Intervention Variables</a>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup"><span class="header-section-number">1</span> Setup</a></li>
+  <li><a href="#regression-with-arima-errors" id="toc-regression-with-arima-errors" class="nav-link" data-scroll-target="#regression-with-arima-errors"><span class="header-section-number">2</span> Regression with ARIMA Errors</a></li>
+  <li><a href="#intervention-variables" id="toc-intervention-variables" class="nav-link" data-scroll-target="#intervention-variables"><span class="header-section-number">3</span> Intervention Variables</a>
   <ul class="collapse">
-  <li><a href="#use-cases" id="toc-use-cases" class="nav-link" data-scroll-target="#use-cases"><span class="header-section-number">2.1</span> Use Cases</a></li>
-  <li><a href="#types" id="toc-types" class="nav-link" data-scroll-target="#types"><span class="header-section-number">2.2</span> Types</a></li>
-  <li><a href="#point-interventions" id="toc-point-interventions" class="nav-link" data-scroll-target="#point-interventions"><span class="header-section-number">2.3</span> Point Interventions</a></li>
-  <li><a href="#step-interventions" id="toc-step-interventions" class="nav-link" data-scroll-target="#step-interventions"><span class="header-section-number">2.4</span> Step Interventions</a></li>
+  <li><a href="#use-cases" id="toc-use-cases" class="nav-link" data-scroll-target="#use-cases"><span class="header-section-number">3.1</span> Use Cases</a></li>
+  <li><a href="#types" id="toc-types" class="nav-link" data-scroll-target="#types"><span class="header-section-number">3.2</span> Types</a></li>
+  <li><a href="#point-interventions" id="toc-point-interventions" class="nav-link" data-scroll-target="#point-interventions"><span class="header-section-number">3.3</span> Point Interventions</a></li>
+  <li><a href="#step-interventions" id="toc-step-interventions" class="nav-link" data-scroll-target="#step-interventions"><span class="header-section-number">3.4</span> Step Interventions</a></li>
+  <li><a href="#ramp-intervention" id="toc-ramp-intervention" class="nav-link" data-scroll-target="#ramp-intervention"><span class="header-section-number">3.5</span> Ramp Intervention</a></li>
   </ul></li>
+  <li><a href="#implementing-in-software" id="toc-implementing-in-software" class="nav-link" data-scroll-target="#implementing-in-software"><span class="header-section-number">4</span> Implementing in Software</a></li>
+  <li><a href="#predictor-variables" id="toc-predictor-variables" class="nav-link" data-scroll-target="#predictor-variables"><span class="header-section-number">5</span> Predictor Variables</a>
+  <ul class="collapse">
+  <li><a href="#determining-lags" id="toc-determining-lags" class="nav-link" data-scroll-target="#determining-lags"><span class="header-section-number">5.1</span> Determining Lags</a></li>
+  <li><a href="#adding-lags-to-model" id="toc-adding-lags-to-model" class="nav-link" data-scroll-target="#adding-lags-to-model"><span class="header-section-number">5.2</span> Adding Lags to Model</a></li>
+  </ul></li>
+  <li><a href="#forecasting" id="toc-forecasting" class="nav-link" data-scroll-target="#forecasting"><span class="header-section-number">6</span> Forecasting</a></li>
   </ul>
 </nav>
     </div>
@@ -164,8 +213,20 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="regression-with-arima-errors" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Regression with ARIMA Errors</h1>
+<section id="setup" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Setup</h1>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(aTSA)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="regression-with-arima-errors" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Regression with ARIMA Errors</h1>
 <p>External information can make better forecasts as well as potentially account for trend and seasonality.</p>
 <p>We can incorporate predictor variables through a regression:</p>
 <p><span class="math display">\[
@@ -179,30 +240,30 @@ Z_t = \omega + \phi_1Z_{t-1} + e_t + \theta_1e_{t-1}
 <li><span class="math inline">\(e_t\)</span> represents the white noise</li>
 </ul>
 </section>
-<section id="intervention-variables" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Intervention Variables</h1>
+<section id="intervention-variables" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Intervention Variables</h1>
 <p>An <strong>intervention variable</strong> is an indicator variable that contains discrete values that flag the occurrence of an event affecting the response series:</p>
 <ul>
 <li>Valentine’s Day while selling chocolate</li>
 <li>A special sales promotion raises sales</li>
 </ul>
-<section id="use-cases" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="use-cases"><span class="header-section-number">2.1</span> Use Cases</h2>
+<section id="use-cases" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="use-cases"><span class="header-section-number">3.1</span> Use Cases</h2>
 <ul>
 <li>Model and forecast the response series</li>
 <li>Analyze the impact of the intervention</li>
 </ul>
 </section>
-<section id="types" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="types"><span class="header-section-number">2.2</span> Types</h2>
+<section id="types" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="types"><span class="header-section-number">3.2</span> Types</h2>
 <ol type="1">
 <li>Point / Pulse Interventions</li>
 <li>Step Interventions</li>
 <li>Ramp Interventions</li>
 </ol>
 </section>
-<section id="point-interventions" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="point-interventions"><span class="header-section-number">2.3</span> Point Interventions</h2>
+<section id="point-interventions" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="point-interventions"><span class="header-section-number">3.3</span> Point Interventions</h2>
 <div id="fig-point-intervention" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/pulse-intervention.png" class="img-fluid figure-img"></p>
@@ -215,8 +276,8 @@ Z_t = \omega + \phi_1Z_{t-1} + e_t + \theta_1e_{t-1}
 Y_t = \beta_0 + \beta_1I_t + Z_t
 \]</span></p>
 </section>
-<section id="step-interventions" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="step-interventions"><span class="header-section-number">2.4</span> Step Interventions</h2>
+<section id="step-interventions" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="step-interventions"><span class="header-section-number">3.4</span> Step Interventions</h2>
 <p>The idea of a step intervention is that we make a permanent step in our data and the change continues on from that time on.</p>
 <div id="fig-step-intervention" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -229,9 +290,197 @@ Y_t = \beta_0 + \beta_1I_t + Z_t
 <p><span class="math display">\[
 Y_t = \beta_0 + \beta_1I_t + Z_t
 \]</span></p>
-
-
 </section>
+<section id="ramp-intervention" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="ramp-intervention"><span class="header-section-number">3.5</span> Ramp Intervention</h2>
+<p>In a ramp intervention, we introduce a new trend line into the model. Some event changes the overall trend following the event. Another way to think of this is that the angle of the time series changes.</p>
+<div id="fig-ramp-intervention" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/ramp-intervention.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Ramp Intervention</figcaption>
+</figure>
+</div>
+<p><span class="math display">\[
+Y_t = \beta_0 + \beta_1I_t + Z_t
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\beta_1\)</span> is the impact measured by model coefficient (new slope)</li>
+</ul>
+</section>
+</section>
+<section id="implementing-in-software" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Implementing in Software</h1>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>USAirlines <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>passenger <span class="ot">&lt;-</span> <span class="fu">ts</span>(USAirlines<span class="sc">$</span>Passengers, <span class="at">start =</span> <span class="dv">1990</span>, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">subset</span>(passenger, <span class="at">end =</span> <span class="fu">length</span>(passenger) <span class="sc">-</span> <span class="dv">12</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">subset</span>(passenger, <span class="at">start =</span> <span class="fu">length</span>(passenger) <span class="sc">-</span> <span class="dv">11</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>sep11 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">207</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>sep11[<span class="dv">141</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>full_arima <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(train, <span class="at">seasonal =</span> <span class="cn">TRUE</span>, <span class="at">xreg =</span> sep11, <span class="at">method =</span> <span class="st">"ML"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_arima)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Series: train 
+Regression with ARIMA(2,0,0)(0,1,1)[12] errors 
+
+Coefficients:
+         ar1     ar2     sma1     drift        xreg
+      0.7119  0.1369  -0.6626  125.6161  -11539.935
+s.e.  0.0709  0.0713   0.0579   22.6471    1150.961
+
+sigma^2 = 2442761:  log likelihood = -1712.17
+AIC=3436.35   AICc=3436.8   BIC=3455.99
+
+Training set error measures:
+                    ME    RMSE      MAE        MPE     MAPE      MASE
+Training set -3.349235 1497.38 1030.214 -0.1299989 2.123044 0.3826493
+                    ACF1
+Training set 0.008315115</code></pre>
+</div>
+</div>
+</section>
+<section id="predictor-variables" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Predictor Variables</h1>
+<p>We can include explanatory variables beyond just the response variable. Models that include external variables have different names–ARIMAX, dynamic regression models, transfer functions, etc.</p>
+<p>Often there are <strong>lagged impacts</strong> as well as immediate impacts–past values of explanatory variables can be important.</p>
+<section id="determining-lags" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="determining-lags"><span class="header-section-number">5.1</span> Determining Lags</h2>
+<p>Multiple ways to evaluate how many lags of a predictor variable:</p>
+<ul>
+<li>Cross-correlation functions and pre-whitening of series.
+<ul>
+<li>Time consuming</li>
+<li>Requires modeling of the predictor variables</li>
+<li>Best used for small number of predictors</li>
+</ul></li>
+<li>Evaluate many different lag combinations models with AIC/BIC on validation set.
+<ul>
+<li>Essentially trial and error</li>
+<li>Handles many variables much easier</li>
+<li>Similar in accuracy of the “elegant” first approach</li>
+</ul></li>
+</ul>
+</section>
+<section id="adding-lags-to-model" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="adding-lags-to-model"><span class="header-section-number">5.2</span> Adding Lags to Model</h2>
+<p>The idea here is that we are manually creating lags by shifting over the effect of the point intervention by 1 each time we add a new lag. The actual number is based on data context–what do you want to include based on events going on in the data?</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sep11 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">207</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sep11[<span class="dv">141</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>sep11_L1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">207</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>sep11_L1[<span class="dv">142</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>sep11_L2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">207</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>sep11_L2[<span class="dv">143</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>sep11_L3 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">207</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>sep11_L3[<span class="dv">144</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>sep11_L4 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">207</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>sep11_L4[<span class="dv">145</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>sep11_L5 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">207</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>sep11_L5[<span class="dv">146</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>sep11_L6 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">207</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>sep11_L6[<span class="dv">147</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>anniv <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">207</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>anniv[<span class="dv">153</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>full_arima <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(train, <span class="at">seasonal =</span> <span class="cn">TRUE</span>, <span class="at">xreg =</span> <span class="fu">cbind</span>(sep11, sep11_L1, sep11_L2, sep11_L3, sep11_L4, sep11_L5, sep11_L6, anniv), <span class="at">method =</span> <span class="st">"ML"</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_arima)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Series: train 
+Regression with ARIMA(2,0,0)(1,1,1)[12] errors 
+
+Coefficients:
+         ar1     ar2    sar1    sma1     drift       sep11    sep11_L1
+      0.6298  0.2207  0.1926  -0.696  124.7648  -17400.506  -12116.992
+s.e.  0.0714  0.0726  0.1143   0.081   21.1663    1162.397    1271.319
+       sep11_L2   sep11_L3   sep11_L4   sep11_L5   sep11_L6       anniv
+      -8076.851  -7671.385  -4345.788  -2172.452  -751.2682  -2306.2188
+s.e.   1387.184   1427.370   1403.915   1271.268  1105.3293    998.2212
+
+sigma^2 = 1736410:  log likelihood = -1673.71
+AIC=3375.42   AICc=3377.75   BIC=3421.24
+
+Training set error measures:
+                   ME     RMSE      MAE         MPE     MAPE      MASE
+Training set 1.041491 1235.597 944.9504 -0.08208786 1.937629 0.3509802
+                    ACF1
+Training set 0.007658679</code></pre>
+</div>
+</div>
+<p>When checking residuals, be mindful of how many observations are in your data. The bars are representing <strong>95% confidence intervals</strong>. These may not be as informative for large data.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">checkresiduals</span>(full_arima)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/checking-residuals-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Ljung-Box test
+
+data:  Residuals from Regression with ARIMA(2,0,0)(1,1,1)[12] errors
+Q* = 16.049, df = 20, p-value = 0.7136
+
+Model df: 4.   Total lags used: 24</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="forecasting" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Forecasting</h1>
+<p>Forecasting in time series with external variables has unique issues. What are the future values of the external variables? You need to research future estimates to pull this off.</p>
+<ul>
+<li>Known future values (interventions)</li>
+<li>External estimates of future values</li>
+<li>Need to forecast future values ourselves</li>
+</ul>
+<p>In our case, we will say that the influence of these variables is removed (0) in the future:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sep11 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">12</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sep11_L1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">12</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>sep11_L2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">12</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>sep11_L3 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">12</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>sep11_L4 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">12</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>sep11_L5 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">12</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>sep11_L6 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">12</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>anniv <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">12</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>full_arima_error <span class="ot">&lt;-</span> test <span class="sc">-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(full_arima, <span class="at">xreg =</span> <span class="fu">cbind</span>(sep11, sep11_L1, sep11_L2, sep11_L3, sep11_L4, sep11_L5, sep11_L6, anniv), <span class="at">h =</span> <span class="dv">12</span>)<span class="sc">$</span>mean</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>full_arima_MAE <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(full_arima_error))</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>full_arima_MAPE <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(full_arima_error) <span class="sc">/</span> <span class="fu">abs</span>(test)) <span class="sc">*</span> <span class="fl">100.0</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"MAPE: %.3f"</span>, full_arima_MAPE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "MAPE: 1.800"</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"MAE: %.3f"</span>, full_arima_MAE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "MAE: 1180.971"</code></pre>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->

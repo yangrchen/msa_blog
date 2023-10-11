@@ -2,290 +2,290 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/index.html</loc>
-    <lastmod>2023-10-09T19:37:05.748Z</lastmod>
+    <lastmod>2023-10-11T01:35:15.721Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/index.html</loc>
-    <lastmod>2023-10-09T19:37:05.004Z</lastmod>
+    <lastmod>2023-10-11T01:35:15.069Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/EDA/introduction/index.html</loc>
-    <lastmod>2023-10-09T19:37:01.864Z</lastmod>
+    <lastmod>2023-10-11T01:35:11.997Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/EDA/introduction/lab_1.html</loc>
-    <lastmod>2023-10-09T19:37:00.296Z</lastmod>
+    <lastmod>2023-10-11T01:35:10.609Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/EDA/categorical-data/lab_12.html</loc>
-    <lastmod>2023-10-09T19:36:58.748Z</lastmod>
+    <lastmod>2023-10-11T01:35:09.149Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/EDA/statistical-inference/index.html</loc>
-    <lastmod>2023-10-09T19:36:57.512Z</lastmod>
+    <lastmod>2023-10-11T01:35:08.065Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/EDA/statistical-inference/breakout_2.html</loc>
-    <lastmod>2023-10-09T19:36:55.984Z</lastmod>
+    <lastmod>2023-10-11T01:35:06.649Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/logistic-regression/data-considerations/index.html</loc>
-    <lastmod>2023-10-09T19:36:54.692Z</lastmod>
+    <lastmod>2023-10-11T01:35:05.473Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/logistic-regression/introduction/lab_13.html</loc>
-    <lastmod>2023-10-09T19:36:52.880Z</lastmod>
+    <lastmod>2023-10-11T01:35:03.757Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/logistic-regression/estimation-methods/index.html</loc>
-    <lastmod>2023-10-09T19:36:51.520Z</lastmod>
+    <lastmod>2023-10-11T01:35:02.461Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/logistic-regression/diagnostics/index.html</loc>
-    <lastmod>2023-10-09T19:36:49.476Z</lastmod>
+    <lastmod>2023-10-11T01:35:00.501Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/introduction/index.html</loc>
-    <lastmod>2023-10-09T19:36:47.884Z</lastmod>
+    <lastmod>2023-10-11T01:34:59.009Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/ARIMA/ARMA/index.html</loc>
-    <lastmod>2023-10-09T19:36:46.184Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/exponential-smoothing/linear-esm/index.html</loc>
-    <lastmod>2023-10-09T19:36:44.568Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/stationarity/index.html</loc>
-    <lastmod>2023-10-09T19:36:42.752Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/MLR/breakout_6.html</loc>
-    <lastmod>2023-10-09T19:36:40.804Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/MLR/lab_6.html</loc>
-    <lastmod>2023-10-09T19:36:39.528Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/regularized/index.html</loc>
-    <lastmod>2023-10-09T19:36:38.224Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/model-selection/index.html</loc>
-    <lastmod>2023-10-09T19:36:35.696Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/influence/index.html</loc>
-    <lastmod>2023-10-09T19:36:34.344Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/influence/lab_9.html</loc>
-    <lastmod>2023-10-09T19:36:32.952Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/SLR/lab_4.html</loc>
-    <lastmod>2023-10-09T19:36:31.684Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/diagnostics/lab_8.html</loc>
-    <lastmod>2023-10-09T19:36:30.356Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/data-mining/introduction/index.html</loc>
-    <lastmod>2023-10-09T19:36:29.040Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/data-mining/clustering/index.html</loc>
-    <lastmod>2023-10-09T19:36:27.212Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/introduction/lab_3.html</loc>
-    <lastmod>2023-10-09T19:36:25.592Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/n-Way/index.html</loc>
-    <lastmod>2023-10-09T19:36:24.324Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/n-Way/lab_5.html</loc>
-    <lastmod>2023-10-09T19:36:22.912Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/communication/062623/index.html</loc>
-    <lastmod>2023-10-09T19:36:21.600Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/primer/probability/index.html</loc>
-    <lastmod>2023-10-09T19:36:19.864Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/primer/index.html</loc>
-    <lastmod>2023-10-09T19:36:18.656Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/primer/hypothesis_testing/index.html</loc>
-    <lastmod>2023-10-09T19:36:17.212Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/programming/index.html</loc>
-    <lastmod>2023-10-09T19:36:15.880Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/programming/R/r4ds/intro_visualization/index.html</loc>
-    <lastmod>2023-10-09T19:36:13.388Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/programming/R/r4ds/intro/index.html</loc>
-    <lastmod>2023-10-09T19:35:50.087Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/index.html</loc>
-    <lastmod>2023-10-09T19:35:48.367Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/blog/first_weeks/index.html</loc>
-    <lastmod>2023-10-09T19:35:47.663Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/projects/summer_r/index.html</loc>
-    <lastmod>2023-10-09T19:35:46.815Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/blog/index.html</loc>
-    <lastmod>2023-10-09T19:35:48.047Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/programming/git/primer/index.html</loc>
-    <lastmod>2023-10-09T19:35:49.691Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/programming/python/practicum-prep/index.html</loc>
-    <lastmod>2023-10-09T19:36:15.260Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/primer/fundamental/index.html</loc>
-    <lastmod>2023-10-09T19:36:16.548Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/primer/confidence_intervals/index.html</loc>
-    <lastmod>2023-10-09T19:36:17.792Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/primer/categorical_data/index.html</loc>
-    <lastmod>2023-10-09T19:36:19.396Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/primer/anova/index.html</loc>
-    <lastmod>2023-10-09T19:36:21.220Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/communication/index.html</loc>
-    <lastmod>2023-10-09T19:36:22.020Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/n-Way/breakout_5.html</loc>
-    <lastmod>2023-10-09T19:36:23.652Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/introduction/breakout_3.html</loc>
-    <lastmod>2023-10-09T19:36:24.908Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/introduction/index.html</loc>
-    <lastmod>2023-10-09T19:36:26.464Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/data-mining/decision-trees/index.html</loc>
-    <lastmod>2023-10-09T19:36:28.144Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/diagnostics/index.html</loc>
-    <lastmod>2023-10-09T19:36:29.764Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/SLR/breakout_4.html</loc>
-    <lastmod>2023-10-09T19:36:31.008Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/SLR/index.html</loc>
-    <lastmod>2023-10-09T19:36:32.388Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/influence/breakout_9.html</loc>
-    <lastmod>2023-10-09T19:36:33.544Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/model-selection/lab_7.html</loc>
-    <lastmod>2023-10-09T19:36:34.920Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/model-selection/breakout_7.html</loc>
-    <lastmod>2023-10-09T19:36:36.276Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/regularized/lab_11.html</loc>
-    <lastmod>2023-10-09T19:36:37.460Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/regularized/breakout_11.html</loc>
-    <lastmod>2023-10-09T19:36:38.812Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/MLR/index.html</loc>
-    <lastmod>2023-10-09T19:36:40.232Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/seasonality/index.html</loc>
-    <lastmod>2023-10-09T19:36:42.040Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/dynamic-regression/index.html</loc>
-    <lastmod>2023-10-09T19:36:43.132Z</lastmod>
+    <lastmod>2023-10-11T01:34:57.449Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/exponential-smoothing/esm/index.html</loc>
-    <lastmod>2023-10-09T19:36:45.216Z</lastmod>
+    <lastmod>2023-10-11T01:34:55.961Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/dynamic-regression/index.html</loc>
+    <lastmod>2023-10-11T01:34:53.869Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/seasonality/index.html</loc>
+    <lastmod>2023-10-11T01:34:52.517Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/MLR/index.html</loc>
+    <lastmod>2023-10-11T01:34:50.805Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/regularized/breakout_11.html</loc>
+    <lastmod>2023-10-11T01:34:49.445Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/regularized/lab_11.html</loc>
+    <lastmod>2023-10-11T01:34:48.181Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/model-selection/breakout_7.html</loc>
+    <lastmod>2023-10-11T01:34:47.061Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/model-selection/lab_7.html</loc>
+    <lastmod>2023-10-11T01:34:45.833Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/influence/breakout_9.html</loc>
+    <lastmod>2023-10-11T01:34:44.533Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/SLR/index.html</loc>
+    <lastmod>2023-10-11T01:34:43.481Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/SLR/breakout_4.html</loc>
+    <lastmod>2023-10-11T01:34:42.173Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/diagnostics/index.html</loc>
+    <lastmod>2023-10-11T01:34:41.021Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/data-mining/decision-trees/index.html</loc>
+    <lastmod>2023-10-11T01:34:39.493Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/introduction/index.html</loc>
+    <lastmod>2023-10-11T01:34:37.993Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/introduction/breakout_3.html</loc>
+    <lastmod>2023-10-11T01:34:36.465Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/n-Way/breakout_5.html</loc>
+    <lastmod>2023-10-11T01:34:35.253Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/communication/index.html</loc>
+    <lastmod>2023-10-11T01:34:33.721Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/primer/anova/index.html</loc>
+    <lastmod>2023-10-11T01:34:33.001Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/primer/categorical_data/index.html</loc>
+    <lastmod>2023-10-11T01:34:31.285Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/primer/confidence_intervals/index.html</loc>
+    <lastmod>2023-10-11T01:34:29.778Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/primer/fundamental/index.html</loc>
+    <lastmod>2023-10-11T01:34:28.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/programming/python/practicum-prep/index.html</loc>
+    <lastmod>2023-10-11T01:34:27.394Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/programming/git/primer/index.html</loc>
+    <lastmod>2023-10-11T01:34:03.962Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/blog/index.html</loc>
+    <lastmod>2023-10-11T01:34:02.590Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/projects/summer_r/index.html</loc>
+    <lastmod>2023-10-11T01:34:01.498Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/blog/first_weeks/index.html</loc>
+    <lastmod>2023-10-11T01:34:02.214Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/index.html</loc>
+    <lastmod>2023-10-11T01:34:02.890Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/programming/R/r4ds/intro/index.html</loc>
+    <lastmod>2023-10-11T01:34:04.342Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/programming/R/r4ds/intro_visualization/index.html</loc>
+    <lastmod>2023-10-11T01:34:25.666Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/programming/index.html</loc>
+    <lastmod>2023-10-11T01:34:27.970Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/primer/hypothesis_testing/index.html</loc>
+    <lastmod>2023-10-11T01:34:29.246Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/primer/index.html</loc>
+    <lastmod>2023-10-11T01:34:30.629Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/primer/probability/index.html</loc>
+    <lastmod>2023-10-11T01:34:31.725Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/communication/062623/index.html</loc>
+    <lastmod>2023-10-11T01:34:33.365Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/n-Way/lab_5.html</loc>
+    <lastmod>2023-10-11T01:34:34.557Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/n-Way/index.html</loc>
+    <lastmod>2023-10-11T01:34:35.921Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/ANOVA/introduction/lab_3.html</loc>
+    <lastmod>2023-10-11T01:34:37.161Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/data-mining/clustering/index.html</loc>
+    <lastmod>2023-10-11T01:34:38.621Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/data-mining/introduction/index.html</loc>
+    <lastmod>2023-10-11T01:34:40.345Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/diagnostics/lab_8.html</loc>
+    <lastmod>2023-10-11T01:34:41.601Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/SLR/lab_4.html</loc>
+    <lastmod>2023-10-11T01:34:42.805Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/influence/lab_9.html</loc>
+    <lastmod>2023-10-11T01:34:44.005Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/influence/index.html</loc>
+    <lastmod>2023-10-11T01:34:45.301Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/model-selection/index.html</loc>
+    <lastmod>2023-10-11T01:34:46.545Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/regularized/index.html</loc>
+    <lastmod>2023-10-11T01:34:48.909Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/MLR/lab_6.html</loc>
+    <lastmod>2023-10-11T01:34:50.101Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/linear-regression/MLR/breakout_6.html</loc>
+    <lastmod>2023-10-11T01:34:51.341Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/stationarity/index.html</loc>
+    <lastmod>2023-10-11T01:34:53.161Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/exponential-smoothing/linear-esm/index.html</loc>
+    <lastmod>2023-10-11T01:34:55.273Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/timeseries/correlation-functions/index.html</loc>
-    <lastmod>2023-10-09T19:36:48.528Z</lastmod>
+    <lastmod>2023-10-11T01:34:59.617Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/logistic-regression/model-assessment/index.html</loc>
-    <lastmod>2023-10-09T19:36:50.532Z</lastmod>
+    <lastmod>2023-10-11T01:35:01.525Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/logistic-regression/intro-review/index.html</loc>
-    <lastmod>2023-10-09T19:36:52.332Z</lastmod>
+    <lastmod>2023-10-11T01:35:03.233Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/logistic-regression/introduction/index.html</loc>
-    <lastmod>2023-10-09T19:36:53.740Z</lastmod>
+    <lastmod>2023-10-11T01:35:04.569Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/logistic-regression/ordinal/index.html</loc>
-    <lastmod>2023-10-09T19:36:55.384Z</lastmod>
+    <lastmod>2023-10-11T01:35:06.085Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/EDA/statistical-inference/lab_2.html</loc>
-    <lastmod>2023-10-09T19:36:56.680Z</lastmod>
+    <lastmod>2023-10-11T01:35:07.301Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/EDA/categorical-data/breakout_12.html</loc>
-    <lastmod>2023-10-09T19:36:58.088Z</lastmod>
+    <lastmod>2023-10-11T01:35:08.565Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/EDA/categorical-data/index.html</loc>
-    <lastmod>2023-10-09T19:36:59.600Z</lastmod>
+    <lastmod>2023-10-11T01:35:09.937Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/EDA/introduction/breakout_1.html</loc>
-    <lastmod>2023-10-09T19:37:00.944Z</lastmod>
+    <lastmod>2023-10-11T01:35:11.157Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/yangrchen/msa_blog/notes/analytics/bayesian/introduction/index.html</loc>
-    <lastmod>2023-10-09T19:37:05.440Z</lastmod>
+    <lastmod>2023-10-11T01:35:15.441Z</lastmod>
   </url>
 </urlset>
