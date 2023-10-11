@@ -215,6 +215,18 @@
       ],
       "Hash": "963ab8fbaf980a5b081ed40419081439"
     },
+    "QuickJSR": {
+      "Package": "QuickJSR",
+      "Version": "1.0.6",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R6",
+        "Rcpp",
+        "jsonlite"
+      ],
+      "Hash": "6ded66fbe724abcec064fb15f626a0e4"
+    },
     "R6": {
       "Package": "R6",
       "Version": "2.5.1",
@@ -287,6 +299,16 @@
       ],
       "Hash": "1e035db628cefb315c571202d70202fe"
     },
+    "RcppParallel": {
+      "Package": "RcppParallel",
+      "Version": "5.1.7",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "a45594a00f5dbb073d5ec9f48592a08a"
+    },
     "RcppProgress": {
       "Package": "RcppProgress",
       "Version": "0.4.2",
@@ -318,6 +340,18 @@
         "utils"
       ],
       "Hash": "2042cd9759cc89a453c4aefef0ce9aae"
+    },
+    "StanHeaders": {
+      "Package": "StanHeaders",
+      "Version": "2.26.28",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "RcppEigen",
+        "RcppParallel"
+      ],
+      "Hash": "35b5aee9ec9507aca2e021997a9e557e"
     },
     "TTR": {
       "Package": "TTR",
@@ -891,6 +925,21 @@
       ],
       "Hash": "54ed3ea01b11e81a86544faaecfef8e2"
     },
+    "dygraphs": {
+      "Package": "dygraphs",
+      "Version": "1.1.1.6",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "htmltools",
+        "htmlwidgets",
+        "magrittr",
+        "xts",
+        "zoo"
+      ],
+      "Hash": "716869fffc16e282c118f8894e082a7d"
+    },
     "e1071": {
       "Package": "e1071",
       "Version": "1.7-13",
@@ -951,6 +1000,17 @@
         "methods"
       ],
       "Hash": "af0c5d9f9ece61d4723904c7b2b49b4d"
+    },
+    "extraDistr": {
+      "Package": "extraDistr",
+      "Version": "1.9.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "Rcpp"
+      ],
+      "Hash": "9e29370a0dd450a33826a4932d3fa16d"
     },
     "fansi": {
       "Package": "fansi",
@@ -1513,6 +1573,16 @@
       ],
       "Hash": "13747dfefd62d02ff4657d4e8eec53ef"
     },
+    "inline": {
+      "Package": "inline",
+      "Version": "0.3.19",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "methods"
+      ],
+      "Hash": "1deaf1de3eac7e1d3377954b3a283652"
+    },
     "inum": {
       "Package": "inum",
       "Version": "1.0-5",
@@ -1717,6 +1787,20 @@
       ],
       "Hash": "c6fafa6cccb1e1dfe7f7d122efd6e6a7"
     },
+    "loo": {
+      "Package": "loo",
+      "Version": "2.6.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "checkmate",
+        "matrixStats",
+        "parallel",
+        "stats"
+      ],
+      "Hash": "e5c8f41731502a0e98f353da23f7ca30"
+    },
     "lpSolve": {
       "Package": "lpSolve",
       "Version": "5.6.18",
@@ -1770,6 +1854,16 @@
         "xfun"
       ],
       "Hash": "93cecf1e5f828d0fc1605a00ad48e3a2"
+    },
+    "matrixStats": {
+      "Package": "matrixStats",
+      "Version": "1.0.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "9143629fd64335aac6a6250d1c1ed82a"
     },
     "memoise": {
       "Package": "memoise",
@@ -2009,6 +2103,24 @@
       ],
       "Hash": "15da5a8412f317beeee6175fbc76f4bb"
     },
+    "pkgbuild": {
+      "Package": "pkgbuild",
+      "Version": "1.4.2",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "R6",
+        "callr",
+        "cli",
+        "crayon",
+        "desc",
+        "prettyunits",
+        "processx",
+        "rprojroot"
+      ],
+      "Hash": "beb25b32a957a22a5c301a9e441190b3"
+    },
     "pkgconfig": {
       "Package": "pkgconfig",
       "Version": "2.0.3",
@@ -2113,6 +2225,35 @@
         "prettyunits"
       ],
       "Hash": "14dc9f7a3c91ebb14ec5bb9208a07061"
+    },
+    "prophet": {
+      "Package": "prophet",
+      "Version": "1.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "BH",
+        "R",
+        "Rcpp",
+        "RcppEigen",
+        "RcppParallel",
+        "StanHeaders",
+        "dplyr",
+        "dygraphs",
+        "extraDistr",
+        "ggplot2",
+        "grid",
+        "lubridate",
+        "methods",
+        "rlang",
+        "rstan",
+        "rstantools",
+        "scales",
+        "stats",
+        "tidyr",
+        "xts"
+      ],
+      "Hash": "00a8bda3717c29421222156d494c5a3d"
     },
     "proxy": {
       "Package": "proxy",
@@ -2466,6 +2607,43 @@
         "R"
       ],
       "Hash": "1de7ab598047a87bba48434ba35d497d"
+    },
+    "rstan": {
+      "Package": "rstan",
+      "Version": "2.26.23",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "BH",
+        "QuickJSR",
+        "R",
+        "Rcpp",
+        "RcppEigen",
+        "RcppParallel",
+        "StanHeaders",
+        "ggplot2",
+        "gridExtra",
+        "inline",
+        "loo",
+        "methods",
+        "pkgbuild",
+        "stats4"
+      ],
+      "Hash": "137e535a84b86280c714315e587a435b"
+    },
+    "rstantools": {
+      "Package": "rstantools",
+      "Version": "2.3.1.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "Rcpp",
+        "RcppParallel",
+        "desc",
+        "stats",
+        "utils"
+      ],
+      "Hash": "32d3b6fe28162eb1c430697f95f40a83"
     },
     "rstudioapi": {
       "Package": "rstudioapi",

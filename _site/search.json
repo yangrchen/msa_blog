@@ -2237,35 +2237,35 @@
     "href": "notes/analytics/timeseries/dynamic-regression/index.html",
     "title": "Dynamic Regression Models",
     "section": "",
-    "text": "External information can make better forecasts as well as potentially account for trend and seasonality.\nWe can incorporate predictor variables through a regression:\n\\[\nY_t = \\beta_0 + \\beta_1X_{1,t} + \\cdots + \\beta_kX_{k,t} + Z_t\n\\]\nWe model the \\(Z_t\\) error term with an ARIMA model. A regression with ARIMA(1, 0, 1) errors would have:\n\\[\nZ_t = \\omega + \\phi_1Z_{t-1} + e_t + \\theta_1e_{t-1}\n\\]\n\n\\(e_t\\) represents the white noise"
+    "text": "Code\nlibrary(tseries)\nlibrary(forecast)\nlibrary(aTSA)\nlibrary(tidyverse)"
   },
   {
     "objectID": "notes/analytics/timeseries/dynamic-regression/index.html#use-cases",
     "href": "notes/analytics/timeseries/dynamic-regression/index.html#use-cases",
     "title": "Dynamic Regression Models",
-    "section": "2.1 Use Cases",
-    "text": "2.1 Use Cases\n\nModel and forecast the response series\nAnalyze the impact of the intervention"
+    "section": "3.1 Use Cases",
+    "text": "3.1 Use Cases\n\nModel and forecast the response series\nAnalyze the impact of the intervention"
   },
   {
     "objectID": "notes/analytics/timeseries/dynamic-regression/index.html#types",
     "href": "notes/analytics/timeseries/dynamic-regression/index.html#types",
     "title": "Dynamic Regression Models",
-    "section": "2.2 Types",
-    "text": "2.2 Types\n\nPoint / Pulse Interventions\nStep Interventions\nRamp Interventions"
+    "section": "3.2 Types",
+    "text": "3.2 Types\n\nPoint / Pulse Interventions\nStep Interventions\nRamp Interventions"
   },
   {
     "objectID": "notes/analytics/timeseries/dynamic-regression/index.html#point-interventions",
     "href": "notes/analytics/timeseries/dynamic-regression/index.html#point-interventions",
     "title": "Dynamic Regression Models",
-    "section": "2.3 Point Interventions",
-    "text": "2.3 Point Interventions\n\n\n\nFigure 1: Point Interventions\n\n\nIn Figure 1 we see a special sales promotion that occurs suddenly. How do we account for this? All we have to do is create a binary variable that indicates the intervention.\nWe model the impact through a coefficient in the model:\n\\[\nY_t = \\beta_0 + \\beta_1I_t + Z_t\n\\]"
+    "section": "3.3 Point Interventions",
+    "text": "3.3 Point Interventions\n\n\n\nFigure 1: Point Interventions\n\n\nIn Figure 1 we see a special sales promotion that occurs suddenly. How do we account for this? All we have to do is create a binary variable that indicates the intervention.\nWe model the impact through a coefficient in the model:\n\\[\nY_t = \\beta_0 + \\beta_1I_t + Z_t\n\\]"
   },
   {
     "objectID": "notes/analytics/timeseries/dynamic-regression/index.html#step-interventions",
     "href": "notes/analytics/timeseries/dynamic-regression/index.html#step-interventions",
     "title": "Dynamic Regression Models",
-    "section": "2.4 Step Interventions",
-    "text": "2.4 Step Interventions\nThe idea of a step intervention is that we make a permanent step in our data and the change continues on from that time on.\n\n\n\nFigure 2: Step Inteventions\n\n\nAny time period after the step is indicated by a 1 in the intervention variable. If we had multiple step events then we would have a variable for each one.\nWith intervention events, you need to have data prior to the intervention and after the intervention. Otherwise, you have no notion of change between the periods.\n\\[\nY_t = \\beta_0 + \\beta_1I_t + Z_t\n\\]"
+    "section": "3.4 Step Interventions",
+    "text": "3.4 Step Interventions\nThe idea of a step intervention is that we make a permanent step in our data and the change continues on from that time on.\n\n\n\nFigure 2: Step Inteventions\n\n\nAny time period after the step is indicated by a 1 in the intervention variable. If we had multiple step events then we would have a variable for each one.\nWith intervention events, you need to have data prior to the intervention and after the intervention. Otherwise, you have no notion of change between the periods.\n\\[\nY_t = \\beta_0 + \\beta_1I_t + Z_t\n\\]"
   },
   {
     "objectID": "notes/analytics/index.html",
@@ -2623,5 +2623,26 @@
     "title": "Breakout 5",
     "section": "",
     "text": "Code\nimport pandas as pd\nimport statsmodels.api as sm\nimport statsmodels.formula.api as smf\n\n\n\n\nCode\nbike = pd.read_csv('https://raw.githubusercontent.com/IAA-Faculty/statistical_foundations/master/bike.csv')\nbike.head()\n\n\n\n\n\n\n\n\n\ndteday\nseason\nyr\nmnth\nhr\nholiday\nweekday\nworkingday\nweathersit\ntemp\natemp\nhum\nwindspeed\ncasual\nregistered\ncnt\n\n\n\n\n0\n14975\n1\n0\n1\n0\n0\n6\n0\n1\n0.24\n0.2879\n0.81\n0.0\n3\n13\n16\n\n\n1\n14975\n1\n0\n1\n1\n0\n6\n0\n1\n0.22\n0.2727\n0.80\n0.0\n8\n32\n40\n\n\n2\n14975\n1\n0\n1\n2\n0\n6\n0\n1\n0.22\n0.2727\n0.80\n0.0\n5\n27\n32\n\n\n3\n14975\n1\n0\n1\n3\n0\n6\n0\n1\n0.24\n0.2879\n0.75\n0.0\n3\n10\n13\n\n\n4\n14975\n1\n0\n1\n4\n0\n6\n0\n1\n0.24\n0.2879\n0.75\n0.0\n0\n1\n1\n\n\n\n\n\n\n\n\n1 1\n\n\nCode\nbike_lm = smf.ols('cnt ~ C(workingday) * C(season)', bike).fit()\n\nsm.stats.anova_lm(bike_lm)\n\n\n\n\n\n\n\n\n\ndf\nsum_sq\nmean_sq\nF\nPR(&gt;F)\n\n\n\n\nC(workingday)\n1.0\n5.243871e+05\n5.243871e+05\n17.082764\n3.595344e-05\n\n\nC(season)\n3.0\n3.748219e+07\n1.249406e+07\n407.014449\n1.544102e-255\n\n\nC(workingday):C(season)\n3.0\n5.199753e+05\n1.733251e+05\n5.646347\n7.301192e-04\n\n\nResidual\n17371.0\n5.332350e+08\n3.069685e+04\nNaN\nNaN\n\n\n\n\n\n\n\n\nThe interaction between workingday and season seems to be significant towards predicting cnt\n\n\n\n2 2\nTalk with breakout group.\n\n\n3 3\n\n\nCode\ncasual_lm = smf.ols('casual ~ C(workingday) * C(season)', bike).fit()\n\nsm.stats.anova_lm(casual_lm)\n\n\n\n\n\n\n\n\n\ndf\nsum_sq\nmean_sq\nF\nPR(&gt;F)\n\n\n\n\nC(workingday)\n1.0\n3.826038e+06\n3.826038e+06\n1954.028610\n0.000000e+00\n\n\nC(season)\n3.0\n3.750852e+06\n1.250284e+06\n638.543326\n0.000000e+00\n\n\nC(workingday):C(season)\n3.0\n6.559238e+05\n2.186413e+05\n111.664154\n1.292550e-71\n\n\nResidual\n17371.0\n3.401286e+07\n1.958026e+03\nNaN\nNaN\n\n\n\n\n\n\n\n\nNot a significant interaction between workingday and season for casual bikers\n\n\n\nCode\nregistered_lm = smf.ols('registered ~ C(workingday) * C(season)', bike).fit()\n\nsm.stats.anova_lm(registered_lm)\n\n\n\n\n\n\n\n\n\ndf\nsum_sq\nmean_sq\nF\nPR(&gt;F)\n\n\n\n\nC(workingday)\n1.0\n7.183321e+06\n7.183321e+06\n335.449602\n3.121975e-74\n\n\nC(season)\n3.0\n1.885079e+07\n6.283597e+06\n293.433926\n7.848911e-186\n\n\nC(workingday):C(season)\n3.0\n9.621956e+04\n3.207319e+04\n1.497767\n2.129291e-01\n\n\nResidual\n17371.0\n3.719828e+08\n2.141401e+04\nNaN\nNaN\n\n\n\n\n\n\n\n\nSignificant interaction between workingday and season for registered bikers\n\n\n\nCode\nunique_season = bike['season'].unique()\n\nfor season in unique_season:\n    sliced_data = smf.ols(\"casual ~ C(workingday)\", bike[bike[\"season\"] == season]).fit()\n    print(sm.stats.anova_lm(sliced_data))\n\nfor season in unique_season:\n    sliced_data = smf.ols(\"registered ~ C(workingday)\", bike[bike[\"season\"] == season]).fit()\n    print(sm.stats.anova_lm(sliced_data))\n\n\n                   df        sum_sq        mean_sq          F        PR(&gt;F)\nC(workingday)     1.0  1.436979e+05  143697.866870  199.44088  2.751109e-44\nResidual       4240.0  3.054935e+06     720.503576        NaN           NaN\n                   df        sum_sq       mean_sq           F         PR(&gt;F)\nC(workingday)     1.0  2.044757e+06  2.044757e+06  720.507711  3.944648e-147\nResidual       4407.0  1.250680e+07  2.837939e+03         NaN            NaN\n                   df        sum_sq       mean_sq           F         PR(&gt;F)\nC(workingday)     1.0  1.623762e+06  1.623762e+06  700.640615  1.328288e-143\nResidual       4494.0  1.041502e+07  2.317539e+03         NaN            NaN\n                   df        sum_sq        mean_sq           F         PR(&gt;F)\nC(workingday)     1.0  9.299500e+05  929949.990208  489.501677  9.987658e-103\nResidual       4230.0  8.036108e+06    1899.789180         NaN            NaN\n                   df        sum_sq       mean_sq           F        PR(&gt;F)\nC(workingday)     1.0  1.278398e+06  1.278398e+06  120.723426  1.035371e-27\nResidual       4240.0  4.489940e+07  1.058948e+04         NaN           NaN\n                   df        sum_sq       mean_sq          F        PR(&gt;F)\nC(workingday)     1.0  1.351663e+06  1.351663e+06  58.687294  2.258053e-14\nResidual       4407.0  1.015003e+08  2.303161e+04        NaN           NaN\n                   df        sum_sq       mean_sq          F        PR(&gt;F)\nC(workingday)     1.0  2.328766e+06  2.328766e+06  85.657432  3.232019e-20\nResidual       4494.0  1.221782e+08  2.718697e+04        NaN           NaN\n                   df        sum_sq       mean_sq          F        PR(&gt;F)\nC(workingday)     1.0  1.629497e+06  1.629497e+06  66.658104  4.220264e-16\nResidual       4230.0  1.034048e+08  2.444559e+04        NaN           NaN\n\n\n\nFor each individual season, there is a significant difference between working days and non-working days in registered bikers"
+  },
+  {
+    "objectID": "notes/analytics/timeseries/dynamic-regression/index.html#ramp-intervention",
+    "href": "notes/analytics/timeseries/dynamic-regression/index.html#ramp-intervention",
+    "title": "Dynamic Regression Models",
+    "section": "3.5 Ramp Intervention",
+    "text": "3.5 Ramp Intervention\nIn a ramp intervention, we introduce a new trend line into the model. Some event changes the overall trend following the event. Another way to think of this is that the angle of the time series changes.\n\n\n\nFigure 3: Ramp Intervention\n\n\n\\[\nY_t = \\beta_0 + \\beta_1I_t + Z_t\n\\]\n\n\\(\\beta_1\\) is the impact measured by model coefficient (new slope)"
+  },
+  {
+    "objectID": "notes/analytics/timeseries/dynamic-regression/index.html#determining-lags",
+    "href": "notes/analytics/timeseries/dynamic-regression/index.html#determining-lags",
+    "title": "Dynamic Regression Models",
+    "section": "5.1 Determining Lags",
+    "text": "5.1 Determining Lags\nMultiple ways to evaluate how many lags of a predictor variable:\n\nCross-correlation functions and pre-whitening of series.\n\nTime consuming\nRequires modeling of the predictor variables\nBest used for small number of predictors\n\nEvaluate many different lag combinations models with AIC/BIC on validation set.\n\nEssentially trial and error\nHandles many variables much easier\nSimilar in accuracy of the “elegant” first approach"
+  },
+  {
+    "objectID": "notes/analytics/timeseries/dynamic-regression/index.html#adding-lags-to-model",
+    "href": "notes/analytics/timeseries/dynamic-regression/index.html#adding-lags-to-model",
+    "title": "Dynamic Regression Models",
+    "section": "5.2 Adding Lags to Model",
+    "text": "5.2 Adding Lags to Model\nThe idea here is that we are manually creating lags by shifting over the effect of the point intervention by 1 each time we add a new lag. The actual number is based on data context–what do you want to include based on events going on in the data?\n\n\nCode\nsep11 &lt;- rep(0, 207)\nsep11[141] &lt;- 1\n\nsep11_L1 &lt;- rep(0, 207)\nsep11_L1[142] &lt;- 1\n\nsep11_L2 &lt;- rep(0, 207)\nsep11_L2[143] &lt;- 1\n\nsep11_L3 &lt;- rep(0, 207)\nsep11_L3[144] &lt;- 1\n\nsep11_L4 &lt;- rep(0, 207)\nsep11_L4[145] &lt;- 1\n\nsep11_L5 &lt;- rep(0, 207)\nsep11_L5[146] &lt;- 1\n\nsep11_L6 &lt;- rep(0, 207)\nsep11_L6[147] &lt;- 1\n\nanniv &lt;- rep(0, 207)\nanniv[153] &lt;- 1\n\nfull_arima &lt;- auto.arima(train, seasonal = TRUE, xreg = cbind(sep11, sep11_L1, sep11_L2, sep11_L3, sep11_L4, sep11_L5, sep11_L6, anniv), method = \"ML\")\nsummary(full_arima)\n\n\nSeries: train \nRegression with ARIMA(2,0,0)(1,1,1)[12] errors \n\nCoefficients:\n         ar1     ar2    sar1    sma1     drift       sep11    sep11_L1\n      0.6298  0.2207  0.1926  -0.696  124.7648  -17400.506  -12116.992\ns.e.  0.0714  0.0726  0.1143   0.081   21.1663    1162.397    1271.319\n       sep11_L2   sep11_L3   sep11_L4   sep11_L5   sep11_L6       anniv\n      -8076.851  -7671.385  -4345.788  -2172.452  -751.2682  -2306.2188\ns.e.   1387.184   1427.370   1403.915   1271.268  1105.3293    998.2212\n\nsigma^2 = 1736410:  log likelihood = -1673.71\nAIC=3375.42   AICc=3377.75   BIC=3421.24\n\nTraining set error measures:\n                   ME     RMSE      MAE         MPE     MAPE      MASE\nTraining set 1.041491 1235.597 944.9504 -0.08208786 1.937629 0.3509802\n                    ACF1\nTraining set 0.007658679\n\n\nWhen checking residuals, be mindful of how many observations are in your data. The bars are representing 95% confidence intervals. These may not be as informative for large data.\n\n\nCode\ncheckresiduals(full_arima)\n\n\n\n\n\n\n    Ljung-Box test\n\ndata:  Residuals from Regression with ARIMA(2,0,0)(1,1,1)[12] errors\nQ* = 16.049, df = 20, p-value = 0.7136\n\nModel df: 4.   Total lags used: 24"
   }
 ]

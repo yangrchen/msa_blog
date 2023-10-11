@@ -1,0 +1,81 @@
+---
+title: Prophet Model
+date: 10/10/2023
+draft: true
+---
+
+# Setup
+
+```{r setup}
+library(tseries)
+library(aTSA)
+library(forecast)
+
+USAirlines <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv")
+passenger <- ts(USAirlines$Passengers, start = 1990, frequency = 12)
+train <- subset(passenger, end = length(passenger) - 12)
+test <- subset(passenger, start = length(passenger) - 11)
+```
+
+# Introduction
+
+Facebook's Prophet model is used for forecasting univariate time series by decomposing it into pieces.
+
+Prophet breaks up the signal into 3 pieces:
+
+-   Growth / Trend
+-   Season
+-   Holiday
+
+![Prophet Breakdown](images/prophet-signal.png){#fig-prophet-signal}
+
+# Growth / Trend
+
+The growth / trend component uses trend lines as regressors in the model. Instead of single trends, this trend is **piecewise** using **knots**. The user can specify knots or it is automatically chosen.
+
+![Growth / Trend](images/growth-trend.png){#fig-growth-trend}
+
+Trend can also be a **logarithmic** trend.
+
+# Seasonal
+
+Fourier variables are used to account for seasonal patterns. Prophet was originally designed for daily data with weekly and yearly seasonal effects. By default, yearly effects have 10 Fourier pairs and weekly effects have 3 Fourier pairs.
+
+# Holiday
+
+The holiday effect is just point interventions!
+
+![Holiday - Point (Pulse) Intervention](images/holiday.png){#fig-holiday}
+
+# Prophet Model
+
+In Prophet, you need to use specific variable names for the model to run. For any date, you need to use `ds`:
+
+```{r prophet-model}
+library(prophet)
+
+holidays <- data.frame(
+    holiday = "Sep11",
+    ds = as.Date(
+        c("2001-09-01", "2001-10-01", "2001-11-01", "2001-12-01", "2002-01-01", "2002-02-01", "2002-09-01")
+    ),
+    lower_window = 0,
+    upper_window = 0
+)
+
+prophet_data <- data.frame(ds = seq(as.Date("1990-01-01"), as.Date("2007-03-01"), by = "m"), y = train)
+
+# Make a baseline model flagging our specified holidays as intervention variables
+# Add US country holidays
+# Don't use default seasonality.
+## Specify period to not use daily seasonality and use monthly instead
+## Specify fourier.order to use 6 pairs
+prof <- prophet(holidays = holidays) %>%
+    add_country_holidays("US") %>%
+    add_seasonality(name = "monthly", period = 30.5, fourier.order = 6) %>%
+    fit.prophet(prophet_data)
+```
+
+We build the Prophet model in components--similar to a ggplot.
+
+Note that `lower_window` and `upper_window` extend the intervention to `day - lower` and `day + upper` for **ALL** the days in between in your data. If you have some holidays that last longer than others then you need to specify multiple holidays in the `holidays` argument.

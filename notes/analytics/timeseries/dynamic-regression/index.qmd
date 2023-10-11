@@ -1,7 +1,18 @@
 ---
 title: Dynamic Regression Models
 date: 10/06/2023
+date-modified: 10/10/2023
 ---
+
+# Setup
+
+```{r}
+#| warning: false
+library(tseries)
+library(forecast)
+library(aTSA)
+library(tidyverse)
+```
 
 # Regression with ARIMA Errors
 
@@ -64,3 +75,116 @@ With intervention events, you need to have data prior to the intervention and af
 $$
 Y_t = \beta_0 + \beta_1I_t + Z_t
 $$
+
+## Ramp Intervention
+
+In a ramp intervention, we introduce a new trend line into the model. Some event changes the overall trend following the event. Another way to think of this is that the angle of the time series changes.
+
+![Ramp Intervention](images/ramp-intervention.png){#fig-ramp-intervention}
+
+$$
+Y_t = \beta_0 + \beta_1I_t + Z_t
+$$
+
+-   $\beta_1$ is the impact measured by model coefficient (new slope)
+
+# Implementing in Software
+
+```{r point-intervention}
+
+USAirlines <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv")
+passenger <- ts(USAirlines$Passengers, start = 1990, frequency = 12)
+train <- subset(passenger, end = length(passenger) - 12)
+test <- subset(passenger, start = length(passenger) - 11)
+sep11 <- rep(0, 207)
+sep11[141] <- 1
+
+full_arima <- auto.arima(train, seasonal = TRUE, xreg = sep11, method = "ML")
+summary(full_arima)
+```
+
+# Predictor Variables
+
+We can include explanatory variables beyond just the response variable. Models that include external variables have different names--ARIMAX, dynamic regression models, transfer functions, etc.
+
+Often there are **lagged impacts** as well as immediate impacts--past values of explanatory variables can be important.
+
+## Determining Lags
+
+Multiple ways to evaluate how many lags of a predictor variable:
+
+-   Cross-correlation functions and pre-whitening of series.
+    -   Time consuming
+    -   Requires modeling of the predictor variables
+    -   Best used for small number of predictors
+-   Evaluate many different lag combinations models with AIC/BIC on validation set.
+    -   Essentially trial and error
+    -   Handles many variables much easier
+    -   Similar in accuracy of the "elegant" first approach
+
+## Adding Lags to Model
+
+The idea here is that we are manually creating lags by shifting over the effect of the point intervention by 1 each time we add a new lag. The actual number is based on data context--what do you want to include based on events going on in the data?
+
+```{r adding-lags}
+sep11 <- rep(0, 207)
+sep11[141] <- 1
+
+sep11_L1 <- rep(0, 207)
+sep11_L1[142] <- 1
+
+sep11_L2 <- rep(0, 207)
+sep11_L2[143] <- 1
+
+sep11_L3 <- rep(0, 207)
+sep11_L3[144] <- 1
+
+sep11_L4 <- rep(0, 207)
+sep11_L4[145] <- 1
+
+sep11_L5 <- rep(0, 207)
+sep11_L5[146] <- 1
+
+sep11_L6 <- rep(0, 207)
+sep11_L6[147] <- 1
+
+anniv <- rep(0, 207)
+anniv[153] <- 1
+
+full_arima <- auto.arima(train, seasonal = TRUE, xreg = cbind(sep11, sep11_L1, sep11_L2, sep11_L3, sep11_L4, sep11_L5, sep11_L6, anniv), method = "ML")
+summary(full_arima)
+```
+
+When checking residuals, be mindful of how many observations are in your data. The bars are representing **95% confidence intervals**. These may not be as informative for large data.
+
+```{r checking-residuals}
+checkresiduals(full_arima)
+```
+
+# Forecasting
+
+Forecasting in time series with external variables has unique issues. What are the future values of the external variables? You need to research future estimates to pull this off.
+
+-   Known future values (interventions)
+-   External estimates of future values
+-   Need to forecast future values ourselves
+
+In our case, we will say that the influence of these variables is removed (0) in the future:
+
+```{r forecasting-external}
+sep11 <- rep(0, 12)
+sep11_L1 <- rep(0, 12)
+sep11_L2 <- rep(0, 12)
+sep11_L3 <- rep(0, 12)
+sep11_L4 <- rep(0, 12)
+sep11_L5 <- rep(0, 12)
+sep11_L6 <- rep(0, 12)
+anniv <- rep(0, 12)
+
+full_arima_error <- test - forecast::forecast(full_arima, xreg = cbind(sep11, sep11_L1, sep11_L2, sep11_L3, sep11_L4, sep11_L5, sep11_L6, anniv), h = 12)$mean
+
+full_arima_MAE <- mean(abs(full_arima_error))
+full_arima_MAPE <- mean(abs(full_arima_error) / abs(test)) * 100.0
+sprintf("MAPE: %.3f", full_arima_MAPE)
+sprintf("MAE: %.3f", full_arima_MAE)
+```

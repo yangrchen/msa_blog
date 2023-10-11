@@ -1,6 +1,7 @@
 ---
 title: Git Basics
 date: 09/20/2023
+date-modified: 10/10/2023
 engine: knitr
 ---
 
@@ -79,6 +80,7 @@ git clone https://github.com/msa2024-hackers/msa-share20-gitdemo.git
 ```
 
 ```{r}
+#| echo: false
 knitr::opts_knit$set(root.dir = "msa-share20-gitdemo")
 ```
 
@@ -396,11 +398,26 @@ git push origin main
 
 Again, if you were working with a repository that you had write permissions to then you could navigate over to Github or the designated Git server and find your work on the remote repository!
 
-# Conclusion
+# Conclusion / Moving Forward
 
 Git is an effective solution to version control that allows multiple users to monitor and contribute to codebases in a stable manner. For a basic workflow, you will pull the new changes, do some work, make a commit, and then push out your changes for others to view and use. There are **a lot** of features to Git--the ones I'm showing here can still get you very far.
 
 However, don't think of this workflow as your ultimate solution for file collaboration in Git. Effective communication is still necessary to make sure you don't clobber each other's work. Make sure to carefully review commits and if necessary look farther into Git's documentation to iron out any issues / scale up as the collaboration grows more complex.
+
+If you feel comfortable with the basics, you should look into the following:
+ 
+- **Branching**
+- **Merging**
+- **Rebasing**
+- **Resetting** to a previous commit
+
+There's also a vast number of project / code management tools that Git *doesn't* solve by itself, but services like Github and GitLab do. To name a few:
+
+- **Pull requests**
+- **Continuous integration** (e.g. Github Actions)
+- **Issues**
+
+ These are all tools that can help us all work better in the practicum and later on in professional settings. Share your knowledge with your team and help each other out!
 
 <!-- Cells to run for cleanup -->
 
