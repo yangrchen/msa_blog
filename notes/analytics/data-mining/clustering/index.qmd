@@ -99,16 +99,194 @@ You can try clustering on original data or you can try it on PCA of the variable
 :::{.panel-tabset group="language"}
 # R
 
-```{r}
-library(ggplot2)
-
+```{r explore-plots}
 par(mfrow = c(2, 2))
 hist(USArrests$Murder)
 hist(USArrests$Assault)
 hist(USArrests$Rape)
 hist(USArrests$UrbanPop)
+
+arrest_scal <- scale(USArrests)
+```
+
+```{r k-means-clustering}
+clus2 <- kmeans(arrest_scal, centers = 2, nstart = 25)
+clus2
+```
+
+```{r pca-plot}
+library(factoextra)
+fviz_cluster(clus2, data = arrest_scal)
 ```
 
 # Python
 
 :::
+
+# Silhouette Method
+
+**Silhouette** is another method to define the number of clusters to use. This method estimates how well each observations falls within its cluster (distance point is to all other points in cluster and compare it to distance from that point to points in other clusters). 
+
+We want to find the number of clusters that **maximizes this ratio**.
+
+```{r}
+#| warning: false
+library(tidyverse)
+fviz_nbclust(arrest_scal, kmeans, method = "silhouette", k.max = 9)
+```
+
+From silhouette, the optimal number of clusters selected is 2. 
+
+We can profile our original data by attaching the clusters to it:
+
+```{r k-means-profiling}
+profile_kmeans <- cbind(USArrests, clus2$cluster)
+all_k <- profile_kmeans %>%
+    group_by(clus2$cluster) %>%
+    summarise(mean_assault = mean(Assault), mean_murder = mean(Murder), mean_rape = mean(Rape), mean_pop = mean(UrbanPop))
+all_k
+```
+
+# Hierarchical Clustering
+
+Every point starts as its own cluster and then we build up clusters as hierarchies. There are several different distant measures we can use, but the two we focus on are **Euclidean distance** and **Manhattan distance**.
+
+Euclidean distance:
+
+$$
+\sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2}
+$$
+
+Manhattan distance:
+
+$$
+|x_1 - x_2| + |y_1 - y_2|
+$$
+
+## Hierarchical Algorithm
+
+1.  Each point starts as its own cluster ($n$ clusters).
+2.  Calculate the distance between each point using the distance measure.
+3.  Choose two points that are the closest and form a cluster ($n - 1$ clusters).
+4.  Calculate distance between all single points and all clustered points.
+5.  Find smallest distance and combine to form a cluster.
+
+:::{layout-ncol="2"}
+![Hierarchical Clustering Step 1](images/hierarchical-step-1.png)
+
+![Hierarchical Clustering Step 2](images/hierarchical-step-2.png)
+:::
+
+Once all points are part of a multi-point cluster we then need to agglomerate clusters.
+
+![Hierarchical Clustering Agglomerative](images/hierarchical-agglom.png)
+
+## Linkages
+
+How do we measure the distance between a point / cluster and a cluster?
+
+### Single Linkage
+
+Distance between the closest points in the clusters.
+
+![Single Linkage](images/single-linkage.png)
+
+### Complete Linkage
+
+Distance between the farthest points in the clusters.
+
+![Complete Linkage](images/complete-linkage.png)
+
+### Centroid Linkage
+
+Distance between the centroids (means) of each cluster.
+
+![Centroid Linkage](images/centroid-linkage.png)
+
+### Average Linkage
+
+Average distance between all points in clusters.
+
+![Average Linkage](images/average-linkage.png)
+
+### Ward's Method
+
+Minimize SSE within the cluster compared to the centroid.
+
+$$
+\sum_{j=1}^{N_i} \lvert x_j - c_i \rvert^2
+$$
+
+![Ward's Method](images/wards-method.png)
+
+## Advantages and Disadvantages
+
+Advantages:
+
+-   Creates hierarchy that can help choose the number of clusters and examine how those clusters relate to each other.
+-   Do NOT need to know number of clusters apriori
+
+Disadvantages:
+
+-   Computationally intensive, large storage reqs., not good for large datasets.
+-   Lacks global objective function: only makes decision based on local criteria.
+-   Greedy algorithm. Merging decisions are final once a point is assigned to a cluster.
+-   Poor performance on noisy or high-dimensional data like text.
+
+At the end of the day, you should always evaluate clustering algorithms based on how it makes sense in the business context.
+
+![Hierarchical Clustering Options](images/hierarchical-options.png)
+
+```{r}
+library(cluster)
+
+dist_assault <- dist(arrest_scal, method = "euclidean")
+h1_comp_eucl <- agnes(dist_assault, method = "complete")
+pltree(h1_comp_eucl, cex = 0.6, hang = -1, main = "Dendrogram of agnes")
+```
+
+We can also get the agglomerative coefficient which measures how strong the clustering structure is (want values close to 1):
+
+```{r}
+print(h1_comp_eucl$ac)
+```
+
+Loop through possibilities of linkage methods:
+
+```{r}
+method <- c(average = "average", single = "single", complete = "complete", ward = "ward")
+
+ac <- function(x) {
+    agnes(dist_assault, method = x)$ac
+}
+
+lapply(method, ac)
+```
+
+Although we can find the best mathematical cluster here, we want the best algorithm for business sense. Explore profiles to see which makes the most sense.
+
+# DBSCAN
+
+Density-based spatial clustering of applications with noise. Groups together points that are close to each other based on a distance measure, a minimum number of points ("neighbors"), and a "neighborhood about each point."
+
+Points not near other points are deemed outliers. A cluster of points must have a minimum number of points around it to be considered a cluster.
+
+# Variable Clustering
+
+Cluster variables that are related to reduce redundancies or multicollinearity. This is also a form of dimension reduction. Variable clustering uses eigenvalues to identify similar values and assess the goodness of the partition.
+
+In R, the package is `ClustOfVar`. R can handle quantitative and qualitative variables, but you need to split these into two data matrices first. 
+
+<!-- ```{r}
+library(readr)
+library(ClustOfVar)
+telco <- read_csv("https://raw.githubusercontent.com/sjsimmo2/DataMining-Fall/master/TelcoChurn.csv")
+
+telco[is.na(telco)] = 0
+quant_var <- telco[,c(3,6,19,20)]
+qual_var <- telco[,c(2,4,5,6:18)]
+
+var_clust_h <- hclustvar(quant_var, qual_var)
+stab <- stability(var_clust_h, B=50)
+plot(stab)
+``` -->

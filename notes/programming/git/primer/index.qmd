@@ -148,7 +148,7 @@ Tracked files have three sub-states:
 
 **Untracked files** are any files not in the last snapshot and not in the staging area.
 
-![Git Staging Lifecycle](images/git-stage-lifecycle.jpeg){#fig-staging-lifecycle}
+![Git Staging Lifecycle](images/git-stage-lifecycle.png){#fig-staging-lifecycle}
 
 ## Check File Status
 
