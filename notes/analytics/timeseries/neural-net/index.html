@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="dcterms.date" content="2023-10-10">
+<meta name="dcterms.date" content="2023-10-12">
 
-<title>Yang MSA - Prophet Model</title>
+<title>Yang MSA - Neural Network AR Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -142,7 +142,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Prophet Model</h1>
+      <h1 class="title">Neural Network AR Models</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analytics</div>
                 <div class="quarto-category">time series</div>
@@ -163,7 +163,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 10, 2023</p>
+        <p class="date">October 12, 2023</p>
       </div>
     </div>
     
@@ -180,12 +180,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup"><span class="header-section-number">1</span> Setup</a></li>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">2</span> Introduction</a></li>
-  <li><a href="#growth-trend" id="toc-growth-trend" class="nav-link" data-scroll-target="#growth-trend"><span class="header-section-number">3</span> Growth / Trend</a></li>
-  <li><a href="#seasonal" id="toc-seasonal" class="nav-link" data-scroll-target="#seasonal"><span class="header-section-number">4</span> Seasonal</a></li>
-  <li><a href="#holiday" id="toc-holiday" class="nav-link" data-scroll-target="#holiday"><span class="header-section-number">5</span> Holiday</a></li>
-  <li><a href="#prophet-model" id="toc-prophet-model" class="nav-link" data-scroll-target="#prophet-model"><span class="header-section-number">6</span> Prophet Model</a></li>
-  <li><a href="#forecasting" id="toc-forecasting" class="nav-link" data-scroll-target="#forecasting"><span class="header-section-number">7</span> Forecasting</a></li>
+  <li><a href="#neural-net-basics" id="toc-neural-net-basics" class="nav-link" data-scroll-target="#neural-net-basics"><span class="header-section-number">2</span> Neural Net Basics</a></li>
+  <li><a href="#autoregressive-neural-networks" id="toc-autoregressive-neural-networks" class="nav-link" data-scroll-target="#autoregressive-neural-networks"><span class="header-section-number">3</span> Autoregressive Neural Networks</a>
+  <ul class="collapse">
+  <li><a href="#number-of-ar-lags" id="toc-number-of-ar-lags" class="nav-link" data-scroll-target="#number-of-ar-lags"><span class="header-section-number">3.1</span> Number of AR Lags</a></li>
+  </ul></li>
+  <li><a href="#implementing-neural-net-ar" id="toc-implementing-neural-net-ar" class="nav-link" data-scroll-target="#implementing-neural-net-ar"><span class="header-section-number">4</span> Implementing Neural Net AR</a></li>
   </ul>
 </nav>
     </div>
@@ -247,135 +247,66 @@ Attaching package: 'forecast'</code></pre>
 </details>
 </div>
 </section>
-<section id="introduction" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Introduction</h1>
-<p>Facebook’s Prophet model is used for forecasting univariate time series by decomposing it into pieces.</p>
-<p>Prophet breaks up the signal into 3 pieces:</p>
+<section id="neural-net-basics" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Neural Net Basics</h1>
+<p>Neural network models are models based on mathematical models of how the brain functions.</p>
+<p>They are organized in a network of <strong>neurons</strong> through <strong>layers</strong>. The input variables are considered the neurons on the <strong>bottom layer</strong>. The output variable is considered the neuron on the <strong>top layer</strong>.</p>
+<p>The layers in between are called <strong>hidden layers</strong> transfrom the input variables through activation functions to try and model the output variable.</p>
+<p><a href="#fig-basic-neural-net">Figure&nbsp;1</a> shows a basic neural net structure without a hidden layer.</p>
+<div id="fig-basic-neural-net" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/basic-neural-net.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Basic Neural Net Structure</figcaption>
+</figure>
+</div>
+<p>Once we add a hidden layer, we apply non-linear activation functions in new nodes that get combined into an output.</p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/hidden-layer-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Hidden Layer Added</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/output.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Combining the Hidden Layer Output</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="autoregressive-neural-networks" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Autoregressive Neural Networks</h1>
+<p>Neural network models used for forecasting in time series, just have lags of Y in the bottom layer along with other X variables.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/autoregressive-terms.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Autoregressive Terms</figcaption>
+</figure>
+</div>
+<section id="number-of-ar-lags" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="number-of-ar-lags"><span class="header-section-number">3.1</span> Number of AR Lags</h2>
 <ul>
-<li>Growth / Trend</li>
-<li>Season</li>
-<li>Holiday</li>
+<li>Explore with correlation plots or automatic selection techniques</li>
+<li>Focus primarily on AR components of the model</li>
+<li>For seasonal data we typically include <strong>all</strong> lags up throguh one season unless correlation plots say you only need specific ones</li>
+<li><strong>Still want to make data stationary first</strong></li>
 </ul>
-<div id="fig-prophet-signal" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/prophet-signal.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Prophet Breakdown</figcaption>
-</figure>
-</div>
+<p>If you don’t have stationary data, the forecasts will still revert to overall mean far enough into the future.</p>
 </section>
-<section id="growth-trend" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Growth / Trend</h1>
-<p>The growth / trend component uses trend lines as regressors in the model. Instead of single trends, this trend is <strong>piecewise</strong> using <strong>knots</strong>. The user can specify knots or it is automatically chosen.</p>
-<div id="fig-growth-trend" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/growth-trend.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Growth / Trend</figcaption>
-</figure>
-</div>
-<p>Trend can also be a <strong>logarithmic</strong> trend.</p>
 </section>
-<section id="seasonal" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Seasonal</h1>
-<p>Fourier variables are used to account for seasonal patterns. Prophet was originally designed for daily data with weekly and yearly seasonal effects. By default, yearly effects have 10 Fourier pairs and weekly effects have 3 Fourier pairs.</p>
-</section>
-<section id="holiday" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Holiday</h1>
-<p>The holiday effect is just point interventions!</p>
-<div id="fig-holiday" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/holiday.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Holiday - Point (Pulse) Intervention</figcaption>
-</figure>
-</div>
-</section>
-<section id="prophet-model" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Prophet Model</h1>
-<p>In prophet, you need to use specific variable names for the model to run. For any date, you need to use <code>ds</code>:</p>
+<section id="implementing-neural-net-ar" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Implementing Neural Net AR</h1>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(prophet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: Rcpp</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: rlang</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>holidays <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">holiday =</span> <span class="st">"Sep11"</span>,</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">as.Date</span>(</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">c</span>(<span class="st">"2001-09-01"</span>, <span class="st">"2001-10-01"</span>, <span class="st">"2001-11-01"</span>, <span class="st">"2001-12-01"</span>, <span class="st">"2002-01-01"</span>, <span class="st">"2002-02-01"</span>, <span class="st">"2002-09-01"</span>)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower_window =</span> <span class="dv">0</span>,</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper_window =</span> <span class="dv">0</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>prophet_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ds =</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"1990-01-01"</span>), <span class="fu">as.Date</span>(<span class="st">"2007-03-01"</span>), <span class="at">by =</span> <span class="st">"m"</span>), <span class="at">y =</span> train)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Make a baseline model flagging our specified holidays as intervention variables</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add US country holidays</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Don't use default seasonality.</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Specify period to not use daily seasonality and use monthly instead</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Specify fourier.order to use 6 pairs</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>prof <span class="ot">&lt;-</span> <span class="fu">prophet</span>(<span class="at">holidays =</span> holidays) <span class="sc">%&gt;%</span></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_country_holidays</span>(<span class="st">"US"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_seasonality</span>(<span class="at">name =</span> <span class="st">"monthly"</span>, <span class="at">period =</span> <span class="fl">30.5</span>, <span class="at">fourier.order =</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fit.prophet</span>(prophet_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Disabling weekly seasonality. Run prophet with weekly.seasonality=TRUE to override this.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in make_holidays_df(year.list, m$country_holidays): Holidays for US are
-only supported from 1995 to 2044</code></pre>
-</div>
-</div>
-<p>We build the prophet model in components–similar to a ggplot.</p>
-<p>Note that <code>lower_window</code> and <code>upper_window</code> extend the intervention to <code>day - lower</code> and <code>day + upper</code> for <strong>ALL</strong> the days in between in your data. If you have some holidays that last longer than others then you need to specify multiple holidays in the <code>holidays</code> argument.</p>
-</section>
-<section id="forecasting" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Forecasting</h1>
-<p>The prophet model doesn’t use any lag values of the target variable. Forecasting just <em>extends</em> the curves into the future, so if there is a new intervention then prophet model won’t be able to take it into account unless the model is refit.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>forecast_data <span class="ot">&lt;-</span> <span class="fu">make_future_dataframe</span>(prof, <span class="at">periods =</span> <span class="dv">12</span>, <span class="at">freq =</span> <span class="st">"month"</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(prof, <span class="fu">predict</span>(prof, forecast_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in make_holidays_df(year.list, m$country_holidays): Holidays for US are
-only supported from 1995 to 2044
-
-Warning in make_holidays_df(year.list, m$country_holidays): Holidays for US are
-only supported from 1995 to 2044</code></pre>
-</div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/prophet-forecasts-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>By default, prophet will try to run daily forecasts so we have to specify <code>freq = "month"</code>. <code>periods</code> is the amount of time periods we want to forecast ahead.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>prophet_error <span class="ot">&lt;-</span> test <span class="sc">-</span> <span class="fu">tail</span>(<span class="fu">predict</span>(prof, forecast_data)<span class="sc">$</span>yhat, <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in make_holidays_df(year.list, m$country_holidays): Holidays for US are
-only supported from 1995 to 2044
-
-Warning in make_holidays_df(year.list, m$country_holidays): Holidays for US are
-only supported from 1995 to 2044</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>prophet_MAE <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(prophet_error))</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>prophet_MAPE <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(prophet_error) <span class="sc">/</span> <span class="fu">abs</span>(test)) <span class="sc">*</span> <span class="fl">100.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nn_model &lt;- nnetar(diff(training, 12), p = 2, P = 3)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 
