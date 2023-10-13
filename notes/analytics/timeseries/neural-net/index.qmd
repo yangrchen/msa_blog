@@ -1,0 +1,58 @@
+---
+title: Neural Network AR Models
+date: 10/12/2023
+---
+
+# Setup
+
+```{r setup}
+library(tseries)
+library(aTSA)
+library(forecast)
+
+USAirlines <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv")
+passenger <- ts(USAirlines$Passengers, start = 1990, frequency = 12)
+train <- subset(passenger, end = length(passenger) - 12)
+test <- subset(passenger, start = length(passenger) - 11)
+```
+
+# Neural Net Basics
+
+Neural network models are models based on mathematical models of how the brain functions. 
+
+They are organized in a network of **neurons** through **layers**. The input variables are considered the neurons on the **bottom layer**. The output variable is considered the neuron on the **top layer**.
+
+The layers in between are called **hidden layers** transfrom the input variables through activation functions to try and model the output variable.
+
+@fig-basic-neural-net shows a basic neural net structure without a hidden layer.
+
+![Basic Neural Net Structure](images/basic-neural-net){#fig-basic-neural-net}
+
+Once we add a hidden layer, we apply non-linear activation functions in new nodes that get combined into an output.
+
+:::{layout-ncol="2"}
+![Hidden Layer Added](images/hidden-layer-1.png)
+
+![Combining the Hidden Layer Output](images/output.png)
+:::
+
+# Autoregressive Neural Networks
+
+Neural network models used for forecasting in time series, just have lags of Y in the bottom layer along with other X variables.
+
+![Autoregressive Terms](images/autoregressive-terms.png)
+
+## Number of AR Lags
+
+-   Explore with correlation plots or automatic selection techniques
+-   Focus primarily on AR components of the model
+-   For seasonal data we typically include **all** lags up throguh one season unless correlation plots say you only need specific ones
+-   **Still want to make data stationary first**
+
+If you don't have stationary data, the forecasts will still revert to overall mean far enough into the future.
+
+# Implementing Neural Net AR
+
+```{r}
+# nn_model <- nnetar(diff(training, 12), p = 2, P = 3)
+```

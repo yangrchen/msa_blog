@@ -35,6 +35,8 @@
   {
     "listing": "/notes/analytics/index.html",
     "items": [
+      "/notes/analytics/data-mining/knn/index.html",
+      "/notes/analytics/timeseries/neural-net/index.html",
       "/notes/analytics/data-mining/clustering/index.html",
       "/notes/analytics/timeseries/dynamic-regression/index.html",
       "/notes/analytics/data-mining/decision-trees/index.html",

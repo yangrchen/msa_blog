@@ -49,7 +49,7 @@ The holiday effect is just point interventions!
 
 # Prophet Model
 
-In Prophet, you need to use specific variable names for the model to run. For any date, you need to use `ds`:
+In prophet, you need to use specific variable names for the model to run. For any date, you need to use `ds`:
 
 ```{r prophet-model}
 library(prophet)
@@ -76,6 +76,23 @@ prof <- prophet(holidays = holidays) %>%
     fit.prophet(prophet_data)
 ```
 
-We build the Prophet model in components--similar to a ggplot.
+We build the prophet model in components--similar to a ggplot.
 
 Note that `lower_window` and `upper_window` extend the intervention to `day - lower` and `day + upper` for **ALL** the days in between in your data. If you have some holidays that last longer than others then you need to specify multiple holidays in the `holidays` argument.
+
+# Forecasting
+
+The prophet model doesn't use any lag values of the target variable. Forecasting just *extends* the curves into the future, so if there is a new intervention then prophet model won't be able to take it into account unless the model is refit.
+
+```{r prophet-forecasts}
+forecast_data <- make_future_dataframe(prof, periods = 12, freq = "month")
+plot(prof, predict(prof, forecast_data))
+```
+
+By default, prophet will try to run daily forecasts so we have to specify `freq = "month"`. `periods` is the amount of time periods we want to forecast ahead.
+
+```{r prophet-metrics}
+prophet_error <- test - tail(predict(prof, forecast_data)$yhat, 12)
+prophet_MAE <- mean(abs(prophet_error))
+prophet_MAPE <- mean(abs(prophet_error) / abs(test)) * 100.0
+```

@@ -1,0 +1,6 @@
+.github/
+_freeze/
+_site/
+.quarto/
+.vscode/
+todos/
