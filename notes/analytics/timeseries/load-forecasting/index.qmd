@@ -1,0 +1,136 @@
+---
+title: Load Forecasting Workshop
+date: 10/24/2023
+---
+
+Load forecasting is about using statistical modeling to develop and analyze short and long term energy and supply forecasts. 
+
+![Load Forecasting Process](images/load-forecasting-process.png){#fig-load-forecasting-process}
+
+# Naive Model
+
+The naive model tries to understand the relationship between energy usage and temperature. The relationship overall might not seem strong, but it's about what time periods we view the data from.
+
+![Understanding Relationships](images/understanding-relationships.png){#fig-understanding-relationships}
+
+## Understanding Relationships
+
+Typically, the data exhibits the following:
+
+-   Trend: Energy usage increases / decreases over time
+-   Seasonality: Year to Year? Day to Day? Week to Week?
+
+With seasonality, what we are saying is that the energy usage at this time point is related to the energy usage at the same time point in the previous year / day / week.
+
+If we break down the load-temperature relationship by season, then we can see more linear trends appearing. However, the relationship depends on different levels of the season--there is an interaction.
+
+![Load-Temperature Relationship](images/load-temperature-relationship.png){#fig-load-temperature-relationship}
+
+![Load-Temperature Hourly Relationship](images/load-temperature-hourly.png){#fig-load-temperature-hourly}
+
+## Naive Load Model
+
+The following variables would be in the naive load forecasting model:
+
+-   Interaction of day and hour
+-   Month
+-   Trend
+-   Temperature: $T, T^2, T^3$
+-   Interaction of temperature and hour
+-   Interactino of temperature and month
+
+# Recency Effect Model
+
+The phenomenon that when people are asked to recall in any order the items on a list, those that come at the end of the list are more likely to be recalled than others.
+
+We can apply this thinking to modeling as well: previous values of **temperature** might affect the current value of **load**.
+
+![Recency Effect Model](images/recency-effect-model.png){#fig-recency-effect-model}
+
+# Dynamic Time Series Model
+
+So far we've modeled a few time lags, temperature, month, hour, and day using a regression model. We have residuals left over that we can model with a time series approach--exponential, ARIMA, prophet, or neural net.
+
+# Nuances
+
+## How Much Data to Use?
+
+Only recent data for the forecasting period.
+
+**Advantages:**
+
+-   No need for complicated interaction model
+-   Easier hypothesis test $\alpha$ levels
+
+**Disadvantages:**
+
+-   Not generalizable
+-   Proxies for holidays
+
+Use long history.
+
+**Advantages:**
+
+-   Generalizable model
+-   Model has seen many different interventions previously
+
+**Disadvantages:**
+
+-   Complicated interactions
+-   Hypothesis test $\alpha$ levels difficult
+
+## Holdout Samples
+
+End-of-Data holdout samples data from the end of the data set for time series.
+
+![End-of-Data Holdout](images/end-of-data-holdout.png){#fig-end-of-data-holdout}
+
+Rolling holdout samples data similar to k-fold cross-validation. We create rolling windows of the same length to predict and refit the model on the window to forecast on the next window.
+
+![Rolling Holdout](images/rolling-holdout.png){#fig-rolling-holdout}
+
+# Seasonal ARIMA Models
+
+Only use stochastic differences to account for the seasonality in the model.
+
+**Advantages:**
+
+-   Temperature and its forecast is NOT needed
+
+**Disadvantages:**
+
+-   Accuracy diminishes as forecast horizon becomes larger
+
+Use deterministic methods to account for the seasonality in the model
+
+**Advantages:**
+
+-   More accurate long term
+
+**Disadvantages:**
+
+-   Need accurate forecasts of temperature
+
+# Temperature Forecasting Nuances
+
+One problem with using temperatures is that you need accurate forecasts of temperatures for accurate load forecasts. However, consider what temperature data we may have used to calculate MAPE in the validation data. We may have used the **actual temperature** data, which is **not available in the future**. We may have used the forecasted temperature data, which is not accurate.
+
+## Look Ahead Bias
+
+Temporal structure of data can lead to inherent biases. **Look ahead bias** is using unknown information in model predictions.
+
+![Look Ahead Bias](images/lookahead-bias.png){#fig-lookahead-bias}
+
+# Intervention Analysis
+
+## Weekends
+
+Weekends are inherently different than the rest of the week. Buildings are typically using less energy without people to populate them. But why are intervention points not enough to model the weekend?
+
+Does the model depend on what happened 24 hours ago? Lags of 24 hours throww of the models around weekends because of the severe drop. We were essentially saying that the hour on Saturday depended on the hour on Friday, which is not true due to the drop.
+
+Lags of 168 hours would correct this problem, but models like ESM cannot use lags of 168 hours. In addition, statistical tests cannot determine differences beyond 24 periods.
+
+## Holidays
+
+If Monday is a holiday, do we treat Tuesda as a typical Monday? Are weekends like holidays? If Friday is a holiday, do we treat Saturday differently?

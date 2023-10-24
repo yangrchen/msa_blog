@@ -1,0 +1,58 @@
+---
+title: Continuous vs. Ordinal Variables
+date: 10/17/2023
+---
+
+We might ask how many levels before the variable is considered continuous? This is actually the wrong question. We have to understand the underlying relationship of the variable to determine its type.
+
+![Continuous vs. Ordinal](images/continuous-vs-ordinal.png){#fig-cont-vs-ord}
+
+What does the straight-line relationship imply? The jumps in the response between points are the same. Are you willing to assume the jumps between each value of x are the same?
+
+# What's the Solution?
+
+Let the data decide if it should be modeled as continuous or categorical.
+
+$$
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1x_1
+$$
+
+$$
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1D_1 + \hat{\beta}_2D_2 + \cdots + \hat{\beta}_{k-1}D_{k-1}
+$$
+
+The first model is a special case of the second model. If only the first category is present, then the second model reduces to the first model. If the second category is present, then the second model reduces to the first model plus the difference between the second category and the first category.
+
+If the differences are the same between levels then we only have to estimate one parameter $\beta_1$.
+
+![Continuous Coefficients](images/continuous-coefs.png){#fig-continuous-coefs}
+
+# Statistical Tests for Nested Models
+
+Many different statistical tests can compare two models if they are nested:
+
+-   Linear regression used the Nested F-test
+-   Logistic regression primarily uses the Likelihood Ratio Test (LRT)
+
+:::{.center-text}
+$H_0:$ Models are the same
+
+Rephrased another way:
+
+$H_0:$ $\beta_1 = \beta_2 - \beta_1 = \beta_3 - \beta_2 = \beta_4 - \beta_3$
+:::
+
+# Implementing Solution
+
+If models are the same, then use the *simpler* model (treat the variable as continuous).
+
+```{r}
+library(readr)
+ins_t <- read_csv("insurance_t.csv")
+
+logit_model_c <- glm(INS ~ CCPURC, data = ins_t, family = binomial(link = "logit"))
+
+logit_model_o <- glm(INS ~ factor(CCPURC), data = ins_t, family = binomial(link = "logit"))
+
+anova(logit_model_o, logit_model_c, test = "LRT")
+```

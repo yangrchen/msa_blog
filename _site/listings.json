@@ -35,6 +35,10 @@
   {
     "listing": "/notes/analytics/index.html",
     "items": [
+      "/notes/analytics/timeseries/load-forecasting/index.html",
+      "/notes/analytics/timeseries/hierarchical/index.html",
+      "/notes/analytics/continuous-vs-ordinal/index.html",
+      "/notes/analytics/timeseries/weighted-combined-models/index.html",
       "/notes/analytics/data-mining/knn/index.html",
       "/notes/analytics/timeseries/neural-net/index.html",
       "/notes/analytics/data-mining/clustering/index.html",

@@ -1,0 +1,71 @@
+---
+title: Weighted and Combined Models
+date: 10/17/2023
+---
+
+# Composite (Ensemble) Forecasting
+
+The idea around **composite forecasting** is that the combination of forecast methods tends to outperform most single forecast methods.
+
+It is better to average the forecasts of several methods than to rely on any single method. Maybe the biases among the methods will compensate for one another and forecast better in cases of high uncertainty like long-range forecasting.
+
+## Two Basic Weighting Methods
+
+1. Simple Averaging of Forecasts
+2. Weighted Methods Based on Error
+   1. Minimum Variance Weighting
+   2. Adaptive Weighting
+
+# Simple Average
+
+For a simple average, all we are doing is taking the average of the forecasts from each method we are using. For a large set of models, we can use cross-validation to determine which models are the best to use given the data.
+
+$$
+\text{Combined Forecast} = \frac{1}{n}\sum_{i=1}^{n} F_i
+$$
+
+# Weighted Average
+
+Building composite forecasts require that the analyst select the weights to assign to the individual forecasts. We assign weights that minimize the variacne of the forecast errors over the forecasted period.
+
+For 2 forecasts:
+
+$$
+\text{Combined Forecasts} = w_1F_1 + w_2F_2
+$$
+
+$$
+w_1 = \frac{\sigma_2^2 - \rho\sigma_1\sigma_2}{\sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2}
+$$
+
+$$
+w_2 = 1 - w_1
+$$
+
+The equations become complicated for more than 2 forecasts. Instead we can run the regression of the actual values of $Y$ against the 2 forecasted methods, with the added restriction that $w_1 + w_2 = 1$.
+
+$$
+Y_t = w_1F_1 + w_2F_2 + \cdots + w_kF_k
+$$
+
+$$
+w_1 + w_2 + \cdots + w_k = 1
+$$
+
+![Minimum Variance Regression in R](images/min-variance-regression.png){#fig-min-var-regression}
+
+In R, there are a few steps we have to take:
+
+-   Adjust the neural net fitted values to be on the same scale as the other models
+-   Get the fitted values of the other models
+-   Run `lm()` on the `offset` of one of the models and the difference between other models and the offset model
+-   Add `- 1` to tell R to not add an intercept to our model
+
+![Minimum Variance Regression in R Coefficients](images/min-variance-regression-coefs.png){#fig-min-var-regression-coefs}
+
+# Adaptive Weighting
+
+Adaptive weighting is structured similarly to minimum variance weighting. The main difference is that we will weight more recent time periods more heavily.
+
+-   If forecast method 1 does great for the first half of the data, but forecast method 2 does better for the second half, wouldn't you prefer to have forecast method 2 since it does better on recent data?
+-   Potential for heavy overfitting in the model

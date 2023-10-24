@@ -1,6 +1,7 @@
 ---
 title: Neural Network AR Models
 date: 10/12/2023
+date-modified: 10/17/2023
 ---
 
 # Setup
@@ -9,6 +10,8 @@ date: 10/12/2023
 library(tseries)
 library(aTSA)
 library(forecast)
+
+set.seed(12345)
 
 USAirlines <- read.csv("https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv")
 passenger <- ts(USAirlines$Passengers, start = 1990, frequency = 12)
@@ -33,7 +36,7 @@ Once we add a hidden layer, we apply non-linear activation functions in new node
 :::{layout-ncol="2"}
 ![Hidden Layer Added](images/hidden-layer-1.png)
 
-![Combining the Hidden Layer Output](images/output.png)
+![Combining the Hidden Layer Output](images/hidden-to-output.png)
 :::
 
 # Autoregressive Neural Networks
@@ -53,6 +56,28 @@ If you don't have stationary data, the forecasts will still revert to overall me
 
 # Implementing Neural Net AR
 
-```{r}
-# nn_model <- nnetar(diff(training, 12), p = 2, P = 3)
+```{r neural-net-ar}
+set.seed(12345)
+
+nn_model <- nnetar(diff(train, 12), p = 2, P = 3) # <1>
+nn_forecast <- forecast::forecast(nn_model, h = 12) # <2>
+plot(nn_forecast)
+```
+1.  `p` refers to number of AR lags and `P` refers to number of seasonal AR lags. By default, the non-linear transformation used is the sigmoid function.
+2.  The neural net only knows about **our differenced data** so we need to add back the last 12 observations to get the original scale.
+
+In the background, R automatically adjusts the forecasts to be on the original scale in ARIMA models. However, with neural net models we need to manually adjust the forecasts.
+
+```{r neural-net-forecasts}
+pass_forecast <- train[(length(train) - 11):length(train)] + forecast::forecast(nn_model, h = 12)$mean[1:12]
+
+plot(train, main = "US Airline Passengers ARIMA Model Forecasts", xlab = "Date", ylab = "Passengers (Thousands)", xlim = c(1990, 2009), ylim = c(30000, 80000))
+lines(pass_forecast, col = "blue")
+abline(v = 2007.25, col = "red", lty = "dashed")
+
+nn_error <- test - pass_forecast
+nn_MAE <- mean(abs(nn_error))
+nn_MAPE <- mean(abs(nn_error) / abs(test)) * 100.0
+print(nn_MAE)
+print(nn_MAPE)
 ```

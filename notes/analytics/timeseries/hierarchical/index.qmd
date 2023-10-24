@@ -1,0 +1,108 @@
+---
+title: Hierarchical and Grouped Time Series
+date: 10/20/2023
+---
+
+# Large Scale Forecasting
+
+Modern businesses require efficient, reliable forecasts for multiple series, not just one. There are not sufficient resources toa pply the same individual approaches to all the series that need to be forecasted.
+
+![Large Scale Forecasting](images/large-scale-forecasting.png){#fig-large-scale-forecasting}
+
+# Hierarchical Forecasting
+
+![Data Hierarchies](images/data-hierarchies.png){#fig-data-hierarchies}
+
+Let's say we have a company CPG that has in-store and online groups. Each group has separate departments and underneath those departments are the individual products. We can think of this as a hierarchy.
+
+Each model inside a hierarchy could easily be different. Most software can do this "automatically." However, with R the `hts` package which does the automatic model building does not have a lot of flexibility to define the hierarchy.
+
+# Model Reconciliation
+
+If we were to model each series in each hierarchy, the statistical forecasts typically wouldn't add up to  to between hierarchies as we would want.
+
+An example is if we sell 20 products in a region, we want our region forecast to be the sum of the 20 product forecasts in that region.
+
+**Reconciliation** is the process of making the statistical forecasts add up for each time interval in the data.
+
+![Reconciliation Approaches](images/reconciliation-approaches.png){#fig-reconciliation-approaches}
+
+## Bottom-Up
+
+Most common approach to hierarchical forecasting. Build a model for each series in the very bottom of the hierarchy structure. Add up individual forecasts to build the hierarchy above it.
+
+### Advantages and Disadvantages
+
+**Advantages**:
+
+-   Easy to implement
+-   No loss of information 
+
+**Disadvantages**:
+
+-   Very noise data typically lies in the lowest hierarchy
+-   Potentially many models to build
+
+## Top-Down
+
+Build a model for the top of the hierarchy. We then disaggregate the top level forecast to the lower levels.
+
+![Top-Down](images/top-down.png){#fig-top-down}
+
+### Disaggregation Techniques
+
+-   Average Historical Proportions
+-   Proportion of Historical Averages
+-   Forecasted Proportions
+
+### Average Historical Proportions
+
+Each proportion is the average of the historical proportions of the series a tier below relative to the total.
+
+In practice, all this means is that we take the average of all proportions a tier below. We forecast on the top level and then multiply the top level forecast by the average proportion. To get the forecast for the next time period in the tier below.
+
+$$
+p_j = \sum_{t=1}^{T}\frac{1}{T}\frac{y_{j,t}}{y_t}
+$$
+
+![Average Historical Proportions](images/average-historical-example.png){#fig-average-historical-proportions}
+
+We can decide if we want to use averages or medians. We can also decide if we want to use the entire history or just the most recent history.
+
+### Proportion of Historical Averages
+
+Each proportion reflects the proportion of the historical averages of the series a tier below relative to the average total series.
+
+$$
+p_j = \sum_{t=1}^{T} \frac{y_{j,t}}{T} / \sum_{t=1}^{T} \frac{y_t}{T}
+$$
+
+### Forecasted Proportions
+
+Use times series models to forecast values of proportions over time.
+
+### Advantages and Disadvantages
+
+**Advantages**:
+
+-   Simple to build as there are lower number of models needed.
+
+**Disadvantages**:
+
+-   Loss of potential valuable information
+
+## Middle-Out
+
+Combines attributes from both bottom-up and top-down approaches. We aggregate up the tiers above with bottom-up and disaggregate down the tiers with top-down.
+
+Pick something in the middle that we can spend enough time on to build a good model that captures information on levels we are focused on.
+
+### Advantages and Disadvantages
+
+**Advantages**:
+
+-   Uses some of the detailed information, but not so detailed that it is noisy
+
+**Disadvantages**:
+
+-   Doesn't use all the information as disaggregation still takes place
