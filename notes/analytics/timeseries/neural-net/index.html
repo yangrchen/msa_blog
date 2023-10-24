@@ -167,6 +167,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </div>
     </div>
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">October 17, 2023</p>
+      </div>
+    </div>
       
     </div>
     
@@ -240,10 +246,12 @@ Attaching package: 'forecast'</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>USAirlines <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>passenger <span class="ot">&lt;-</span> <span class="fu">ts</span>(USAirlines<span class="sc">$</span>Passengers, <span class="at">start =</span> <span class="dv">1990</span>, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">subset</span>(passenger, <span class="at">end =</span> <span class="fu">length</span>(passenger) <span class="sc">-</span> <span class="dv">12</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">subset</span>(passenger, <span class="at">start =</span> <span class="fu">length</span>(passenger) <span class="sc">-</span> <span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>USAirlines <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>passenger <span class="ot">&lt;-</span> <span class="fu">ts</span>(USAirlines<span class="sc">$</span>Passengers, <span class="at">start =</span> <span class="dv">1990</span>, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">subset</span>(passenger, <span class="at">end =</span> <span class="fu">length</span>(passenger) <span class="sc">-</span> <span class="dv">12</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">subset</span>(passenger, <span class="at">start =</span> <span class="fu">length</span>(passenger) <span class="sc">-</span> <span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -273,7 +281,7 @@ Attaching package: 'forecast'</code></pre>
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/output.png" class="img-fluid figure-img"></p>
+<p><img src="images/hidden-to-output.png" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Combining the Hidden Layer Output</figcaption>
 </figure>
 </div>
@@ -306,8 +314,58 @@ Attaching package: 'forecast'</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nn_model &lt;- nnetar(diff(training, 12), p = 2, P = 3)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-5-3" class="code-annotation-target"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a>nn_model <span class="ot">&lt;-</span> <span class="fu">nnetar</span>(<span class="fu">diff</span>(train, <span class="dv">12</span>), <span class="at">p =</span> <span class="dv">2</span>, <span class="at">P =</span> <span class="dv">3</span>)</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-5-4" class="code-annotation-target"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a>nn_forecast <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(nn_model, <span class="at">h =</span> <span class="dv">12</span>)</span>
+<span id="annotated-cell-5-5"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(nn_forecast)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-annotation="1" data-code-cell="annotated-cell-5" data-code-lines="3"><code>p</code> refers to number of AR lags and <code>P</code> refers to number of seasonal AR lags. By default, the non-linear transformation used is the sigmoid function.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-annotation="2" data-code-cell="annotated-cell-5" data-code-lines="4">The neural net only knows about our differenced data so we need to add back the last 12 observations to get the original scale.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/neural-net-ar-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>In the background, R automatically adjusts the forecasts to be on the original scale in ARIMA models. However, with neural net models we need to manually adjust the forecasts.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pass_forecast <span class="ot">&lt;-</span> train[(<span class="fu">length</span>(train) <span class="sc">-</span> <span class="dv">11</span>)<span class="sc">:</span><span class="fu">length</span>(train)] <span class="sc">+</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(nn_model, <span class="at">h =</span> <span class="dv">12</span>)<span class="sc">$</span>mean[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(train, <span class="at">main =</span> <span class="st">"US Airline Passengers ARIMA Model Forecasts"</span>, <span class="at">xlab =</span> <span class="st">"Date"</span>, <span class="at">ylab =</span> <span class="st">"Passengers (Thousands)"</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1990</span>, <span class="dv">2009</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">30000</span>, <span class="dv">80000</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(pass_forecast, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fl">2007.25</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/neural-net-forecasts-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nn_error <span class="ot">&lt;-</span> test <span class="sc">-</span> pass_forecast</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>nn_MAE <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(nn_error))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>nn_MAPE <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(nn_error) <span class="sc">/</span> <span class="fu">abs</span>(test)) <span class="sc">*</span> <span class="fl">100.0</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(nn_MAE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1091.243</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(nn_MAPE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.6728</code></pre>
+</div>
 </div>
 
 

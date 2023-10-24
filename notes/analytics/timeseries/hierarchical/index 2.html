@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
+<meta name="dcterms.date" content="2023-10-20">
 
-<title>Yang MSA - Blog</title>
+<title>Yang MSA - Hierarchical and Grouped Time Series</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,25 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../favicon.ico" rel="icon">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../favicon.ico" rel="icon">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -63,40 +62,11 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -106,7 +76,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Yang MSA</span>
     </a>
   </div>
@@ -117,11 +87,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../notes/index.html" rel="" target="">
+    <a class="nav-link" href="../../../../notes/index.html" rel="" target="">
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../blog/index.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="../../../../blog/index.html" rel="" target="">
  <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
@@ -139,9 +109,13 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Blog</h1>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Hierarchical and Grouped Time Series</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">analytics</div>
+                <div class="quarto-category">time series</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -154,62 +128,127 @@ ul.task-list li input[type="checkbox"] {
             </div>
     </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 20, 2023</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#large-scale-forecasting" id="toc-large-scale-forecasting" class="nav-link active" data-scroll-target="#large-scale-forecasting"><span class="header-section-number">1</span> Large Scale Forecasting</a></li>
+  <li><a href="#hierarchical-forecasting" id="toc-hierarchical-forecasting" class="nav-link" data-scroll-target="#hierarchical-forecasting"><span class="header-section-number">2</span> Hierarchical Forecasting</a></li>
+  <li><a href="#model-reconciliation" id="toc-model-reconciliation" class="nav-link" data-scroll-target="#model-reconciliation"><span class="header-section-number">3</span> Model Reconciliation</a>
+  <ul class="collapse">
+  <li><a href="#bottom-up" id="toc-bottom-up" class="nav-link" data-scroll-target="#bottom-up"><span class="header-section-number">3.1</span> Bottom-Up</a>
+  <ul class="collapse">
+  <li><a href="#advantages-and-disadvantages" id="toc-advantages-and-disadvantages" class="nav-link" data-scroll-target="#advantages-and-disadvantages"><span class="header-section-number">3.1.1</span> Advantages and Disadvantages</a></li>
+  </ul></li>
+  <li><a href="#top-down" id="toc-top-down" class="nav-link" data-scroll-target="#top-down"><span class="header-section-number">3.2</span> Top-Down</a>
+  <ul class="collapse">
+  <li><a href="#disaggregation-techniques" id="toc-disaggregation-techniques" class="nav-link" data-scroll-target="#disaggregation-techniques"><span class="header-section-number">3.2.1</span> Disaggregation Techniques</a></li>
+  <li><a href="#average-historical-proportions" id="toc-average-historical-proportions" class="nav-link" data-scroll-target="#average-historical-proportions"><span class="header-section-number">3.2.2</span> Average Historical Proportions</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
+<section id="large-scale-forecasting" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Large Scale Forecasting</h1>
+<p>Modern businesses require efficient, reliable forecasts for multiple series, not just one. There are not sufficient resources toa pply the same individual approaches to all the series that need to be forecasted.</p>
+<div id="fig-large-scale-forecasting" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/large-scale-forecasting.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Large Scale Forecasting</figcaption>
+</figure>
+</div>
+</section>
+<section id="hierarchical-forecasting" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Hierarchical Forecasting</h1>
+<p>Let’s say we have a company CPG that has in-store and online groups. Each group has separate departments and underneath those departments are the individual products. We can think of this as a hierarchy.</p>
+<p>Each model inside a hierarchy could easily be different. Most software can do this “automatically.” However, with R the <code>hts</code> package which does the automatic model building does not have a lot of flexibility to define the hierarchy.</p>
+</section>
+<section id="model-reconciliation" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Model Reconciliation</h1>
+<p>If we were to model each series in each hierarchy, the statistical forecasts typically wouldn’t add up to to between hierarchies as we would want.</p>
+<p>An example is if we sell 20 products in a region, we want our region forecast to be the sum of the 20 product forecasts in that region.</p>
+<p><strong>Reconciliation</strong> is the process of making the statistical forecasts add up for each time interval in the data.</p>
+<div id="fig-reconciliation-approaches" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/reconciliation-approaches.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Reconciliation Approaches</figcaption>
+</figure>
+</div>
+<section id="bottom-up" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="bottom-up"><span class="header-section-number">3.1</span> Bottom-Up</h2>
+<p>Most common approach to hierarchical forecasting. Build a model for each series in the very bottom of the hierarchy structure. Add up individual forecasts to build the hierarchy above it.</p>
+<section id="advantages-and-disadvantages" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="advantages-and-disadvantages"><span class="header-section-number">3.1.1</span> Advantages and Disadvantages</h3>
+<p><strong>Advantages</strong>:</p>
+<ul>
+<li>Easy to implement</li>
+<li>No loss of information</li>
+</ul>
+<p><strong>Disadvantages</strong>:</p>
+<ul>
+<li>Very noise data typically lies in the lowest hierarchy</li>
+<li>Potentially many models to build</li>
+</ul>
+</section>
+</section>
+<section id="top-down" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="top-down"><span class="header-section-number">3.2</span> Top-Down</h2>
+<p>Build a model for the top of the hierarchy. We then disaggregate the top level forecast to the lower levels.</p>
+<div id="fig-top-down" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/top-down.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Top-Down</figcaption>
+</figure>
+</div>
+<section id="disaggregation-techniques" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="disaggregation-techniques"><span class="header-section-number">3.2.1</span> Disaggregation Techniques</h3>
+<ul>
+<li>Average Historical Proportions</li>
+<li>Proportion of Historical Averages</li>
+<li>Forecasted Proportions</li>
+</ul>
+</section>
+<section id="average-historical-proportions" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="average-historical-proportions"><span class="header-section-number">3.2.2</span> Average Historical Proportions</h3>
+<p>Each proportion is the average of the historical proportions of the series a tier below relative to the total.</p>
+<p><span class="math display">\[
+p_j = \sum_{t=1}^{T}\frac{1}{T}\frac{y_{j,t}}{y_t}
+\]</span></p>
+<div id="fig-average-historical-proportions" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/average-historical-proportions.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;4: Average Historical Proportions</figcaption>
+</figure>
+</div>
 
 
+</section>
+</section>
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1689033600000" data-listing-file-modified-sort="1698156244378" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
-<div class="thumbnail">
-<p><a href="../blog/first_weeks/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
-</div>
-<div class="body">
-<a href="../blog/first_weeks/index.html">
-<h3 class="no-anchor listing-title">
-First Weeks: Initial Thoughts
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-How would I describe the Institute for Advanced Analytics? It’s fast, it’s <em>scary</em>, and it’s absolutely thrilling.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../blog/first_weeks/index.html">
-<div class="listing-date">
-Jul 11, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
+<meta name="dcterms.date" content="2023-10-17">
 
-<title>Yang MSA - Blog</title>
+<title>Yang MSA - Weighted and Combined Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,25 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../favicon.ico" rel="icon">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../favicon.ico" rel="icon">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -63,40 +62,11 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -106,7 +76,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Yang MSA</span>
     </a>
   </div>
@@ -117,11 +87,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../notes/index.html" rel="" target="">
+    <a class="nav-link" href="../../../../notes/index.html" rel="" target="">
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../blog/index.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="../../../../blog/index.html" rel="" target="">
  <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
@@ -139,9 +109,13 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Blog</h1>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Weighted and Combined Models</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">analytics</div>
+                <div class="quarto-category">time series</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -154,62 +128,116 @@ ul.task-list li input[type="checkbox"] {
             </div>
     </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 17, 2023</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#composite-ensemble-forecasting" id="toc-composite-ensemble-forecasting" class="nav-link active" data-scroll-target="#composite-ensemble-forecasting"><span class="header-section-number">1</span> Composite (Ensemble) Forecasting</a>
+  <ul class="collapse">
+  <li><a href="#two-basic-weighting-methods" id="toc-two-basic-weighting-methods" class="nav-link" data-scroll-target="#two-basic-weighting-methods"><span class="header-section-number">1.1</span> Two Basic Weighting Methods</a></li>
+  </ul></li>
+  <li><a href="#simple-average" id="toc-simple-average" class="nav-link" data-scroll-target="#simple-average"><span class="header-section-number">2</span> Simple Average</a></li>
+  <li><a href="#weighted-average" id="toc-weighted-average" class="nav-link" data-scroll-target="#weighted-average"><span class="header-section-number">3</span> Weighted Average</a></li>
+  <li><a href="#adaptive-weighting" id="toc-adaptive-weighting" class="nav-link" data-scroll-target="#adaptive-weighting"><span class="header-section-number">4</span> Adaptive Weighting</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
+<section id="composite-ensemble-forecasting" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Composite (Ensemble) Forecasting</h1>
+<p>The idea around <strong>composite forecasting</strong> is that the combination of forecast methods tends to outperform most single forecast methods.</p>
+<p>It is better to average the forecasts of several methods than to rely on any single method. Maybe the biases among the methods will compensate for one another and forecast better in cases of high uncertainty like long-range forecasting.</p>
+<section id="two-basic-weighting-methods" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="two-basic-weighting-methods"><span class="header-section-number">1.1</span> Two Basic Weighting Methods</h2>
+<ol type="1">
+<li>Simple Averaging of Forecasts</li>
+<li>Weighted Methods Based on Error
+<ol type="1">
+<li>Minimum Variance Weighting</li>
+<li>Adaptive Weighting</li>
+</ol></li>
+</ol>
+</section>
+</section>
+<section id="simple-average" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Simple Average</h1>
+<p>For a simple average, all we are doing is taking the average of the forecasts from each method we are using. For a large set of models, we can use cross-validation to determine which models are the best to use given the data.</p>
+<p><span class="math display">\[
+\text{Combined Forecast} = \frac{1}{n}\sum_{i=1}^{n} F_i
+\]</span></p>
+</section>
+<section id="weighted-average" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Weighted Average</h1>
+<p>Building composite forecasts require that the analyst select the weights to assign to the individual forecasts. We assign weights that minimize the variacne of the forecast errors over the forecasted period.</p>
+<p>For 2 forecasts:</p>
+<p><span class="math display">\[
+\text{Combined Forecasts} = w_1F_1 + w_2F_2
+\]</span></p>
+<p><span class="math display">\[
+w_1 = \frac{\sigma_2^2 - \rho\sigma_1\sigma_2}{\sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2}
+\]</span></p>
+<p><span class="math display">\[
+w_2 = 1 - w_1
+\]</span></p>
+<p>The equations become complicated for more than 2 forecasts. Instead we can run the regression of the actual values of <span class="math inline">\(Y\)</span> against the 2 forecasted methods, with the added restriction that <span class="math inline">\(w_1 + w_2 = 1\)</span>.</p>
+<p><span class="math display">\[
+Y_t = w_1F_1 + w_2F_2 + \cdots + w_kF_k
+\]</span></p>
+<p><span class="math display">\[
+w_1 + w_2 + \cdots + w_k = 1
+\]</span></p>
+<div id="fig-min-var-regression" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/min-variance-regression.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Minimum Variance Regression in R</figcaption>
+</figure>
+</div>
+<p>In R, there are a few steps we have to take:</p>
+<ul>
+<li>Adjust the neural net fitted values to be on the same scale as the other models</li>
+<li>Get the fitted values of the other models</li>
+<li>Run <code>lm()</code> on the <code>offset</code> of one of the models and the difference between other models and the offset model</li>
+<li>Add <code>- 1</code> to tell R to not add an intercept to our model</li>
+</ul>
+<div id="fig-min-var-regression-coefs" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/min-variance-regression-coefs.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Minimum Variance Regression in R Coefficients</figcaption>
+</figure>
+</div>
+</section>
+<section id="adaptive-weighting" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Adaptive Weighting</h1>
+<p>Adaptive weighting is structured similarly to minimum variance weighting. The main difference is that we will weight more recent time periods more heavily.</p>
+<ul>
+<li>If forecast method 1 does great for the first half of the data, but forecast method 2 does better for the second half, wouldn’t you prefer to have forecast method 2 since it does better on recent data?</li>
+<li>Potential for heavy overfitting in the model</li>
+</ul>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1689033600000" data-listing-file-modified-sort="1698156244378" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
-<div class="thumbnail">
-<p><a href="../blog/first_weeks/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
-</div>
-<div class="body">
-<a href="../blog/first_weeks/index.html">
-<h3 class="no-anchor listing-title">
-First Weeks: Initial Thoughts
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-How would I describe the Institute for Advanced Analytics? It’s fast, it’s <em>scary</em>, and it’s absolutely thrilling.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../blog/first_weeks/index.html">
-<div class="listing-date">
-Jul 11, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
