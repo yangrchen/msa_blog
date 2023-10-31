@@ -1,7 +1,7 @@
 ---
 title: Classification and Regression Trees (CART)
 date: 10/02/2023
-date-modified: 10/06/2023
+date-modified: 10/26/2023
 ---
 
 A decision tree has a **root node** and a series of nodes splitting off from the node based on rules on the variables in the data. We typically use a binary tree as it shows empirically good results than $n$-ary tree.
@@ -65,7 +65,7 @@ $$
 The impurity of nodes is involved in calculating the **gain** of a node. Gain is measuring how much impurity we have reduced due to the split. We want gain to be high as it represents a significant difference in impurity.
 
 $$
-\Delta = I(t) = (\frac{n_L}{n}I(t_L) + \frac{n_R}{n}I(t_R))
+\Delta = I(t) - (\frac{n_L}{n}I(t_L) + \frac{n_R}{n}I(t_R))
 $$
 
 -   $\Delta$ is the gain

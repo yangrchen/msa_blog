@@ -1,0 +1,133 @@
+---
+title: Generalized Additive Models
+date: 10/31/2023
+---
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(readr)
+library(AmesHousing)
+
+ames <- make_ordinal_ames()
+ames <- ames %>% mutate(id = row_number())
+set.seed(4321)
+
+training <- ames %>% sample_frac(0.7)
+testing <- anti_join(ames, training, by = "id")
+
+training <- training %>%
+    select(Sale_Price, Bedroom_AbvGr, Year_Built, Mo_Sold, Lot_Area, Street, Central_Air, First_Flr_SF, Second_Flr_SF, Full_Bath, Half_Bath, Fireplaces, Garage_Area, Gr_Liv_Area, TotRms_AbvGrd)
+
+```
+
+# General Structure
+
+GAMs provide a general framework for adding non-linear functions together instead of the typical linear structure.
+
+$$
+y = \beta_0 + f_1(x_1) + f_2(x_2) + \cdots + f_p(x_p) + \epsilon
+$$
+
+# Piecewise Linear Regression
+
+What if you had a linear relationship between $x$ and $y$, but the slope changes? Different pieces might have a straight-line relationship, but a typical single straight-line model will not be a good fit for this type of data.
+
+![Changing Slopes](images/changing-slopes.png){#fig-changing-slopes}
+
+A model where different straight-line relationships for different intervals in the predictor variable is called the **piecewise linear regression model**. For two slopes, the model follows as:
+
+$$
+y = \beta_0 + \beta_1x_1 + \beta_2(x_1 - k)x_2 + \epsilon
+$$
+
+-   $k$ is the knot value for $x_1$
+
+How do we split up the pieces? $x_2$ depends on how the value of $x_1$ compares to the knot value:
+
+$$
+x_2 = \begin{cases}
+    1 & x_1 > k \\
+    0 & x_1 \leq k
+\end{cases}
+$$
+
+![Cement Example](images/cement-example.png){#fig-cement-example}
+
+```{r}
+cement <- read_csv("data/cement.csv")
+cement_lm <- lm(STRENGTH ~ RATIO + X2STAR, data = cement)
+ggplot(cement, aes(x = RATIO, y = STRENGTH)) +
+    geom_point() +
+    geom_line(data = cement, aes(x = RATIO, y = cement_lm$fitted.values)) +
+    ylim(0, 6)
+```
+
+## Extensions - Discontinuous
+
+The previous approach had piecewise functions that are continuous. The following is the discontinuous version for two straight lines:
+
+$$
+y = \beta_0 + \beta_1x_1 + \beta_2(x_1 - k)x_2 + \beta_3x_2 + \epsilon
+$$
+
+```{r}
+cement_lm <- lm(STRENGTH ~ RATIO + X2STAR + X2, data = cement)
+summary(cement_lm)
+```
+
+For $k$ straight lines, we can produce $k - 1$ knot values to model our data.
+
+![Extension - Knots](images/extension-knots.png){#fig-extension-knots}
+
+# MARS (Multivariate Adaptive Regression Splines)
+
+MARS is a generalization of piecewise linear regression. It is a non-parametric regression method that uses a series of nonlinearities and interactions between variables in a additive form. Essentially, uses **piecewise** regression to split into pieces then potentially uses either linear or nonlinear patterns for each piece.
+
+MARS looks for a point in the range of $x$ where two linear functions on either side of the point provides the least squared error.
+
+![Different Knot Values](images/many-knots.png){#fig-many-knots}
+
+Algorithm continnues on each piece of piecewise function until many knots are found--this will overfit your data. MARS uses a **pruning** algorithm to remove knots that do not improve the model.
+
+The pruning is calculated using generalized cross-validation which is a computational shortcut for leave-one-out cross-validation.
+
+For open-source software, the implementation is **EARTH** (Enhanced Adaptive Regression Through Hinges).
+
+```{r}
+library(earth)
+mars1 <- earth(Sale_Price ~ Garage_Area, data = training)
+summary(mars1)
+```
+
+Each value in the EARTH output represents a knot / hinge value. For example, h(Garage_Area - 286) is the knot value when Garage_Area is 286. A new line is created at this point.
+
+```{r}
+ggplot(training, aes(x = Garage_Area, y = Sale_Price)) +
+    geom_point() +
+    geom_line(data = training, aes(x = Garage_Area, y = mars1$fitted.values), color = "blue")
+```
+
+Creating a model on the full data:
+
+```{r}
+mars1 <- earth(Sale_Price ~ ., data = training)
+summary(mars1)
+```
+
+Notice that our output shows how many predictors were used in the model. We also have a list of variable importance. What is going on in the variable importance?
+
+## Variable Importance
+
+There is one "subset" for each model size (1 term, 2 terms, etc.)--the best model of that size. The variable importance is the number of times that variable was used in the best model of that size. The more subsets of models the variable appears in the better the variable.
+
+**Residual sum of squares** is a scaled version of decrease in residual sum of squares relative to the previous subset. GCV is an approximation of RSS on leave-one-out cross validation.
+
+```{r}
+evimp(mars1)
+```
+
+Each variable following the first variable is the amount of improvement in the residual sum of squares relative to the amount of improvement in the first variable. 
+
+Be careful, we have no notion of how these variables affect the response just which variables we think are the most important in the model. We trade interpretability for predictive power.

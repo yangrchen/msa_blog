@@ -1,0 +1,206 @@
+---
+title: Resampling, Model Selection, and Regularization
+date: 10/30/2023
+---
+
+# Resampling Revisited
+
+Recall that before we do cross-validation, we need to have split off a test set from our overall data. To do cross-validation, we take our training data and split it into $k$ equally-sized groups. For each set, we train the model on the other $k - 1$ sets and validate the model using the selected set. We then average the validation error across all $k$ sets to get our cross-validation error.
+
+::: panel-tabset
+# R
+
+```{r}
+library(AmesHousing)
+library(dplyr)
+library(reticulate)
+
+use_condaenv("msa")
+
+ames <- make_ordinal_ames()
+ames <- ames %>% mutate(id = row_number())
+
+set.seed(4321)
+
+# Split 70% for training, 30% for testing
+training <- ames %>% sample_frac(0.7)
+testing <- anti_join(ames, training, by = "id")
+
+# Select a subset of data based on previous data exploration
+training <- training %>% select(Sale_Price, Bedroom_AbvGr, Year_Built, Mo_Sold, Lot_Area, Street, Central_Air, First_Flr_SF, Second_Flr_SF, Full_Bath, Half_Bath, Fireplaces, Garage_Area, Gr_Liv_Area, TotRms_AbvGrd)
+```
+
+# Python
+
+```{python}
+import pandas as pd
+
+training = r.training
+testing = r.testing
+```
+:::
+
+# Model Selection
+
+Linear models contain many different models. We should always start by narrowing a list of reasonable predictor variables through exploratory analysis. For explanation and inference, we can use forward, backward, and stepwise selection.
+
+Instead of evaluating on the training set, we evaluate on the validation set for each step.
+
+![Stepwise Selection through Cross-Validation](images/stepwise-selection-cv.png){#fig-stepwise-selection-cv}
+
+In @fig-stepwise-selection-cv, each numbered row represents training the model at that stage on each of the $k$ folds. The validation error is then averaged across all $k$ folds. The model with the lowest validation error is selected. Since our focus is on prediction, we don't care as much about the typical assumptions of variables. We want to focus on the relationship between the response and the explanatory variable.
+
+At step 0, for each variable we train 10 models and average their errors. We then have to take the next variable then train another 10 models and average their errors. After evaluating every univariate model, we select the variable with the lowest average error.
+
+::: panel-tabset
+# R
+
+```{r}
+library(caret)
+
+set.seed(9876)
+
+# nvmax controls what the max number of variables we want to consider in our models
+step_model <- train(Sale_Price ~ ., data = training, method = "leapBackward", tuneGrid = data.frame(nvmax = 1:14), trControl = trainControl(method = "cv", number = 10))
+step_model$bestTune
+```
+
+If we were to see `step_model$results` then each row shows the **average** metric for each metric calculated for the **best model** selected. For example, if we were to use RMSE, then each row would show the average RMSE across all 10 folds.
+
+To see the actual final model with the best tuned parameters:
+
+```{r}
+summary(step_model$finalModel)
+```
+
+# Python
+
+```{python}
+
+```
+:::
+
+# Two Views of Parameter Tuning
+
++----------------+----------------------------------------------------------------------------------------------------------------+
+| View           | Points                                                                                                         |
++================+================================================================================================================+
+| Classical View | -   Use validation to evaluate which model is "best" at each step of the procedure                             |
+|                |                                                                                                                |
+|                | -   Final model contains variables remaining at end of procedure                                               |
+|                |                                                                                                                |
+|                | -   Combine training and validation and update parameter estimates on the chosen variables                     |
++----------------+----------------------------------------------------------------------------------------------------------------+
+| "Modern" View  | -   Use validation to evaluate which model is "best" at each step of the procedure                             |
+|                |                                                                                                                |
+|                | -   Final model contains same number of variables as model at end of procedure                                 |
+|                |                                                                                                                |
+|                | -   Combine training and validation but do not restrict yourself to any variable, just the number of variables |
++----------------+----------------------------------------------------------------------------------------------------------------+
+
+In the classical view, we can take those final variables and retrain the model on the entire training set. In the modern view, we drop cross-validation and see what optimal model for the selected `nvmax` is on the entire training set. The modern view assumes that there is no globally optimal variable even as data changes, but there is an optimal number of variables to use--the best variables can change as data changes.
+
+When it comes to retraining the model with new data, the modern view does not need to retune the best number of parameters unless the data *fundamentally* changes. Changes can include new variables or how we view our data to begin with.
+
+Classical view: 
+
+```{r}
+final_model1 <- glm(Sale_Price ~ First_Flr_SF + Second_Flr_SF + Year_Built + Garage_Area + Bedroom_AbvGr + Fireplaces, data = training)
+summary(final_model1)
+```
+
+Modern view:
+
+```{r}
+empty_model <- glm(Sale_Price ~ 1, data = training)
+full_model <- glm(Sale_Price ~ ., data = training)
+
+final_model2 <- step(empty_model, scope = list(lower = formula(empty_model), upper = formula(full_model)), direction = "both", steps = 6, trace = 0)
+summary(final_model2)
+```
+
+We have a different set of 6 variables under the modern view.
+
+# Regularization
+
+**Regularization** is a tool toc ontrol the complexity/flexibility of a model. We are adding a penalty term to penalize model complexity. Model is biased, but potentially improves variance.
+
+![Bias-Variance Tradeoff](images/bias-variance-tradeoff.png){#fig-bias-variance-tradeoff}
+
+Regularized regression puts constraints on the estimates coefficients in our model and **shrink** these estimates to 0. We have three common methods:
+
+-   LASSO
+-   Ridge
+-   ElasticNet
+
+## Penalties in Models
+
+We introduce a penalty term into our loss function to penalize coefficients.
+
+$$
+\min\left( \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \text{Penalty} \right) = \min(\text{SSE} + \text{Penalty})
+$$
+
+## Ridge Regression
+
+Ridge regression introduces an L2 penalty term to the minimization:
+
+$$
+\min\left( \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda\sum_{i=1}^{p} \hat{\beta}_j^2 \right)
+$$
+
+If $\lambda = 0$, then OLS. As $\lambda \longrightarrow \infty$, coefficients shrink to 0 but cannot actually become 0.
+
+## LASSO Regression
+
+Least aboslute shrinkage and selection operator regression introduces an L1 penalty term to the minimization:
+
+$$
+\min\left( \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda\sum_{j=1}^{n}|\hat{\beta}_j|  \right)
+$$
+
+If $\lambda = 0$, then OLS. As $\lambda \longrightarrow \infty$, coefficients shrink to 0 and can become 0.
+
+## ElasticNet
+
+ElasticNet combines both Ridge and LASSO based on a new $\alpha$ parameter. Any calue of $\alpha$ between 0 and 1 gives a combination of both penalties. We can use cross-validation to tune the $\alpha$ parameter.
+
+:::{.panel-tabset}
+# R
+
+```{r alpha-optimization}
+set.seed(5)
+
+en_model <- train(Sale_Price ~ ., data = training, method = "glmnet", tuneGrid = expand.grid(.alpha = seq(0, 1, by = 0.05), .lambda = seq(100, 60000, by = 1000)), trControl = trainControl(method = "cv", number = 10))
+
+en_model$bestTune
+```
+
+Our best $\alpha$ is 0.5 and our best $\lambda$  is 100.
+
+```{r glmnet}
+library(glmnet)
+train_x <- model.matrix(Sale_Price ~ ., data = training)[, -1]
+train_y <- training$Sale_Price
+
+# Build with the optimal alpha level
+ames_en <- glmnet(x = train_x, y = train_y, alpha = 0.5)
+plot(ames_en, xvar = "lambda")
+```
+
+# Python
+
+```{python}
+
+```
+
+:::
+
+```{r}
+set.seed(5)
+ames_en_cv <- cv.glmnet(x = train_x, y = train_y, alpha = 0.5)
+
+plot(ames_en_cv)
+ames_en_cv$lambda.min
+ames_en_cv$lambda.1se
+```

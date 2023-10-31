@@ -35,6 +35,9 @@
   {
     "listing": "/notes/analytics/index.html",
     "items": [
+      "/notes/analytics/machine-learning/GAM/index.html",
+      "/notes/analytics/machine-learning/resampling-regularization/index.html",
+      "/notes/analytics/survival-analysis/introduction/index.html",
       "/notes/analytics/timeseries/load-forecasting/index.html",
       "/notes/analytics/timeseries/hierarchical/index.html",
       "/notes/analytics/continuous-vs-ordinal/index.html",

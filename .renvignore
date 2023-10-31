@@ -4,3 +4,4 @@ _site/
 .quarto/
 .vscode/
 todos/
+data/

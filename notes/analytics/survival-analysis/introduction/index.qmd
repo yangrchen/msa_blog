@@ -1,0 +1,197 @@
+---
+title: Censoring, Survival, and Hazards
+date: 10/30/2023
+---
+
+# Setup {.unnumbered}
+
+:::{.panel-tabset}
+# R
+
+```{r setup}
+library(survival)
+library(foreign)
+library(ggplot2)
+library(dplyr)
+library(reticulate)
+library(readr)
+library(survminer)
+
+use_condaenv("msa")
+```
+
+# Python
+
+```{python python-setup}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sksurv.nonparametric import kaplan_meier_estimator
+from lifelines import KaplanMeierFitter
+from lifelines import NelsonAalenFitter
+```
+
+:::
+
+# What is Survival Analysis?
+
+Survival analysis is a branch of statistics that deals with the analysis of time-to-event data. The event can be anything that occurs at a specific point in time, such as death, injury, or failure.
+
+**Time** generally refers to **tenure** rather than actual calendar time. The **event** is some specific outcome of interest:
+
+-   Customer cancel service
+-   Customer makes another purchase
+-   Patient develops disease
+
+Compare this to logistic regression, where we are studying if the event happened or not. Survival analysis is studying how long it took for the event to happen.
+
+## Numeric Target
+
+We can't use OLS for time-to-event data due to **censoring**. For some observations, the event may never occur or has not happened yet. Tenure is also always positive and the risk of failure can change over time--not a linear relationship.
+
+## Data Structure
+
+Survival analysis splits the target variable into two pieces: a continuous and a categorical variable.
+
+-   **Time**: Tenure for an observation
+-   **Event**: At the end of that time, what happened?
+
+Using the Maryland Recidivism Data, we want to model the association between various factors and length of time before re-arrest.
+
+-   **Week**: Week of arrest - week which equals 52 is not arrested
+-   **Arrest**: Indicator for arrest (1 = yes, 0 = no)
+
+Predictors:
+
+-   **fin**: Received financial aid upon release (1 = yes, 0 = no)
+-   **age**: Age at time of release (years)
+-   **race**: Indicator for African American (1 = yes, 0 = no)
+-   **wexp**: Indicator of prior work experience prior to incarceration (1 = yes, 0 = no)
+-   **mar**: Married at time of release (1 = yes, 0 = no)
+-   **paro**: Released on parole (1 = yes, 0 = no)
+-   **prio**: Number of prior convictions
+
+# Time and Censoring
+
+Survival analysis depends on a few assumptions:
+
+-   Every observation starts at the same time since we are not interested in time, but tenure
+-   We are interested in time to event $T$, but we can not observe this for all observations--they are censored
+    -   We take the minimum between $T_i$ and the censoring time $C_i$
+
+:::{layout-ncol="2"}
+![Time vs. Tenure](images/time-vs-tenure.png){#fig-time-vs-tenure}
+
+![Data Structure](images/data-structure.png){#fig-data-structure}
+:::
+
+Censored data is **NOT** missing data. We do not know the actual time to event $T_i$ for censored observations. We only know that for some amount of time the event has not occurred. Data is incomplete, but not missing.
+
+## Types of Censoring
+
+**Type I** censoring is where there is an end time $c$ and any subject that hasn't had the event by time **c** is censored.
+
+**Type II** censoring is where time goes until a certain number of events have occurred and any subjects who haven't had the event by that time are censored.
+
+### Right, Left, and Interval Censoring
+
+Observation is **right censored** when $T > c$. An example is when a clinical trial ends and patient is still alive. Censoring is noninformative--patients who are censored should have the same future risk for the event happening, conditional on exposure, as those who continue to be followed.
+
+Observation is **left censored** when $T < c$. An example is whne a customer enrolled more than 3 years ago. A new customer tracking system was implemented, but current customers were around before.
+
+**Interval censoring** is where $a < T < b$. An example is when a person tests negative during appointment at $a$, but positive during appointment at $b$. So time developing disease occurs between $a$ and $b$.
+
+# Survival Function
+
+Survival analysis is described in two major quantities: **survival function** and **hazard function**.
+
+Survival function: Probability of surviving **beyond** time $t$.
+
+$$
+S(t) = P(T > t)
+$$
+
+-   Always starts at 1
+-   Never increases
+-   Bounded below by 0
+
+## Kaplan-Meier Estimator
+
+The Kaplan-Meier estimator is a non-parametric estimator of the survival function. It is a product of the survival probabilities at each time point. We want to estimate the proportion of individuals "still alive" at any given time $t$.
+
+$$
+\hat{S}(t) = \prod_{k \leq t} \left(1 - \frac{d_k}{r_k}\right)
+$$
+
+-   $d_k$ is the number of events occurring at time $t$
+-   $r_k$ is the number of observations available right before time $t$ (**risk set**)
+
+Note that censored individuals are initially included in the risk set up until the point of censoring.
+
+![Calculating K-M Estimate](images/km-estimate.png){#fig-km-estimate}
+
+## Summary Statistics
+
+Due to censoring, mean is difficult to estimate but the **median** is still valid as long as the event occurs for at least half of the sample.
+
+The median is the **half-life** or the time $t$ that $\hat{S}(t)$ drops below 0.5. The half-life interpretation is that 50% of observations survive beyond time $t$.
+
+:::{.panel-tabset}
+# R
+
+```{r}
+recid <- read_csv("https://raw.githubusercontent.com/sjsimmo2/Survival/master/recid.csv")
+simple <- data.frame(matrix(c(7, 8, 10, 3, 2, 3, 1, 1, 0, 1, 1, 0), ncol = 2))
+colnames(simple) <- c("tenure", "censored")
+
+simple_s <- Surv(time = simple$tenure, event = simple$censored)
+```
+
+To perform Kaplan-Meier:
+
+```{r}
+simple_km <- survfit(Surv(time = tenure, event = censored) ~ 1, data = simple)
+summary(simple_km)
+```
+
+```{r}
+plot(simple_km, main = "Survival Function", xlab = "Tenure", ylab = "Survival Probability")
+```
+
+```{r}
+recid_fit <- survfit(Surv(time = week, event = arrest) ~ 1, data = recid)
+summary(recid_fit)
+```
+
+```{r}
+ggsurvplot(recid_fit, data = recid, conf.int = TRUE, palette = "purple", xlab = "Week", ylab = "Survival Probability", legend = "none", break.y.by = 0.1)
+```
+
+# Python
+
+```{python}
+
+```
+
+:::
+
+# Stratified Analysis
+
+We can also create separate / stratified curves by group. Different curves result in different estimates for each group.
+
+R provides 2 tests that each have the same null hypothesis--all survival curves are **equal** and alternative is that at least one curve is different.
+
+1.  Log-rank Test
+2.  Wilcoxon Test
+
+## Log-rank test
+
+Combines all the information from the K-M estimate at times where events occur.
+
+For each group, calculate expected events and compare to observed events. This is a $\chi^2$ statistic with $k - 1$ degrees of freedom. 
+
+![Log-rank Tests](images/log-rank.png){#fig-log-rank}
+
+## Wilcoxon Test
+
+Similar to Log-rank test except that we now use weights. 
