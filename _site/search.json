@@ -2272,7 +2272,7 @@
     "href": "notes/analytics/index.html",
     "title": "Analytics",
     "section": "",
-    "text": "Generalized Additive Models\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 31, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nResampling, Model Selection, and Regularization\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nCensoring, Survival, and Hazards\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nLoad Forecasting Workshop\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nOct 24, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nHierarchical and Grouped Time Series\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nOct 20, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nContinuous vs. Ordinal Variables\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nWeighted and Combined Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nKNN and Other Ideas\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 13, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nNeural Network AR Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nOct 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nClustering\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 6, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nDynamic Regression Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nOct 6, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nClassification and Regression Trees (CART)\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 2, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to Data Mining and Association Analysis\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nSep 27, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nSeasonality Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nSep 27, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nOrdinal Logistic Regression\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nSep 15, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nBayesian Workshop\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nSep 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nModel Assessment\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\nmodeling\n\n\n\n\n\n\n\n\n\n\n\nSep 7, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nARIMA Models: AR and MA Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nSep 7, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nCorrelation Functions\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nSep 6, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nDiagnostics and Subset Selection\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nSep 5, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nStationarity\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nSep 5, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nLinear Trend for Exponential Smoothing\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nAug 31, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nExponential Smoothing Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nAug 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nData Considerations\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nAug 28, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nEstimation Methods for Logistic Regression\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nAug 25, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to Forecasting & Time Series Structure\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nAug 24, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to Logistic Regression Review\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nAug 22, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to Logistic Regression\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nJul 18, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nCategorical Data Analysis\n\n\n\n\n\n\n\nanalytics\n\n\nEDA\n\n\n\n\n\n\n\n\n\n\n\nJul 17, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nModel Building and Scoring for Prediction\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\nmodeling\n\n\n\n\n\n\n\n\n\n\n\nJul 13, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nCorrelated Error Terms\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\ncorrelation\n\n\nEDA\n\n\n\n\n\n\n\n\n\n\n\nJul 11, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nDiagnostics\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\ndiagnostics\n\n\n\n\n\n\n\n\n\n\n\nJul 10, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nModel Selection\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\nmodeling\n\n\n\n\n\n\n\n\n\n\n\nJul 7, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nMultiple Linear Regression\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\n\n\n\n\n\n\n\n\n\nJul 6, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nMore Complex ANOVA & Regression\n\n\n\n\n\n\n\nanalytics\n\n\nANOVA\n\n\n\n\n\n\n\n\n\n\n\nJul 3, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nOrdinary Least Squares Regression\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\n\n\n\n\n\n\n\n\n\nJun 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to ANOVA and Regression\n\n\n\n\n\n\n\nanalytics\n\n\nANOVA\n\n\n\n\n\n\n\n\n\n\n\nJun 29, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to Statistical Inference\n\n\n\n\n\n\n\nanalytics\n\n\nEDA\n\n\n\n\n\n\n\n\n\n\n\nJun 28, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nExploratory Data Analysis\n\n\n\n\n\n\n\nanalytics\n\n\nEDA\n\n\n\n\n\n\n\n\n\n\n\nJun 27, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
+    "text": "Naive Bayes Model\n\n\n\n\n\n\n\nanalytics\n\n\nmachine learning\n\n\n\n\n\n\n\n\n\n\n\nNov 14, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nNeural Networks\n\n\n\n\n\n\n\nanalytics\n\n\nmachine learning\n\n\n\n\n\n\n\n\n\n\n\nNov 13, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nTree-based Models\n\n\n\n\n\n\n\nanalytics\n\n\nmachine learning\n\n\n\n\n\n\n\n\n\n\n\nNov 6, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nCox Regression Model\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nNov 6, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nGeneralized Additive Models\n\n\n\n\n\n\n\nanalytics\n\n\nmachine learning\n\n\n\n\n\n\n\n\n\n\n\nOct 31, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nResampling, Model Selection, and Regularization\n\n\n\n\n\n\n\nanalytics\n\n\nmachine learning\n\n\n\n\n\n\n\n\n\n\n\nOct 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nCensoring, Survival, and Hazards\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nLoad Forecasting Workshop\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nOct 24, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nHierarchical and Grouped Time Series\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nOct 20, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nContinuous vs. Ordinal Variables\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nWeighted and Combined Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nKNN and Other Ideas\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 13, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nNeural Network AR Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nOct 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nClustering\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 6, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nDynamic Regression Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nOct 6, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nClassification and Regression Trees (CART)\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nOct 2, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to Data Mining and Association Analysis\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nSep 27, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nSeasonality Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nSep 27, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nOrdinal Logistic Regression\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nSep 15, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nBayesian Workshop\n\n\n\n\n\n\n\nanalytics\n\n\n\n\n\n\n\n\n\n\n\nSep 12, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nModel Assessment\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\nmodeling\n\n\n\n\n\n\n\n\n\n\n\nSep 7, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nARIMA Models: AR and MA Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nSep 7, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nCorrelation Functions\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nSep 6, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nDiagnostics and Subset Selection\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nSep 5, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nStationarity\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nSep 5, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nLinear Trend for Exponential Smoothing\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nAug 31, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nExponential Smoothing Models\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nAug 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nData Considerations\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nAug 28, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nEstimation Methods for Logistic Regression\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nAug 25, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to Forecasting & Time Series Structure\n\n\n\n\n\n\n\nanalytics\n\n\ntime series\n\n\n\n\n\n\n\n\n\n\n\nAug 24, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to Logistic Regression Review\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nAug 22, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to Logistic Regression\n\n\n\n\n\n\n\nanalytics\n\n\nlogistic regression\n\n\n\n\n\n\n\n\n\n\n\nJul 18, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nCategorical Data Analysis\n\n\n\n\n\n\n\nanalytics\n\n\nEDA\n\n\n\n\n\n\n\n\n\n\n\nJul 17, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nModel Building and Scoring for Prediction\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\nmodeling\n\n\n\n\n\n\n\n\n\n\n\nJul 13, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nCorrelated Error Terms\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\ncorrelation\n\n\nEDA\n\n\n\n\n\n\n\n\n\n\n\nJul 11, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nDiagnostics\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\ndiagnostics\n\n\n\n\n\n\n\n\n\n\n\nJul 10, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nModel Selection\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\nmodeling\n\n\n\n\n\n\n\n\n\n\n\nJul 7, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nMultiple Linear Regression\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\n\n\n\n\n\n\n\n\n\nJul 6, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nMore Complex ANOVA & Regression\n\n\n\n\n\n\n\nanalytics\n\n\nANOVA\n\n\n\n\n\n\n\n\n\n\n\nJul 3, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nOrdinary Least Squares Regression\n\n\n\n\n\n\n\nanalytics\n\n\nlinear regression\n\n\n\n\n\n\n\n\n\n\n\nJun 30, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to ANOVA and Regression\n\n\n\n\n\n\n\nanalytics\n\n\nANOVA\n\n\n\n\n\n\n\n\n\n\n\nJun 29, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nIntroduction to Statistical Inference\n\n\n\n\n\n\n\nanalytics\n\n\nEDA\n\n\n\n\n\n\n\n\n\n\n\nJun 28, 2023\n\n\nYang Chen\n\n\n\n\n\n\n  \n\n\n\n\nExploratory Data Analysis\n\n\n\n\n\n\n\nanalytics\n\n\nEDA\n\n\n\n\n\n\n\n\n\n\n\nJun 27, 2023\n\n\nYang Chen\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "notes/analytics/linear-regression/influence/breakout_9.html",
@@ -2888,7 +2888,7 @@
     "href": "notes/analytics/survival-analysis/introduction/index.html#wilcoxon-test",
     "title": "Censoring, Survival, and Hazards",
     "section": "4.2 Wilcoxon Test",
-    "text": "4.2 Wilcoxon Test\nSimilar to Log-rank test except that we now use weights."
+    "text": "4.2 Wilcoxon Test\nSimilar to Log-rank test except that we now use weights. This test places larger emphasis on earlier event times."
   },
   {
     "objectID": "notes/analytics/machine-learning/resampling-regularization/index.html",
@@ -2945,5 +2945,243 @@
     "title": "Generalized Additive Models",
     "section": "3.1 Variable Importance",
     "text": "3.1 Variable Importance\nThere is one “subset” for each model size (1 term, 2 terms, etc.)–the best model of that size. The variable importance is the number of times that variable was used in the best model of that size. The more subsets of models the variable appears in the better the variable.\nResidual sum of squares is a scaled version of decrease in residual sum of squares relative to the previous subset. GCV is an approximation of RSS on leave-one-out cross validation.\n\n\nCode\nevimp(mars1)\n\n\n              nsubsets   gcv    rss\nFirst_Flr_SF        20 100.0  100.0\nSecond_Flr_SF       19  71.7   71.9\nYear_Built          18  50.9   51.3\nGarage_Area         17  34.3   35.0\nFireplaces          16  31.0   31.7\nGr_Liv_Area         15  27.6   28.4\nCentral_AirY        12  20.0   20.9\nBedroom_AbvGr       11  18.1   19.0\nLot_Area            10  16.2   17.2\nHalf_Bath            4   7.4    8.2\n\n\nEach variable following the first variable is the amount of improvement in the residual sum of squares relative to the amount of improvement in the first variable.\nBe careful, we have no notion of how these variables affect the response just which variables we think are the most important in the model. We trade interpretability for predictive power."
+  },
+  {
+    "objectID": "notes/analytics/survival-analysis/introduction/index.html#hazard-probabilities",
+    "href": "notes/analytics/survival-analysis/introduction/index.html#hazard-probabilities",
+    "title": "Censoring, Survival, and Hazards",
+    "section": "5.1 Hazard Probabilities",
+    "text": "5.1 Hazard Probabilities\n\\[\nh(t) = P(t &lt; T &lt; t + 1 | T &gt; t)\n\\]\nIn general, hazard probability can be interpreted as “assuming the event has not occurred yet, this is the probability the events occurs by the next time point.”\nAn example is that a customer has survived for a certain length of time, so the customer’s tenure is \\(t\\). What is the probability that the customer leaves before \\(t + 1\\)?\n\n\n\n\n\n\nFigure 5: Hazard Probability Events\n\n\n\n\n\n\n\nFigure 6: Hazard Probability Calculations"
+  },
+  {
+    "objectID": "notes/analytics/survival-analysis/introduction/index.html#hazard-rates",
+    "href": "notes/analytics/survival-analysis/introduction/index.html#hazard-rates",
+    "title": "Censoring, Survival, and Hazards",
+    "section": "5.2 Hazard Rates",
+    "text": "5.2 Hazard Rates\n\\[\nh(t) = \\lim_{\\Delta t \\to 0} \\frac{P(t &lt; T &lt; t + \\Delta t | T &gt; t)}{\\Delta t}\n\\]\nHazard rates have a slightly different interpretation than hazard probabilities because they are limits. Hazard rates are the instantaneous event rate at time \\(t\\) for the risk set at time \\(t\\).\nThe inverse of the hazard function is the length of time before the next occurrence.\nThe cumulative hazard probability is just the total hazard rate up until time \\(t\\)–denoted by \\(\\Lambda(t)\\)."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/GAM/index.html#loess",
+    "href": "notes/analytics/machine-learning/GAM/index.html#loess",
+    "title": "Generalized Additive Models",
+    "section": "4.1 LOESS",
+    "text": "4.1 LOESS\nLOESS is a non-parametric regression method that estimates the latent signal in a point-wise fashion. Essnetially, for each point we calculate a local weighted regression of a fixed window size around the point and record the point’s prediction along the local regression. However, more weight is assigned to points closer to the point of interest while less weight is assigned to points further away.\nLarge window sizes result in higher bias (more points to consider) while lower values will increase variance (less points to consider). The window size is a hyperparameter that we can tune.\n\n\n\nFigure 5: LOESS Visualized"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/GAM/index.html#smoothing-splines",
+    "href": "notes/analytics/machine-learning/GAM/index.html#smoothing-splines",
+    "title": "Generalized Additive Models",
+    "section": "4.2 Smoothing Splines",
+    "text": "4.2 Smoothing Splines\nSmoothing splines have a knot at every single observation for piecewise regression. We use a penalty parameter to counterbalance the overfitting.\nSmoothing splines are optimizing the following equation:\n\\[\n\\min \\sum_{i=1}^{n} (y_i - s(x_i))^2 + \\lambda \\int s''(t_i)^2 dt\n\\]\n\nThe first sum is the residual sum of squares\nThe second term is the penalty applied to integral of second derivative of smoothing function\nThe penalty \\(\\lambda\\) is estimated with an approximation of leave one out cross validation\n\nThe idea behind the second derivative in the penalty term is that it gives us an idea of how fast our slopes (first derivatives) are changing. The larger the second derivative, the faster the slope is changing. We want to penalize large changes in slope to lower the variance of our model."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/GAM/index.html#regression-splines",
+    "href": "notes/analytics/machine-learning/GAM/index.html#regression-splines",
+    "title": "Generalized Additive Models",
+    "section": "4.3 Regression Splines",
+    "text": "4.3 Regression Splines\nEssentially regression splines are a computationally nicer version of smoothing splines."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html",
+    "href": "notes/analytics/machine-learning/tree-models/index.html",
+    "title": "Tree-based Models",
+    "section": "",
+    "text": "Code\n# | include: false\nimport pandas as pd\n\ntraining = r.training\ntesting = r.testing"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#bootstrapping",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#bootstrapping",
+    "title": "Tree-based Models",
+    "section": "2.1 Bootstrapping",
+    "text": "2.1 Bootstrapping\nTake random samples of data with replacement that are the same size as the original dataset. Some observations will not be sampled which are referred to as out-of-bag observations.\n\n\n\nFigure 2: Bootstrapping for 10 Observations\n\n\nThe out-of-bag observations can be used as a validation set. However, there is no guarantee what the size of each validation set will be.\nIt’s been proven that a bootstrap sample will contain approximately 63% of observations on average. Sample size is the same as original as some observations are repeated."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#bagging-process",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#bagging-process",
+    "title": "Tree-based Models",
+    "section": "2.2 Bagging Process",
+    "text": "2.2 Bagging Process\n\nTake \\(k\\) bootstrap samples of size \\(n\\) from the training data.\nFor each of the \\(k\\) samples, create a model using that sample as training data.\nEnsemble the \\(k\\) different models.\n\nBagging aggregates the \\(k\\) models for the full dataset and compares the ensembled values to the actual truth of the original dataset.\nThis process can be computationally expensive if we focused on building \\(k\\) complex models. For trees, we will actually just stick to building simple decision tree models with only one split."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#bagging-example-for-trees",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#bagging-example-for-trees",
+    "title": "Tree-based Models",
+    "section": "2.3 Bagging Example for Trees",
+    "text": "2.3 Bagging Example for Trees\n\nTake 10 bootstrap samples.\nBuild a tree with only one split.\nAggregate these rules into a voting ensemble.\nTest performance of the voting ensemble on the whole dataset.\n\n\n\n\nFigure 3: Bagging Example"
+  },
+  {
+    "objectID": "notes/analytics/survival-analysis/cox-regression/index.html",
+    "href": "notes/analytics/survival-analysis/cox-regression/index.html",
+    "title": "Cox Regression Model",
+    "section": "",
+    "text": "The alternative to modeling failure time is to model hazards.\nThe hazard function is written as:\n\\[\n\\begin{align*}\nh(t) &= e^{\\beta_0 + beta_1x_{i,1} + \\cdots + \\beta_k x_{i,k}} \\\\\n& = h_0(t)e^{\\beta_1x_{i,1} + \\cdots + \\beta_k x_{i,k}}\n\\end{align*}\n\\]\n\n\\(h_0(t)\\) is the baseline hazard function\n\nThe proportional hazard model models the log of the hazard directly:\n\\[\n\\log h(t) = \\log h_0(t) + \\beta_1x_{i,1} + \\cdots + \\beta_k x_{i,k}\n\\]\nPredictions shift the hazard rather than directly shifting the failure time like in the AFT model.\nThe hazard ratio between two groups no longer depend son time. We assume that there is a constant proportion on hazards.\n\\[\n\\begin{align*}\nh_i(t) &= h_0(t)e^{\\beta_1 x_{i,1} + \\cdots + \\beta_k x_{i,k}} \\\\\nh_j(t) &= h_0(t)e^{\\beta_1 x_{j,1} + \\cdots + \\beta_k x_{j,k}} \\\\\n\\frac{h_i(t)}{h_j(t)} &= e^{\\beta_1(x_{i,1} - x_{j,1}) + \\cdots + \\beta_k(x_{i,k} - x_{j,k})}\n\\end{align*}\n\\]\nThe important takeaway from proportional hazards is that we can say things like, “On average, a customer who signed up via direct mail stays twice as long compared to a customer who signed up via telemarketing.”\nThe results do not say how long someone will last, only relative length of tenure between two groups. We assume that factors measured at an initial time point have a uniform proportional effect on hazards between indviiduals or groups."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#bagging-summary",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#bagging-summary",
+    "title": "Tree-based Models",
+    "section": "2.4 Bagging Summary",
+    "text": "2.4 Bagging Summary\n\nImproves generalization error on models with high variance\nIf base classifier is stable (not high variance), bagging can actually make it worse\nDoes not focus on any particular observations in the training data (unlike boosting)"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#parameters-to-tune",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#parameters-to-tune",
+    "title": "Tree-based Models",
+    "section": "3.1 Parameters to Tune",
+    "text": "3.1 Parameters to Tune\n\nNumber of trees\nNumber of variables for each split\nDepth of tree (defaults to unpruned)"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#implementing-random-forests",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#implementing-random-forests",
+    "title": "Tree-based Models",
+    "section": "3.2 Implementing Random Forests",
+    "text": "3.2 Implementing Random Forests\n\nRPython\n\n\n\n\nCode\nset.seed(12345)\nlibrary(randomForest)\n\n\n\n1\n\nntree is the number of trees\n\n2\n\nimportance is a flag to allow for variable importance\n\n\n\n\nrandomForest 4.7-1.1\n\n\nType rfNews() to see new features/changes/bug fixes.\n\n\n\nAttaching package: 'randomForest'\n\n\nThe following object is masked from 'package:dplyr':\n\n    combine\n\n\nThe following object is masked from 'package:ggplot2':\n\n    margin\n\n\nCode\nrf_ames &lt;- randomForest(\n    Sale_Price ~ ., data = training_df, \n1    ntree = 500,\n21    importance = TRUE)\n\n\n\n\nCode\nplot(rf_ames, main = \"Number of Trees Compared to MSE\")\n\n\n\n\n\nTo get variable importance we can use varImpPlot:\n\n\nCode\nvarImpPlot(rf_ames, sort = TRUE, n.var = 10, main = \"Top 10 Variable Importance\")\n\n\n\n\n\n\nThe x-axis represents how much more MSE your model would gain if you left out this variable\nTo calculate the MSE increase, the variable is randomly permuted to “remove” relationship with target\n\n\n\n\n\nCode\nfrom sklearn.ensemble import RandomForestRegressor\n\ntrain_dummy = pd.get_dummies(training, columns=[\"Street\", \"Central_Air\"])\ny_train = train_dummy[\"Sale_Price\"]\nX_train = train_dummy.loc[:, train_dummy.columns != \"Sale_Price\"]\n\nrf_ames = RandomForestRegressor(n_estimators=100, random_state=12345, oob_score=True)\n\nrf_ames.fit(X_train, y_train)\n\n\nRandomForestRegressor(oob_score=True, random_state=12345)In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.RandomForestRegressorRandomForestRegressor(oob_score=True, random_state=12345)\n\n\nWe can plot the average decrease in impurity in the nodes of the tree:\n\n\nCode\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\nforest_importances = pd.Series(\n    rf_ames.feature_importances_, index=rf_ames.feature_names_in_\n)\n\nfig, ax = plt.subplots()\nforest_importances.plot.bar(ax=ax)\nax.set_title(\"Feature Importances\")\nax.set_ylabel(\"Mean decrease in impurity\")\nfig.tight_layout()\n\nplt.show()"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#tuning-random-forests",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#tuning-random-forests",
+    "title": "Tree-based Models",
+    "section": "3.3 Tuning Random Forests",
+    "text": "3.3 Tuning Random Forests\nThe number of variables considered for each split is called mtry in caret. By default, mtry is \\(\\sqrt{p}\\), with \\(p\\) being number of variables.\nWe use validation (out-of-bag samples) to tune along with number of trees. We are measuring the total amount of error across all the samples we did not take.\nFor each mtry, the same bootstrap samples are used to give each attempt a fair shot.\n\n\nCode\nset.seed(12345)\ntuneRF(x = training_df[, -1], y = training_df[, 1], plot = TRUE, ntreeTry = 500, stepFactor = 0.5)\n\n\nmtry = 4  OOB error = 855384447 \nSearching left ...\nmtry = 8    OOB error = 890709806 \n-0.04129764 0.05 \nSearching right ...\nmtry = 2    OOB error = 908679993 \n-0.06230596 0.05 \n\n\n\n\n\n  mtry  OOBError\n2    2 908679993\n4    4 855384447\n8    8 890709806"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#variable-selection",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#variable-selection",
+    "title": "Tree-based Models",
+    "section": "3.4 Variable Selection",
+    "text": "3.4 Variable Selection\nRandom forests use all the variables since they are averaged across all the trees used to build the model. Variable selection can be performed by a variety of methods.\n\nMany permutations of including / excluding variables\nCompare variables to random variable (newer way)\n\n\n\nCode\ntraining_df &lt;- training_df %&gt;% mutate(random = rnorm(2051))\n\nset.seed(12345)\nrf_ames &lt;- randomForest(Sale_Price ~ ., data = training_df, ntree = 500, mtry = 4, importance = TRUE)\n\nvarImpPlot(rf_ames, sort = TRUE, n.var = 15, main = \"Look for Variables Below Random Variable\")\n\n\n\n\n\nThe idea is that any variables that are below the completely random variable do not perform as well overall."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#summary",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#summary",
+    "title": "Tree-based Models",
+    "section": "3.5 Summary",
+    "text": "3.5 Summary\nIf you are building a random forest model for a client, you want to focus on the predictions, results, and maybe the variable importance. Beyond that, the interpretability may be too complex.\nAdvantages:\n\nComputationally fast\nTrees trained simultaneously\nAccurate classification model\nVariable importance\nMissing data is OK\n\nDisadvantages:\n\nNo “interpretability” other than variable importance\nTuning parameters"
+  },
+  {
+    "objectID": "notes/analytics/survival-analysis/cox-regression/index.html#partial-likelihood-downfalls",
+    "href": "notes/analytics/survival-analysis/cox-regression/index.html#partial-likelihood-downfalls",
+    "title": "Cox Regression Model",
+    "section": "3.1 Partial Likelihood Downfalls",
+    "text": "3.1 Partial Likelihood Downfalls\nSome information about parameters is lost due to partial likelihood estimation–inefficient estimates. Estimates still have desired properties:\n\nUbiased\nEstimates can be tested in same way as before"
+  },
+  {
+    "objectID": "notes/analytics/survival-analysis/cox-regression/index.html#comparative-risks",
+    "href": "notes/analytics/survival-analysis/cox-regression/index.html#comparative-risks",
+    "title": "Cox Regression Model",
+    "section": "3.2 Comparative Risks",
+    "text": "3.2 Comparative Risks\nThe primary value from Cox regression is the interpretation of the individual coefficients–we are estimating the hazard ratio compared to some reference.\nCox regression essentially estimates subject’s relative likelihood of failure at specific time compared to everyone else in the risk set at that time. Any estimation/inference is still valid, but contrary to AFT, Cog regression does not make absolute predictions of time or risk."
+  },
+  {
+    "objectID": "notes/analytics/survival-analysis/cox-regression/index.html#assumptions",
+    "href": "notes/analytics/survival-analysis/cox-regression/index.html#assumptions",
+    "title": "Cox Regression Model",
+    "section": "3.3 Assumptions",
+    "text": "3.3 Assumptions\n\nLinearity\nProportional hazards (constant proportions over time)"
+  },
+  {
+    "objectID": "notes/analytics/survival-analysis/cox-regression/index.html#concordance",
+    "href": "notes/analytics/survival-analysis/cox-regression/index.html#concordance",
+    "title": "Cox Regression Model",
+    "section": "6.1 Concordance",
+    "text": "6.1 Concordance\nWhat is risk in this context?\n\\[\n\\text{Risk} = \\hat{\\beta}_1 x_{i,1} + \\cdots + \\hat{\\beta}_k x_{i,k}\n\\]\nExample:\n\nPerson 1: Event occurs at \\(t = 3\\) and risk is 1.5\nPerson 2: Event (or censored) occurs at \\(t = 7\\) and risk is 0.3\nConcordant pair since person with higher risk score had the event first\n\nIf the time that occurs first is censored, then the pair is incomparable. if both observations have the same predicted risk, then the pair is tied in the “x-space”. If both observations have the same event time, then this pair is tied in the “y-space”."
+  },
+  {
+    "objectID": "notes/analytics/survival-analysis/cox-regression/index.html#checking-assumptions",
+    "href": "notes/analytics/survival-analysis/cox-regression/index.html#checking-assumptions",
+    "title": "Cox Regression Model",
+    "section": "7.1 Checking Assumptions",
+    "text": "7.1 Checking Assumptions\nWe can check assumptions of the proportional hazards model using residuals.\n\nMartingale (check linearity)\nSchoenfeld (check PH)\n\n\n7.1.1 Martingale Residuals\nDifference between observed number of events and expected number of events at a specific point in time (determined by model) “integrated over the time for which that subject was at risk.”\n\n\n7.1.2 Schoenfeld Residuals\nSchoenfeld residuals are calculated for each variable for each individual. These are the differences between the actual value of the variable and expected value for someone who had the event occur at that time."
+  },
+  {
+    "objectID": "notes/analytics/survival-analysis/cox-regression/index.html#schoenfeld",
+    "href": "notes/analytics/survival-analysis/cox-regression/index.html#schoenfeld",
+    "title": "Cox Regression Model",
+    "section": "8.1 Schoenfeld",
+    "text": "8.1 Schoenfeld\nIf coefficients, do NOT depend on time, then the PH model holds and graphs of the Schoenfeld residuals should be a horizontal line.\nThere is a test that has \\(H_0: \\beta = 0\\) and \\(H_a: \\beta \\neq 0\\) such that we want to fail to reject H_0 to assume there is no relationship with time. We prefer this test over the graphs–the graphs aren’t necesssarily too informative.\nHowever, these residual tests should be done after model selection has occurred.\nYou can also test out different transformations of time like the log of time. However, in your model you have to go with the same transformation for all variables, whichever you decide to move forward with."
+  },
+  {
+    "objectID": "notes/analytics/survival-analysis/cox-regression/index.html#interpretation",
+    "href": "notes/analytics/survival-analysis/cox-regression/index.html#interpretation",
+    "title": "Cox Regression Model",
+    "section": "8.2 Interpretation",
+    "text": "8.2 Interpretation"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#classifier-weights",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#classifier-weights",
+    "title": "Tree-based Models",
+    "section": "6.1 Classifier Weights",
+    "text": "6.1 Classifier Weights\nObservations are each weighted based on how well they were predicted in the previous round.\nLet the weights for each round be denoted as \\(\\omega_i\\) and the predictions for round be \\(\\hat{y}_{1,i}, \\hat{y}_{2,i}\\).\nThe prediction for each observation is derived from a classification as follows:\n\\[\n\\hat{y}_i = \\omega_1 \\hat{y}_{1,i} + \\omega_2 \\hat{y}_{2,i} + \\cdots\n\\]"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#overfitting-protection",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#overfitting-protection",
+    "title": "Tree-based Models",
+    "section": "7.1 Overfitting Protection",
+    "text": "7.1 Overfitting Protection\nGradient boosting regularizes with tunable parameters to prevent overfitting:\n\nReduce weight of each of the error models for prediction.\n\n\\[\ny = f_1(x) + \\eta f_2(x) + \\eta f_3(x) + \\cdots + \\eta f_k(x) + \\epsilon_k\n\\]\n\nSmaller values of \\(\\eta\\) lead to less overfitting\n\n\nNumber of trees used in the prediction where larger number of trees increases overfitting\nOther parameters introduced over the years…"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#gradient-boosted-trees",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#gradient-boosted-trees",
+    "title": "Tree-based Models",
+    "section": "7.2 Gradient Boosted Trees",
+    "text": "7.2 Gradient Boosted Trees\nGradient boosting yields an additive ensemble model. There is no averaging of individual models. Predictions from each model are summed together for final prediction.\nThe key to gradient boosting is using weak learners (shallow trees). Although each learner would make poor predictions on their own, their addition provides good predictions.\n\n\n\nFigure 6: Weak Learner Ensemble"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#stochastic-gradient-descent",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#stochastic-gradient-descent",
+    "title": "Tree-based Models",
+    "section": "8.1 Stochastic Gradient Descent",
+    "text": "8.1 Stochastic Gradient Descent\nNot all loss functions are convex and some have local minima or plateaus that make finding the global minimum difficult.\nStochastic gradient descent attempts to solve this by randomly sampling a fraction of the training observations for each tree in the ensemble. This makes the algorithm faster and more reliable, but may not always find the true overall minimum."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#training-a-gradient-boosted-machine",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#training-a-gradient-boosted-machine",
+    "title": "Tree-based Models",
+    "section": "8.2 Training a Gradient Boosted Machine",
+    "text": "8.2 Training a Gradient Boosted Machine\nGrid search is very time consuming because of the time it takes to build these models. We can tune parameters one at a time:\n\nStart with relatively high learning rate (default of 0.1 is typically good).\nDetermine optimal number of trees for this learning rate.\nFix tree tuning parameters (number of trees, depth, etc.) and tune learning rate.\nSet learning rate again at this new value and retune tree parameters.\nTry lowering learning rate again to see any improvements."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#variable-importance-in-xgboost",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#variable-importance-in-xgboost",
+    "title": "Tree-based Models",
+    "section": "9.1 Variable Importance in XGBoost",
+    "text": "9.1 Variable Importance in XGBoost\nXGBoost provides 3 built-in measures of variable importance:\n\nGain: Equivalent metric in random forests\nCoverage: Measures relative number of observations influenced by the variable\nFrequency: Percentage of splits in the whole ensemble that use this variable\n\n\n\nCode\n# set.seed(12345)\n# xgb_ames &lt;- xgboost(data = train_x, label = train_y, subsample = 1, nrounds = 24, eta = 0.25, max_depth = 5)\n# xgb.importance(features_names = colnames(train_x), model = xgb_ames)\n\n\n\n\nCode\n# xgb.ggplot.importance(xgb.importance(feature_names = colnames(train_x), model = xgb_ames))\n\n\nOne of the advantages of XGBoost is that it tries to cluster variables in terms of their importance. There is some notion of statistically different importances between variables."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/tree-models/index.html#variable-selection-1",
+    "href": "notes/analytics/machine-learning/tree-models/index.html#variable-selection-1",
+    "title": "Tree-based Models",
+    "section": "9.2 Variable Selection",
+    "text": "9.2 Variable Selection\nXGBoost uses all variables since they are averages across all the trees used to build the model.\nVariable selection can be performed by permutations of including and excluding variables. However, this is extremely time confusing.\nSimilarly to the random forest models, we can compare variables to a random variable and potentially exclude variables that end up less important than the random variable."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/naive-bayes/index.html",
+    "href": "notes/analytics/machine-learning/naive-bayes/index.html",
+    "title": "Naive Bayes Model",
+    "section": "",
+    "text": "When we need to classify observations there are two difference sources of evidence:\n\nSimilarity to other observations based on certain metrics / variables\nPast decisions on classifications of observations like it\n\nThe second approach is a Bayesian approach.\nIn Figure 1, we are establishing what our prior probabilities are based on current observations.\n\n\n\nFigure 1: Naive Bayes Priors\n\n\nIf we introduce a new observation and take the predefined closest number of observations, then we can get conditional probabilities along with our knowledge of prior probabilities.\n\n\n\nFigure 2: Naive Bayes Conditionals\n\n\nWe then multiply the conditionals with the priors and scale the probabilities to sum up to 1. The higher probability wins.\n\n\n\nFigure 3: Naive Bayes Results\n\n\n\n1 Assumption\nOne of the big assumptions of naive Bayes classification is that predictor variables are independent in their effects on the classification."
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/nnet/index.html",
+    "href": "notes/analytics/machine-learning/nnet/index.html",
+    "title": "Neural Networks",
+    "section": "",
+    "text": "Neural networks are organized as a network of neurons through layers. Input variables are considered neurons on the bottom layer. The output variable is considered the neuron on the head layer. The layers in between are hidden layers which transform the input variables through non-linear activation functions to try and best model the output variable.\nA neural network is a linear transformation of nonlinear transformations of our inputs and weights spread out across different layers.\n\n\n\nFigure 1: Neural Net Structure\n\n\n\n\n\nFigure 2: Activation Functions"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/nnet/index.html#standardization",
+    "href": "notes/analytics/machine-learning/nnet/index.html#standardization",
+    "title": "Neural Networks",
+    "section": "3.1 Standardization",
+    "text": "3.1 Standardization\nNeural nets work best when input data are scaled. For bell-shaped data, statistical z-scores standardization can work. For severely assymmetric data, midrange standardization works better:\n\\[\n\\frac{x - \\text{midrange}(x)}{0.5 \\cdot \\text{range}(x)} = \\frac{x - \\frac{(\\max(x) + \\min(x))}{2}}{0.5 \\cdot (\\max(x) - \\min(x))}\n\\]\n\n\nCode\ncols_to_scale &lt;- c(\"Sale_Price\", \"Bedroom_AbvGr\", \"Year_Built\", \"Mo_Sold\", \"Lot_Area\", \"First_Flr_SF\", \"Second_Flr_SF\", \"Garage_Area\", \"Gr_Liv_Area\", \"TotRms_AbvGrd\")\ntraining &lt;- training %&gt;%\n    mutate(Full_Bath = as.factor(Full_Bath), Half_Bath = as.factor(Half_Bath), Fireplaces = as.factor(Fireplaces))\n\nscaled_training &lt;- training %&gt;%\n    mutate(across(all_of(cols_to_scale), scale))\n\n\n\n\nCode\nlibrary(nnet)\nset.seed(12345)\n\nnn_ames &lt;- nnet(Sale_Price ~ ., data = training, size = 5, linout = TRUE)\n\n\n# weights:  116\ninitial  value 79865952890167.062500 \nfinal  value 12750392495886.974609 \nconverged"
+  },
+  {
+    "objectID": "notes/analytics/machine-learning/nnet/index.html#optimize-number-of-hidden-nodes-and-decay",
+    "href": "notes/analytics/machine-learning/nnet/index.html#optimize-number-of-hidden-nodes-and-decay",
+    "title": "Neural Networks",
+    "section": "3.2 Optimize Number of Hidden Nodes and Decay",
+    "text": "3.2 Optimize Number of Hidden Nodes and Decay\n\n\nCode\nlibrary(caret)\n\n\nLoading required package: lattice\n\n\n\nAttaching package: 'caret'\n\n\nThe following object is masked from 'package:purrr':\n\n    lift\n\n\nCode\ntune_grid &lt;- expand.grid(\n    .size = c(3, 4, 5, 6, 7),\n    .decay = c(0, 0.5, 1)\n)\n\nset.seed(12345)\n\nnn_ames_caret &lt;- train(Sale_Price ~ ., data = training, method = \"nnet\", tuneGrid = tune_grid, trControl = trainControl(method = \"cv\", number = 10), trace = FALSE, linout = TRUE)\n\n\nWarning in nominalTrainWorkflow(x = x, y = y, wts = weights, info = trainInfo,\n: There were missing values in resampled performance measures.\n\n\nCode\nnn_ames_caret$bestTune\n\n\n  size decay\n2    3   0.5"
   }
 ]

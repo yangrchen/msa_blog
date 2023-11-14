@@ -203,6 +203,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#log-rank-test" id="toc-log-rank-test" class="nav-link" data-scroll-target="#log-rank-test"><span class="header-section-number">4.1</span> Log-rank test</a></li>
   <li><a href="#wilcoxon-test" id="toc-wilcoxon-test" class="nav-link" data-scroll-target="#wilcoxon-test"><span class="header-section-number">4.2</span> Wilcoxon Test</a></li>
   </ul></li>
+  <li><a href="#hazard-function" id="toc-hazard-function" class="nav-link" data-scroll-target="#hazard-function"><span class="header-section-number">5</span> Hazard Function</a>
+  <ul class="collapse">
+  <li><a href="#hazard-probabilities" id="toc-hazard-probabilities" class="nav-link" data-scroll-target="#hazard-probabilities"><span class="header-section-number">5.1</span> Hazard Probabilities</a></li>
+  <li><a href="#hazard-rates" id="toc-hazard-rates" class="nav-link" data-scroll-target="#hazard-rates"><span class="header-section-number">5.2</span> Hazard Rates</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -547,7 +552,49 @@ dbl (63): week, arrest, fin, age, race, wexp, mar, paro, prio, educ, emp1, e...
 </section>
 <section id="wilcoxon-test" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="wilcoxon-test"><span class="header-section-number">4.2</span> Wilcoxon Test</h2>
-<p>Similar to Log-rank test except that we now use weights.</p>
+<p>Similar to Log-rank test except that we now use weights. This test places larger emphasis on earlier event times.</p>
+</section>
+</section>
+<section id="hazard-function" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Hazard Function</h1>
+<p>The <strong>hazard function</strong> is the instantaneous rate of failure at time <span class="math inline">\(t\)</span> given that the individual has survived up to time <span class="math inline">\(t\)</span>.</p>
+<p>We have two common types of hazard functions: harzard probabilities and hazard rates.</p>
+<section id="hazard-probabilities" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="hazard-probabilities"><span class="header-section-number">5.1</span> Hazard Probabilities</h2>
+<p><span class="math display">\[
+h(t) = P(t &lt; T &lt; t + 1 | T &gt; t)
+\]</span></p>
+<p>In general, hazard probability can be interpreted as “assuming the event has not occurred yet, this is the probability the events occurs by the next time point.”</p>
+<p>An example is that a customer has survived for a certain length of time, so the customer’s tenure is <span class="math inline">\(t\)</span>. What is the probability that the customer leaves before <span class="math inline">\(t + 1\)</span>?</p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-hazard-probability-events" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/hazard-probability-events.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;5: Hazard Probability Events</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-hazard-probability-calculations" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/hazard-probability-calculations.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;6: Hazard Probability Calculations</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="hazard-rates" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="hazard-rates"><span class="header-section-number">5.2</span> Hazard Rates</h2>
+<p><span class="math display">\[
+h(t) = \lim_{\Delta t \to 0} \frac{P(t &lt; T &lt; t + \Delta t | T &gt; t)}{\Delta t}
+\]</span></p>
+<p>Hazard rates have a slightly different interpretation than hazard probabilities because they are limits. Hazard rates are the instantaneous event rate at time <span class="math inline">\(t\)</span> for the risk set at time <span class="math inline">\(t\)</span>.</p>
+<p>The inverse of the hazard function is the length of time before the next occurrence.</p>
+<p>The <strong>cumulative hazard probability</strong> is just the total hazard rate up until time <span class="math inline">\(t\)</span>–denoted by <span class="math inline">\(\Lambda(t)\)</span>.</p>
 
 
 </section>

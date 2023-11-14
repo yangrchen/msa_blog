@@ -1,0 +1,407 @@
+---
+title: Tree-based Models
+date: 11/06/2023
+---
+
+```{r r-setup}
+#| include: false
+library(AmesHousing)
+library(tidyverse)
+
+ames <- make_ordinal_ames()
+ames <- ames %>%
+    mutate(id = row_number())
+
+training <- ames %>% sample_frac(0.7)
+testing <- anti_join(ames, training, by = "id")
+
+training <- training %>%
+    select(Sale_Price, Bedroom_AbvGr, Year_Built, Mo_Sold, Lot_Area, Street, Central_Air, First_Flr_SF, Second_Flr_SF, Full_Bath, Half_Bath, Fireplaces, Garage_Area, Gr_Liv_Area, TotRms_AbvGrd)
+
+training_df <- data.frame(training)
+```
+
+```{python py-setup}
+# | include: false
+import pandas as pd
+
+training = r.training
+testing = r.testing
+```
+
+# Decision Tree Review
+
+Decision trees are built by recursively splitting the data into successively purer subsets of data using measures of purity--Gini, entropy, misclassifcation error rate.
+
+![Selecting the Split](images/dt-review-splits.png){#fig-dt-review-splits}
+
+# Bagging
+
+**Bagging** refers to bootstrap aggregation. In order to understand bagging, we need to understanding bootstrapping.
+
+## Bootstrapping
+
+Take random samples of data *with replacement* that are the same size as the original dataset. Some observations will not be sampled which are referred to as **out-of-bag observations**.
+
+![Bootstrapping for 10 Observations](images/bootstrapping-example.png){#fig-bootstrapping-example}
+
+The out-of-bag observations can be used as a validation set. However, there is no guarantee what the size of each validation set will be.
+
+It's been proven that a bootstrap sample will contain approximately 63% of observations on average. Sample size is the same as original as some observations are repeated.
+
+## Bagging Process
+
+1.  Take $k$ bootstrap samples of size $n$ from the training data.
+2.  For each of the $k$ samples, create a model using that sample as training data.
+3.  Ensemble the $k$ different models.
+
+Bagging aggregates the $k$ models for the full dataset and compares the ensembled values to the actual truth of the original dataset.
+
+This process can be computationally expensive if we focused on building $k$ complex models. For trees, we will actually just stick to building simple decision tree models with only one split.
+
+## Bagging Example for Trees
+
+1.  Take 10 bootstrap samples.
+2.  Build a tree with only one split. 
+3.  Aggregate these rules into a voting ensemble.
+4.  Test performance of the voting ensemble on the whole dataset.
+
+![Bagging Example](images/bagging-example.png){#fig-bagging-example}
+
+## Bagging Summary
+
+-   Improves generalization error on models with high variance
+-   If base classifier is stable (not high variance), bagging can actually make it worse
+-   Does not focus on any particular observations in the training data (unlike boosting)
+
+# Random Forests
+
+**Random forests** are ensembles of decision trees--ensembles work best when they find **different patterns in the data**.
+
+Random forests also create **random subsets of variables for each split** and **unpruned decision trees** in each ensemble. The idea is that we give different a variables a chance to be a main split on the data. Results from trees are then ensembled together.
+
+For a regression problem, we are taking the averages of the average predictions made from each model. The number of leaf nodes don't matter since we are averaging the *final predictions* from each model.
+
+## Parameters to Tune
+
+-   Number of trees
+-   Number of variables for each split
+-   Depth of tree (defaults to unpruned)
+
+## Implementing Random Forests
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r random-forest}
+set.seed(12345)
+library(randomForest)
+
+rf_ames <- randomForest(
+    Sale_Price ~ ., data = training_df, 
+    ntree = 500, # <1>
+    importance = TRUE) # <2>
+```
+1.  `ntree` is the number of trees
+2.  `importance` is a flag to allow for variable importance
+
+```{r MSE-plot}
+plot(rf_ames, main = "Number of Trees Compared to MSE")
+```
+
+To get variable importance we can use `varImpPlot`:
+
+```{r var-importance}
+varImpPlot(rf_ames, sort = TRUE, n.var = 10, main = "Top 10 Variable Importance")
+```
+
+-   The x-axis represents how much more MSE your model would gain if you left out this variable
+-   To calculate the MSE increase, the variable is randomly permuted to "remove" relationship with target
+
+# Python
+
+```{python py-random-forest}
+from sklearn.ensemble import RandomForestRegressor
+
+train_dummy = pd.get_dummies(training, columns=["Street", "Central_Air"])
+y_train = train_dummy["Sale_Price"]
+X_train = train_dummy.loc[:, train_dummy.columns != "Sale_Price"]
+
+rf_ames = RandomForestRegressor(n_estimators=100, random_state=12345, oob_score=True)
+
+rf_ames.fit(X_train, y_train)
+```
+
+We can plot the average decrease in impurity in the nodes of the tree:
+
+```{python py-var-importance}
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+forest_importances = pd.Series(
+    rf_ames.feature_importances_, index=rf_ames.feature_names_in_
+)
+
+fig, ax = plt.subplots()
+forest_importances.plot.bar(ax=ax)
+ax.set_title("Feature Importances")
+ax.set_ylabel("Mean decrease in impurity")
+fig.tight_layout()
+
+plt.show()
+```
+
+:::
+
+## Tuning Random Forests
+
+The number of variables considered for each split is called `mtry` in `caret`. By default, `mtry` is $\sqrt{p}$, with $p$ being number of variables.
+
+We use validation (out-of-bag samples) to tune along with number of trees. We are measuring the total amount of error across all the samples we did not take.
+
+For each `mtry`, the same bootstrap samples are used to give each attempt a fair shot.
+
+```{r tuning-rf}
+set.seed(12345)
+tuneRF(x = training_df[, -1], y = training_df[, 1], plot = TRUE, ntreeTry = 500, stepFactor = 0.5)
+```
+
+## Variable Selection
+
+Random forests use all the variables since they are averaged across all the trees used to build the model. Variable selection can be performed by a variety of methods.
+
+-   Many permutations of including / excluding variables
+-   Compare variables to random variable (newer way)
+
+```{r random-variable-selection}
+training_df <- training_df %>% mutate(random = rnorm(2051))
+
+set.seed(12345)
+rf_ames <- randomForest(Sale_Price ~ ., data = training_df, ntree = 500, mtry = 4, importance = TRUE)
+
+varImpPlot(rf_ames, sort = TRUE, n.var = 15, main = "Look for Variables Below Random Variable")
+```
+
+The idea is that any variables that are below the completely random variable do not perform as well overall.
+
+## Summary
+
+If you are building a random forest model for a client, you want to focus on the predictions, results, and *maybe* the variable importance. Beyond that, the interpretability may be too complex.
+
+**Advantages:**
+
+-   Computationally fast
+-   Trees trained simultaneously
+-   Accurate classification model
+-   Variable importance
+-   Missing data is OK 
+
+**Disadvantages:**
+
+-   No "interpretability" other than variable importance
+-   Tuning parameters
+
+# Interpretability
+
+Most machine learning models are not interpretable in the classical sense. The relationships modeled are **not linear** so the interpretations are much more complicated than a typical regression. 
+
+Similar to GAMs however, we can get a general idea of overall pattern for a predictor variable compared to a target using **partial dependence plots**.
+
+```{r partial-dependence}
+partialPlot(rf_ames, training_df, Year_Built)
+partialPlot(rf_ames, training_df, Garage_Area)
+```
+
+# Boosting
+
+**Boosting** is similar to bagging in that we are still taking bootstrapped samples from the dataset. However, unlike bagging, observations are **not sampled randomly**. Boosting assigns weight to each trianing observation and uses the weight as a sampling distribution. In particular, we assign higher weight to the observations that are **harder to classify**.
+
+![Probability of Selection Observation](images/boosting-probability.png){#fig-boosting-probability}
+
+Boosting is trying to learn from its mistakes by selecting the observations that it gets wrong more often. Bagging will build the ensemble model **simultaneously**, but since each model in boosting informs the next we have to build models **sequentially**.
+
+For our previous tree sample our process is:
+
+1.  Build a tree with only one split
+2.  Start with equal weights for each observation
+3.  Update weights each round based on the classification error
+
+![Three Boosting Rounds](images/three-boosting-rounds.png){#fig-three-boosting-rounds}
+
+# AdaBoost
+
+Boosted ensembles weight the votes of each classifier by a function of their accuracy. If the classifier get the higher weighted observations wrong, it has a higher error rate.
+
+Put simply, more accurate guesses are more important.
+
+## Classifier Weights
+
+Observations are each weighted based on how well they were predicted in the previous round.
+
+Let the weights for each round be denoted as $\omega_i$ and the predictions for round be $\hat{y}_{1,i}, \hat{y}_{2,i}$.
+
+The prediction for each observation is derived from a classification as follows:
+
+$$
+\hat{y}_i = \omega_1 \hat{y}_{1,i} + \omega_2 \hat{y}_{2,i} + \cdots
+$$
+
+# Gradient Boosting
+
+Idea behind gradient boosting to use simple model to predict the target. With the next model, we are trying to predict the initial model's error, $\epsilon_1$. Let's say the first variable predicted most of the signal, then by predicting each error we are giving the other variables a chance to predict the signal where the first variable went wrong.
+
+The idea of sequential building on the errors is why we consider this *boosting*. However, it's different from the previous idea of boosting where we were applying weight classifiers to observations.
+
+$$
+y = f_1(x) + f_2(x) + f_3(x) + \cdots + f_k(x) + \epsilon_k
+$$
+
+-   Each function $f_i(x)$ is trying to predict the previous error $\epsilon_{i-1}$
+
+## Overfitting Protection
+
+Gradient boosting regularizes with tunable parameters to prevent overfitting:
+
+1.  Reduce weight of each of the error models for prediction.
+
+$$
+y = f_1(x) + \eta f_2(x) + \eta f_3(x) + \cdots + \eta f_k(x) + \epsilon_k
+$$
+
+-   Smaller values of $\eta$ lead to less overfitting
+
+2.  Number of trees used in the prediction where larger number of trees increases overfitting
+3.  Other parameters introduced over the years...
+
+## Gradient Boosted Trees
+
+Gradient boosting yields an **additive ensemble model**. There is no averaging of individual models. Predictions from each model are summed together for final prediction.
+
+The key to gradient boosting is using weak learners (shallow trees). Although each learner would make poor predictions on their own, their addition provides good predictions.
+
+![Weak Learner Ensemble](images/weak-learner-ensemble.png){#fig-weak-learner-ensemble}
+
+# Gradient Descent
+
+Models are optimized to some form of **loss function**. For example, linear regression and decision trees typically look at minimizing SSE. The SSE represents the overall loss of the model. To find the model with the lowest loss function, we can use **gradient descent**.
+
+Gradient descent iteratively updates parameters in order to minimize the loss function by moving int he direction of "steepest descent".
+
+![Gradient Descent](images/gradient-descent.png){#fig-gradient-descent}
+
+Step size is updated at each step by multiplying the gradient by a **learning rate**. Without a learning rate, wem igth take steps too big or too small (too long to optimize).
+
+## Stochastic Gradient Descent
+
+Not all loss functions are convex and some have local minima or plateaus that make finding the global minimum difficult.
+
+**Stochastic gradient descent** attempts to solve this by randomly sampling a fraction of the training observations for each tree in the ensemble. This makes the algorithm faster and more reliable, but may not always find the true overall minimum.
+
+## Training a Gradient Boosted Machine
+
+Grid search is very time consuming because of the time it takes to build these models. We can tune parameters one at a time:
+
+1.  Start with relatively high learning rate (default of 0.1 is typically good).
+2.  Determine optimal number of trees for this learning rate.
+3.  Fix tree tuning parameters (number of trees, depth, etc.) and tune learning rate.
+4.  Set learning rate again at this new value and retune tree parameters.
+5.  Try lowering learning rate again to see any improvements.
+
+# XGBoost Introduction
+
+**Extreme gradient boosting** has different advantages over traditional GBM:
+
+1.  Additional regularization parameters to prevent overfitting.
+2.  Settings to stop model assessment when adding more trees isn't helpful.
+3.  Supports parallel processing, but still must be trained sequentially.
+4.  Variety of loss functions.
+5.  Allows generalized linear models as well as tree-based models (all still weak learners).
+6.  Implemented in R, Python, Julia, Scala, Java, C++, etc.
+
+:::{.panel-tabset group="language"}
+# R
+
+```{r}
+# library(xgboost)
+
+# train_x <- model.matrix(Sale_Price ~ ., data = training)[, -1]
+# train_y <- training$Sale_Price
+
+# set.seed(12345)
+# xgb_ames <- xgboost(data = train_x, label = train_y, subsample = 0.5, nrounds = 100)
+```
+
+# Python
+
+```{python py-xgboost}
+from xgboost import XGBRegressor
+
+xgb_ames = XGBRegressor(n_estimators=50, subsample=0.5, random_state=12345)
+xgb_ames.fit(X_train, y_train)
+```
+
+```{python py-cv-xgboost}
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {
+    "n_estimators": list(range(5, 51, 5)), # <1>
+    "eta": [0.1, 0.15, 0.2, 0.25, 0.3], # <2>
+    "max_depth": list(range(1, 11)), # <3>
+    "subsample": [0.25, 0.5, 0.75, 1] # <4>
+}
+
+xgb = XGBRegressor()
+
+grid_search = GridSearchCV(estimator=xgb, param_grid=param_grid, cv = 10)
+# grid_search.fit(X_train, y_train)
+```
+1.  `n_estimators` is the number of trees we will use
+2.  `eta` is the regularization parameter
+3.  `max_depth` is the maximum depth of our trees
+4.  `subsample` is the fraction of our data that we use in stochastic gradient descent
+
+:::
+
+## Variable Importance in XGBoost
+
+XGBoost provides 3 built-in measures of variable importance:
+
+1.  **Gain**: Equivalent metric in random forests
+2.  **Coverage**: Measures relative number of observations influenced by the variable
+3.  **Frequency**: Percentage of splits in the whole ensemble that use this variable
+
+```{r xgboost-importance}
+# set.seed(12345)
+# xgb_ames <- xgboost(data = train_x, label = train_y, subsample = 1, nrounds = 24, eta = 0.25, max_depth = 5)
+# xgb.importance(features_names = colnames(train_x), model = xgb_ames)
+```
+
+```{r}
+# xgb.ggplot.importance(xgb.importance(feature_names = colnames(train_x), model = xgb_ames))
+```
+
+One of the advantages of XGBoost is that it tries to cluster variables in terms of their importance. There is some notion of statistically different importances between variables.
+
+## Variable Selection
+
+XGBoost uses all variables since they are averages across all the trees used to build the model.
+
+Variable selection can be performed by permutations of including and excluding variables. However, this is extremely time confusing.
+
+Similarly to the random forest models, we can compare variables to a random variable and potentially exclude variables that end up less important than the random variable.
+
+# Gradient Boosting Summary
+
+**Advantages:**
+
+-   Very accurate
+-   Tend to outperform random forests when properly trained and tuned
+-   Variable importance provided
+
+**Disadvantages:**
+
+-   Lacks "interpretability" beyond variable importance
+-   Computationally slower than random forests
+-   More tuning parameters than random forest
+-   Harder to optimize
+-   More sensitive to tuning parameters

@@ -1,0 +1,151 @@
+---
+title: Cox Regression Model
+date: 11/06/2023
+date-modified: 11/09/2023
+---
+
+# Proportional Hazards
+
+The alternative to modeling failure time is to model hazards.
+
+The hazard function is written as:
+
+$$
+\begin{align*}
+h(t) &= e^{\beta_0 + beta_1x_{i,1} + \cdots + \beta_k x_{i,k}} \\
+& = h_0(t)e^{\beta_1x_{i,1} + \cdots + \beta_k x_{i,k}}
+\end{align*}
+$$
+
+-   $h_0(t)$ is the baseline hazard function
+
+The proportional hazard model models the log of the hazard directly:
+
+$$
+\log h(t) = \log h_0(t) + \beta_1x_{i,1} + \cdots + \beta_k x_{i,k}
+$$
+
+Predictions shift the hazard rather than directly shifting the failure time like in the AFT model.
+
+The hazard ratio between two groups no longer depend son time. We assume that there is a **constant proportion** on hazards.
+
+$$
+\begin{align*}
+h_i(t) &= h_0(t)e^{\beta_1 x_{i,1} + \cdots + \beta_k x_{i,k}} \\
+h_j(t) &= h_0(t)e^{\beta_1 x_{j,1} + \cdots + \beta_k x_{j,k}} \\
+\frac{h_i(t)}{h_j(t)} &= e^{\beta_1(x_{i,1} - x_{j,1}) + \cdots + \beta_k(x_{i,k} - x_{j,k})}
+\end{align*}
+$$
+
+The important takeaway from proportional hazards is that we can say things like, "On average, a customer who signed up via direct mail stays twice as long compared to a customer who signed up via telemarketing." 
+
+The results do not say how long someone will last, only **relative length of tenure** between two groups. We assume that factors measured at an initial time point have a uniform proportional effect on hazards between indviiduals or groups.
+
+# Hazard Ratio
+
+If a parameter estimate is positive, increases in that variable increase the expected hazard (increase the rate/risk of failure). If a parameter estimate is negative, increases in that variable decrease expected hazard (decrease the rate/risk of failure).
+
+$100 \cdot (e^\beta - 1)\%$ is the percent change in expected hazard for each one-unit cincrease in the variable. $e^\beta$ is the hazard ratio or the ratio of the hazards for each one-unit increase in the variable. Again, we made the assumption that the proportions are constant.
+
+# Estimation
+
+In AFT and PH models, estimation depends on some distributional assumption around either failure time or baseline hazard. In PH models, the likelihood function can be split into two pieces:
+
+-   First piece depends on $h_0(t)$ and the parameters
+    -   Treat as non-parametric (no assumptions about form of distribution)
+-   Second piece depends only on the covariates
+    -   Treat as parameteric (know the form)
+
+Using this semiparameteric model approach, we can ignore ever estimating anything about the baseline hazard $h_0(t)$. Cox disregarded the first piece of the likelihood and maximized the second piece and estimate sare obtained by maximizing the **partial likelihood**--one piece depends on the predictors, not the entire thing.
+
+## Partial Likelihood Downfalls
+
+Some information about parameters is lost due to partial likelihood estimation--inefficient estimates. Estimates still have desired properties:
+
+-   Ubiased
+-   Estimates can be tested in same way as before
+
+## Comparative Risks
+
+The primary value from Cox regression is the interpretation of the individual coefficients--we are estimating the hazard ratio compared to some reference.
+
+Cox regression essentially estimates subject's relative likelihood of failure at specific time compared to everyone else in the risk set at that time. Any estimation/inference is still valid, but contrary to AFT, Cog regression **does not make absolute predictions of time or risk**.
+
+## Assumptions
+
+-   Linearity
+-   Proportional hazards (constant proportions over time)
+
+# Automatic Selection Techniques
+
+We can still do forward, backward, stepwise regression techniques in Cox regression. We are again using AIC, BIC, p-value measures to compare models!
+
+# Predictions
+
+After obtaining parameter estimates from partial likelihood, we can plug it into "full likelihood" and nonparametrically estimate the remaining piece.
+
+Now we can estimate survival curves for predefined predictor values.
+
+# Model Assessment
+
+Concordance is a popular method to assess model performance.
+
+-   For all possible event and non-event pairs we want to assign the higher predicted value to the subject that had the event.
+-   How well does model rank who will have event sooner?
+
+## Concordance
+
+What is risk in this context?
+
+$$
+\text{Risk} = \hat{\beta}_1 x_{i,1} + \cdots + \hat{\beta}_k x_{i,k}
+$$
+
+Example:
+
+-   Person 1: Event occurs at $t = 3$ and risk is 1.5
+-   Person 2: Event (or censored) occurs at $t = 7$ and risk is 0.3
+-   Concordant pair since person with higher risk score had the event first
+
+If the time that occurs first is censored, then the pair is **incomparable**. if both observations have the same predicted risk, then the pair is **tied in the "x-space"**. If both observations have the same event time, then this pair is **tied in the "y-space"**.
+
+# Diagnostics
+
+## Checking Assumptions
+
+We can check assumptions of the proportional hazards model using residuals.
+
+-   Martingale (check linearity)
+-   Schoenfeld (check PH)
+
+### Martingale Residuals
+
+Difference between observed number of events and expected number of events at a specific point in time (determined by model) "integrated over the time for which that subject was at risk."
+
+### Schoenfeld Residuals
+
+Schoenfeld residuals are calculated for each variable for each individual. These are the differences between the actual value of the variable and expected value for someone who had the event occur at that time.
+
+# Non-Proportional Hazard Models
+
+In PH models, we assume effects are **constant over time** so the hazard ratio is independent of time. If this doesn't hold true, then the effect of the predictor variable can change over time so we need new effects, $\beta(t)$, called **time-dependent coefficients**.
+
+$$
+\log h(t) = \beta_1x_{i,1} + \beta_2(t)x_{i,2}
+$$
+
+-   Time-dependent coefficients are functions of time, $t$.
+-   If $\beta = 0$, then effect doesn't depend on time.
+-   If $\beta \neq 0$, then effect does depend on time and PH assumptino is not satisfied.
+
+## Schoenfeld
+
+If coefficients, do **NOT** depend on time, then the PH model holds and graphs of the Schoenfeld residuals should be a horizontal line. 
+
+There is a test that has $H_0: \beta = 0$ and $H_a: \beta \neq 0$ such that we want to fail to reject **H_0** to assume there is no relationship with time. We prefer this test over the graphs--the graphs aren't necesssarily too informative.
+
+However, these residual tests should be done **after** model selection has occurred.
+
+You can also test out different transformations of time like the log of time. However, in your model you have to go with the same transformation for all variables, whichever you decide to move forward with.
+
+## Interpretation

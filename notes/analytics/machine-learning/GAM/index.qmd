@@ -89,9 +89,7 @@ MARS looks for a point in the range of $x$ where two linear functions on either 
 
 ![Different Knot Values](images/many-knots.png){#fig-many-knots}
 
-Algorithm continnues on each piece of piecewise function until many knots are found--this will overfit your data. MARS uses a **pruning** algorithm to remove knots that do not improve the model.
-
-The pruning is calculated using generalized cross-validation which is a computational shortcut for leave-one-out cross-validation.
+Algorithm continnues on each piece of piecewise function until many knots are found--this will overfit your data. MARS uses a **pruning** algorithm to remove knots that do not improve the model. The way it does this is by comparing the model without the knot to the model with the knot and selects the model which does better on **generalized cross-validation**. This is repeated for each variable we provide to the model.
 
 For open-source software, the implementation is **EARTH** (Enhanced Adaptive Regression Through Hinges).
 
@@ -131,3 +129,124 @@ evimp(mars1)
 Each variable following the first variable is the amount of improvement in the residual sum of squares relative to the amount of improvement in the first variable. 
 
 Be careful, we have no notion of how these variables affect the response just which variables we think are the most important in the model. We trade interpretability for predictive power.
+
+# Smoothing
+
+Smoothing is a way to reduce the variance of our model. In GAMs, we can use **smoothing functions** to approximate a curve representing the signal of our data. One common example is **LOESS (locally estimated scatterplot smoothing)**.
+
+## LOESS
+
+LOESS is a non-parametric regression method that estimates the latent signal in a point-wise fashion. Essnetially, for each point we calculate a local weighted regression of a fixed window size around the point and record the point's prediction along the local regression. However, more weight is assigned to points closer to the point of interest while less weight is assigned to points further away. 
+
+Large window sizes result in higher bias (more points to consider) while lower values will increase variance (less points to consider). The window size is a hyperparameter that we can tune.
+
+![LOESS Visualized](images/loess-visual.png){#fig-loess-visual}
+
+## Smoothing Splines
+
+**Smoothing splines** have a knot at **every single observation** for piecewise regression. We use a penalty parameter to counterbalance the overfitting.
+
+Smoothing splines are optimizing the following equation:
+
+$$
+\min \sum_{i=1}^{n} (y_i - s(x_i))^2 + \lambda \int s''(t_i)^2 dt
+$$
+
+-   The first sum is the residual sum of squares
+-   The second term is the penalty applied to integral of second derivative of smoothing function
+-   The penalty $\lambda$ is estimated with an approximation of leave one out cross validation
+
+The idea behind the second derivative in the penalty term is that it gives us an idea of how fast our slopes (first derivatives) are changing. The larger the second derivative, the faster the slope is changing. We want to penalize large changes in slope to lower the variance of our model.
+
+## Regression Splines
+
+Essentially **regression splines** are a computationally nicer version of smoothing splines.
+
+# Implementing Smoothing
+
+:::{.panel-tabset group="language"}
+# R 
+
+```{r}
+library(mgcv)
+
+gam1 <- gam(Sale_Price ~ s(Garage_Area), data = training)
+summary(gam1)
+```
+
+We see a section for coefficients not involved in splines and a section for smoothing terms. The p-value for the spline of `Garage_Area` shows the significance of the variable to the model **as a whole.** These p-values are essentially results from likelihood ratio tests. We can plot the relationship using the `plot` function:
+
+```{r}
+plot(gam1, se = TRUE, col = "blue")
+```
+
+We can also apply this to multiple variables:
+
+```{r}
+gam2 <- gam(
+    Sale_Price ~ s(Bedroom_AbvGr, k = 5) +
+        s(Year_Built) +
+        s(Mo_Sold) +
+        s(Lot_Area) +
+        s(First_Flr_SF) +
+        s(Second_Flr_SF) +
+        s(Garage_Area) +
+        s(Gr_Liv_Area) +
+        s(TotRms_AbvGrd) +
+        Street +
+        Central_Air +
+        factor(Fireplaces) +
+        factor(Full_Bath) +
+        factor(Half_Bath),
+    method = "REML", data = training
+)
+summary(gam2)
+```
+
+There are some variables with high p-values that can be removed. The `gam` function has a `select` option which will penalize variable edf values.
+
+```{r}
+sel_gam2 <- gam(
+    Sale_Price ~ s(Bedroom_AbvGr, k = 5) +
+        s(Year_Built) +
+        s(Mo_Sold) +
+        s(Lot_Area) +
+        s(First_Flr_SF) +
+        s(Second_Flr_SF) +
+        s(Garage_Area) +
+        s(Gr_Liv_Area) +
+        s(TotRms_AbvGrd) +
+        Street +
+        Central_Air +
+        factor(Fireplaces) +
+        factor(Full_Bath) +
+        factor(Half_Bath),
+    method = "REML",
+    select = TRUE,
+    data = training
+)
+summary(sel_gam2)
+```
+
+# Python
+
+```{python}
+
+```
+
+:::
+
+# Summary
+
+Advantages:
+
+-   Allows for non-linear relationships without trying out many transformations
+-   Improved predictions
+-   Still has some "interpretation"
+-   Computationally fast
+
+Disadvantages:
+
+-   Can incorporate interactions but can take time
+-   Not good for large numbers of variables
+-   Multicollinearity is still a problem

@@ -1,0 +1,110 @@
+---
+title: Neural Networks
+date: 11/13/2023
+---
+
+```{r}
+#| include: false
+
+library(AmesHousing)
+library(tidyverse)
+
+set.seed(4321)
+
+ames <- make_ordinal_ames() %>%
+    mutate(id = row_number())
+training <- ames %>% sample_frac(0.7)
+testing <- anti_join(ames, training, by = "id")
+
+training <- training %>%
+    select(Sale_Price, Bedroom_AbvGr, Year_Built, Mo_Sold, Lot_Area, Street, Central_Air, First_Flr_SF, Second_Flr_SF, Full_Bath, Half_Bath, Fireplaces, Garage_Area, Gr_Liv_Area, TotRms_AbvGrd)
+```
+
+# Structure
+
+Neural networks are organized as a network of neurons through layers. Input variables are considered neurons on the **bottom layer**. The output variable is considered the neuron on the **head layer**. The layers in between are **hidden layers** which transform the input variables through non-linear activation functions to try and best model the output variable.
+
+A neural network is a linear transformation of nonlinear transformations of our inputs and weights spread out across different layers.
+
+![Neural Net Structure](images/neural-net-structure.png){#fig-nnet-structure}
+
+![Activation Functions](images/activation-functions.png){#fig-activation-functions}
+
+# Backpropagation
+
+There are two main phases: a forward and backward phase.
+
+In the forward phase:
+
+1.  Start with randomly initialized weights
+2.  Calculations are passed forward through the network
+3.  Output predicted value computed
+
+In the backward phase:
+
+1.  Predicted value compared with actual value to compute error
+2.  Work backwards through the network to adjust weights to make the prediction better 
+
+We want to repeat this process until we have some notion of convergence.
+
+# Implementing Neural Nets in R
+
+## Standardization
+
+Neural nets work best when input data **are scaled**. For bell-shaped data, statistical z-scores standardization can work. For severely assymmetric data, midrange standardization works better:
+
+$$
+\frac{x - \text{midrange}(x)}{0.5 \cdot \text{range}(x)} = \frac{x - \frac{(\max(x) + \min(x))}{2}}{0.5 \cdot (\max(x) - \min(x))}
+$$
+
+
+```{r}
+cols_to_scale <- c("Sale_Price", "Bedroom_AbvGr", "Year_Built", "Mo_Sold", "Lot_Area", "First_Flr_SF", "Second_Flr_SF", "Garage_Area", "Gr_Liv_Area", "TotRms_AbvGrd")
+training <- training %>%
+    mutate(Full_Bath = as.factor(Full_Bath), Half_Bath = as.factor(Half_Bath), Fireplaces = as.factor(Fireplaces))
+
+scaled_training <- training %>%
+    mutate(across(all_of(cols_to_scale), scale))
+```
+
+```{r nnet}
+library(nnet)
+set.seed(12345)
+
+nn_ames <- nnet(Sale_Price ~ ., data = training, size = 5, linout = TRUE)
+```
+
+## Optimize Number of Hidden Nodes and Decay
+
+```{r tuning-nnet}
+library(caret)
+tune_grid <- expand.grid(
+    .size = c(3, 4, 5, 6, 7),
+    .decay = c(0, 0.5, 1)
+)
+
+set.seed(12345)
+
+nn_ames_caret <- train(Sale_Price ~ ., data = training, method = "nnet", tuneGrid = tune_grid, trControl = trainControl(method = "cv", number = 10), trace = FALSE, linout = TRUE)
+
+nn_ames_caret$bestTune
+```
+
+# Variable Selection
+
+Neural networks typically do not care about variable selection. All variables are used in a complicated and mixed way. If you want to do variable selectinon, you can examine weights for each variable, but this is not a clear selection technique.
+
+# Summary
+
+**Advantages:**
+
+-   Usd for categorical / numerical target variables
+-   Capable of modeling complex nonlinear patterns
+-   No assumptions about the data distributions
+
+**Disadvantages:**
+
+-   No insights for variable importance
+-   Extremely computationally intensive
+-   Tuning of parameters
+-   Prone to overfitting training data

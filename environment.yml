@@ -16,4 +16,5 @@ dependencies:
   - statsforecast
   - pytest
   - mlxtend
+  - scikit-survival
 prefix: /opt/homebrew/Caskroom/miniconda/base/envs/msa

@@ -1,0 +1,27 @@
+---
+title: Naive Bayes Model
+date: 11/14/2023
+---
+
+When we need to classify observations there are two difference sources of evidence:
+
+-   Similarity to other observations based on certain metrics / variables
+-   Past decisions on classifications of observations like it
+
+The second approach is a Bayesian approach.
+
+In @fig-priors, we are establishing what our prior probabilities are based on current observations.
+
+![Naive Bayes Priors](images/priors.png){#fig-priors}
+
+If we introduce a new observation and take the predefined closest number of observations, then we can get conditional probabilities along with our knowledge of prior probabilities.
+
+![Naive Bayes Conditionals](images/conditionals.png){#fig-conditionals}
+
+We then multiply the conditionals with the priors and scale the probabilities to sum up to 1. The higher probability wins.
+
+![Naive Bayes Results](images/results.png){#fig-results}
+
+# Assumption
+
+One of the big assumptions of naive Bayes classification is that **predictor variables are independent in their effects on the classification**.

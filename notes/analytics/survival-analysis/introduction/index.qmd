@@ -194,4 +194,37 @@ For each group, calculate expected events and compare to observed events. This i
 
 ## Wilcoxon Test
 
-Similar to Log-rank test except that we now use weights. 
+Similar to Log-rank test except that we now use weights. This test places larger emphasis on earlier event times.
+
+# Hazard Function
+
+The **hazard function** is the instantaneous rate of failure at time $t$ given that the individual has survived up to time $t$.
+
+We have two common types of hazard functions: harzard probabilities and hazard rates.
+
+## Hazard Probabilities
+
+$$
+h(t) = P(t < T < t + 1 | T > t)
+$$
+
+In general, hazard probability can be interpreted as "assuming the event has not occurred yet, this is the probability the event occurs by the next time point."
+
+An example is that a customer has survived for a certain length of time, so the customer's tenure is $t$. What is the probability that the customer leaves before $t + 1$?
+
+:::{layout-ncol="2"}
+![Hazard Probability Events](images/hazard-probability-events.png){#fig-hazard-probability-events}
+
+![Hazard Probability Calculations](images/hazard-probability-calculations.png){#fig-hazard-probability-calculations}
+:::
+
+## Hazard Rates
+$$
+h(t) = \lim_{\Delta t \to 0} \frac{P(t < T < t + \Delta t | T > t)}{\Delta t}
+$$
+
+Hazard rates have a slightly different interpretation than hazard probabilities because they are limits. Hazard rates are the instantaneous event rate at time $t$ for the risk set at time $t$. 
+
+The inverse of the hazard function is the length of time before the next occurrence.
+
+The **cumulative hazard probability** is just the total hazard rate up until time $t$--denoted by $\Lambda(t)$.
