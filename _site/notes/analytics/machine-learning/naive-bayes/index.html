@@ -63,6 +63,8 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -146,6 +148,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#assumption" id="toc-assumption" class="nav-link active" data-scroll-target="#assumption"><span class="header-section-number">1</span> Assumption</a></li>
+  <li><a href="#underlying-math" id="toc-underlying-math" class="nav-link" data-scroll-target="#underlying-math"><span class="header-section-number">2</span> Underlying Math</a></li>
   </ul>
 </nav>
     </div>
@@ -185,6 +188,35 @@ ul.task-list li input[type="checkbox"] {
 <section id="assumption" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Assumption</h1>
 <p>One of the big assumptions of naive Bayes classification is that <strong>predictor variables are independent in their effects on the classification</strong>.</p>
+</section>
+<section id="underlying-math" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Underlying Math</h1>
+<p><strong>Posterior probabilities</strong> are the predicted probability of success given values of variables for this observation. The <strong>prior probability</strong> is the probability that an observation has those variable values.</p>
+<p>Bayesian classifiers are based on Bayes’ Theorem. Naive Bayes assumes that the effect of the inputs are independent of one another:</p>
+<p>Recall Bayes’ Theorem:</p>
+<p><span class="math display">\[
+P(y_i | x_1, x_2, \cdots, x_p) = \frac{P(y_i)P(x_1, x_2, \cdots, x_p | y_i)}{P(x_1, x_2, \cdots, x_p)}
+\]</span></p>
+<p>If events are independent like Naive Bayes assumes then:</p>
+<p><span class="math display">\[
+P(A \cap B) = P(A) \cdot P(B)
+\]</span></p>
+<p><span class="math display">\[
+P(A \cap B|C) = P(A|C) \cdot P(B|C)
+\]</span></p>
+<div id="fig-example" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/medium-blue-example.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;4: Naive Bayes Example</figcaption>
+</figure>
+</div>
+<p>If certain values don’t occur for all levels of the outcome, then the probability will zero out. We use a Laplace correction to make sure that we can still estimate probabilities.</p>
+<div id="fig-laplace" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/laplace-correction.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;5: Laplace Correction</figcaption>
+</figure>
+</div>
 
 
 </section>

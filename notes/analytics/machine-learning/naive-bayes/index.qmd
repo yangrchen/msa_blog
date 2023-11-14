@@ -25,3 +25,31 @@ We then multiply the conditionals with the priors and scale the probabilities to
 # Assumption
 
 One of the big assumptions of naive Bayes classification is that **predictor variables are independent in their effects on the classification**.
+
+# Underlying Math
+
+**Posterior probabilities** are the predicted probability of success given values of variables for this observation. The **prior probability** is the probability that an observation has those variable values.
+
+Bayesian classifiers are based on Bayes' Theorem. Naive Bayes assumes that the effect of the inputs are independent of one another:
+
+Recall Bayes' Theorem:
+
+$$
+P(y_i | x_1, x_2, \cdots, x_p) = \frac{P(y_i)P(x_1, x_2, \cdots, x_p | y_i)}{P(x_1, x_2, \cdots, x_p)}
+$$
+
+If events are independent like Naive Bayes assumes then:
+
+$$
+P(A \cap B) = P(A) \cdot P(B)
+$$
+
+$$
+P(A \cap B|C) = P(A|C) \cdot P(B|C)
+$$
+
+![Naive Bayes Example](images/medium-blue-example.png){#fig-example}
+
+If certain values don't occur for all levels of the outcome, then the probability will zero out. We use a Laplace correction to make sure that we can still estimate probabilities.
+
+![Laplace Correction](images/laplace-correction.png){#fig-laplace}

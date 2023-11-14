@@ -4,17 +4,18 @@ channels:
   - defaults
 dependencies:
   - python=3.11
-  - pandas
-  - jupyter
   - numpy
   - matplotlib
-  - statsmodels
-  - seaborn
-  - ipython
-  - tabulate
   - scikit-learn
-  - statsforecast
-  - pytest
-  - mlxtend
+  - pandas
+  - jupyter
   - scikit-survival
+  - tabulate
+  - ipython
+  - mlxtend
+  - pytest
+  - statsmodels
+  - statsforecast
+  - seaborn
+  - xgboost
 prefix: /opt/homebrew/Caskroom/miniconda/base/envs/msa
