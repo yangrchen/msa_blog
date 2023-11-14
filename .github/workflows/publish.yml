@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
   push:
-    branches: main
+    branches: [main]
 
 name: Quarto Publish
 
@@ -46,11 +46,11 @@ jobs:
           key:
             ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
 
-      - name: Install Conda dependencies
-        uses: conda-incubator/setup-miniconda@v2
+      - name: Install Mamba dependencies
+        uses: mamba-org/setup-micromamba@v1
         with:
-          activate-environment: build
           environment-file: environment.yml
+          environment-name: build
           use-only-tar-bz2: true
 
       - name: Render and Publish
