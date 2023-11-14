@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="description" content="MSA Summer Primer 2023 Notes">
+<meta name="dcterms.date" content="2023-11-14">
 
-<title>Yang MSA - Primer</title>
+<title>Yang MSA - Naive Bayes Model</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,25 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<link href="../../favicon.ico" rel="icon">
-<script src="../../site_libs/quarto-listing/list.min.js"></script>
-<script src="../../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../favicon.ico" rel="icon">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -64,40 +62,11 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="../../../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -107,7 +76,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Yang MSA</span>
     </a>
   </div>
@@ -118,11 +87,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../notes/index.html" rel="" target="">
+    <a class="nav-link" href="../../../../notes/index.html" rel="" target="">
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../blog/index.html" rel="" target="">
+    <a class="nav-link" href="../../../../blog/index.html" rel="" target="">
  <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
@@ -140,15 +109,11 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Primer</h1>
-                  <div>
-        <div class="description">
-          MSA Summer Primer 2023 Notes
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">primer</div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Naive Bayes Model</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">analytics</div>
+                <div class="quarto-category">machine learning</div>
               </div>
                   </div>
   </div>
@@ -163,256 +128,100 @@ ul.task-list li input[type="checkbox"] {
             </div>
     </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 14, 2023</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(6)</span></div><div class="category" data-category="hypothesis testing">hypothesis testing <span class="quarto-category-count">(1)</span></div><div class="category" data-category="primer">primer <span class="quarto-category-count">(6)</span></div><div class="category" data-category="probability">probability <span class="quarto-category-count">(1)</span></div><div class="category" data-category="statistics">statistics <span class="quarto-category-count">(2)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#assumption" id="toc-assumption" class="nav-link active" data-scroll-target="#assumption"><span class="header-section-number">1</span> Assumption</a></li>
+  <li><a href="#underlying-math" id="toc-underlying-math" class="nav-link" data-scroll-target="#underlying-math"><span class="header-section-number">2</span> Underlying Math</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
+<p>When we need to classify observations there are two difference sources of evidence:</p>
+<ul>
+<li>Similarity to other observations based on certain metrics / variables</li>
+<li>Past decisions on classifications of observations like it</li>
+</ul>
+<p>The second approach is a Bayesian approach.</p>
+<p>In <a href="#fig-priors">Figure&nbsp;1</a>, we are establishing what our prior probabilities are based on current observations.</p>
+<div id="fig-priors" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/priors.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Naive Bayes Priors</figcaption>
+</figure>
+</div>
+<p>If we introduce a new observation and take the predefined closest number of observations, then we can get conditional probabilities along with our knowledge of prior probabilities.</p>
+<div id="fig-conditionals" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/conditionals.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Naive Bayes Conditionals</figcaption>
+</figure>
+</div>
+<p>We then multiply the conditionals with the priors and scale the probabilities to sum up to 1. The higher probability wins.</p>
+<div id="fig-results" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/results.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Naive Bayes Results</figcaption>
+</figure>
+</div>
+<section id="assumption" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Assumption</h1>
+<p>One of the big assumptions of naive Bayes classification is that <strong>predictor variables are independent in their effects on the classification</strong>.</p>
+</section>
+<section id="underlying-math" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Underlying Math</h1>
+<p><strong>Posterior probabilities</strong> are the predicted probability of success given values of variables for this observation. The <strong>prior probability</strong> is the probability that an observation has those variable values.</p>
+<p>Bayesian classifiers are based on Bayes’ Theorem. Naive Bayes assumes that the effect of the inputs are independent of one another:</p>
+<p>Recall Bayes’ Theorem:</p>
+<p><span class="math display">\[
+P(y_i | x_1, x_2, \cdots, x_p) = \frac{P(y_i)P(x_1, x_2, \cdots, x_p | y_i)}{P(x_1, x_2, \cdots, x_p)}
+\]</span></p>
+<p>If events are independent like Naive Bayes assumes then:</p>
+<p><span class="math display">\[
+P(A \cap B) = P(A) \cdot P(B)
+\]</span></p>
+<p><span class="math display">\[
+P(A \cap B|C) = P(A|C) \cdot P(B|C)
+\]</span></p>
+<div id="fig-example" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/medium-blue-example.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;4: Naive Bayes Example</figcaption>
+</figure>
+</div>
+<p>If certain values don’t occur for all levels of the outcome, then the probability will zero out. We use a Laplace correction to make sure that we can still estimate probabilities.</p>
+<div id="fig-laplace" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/laplace-correction.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;5: Laplace Correction</figcaption>
+</figure>
+</div>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="primer" data-listing-date-sort="1686700800000" data-listing-file-modified-sort="1699995387967" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
-<div class="thumbnail">
-<p><a href="../../notes/primer/categorical_data/index.html"> <p class="card-img-top"><img src="categorical_data/index_files/figure-html/fig-chi-square-output-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/categorical_data/index.html">
-<h3 class="no-anchor listing-title">
-Categorical Data Analysis
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-</div>
-<a href="../../notes/primer/categorical_data/index.html">
-<div class="listing-description">
-In categorical data analysis, we use qualitative data types which describes data whose measurement scale is by categorical.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/categorical_data/index.html">
-<div class="listing-date">
-Jun 14, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="primer" data-listing-date-sort="1686528000000" data-listing-file-modified-sort="1699995387967" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15">
-<div class="thumbnail">
-<p><a href="../../notes/primer/anova/index.html"> <p class="card-img-top"><img src="anova/images/one_way_anova_table.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/anova/index.html">
-<h3 class="no-anchor listing-title">
-Analysis of Variance
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-</div>
-<a href="../../notes/primer/anova/index.html">
-<div class="listing-description">
-One sample hypothesis…<strong></strong>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/anova/index.html">
-<div class="listing-date">
-Jun 12, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="primer,hypothesis testing,statistics" data-listing-date-sort="1686096000000" data-listing-file-modified-sort="1699995387975" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
-<div class="thumbnail">
-<p><a href="../../notes/primer/hypothesis_testing/index.html"> <p class="card-img-top"><img src="hypothesis_testing/index_files/figure-html/cell-2-output-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/hypothesis_testing/index.html">
-<h3 class="no-anchor listing-title">
-Hypothesis Testing
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('hypothesis testing'); return false;">
-hypothesis testing
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('statistics'); return false;">
-statistics
-</div>
-</div>
-<a href="../../notes/primer/hypothesis_testing/index.html">
-<div class="listing-description">
-According to the CLT, the the mean has a sampling distribution that follows a Normal distribution as long as the sample size is large enough.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/hypothesis_testing/index.html">
-<div class="listing-date">
-Jun 7, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="primer,statistics" data-listing-date-sort="1685404800000" data-listing-file-modified-sort="1699995387967" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
-<div class="thumbnail">
-<p><a href="../../notes/primer/confidence_intervals/index.html"> <p class="card-img-top"><img src="confidence_intervals/index_files/figure-html/cell-2-output-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/confidence_intervals/index.html">
-<h3 class="no-anchor listing-title">
-Confidence Intervals
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('statistics'); return false;">
-statistics
-</div>
-</div>
-<a href="../../notes/primer/confidence_intervals/index.html">
-<div class="listing-description">
-Point estimators cannot be expected to provide exact values of population parameters. <strong>Intervals</strong> provide…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/confidence_intervals/index.html">
-<div class="listing-date">
-May 30, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="primer,probability" data-listing-date-sort="1684800000000" data-listing-file-modified-sort="1699995387975" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
-<div class="thumbnail">
-<p><a href="../../notes/primer/probability/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/probability/index.html">
-<h3 class="no-anchor listing-title">
-Probability
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('probability'); return false;">
-probability
-</div>
-</div>
-<a href="../../notes/primer/probability/index.html">
-<div class="listing-description">
-<strong>Probability</strong> is a numerical measure of the likelihood of that event’s occurrence. It takes on a value in the interval <span class="math inline">\([0, 1]\)</span>.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/probability/index.html">
-<div class="listing-date">
-May 23, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="primer" data-listing-date-sort="1684713600000" data-listing-file-modified-sort="1699995387975" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
-<div class="thumbnail">
-<p><a href="../../notes/primer/fundamental/index.html"> <p class="card-img-top"><img src="fundamental/images/simple-random-sampling.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/primer/fundamental/index.html">
-<h3 class="no-anchor listing-title">
-Fundamental Statistical Concepts
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('primer'); return false;">
-primer
-</div>
-</div>
-<a href="../../notes/primer/fundamental/index.html">
-<div class="listing-description">
-There are three main pieces to statistics:
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/primer/fundamental/index.html">
-<div class="listing-date">
-May 22, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

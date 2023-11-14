@@ -147,6 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <h1 class="title">Generalized Additive Models</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analytics</div>
+                <div class="quarto-category">machine learning</div>
               </div>
                   </div>
   </div>
@@ -189,6 +190,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#variable-importance" id="toc-variable-importance" class="nav-link" data-scroll-target="#variable-importance"><span class="header-section-number">3.1</span> Variable Importance</a></li>
   </ul></li>
+  <li><a href="#smoothing" id="toc-smoothing" class="nav-link" data-scroll-target="#smoothing"><span class="header-section-number">4</span> Smoothing</a>
+  <ul class="collapse">
+  <li><a href="#loess" id="toc-loess" class="nav-link" data-scroll-target="#loess"><span class="header-section-number">4.1</span> LOESS</a></li>
+  <li><a href="#smoothing-splines" id="toc-smoothing-splines" class="nav-link" data-scroll-target="#smoothing-splines"><span class="header-section-number">4.2</span> Smoothing Splines</a></li>
+  <li><a href="#regression-splines" id="toc-regression-splines" class="nav-link" data-scroll-target="#regression-splines"><span class="header-section-number">4.3</span> Regression Splines</a></li>
+  </ul></li>
+  <li><a href="#implementing-smoothing" id="toc-implementing-smoothing" class="nav-link" data-scroll-target="#implementing-smoothing"><span class="header-section-number">5</span> Implementing Smoothing</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">6</span> Summary</a></li>
   </ul>
 </nav>
     </div>
@@ -314,8 +323,7 @@ F-statistic: 98.57 on 3 and 14 DF,  p-value: 1.188e-09</code></pre>
 <figcaption class="figure-caption">Figure&nbsp;4: Different Knot Values</figcaption>
 </figure>
 </div>
-<p>Algorithm continnues on each piece of piecewise function until many knots are found–this will overfit your data. MARS uses a <strong>pruning</strong> algorithm to remove knots that do not improve the model.</p>
-<p>The pruning is calculated using generalized cross-validation which is a computational shortcut for leave-one-out cross-validation.</p>
+<p>Algorithm continnues on each piece of piecewise function until many knots are found–this will overfit your data. MARS uses a <strong>pruning</strong> algorithm to remove knots that do not improve the model. The way it does this is by comparing the model without the knot to the model with the knot and selects the model which does better on <strong>generalized cross-validation</strong>. This is repeated for each variable we provide to the model.</p>
 <p>For open-source software, the implementation is <strong>EARTH</strong> (Enhanced Adaptive Regression Through Hinges).</p>
 <div class="cell">
 <details open="">
@@ -436,9 +444,272 @@ Half_Bath            4   7.4    8.2</code></pre>
 </div>
 <p>Each variable following the first variable is the amount of improvement in the residual sum of squares relative to the amount of improvement in the first variable.</p>
 <p>Be careful, we have no notion of how these variables affect the response just which variables we think are the most important in the model. We trade interpretability for predictive power.</p>
-
-
 </section>
+</section>
+<section id="smoothing" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Smoothing</h1>
+<p>Smoothing is a way to reduce the variance of our model. In GAMs, we can use <strong>smoothing functions</strong> to approximate a curve representing the signal of our data. One common example is <strong>LOESS (locally estimated scatterplot smoothing)</strong>.</p>
+<section id="loess" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="loess"><span class="header-section-number">4.1</span> LOESS</h2>
+<p>LOESS is a non-parametric regression method that estimates the latent signal in a point-wise fashion. Essnetially, for each point we calculate a local weighted regression of a fixed window size around the point and record the point’s prediction along the local regression. However, more weight is assigned to points closer to the point of interest while less weight is assigned to points further away.</p>
+<p>Large window sizes result in higher bias (more points to consider) while lower values will increase variance (less points to consider). The window size is a hyperparameter that we can tune.</p>
+<div id="fig-loess-visual" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/loess-visual.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;5: LOESS Visualized</figcaption>
+</figure>
+</div>
+</section>
+<section id="smoothing-splines" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="smoothing-splines"><span class="header-section-number">4.2</span> Smoothing Splines</h2>
+<p><strong>Smoothing splines</strong> have a knot at <strong>every single observation</strong> for piecewise regression. We use a penalty parameter to counterbalance the overfitting.</p>
+<p>Smoothing splines are optimizing the following equation:</p>
+<p><span class="math display">\[
+\min \sum_{i=1}^{n} (y_i - s(x_i))^2 + \lambda \int s''(t_i)^2 dt
+\]</span></p>
+<ul>
+<li>The first sum is the residual sum of squares</li>
+<li>The second term is the penalty applied to integral of second derivative of smoothing function</li>
+<li>The penalty <span class="math inline">\(\lambda\)</span> is estimated with an approximation of leave one out cross validation</li>
+</ul>
+<p>The idea behind the second derivative in the penalty term is that it gives us an idea of how fast our slopes (first derivatives) are changing. The larger the second derivative, the faster the slope is changing. We want to penalize large changes in slope to lower the variance of our model.</p>
+</section>
+<section id="regression-splines" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="regression-splines"><span class="header-section-number">4.3</span> Regression Splines</h2>
+<p>Essentially <strong>regression splines</strong> are a computationally nicer version of smoothing splines.</p>
+</section>
+</section>
+<section id="implementing-smoothing" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Implementing Smoothing</h1>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mgcv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: nlme</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'nlme'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    collapse</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is mgcv 1.9-0. For overview type 'help("mgcv-package")'.</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>gam1 <span class="ot">&lt;-</span> <span class="fu">gam</span>(Sale_Price <span class="sc">~</span> <span class="fu">s</span>(Garage_Area), <span class="at">data =</span> training)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gam1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Family: gaussian 
+Link function: identity 
+
+Formula:
+Sale_Price ~ s(Garage_Area)
+
+Parametric coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   180897       1290   140.2   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Approximate significance of smooth terms:
+                 edf Ref.df     F p-value    
+s(Garage_Area) 8.134  8.769 192.5  &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+R-sq.(adj) =  0.451   Deviance explained = 45.3%
+GCV = 3.4301e+09  Scale est. = 3.4148e+09  n = 2051</code></pre>
+</div>
+</div>
+<p>We see a section for coefficients not involved in splines and a section for smoothing terms. The p-value for the spline of <code>Garage_Area</code> shows the significance of the variable to the model <strong>as a whole.</strong> These p-values are essentially results from likelihood ratio tests. We can plot the relationship using the <code>plot</code> function:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gam1, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can also apply this to multiple variables:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>gam2 <span class="ot">&lt;-</span> <span class="fu">gam</span>(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    Sale_Price <span class="sc">~</span> <span class="fu">s</span>(Bedroom_AbvGr, <span class="at">k =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Year_Built) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Mo_Sold) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Lot_Area) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(First_Flr_SF) <span class="sc">+</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Second_Flr_SF) <span class="sc">+</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Garage_Area) <span class="sc">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Gr_Liv_Area) <span class="sc">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(TotRms_AbvGrd) <span class="sc">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>        Street <span class="sc">+</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>        Central_Air <span class="sc">+</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">factor</span>(Fireplaces) <span class="sc">+</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">factor</span>(Full_Bath) <span class="sc">+</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">factor</span>(Half_Bath),</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"REML"</span>, <span class="at">data =</span> training</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gam2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Family: gaussian 
+Link function: identity 
+
+Formula:
+Sale_Price ~ s(Bedroom_AbvGr, k = 5) + s(Year_Built) + s(Mo_Sold) + 
+    s(Lot_Area) + s(First_Flr_SF) + s(Second_Flr_SF) + s(Garage_Area) + 
+    s(Gr_Liv_Area) + s(TotRms_AbvGrd) + Street + Central_Air + 
+    factor(Fireplaces) + factor(Full_Bath) + factor(Half_Bath)
+
+Parametric coefficients:
+                    Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)           136139      19682   6.917 6.20e-12 ***
+StreetPave             27690      12710   2.179   0.0295 *  
+Central_AirY           18012       3168   5.685 1.50e-08 ***
+factor(Fireplaces)1    14069       1666   8.443  &lt; 2e-16 ***
+factor(Fireplaces)2    27137       3146   8.626  &lt; 2e-16 ***
+factor(Fireplaces)3    15705      10552   1.488   0.1368    
+factor(Fireplaces)4   -79591      31469  -2.529   0.0115 *  
+factor(Full_Bath)1     -5341      14528  -0.368   0.7132    
+factor(Full_Bath)2    -11074      14828  -0.747   0.4552    
+factor(Full_Bath)3      1225      15787   0.078   0.9382    
+factor(Full_Bath)4    -16268      24327  -0.669   0.5038    
+factor(Half_Bath)1      2102       2206   0.953   0.3408    
+factor(Half_Bath)2    -38508       9111  -4.226 2.48e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Approximate significance of smooth terms:
+                   edf Ref.df       F p-value    
+s(Bedroom_AbvGr) 2.653  3.166  18.787  &lt;2e-16 ***
+s(Year_Built)    6.445  7.543 101.759  &lt;2e-16 ***
+s(Mo_Sold)       1.521  1.875   0.990  0.4500    
+s(Lot_Area)      7.186  8.193  11.726  &lt;2e-16 ***
+s(First_Flr_SF)  8.063  8.765  15.548  &lt;2e-16 ***
+s(Second_Flr_SF) 8.212  8.818   7.806  &lt;2e-16 ***
+s(Garage_Area)   7.426  8.328  21.654  &lt;2e-16 ***
+s(Gr_Liv_Area)   8.546  8.882  14.834  &lt;2e-16 ***
+s(TotRms_AbvGrd) 3.805  4.739   1.921  0.0783 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+R-sq.(adj) =  0.851   Deviance explained = 85.6%
+-REML =  23957  Scale est. = 9.2391e+08  n = 2051</code></pre>
+</div>
+</div>
+<p>There are some variables with high p-values that can be removed. The <code>gam</code> function has a <code>select</code> option which will penalize variable edf values.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>sel_gam2 <span class="ot">&lt;-</span> <span class="fu">gam</span>(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    Sale_Price <span class="sc">~</span> <span class="fu">s</span>(Bedroom_AbvGr, <span class="at">k =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Year_Built) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Mo_Sold) <span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Lot_Area) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(First_Flr_SF) <span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Second_Flr_SF) <span class="sc">+</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Garage_Area) <span class="sc">+</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(Gr_Liv_Area) <span class="sc">+</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s</span>(TotRms_AbvGrd) <span class="sc">+</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>        Street <span class="sc">+</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        Central_Air <span class="sc">+</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">factor</span>(Fireplaces) <span class="sc">+</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">factor</span>(Full_Bath) <span class="sc">+</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">factor</span>(Half_Bath),</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"REML"</span>,</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">select =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> training</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sel_gam2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Family: gaussian 
+Link function: identity 
+
+Formula:
+Sale_Price ~ s(Bedroom_AbvGr, k = 5) + s(Year_Built) + s(Mo_Sold) + 
+    s(Lot_Area) + s(First_Flr_SF) + s(Second_Flr_SF) + s(Garage_Area) + 
+    s(Gr_Liv_Area) + s(TotRms_AbvGrd) + Street + Central_Air + 
+    factor(Fireplaces) + factor(Full_Bath) + factor(Half_Bath)
+
+Parametric coefficients:
+                    Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)           139417      19644   7.097 1.76e-12 ***
+StreetPave             27516      12778   2.153   0.0314 *  
+Central_AirY           17909       3172   5.645 1.89e-08 ***
+factor(Fireplaces)1    13741       1671   8.223 3.55e-16 ***
+factor(Fireplaces)2    26998       3170   8.517  &lt; 2e-16 ***
+factor(Fireplaces)3    17180      10612   1.619   0.1056    
+factor(Fireplaces)4   -77383      31523  -2.455   0.0142 *  
+factor(Full_Bath)1     -8354      14483  -0.577   0.5642    
+factor(Full_Bath)2    -13973      14759  -0.947   0.3439    
+factor(Full_Bath)3     -1749      15710  -0.111   0.9114    
+factor(Full_Bath)4    -31031      22964  -1.351   0.1768    
+factor(Half_Bath)1      2376       2200   1.080   0.2802    
+factor(Half_Bath)2    -38160       9166  -4.163 3.27e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Approximate significance of smooth terms:
+                      edf Ref.df      F  p-value    
+s(Bedroom_AbvGr) 2.505713      4 15.697  &lt; 2e-16 ***
+s(Year_Built)    6.400950      9 87.241  &lt; 2e-16 ***
+s(Mo_Sold)       0.002762      9  0.000   0.4536    
+s(Lot_Area)      7.242803      9 10.938  &lt; 2e-16 ***
+s(First_Flr_SF)  8.471172      9 19.763  &lt; 2e-16 ***
+s(Second_Flr_SF) 0.949500      9  2.072 8.44e-06 ***
+s(Garage_Area)   6.782102      9 19.327  &lt; 2e-16 ***
+s(Gr_Liv_Area)   8.736843      9 14.613  &lt; 2e-16 ***
+s(TotRms_AbvGrd) 3.248559      9  0.988   0.0215 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+R-sq.(adj) =  0.849   Deviance explained = 85.3%
+-REML =  24068  Scale est. = 9.4133e+08  n = 2051</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+
+</div>
+</div>
+</div>
+</section>
+<section id="summary" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Summary</h1>
+<p>Advantages:</p>
+<ul>
+<li>Allows for non-linear relationships without trying out many transformations</li>
+<li>Improved predictions</li>
+<li>Still has some “interpretation”</li>
+<li>Computationally fast</li>
+</ul>
+<p>Disadvantages:</p>
+<ul>
+<li>Can incorporate interactions but can take time</li>
+<li>Not good for large numbers of variables</li>
+<li>Multicollinearity is still a problem</li>
+</ul>
+
+
 </section>
 
 </main> <!-- /main -->

@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="dcterms.date" content="2023-10-12">
+<meta name="dcterms.date" content="2023-11-13">
 
-<title>Yang MSA - Neural Network AR Models</title>
+<title>Yang MSA - Neural Networks</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -97,6 +97,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -142,10 +144,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Neural Network AR Models</h1>
+      <h1 class="title">Neural Networks</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analytics</div>
-                <div class="quarto-category">time series</div>
+                <div class="quarto-category">machine learning</div>
               </div>
                   </div>
   </div>
@@ -163,16 +165,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 12, 2023</p>
+        <p class="date">November 13, 2023</p>
       </div>
     </div>
     
-      <div>
-      <div class="quarto-title-meta-heading">Modified</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date-modified">October 17, 2023</p>
-      </div>
-    </div>
       
     </div>
     
@@ -185,13 +181,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup"><span class="header-section-number">1</span> Setup</a></li>
-  <li><a href="#neural-net-basics" id="toc-neural-net-basics" class="nav-link" data-scroll-target="#neural-net-basics"><span class="header-section-number">2</span> Neural Net Basics</a></li>
-  <li><a href="#autoregressive-neural-networks" id="toc-autoregressive-neural-networks" class="nav-link" data-scroll-target="#autoregressive-neural-networks"><span class="header-section-number">3</span> Autoregressive Neural Networks</a>
+  <li><a href="#structure" id="toc-structure" class="nav-link active" data-scroll-target="#structure"><span class="header-section-number">1</span> Structure</a></li>
+  <li><a href="#backpropagation" id="toc-backpropagation" class="nav-link" data-scroll-target="#backpropagation"><span class="header-section-number">2</span> Backpropagation</a></li>
+  <li><a href="#implementing-neural-nets-in-r" id="toc-implementing-neural-nets-in-r" class="nav-link" data-scroll-target="#implementing-neural-nets-in-r"><span class="header-section-number">3</span> Implementing Neural Nets in R</a>
   <ul class="collapse">
-  <li><a href="#number-of-ar-lags" id="toc-number-of-ar-lags" class="nav-link" data-scroll-target="#number-of-ar-lags"><span class="header-section-number">3.1</span> Number of AR Lags</a></li>
+  <li><a href="#standardization" id="toc-standardization" class="nav-link" data-scroll-target="#standardization"><span class="header-section-number">3.1</span> Standardization</a></li>
+  <li><a href="#optimize-number-of-hidden-nodes-and-decay" id="toc-optimize-number-of-hidden-nodes-and-decay" class="nav-link" data-scroll-target="#optimize-number-of-hidden-nodes-and-decay"><span class="header-section-number">3.2</span> Optimize Number of Hidden Nodes and Decay</a></li>
   </ul></li>
-  <li><a href="#implementing-neural-net-ar" id="toc-implementing-neural-net-ar" class="nav-link" data-scroll-target="#implementing-neural-net-ar"><span class="header-section-number">4</span> Implementing Neural Net AR</a></li>
+  <li><a href="#variable-selection" id="toc-variable-selection" class="nav-link" data-scroll-target="#variable-selection"><span class="header-section-number">4</span> Variable Selection</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">5</span> Summary</a></li>
   </ul>
 </nav>
     </div>
@@ -201,172 +199,138 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="setup" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Setup</h1>
+<section id="structure" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Structure</h1>
+<p>Neural networks are organized as a network of neurons through layers. Input variables are considered neurons on the <strong>bottom layer</strong>. The output variable is considered the neuron on the <strong>head layer</strong>. The layers in between are <strong>hidden layers</strong> which transform the input variables through non-linear activation functions to try and best model the output variable.</p>
+<p>A neural network is a linear transformation of nonlinear transformations of our inputs and weights spread out across different layers.</p>
+<div id="fig-nnet-structure" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/neural-net-structure.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Neural Net Structure</figcaption>
+</figure>
+</div>
+<div id="fig-activation-functions" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/activation-functions.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Activation Functions</figcaption>
+</figure>
+</div>
+</section>
+<section id="backpropagation" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Backpropagation</h1>
+<p>There are two main phases: a forward and backward phase.</p>
+<p>In the forward phase:</p>
+<ol type="1">
+<li>Start with randomly initialized weights</li>
+<li>Calculations are passed forward through the network</li>
+<li>Output predicted value computed</li>
+</ol>
+<p>In the backward phase:</p>
+<ol type="1">
+<li>Predicted value compared with actual value to compute error</li>
+<li>Work backwards through the network to adjust weights to make the prediction better</li>
+</ol>
+<p>We want to repeat this process until we have some notion of convergence.</p>
+</section>
+<section id="implementing-neural-nets-in-r" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Implementing Neural Nets in R</h1>
+<section id="standardization" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="standardization"><span class="header-section-number">3.1</span> Standardization</h2>
+<p>Neural nets work best when input data <strong>are scaled</strong>. For bell-shaped data, statistical z-scores standardization can work. For severely assymmetric data, midrange standardization works better:</p>
+<p><span class="math display">\[
+\frac{x - \text{midrange}(x)}{0.5 \cdot \text{range}(x)} = \frac{x - \frac{(\max(x) + \min(x))}{2}}{0.5 \cdot (\max(x) - \min(x))}
+\]</span></p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>cols_to_scale <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Sale_Price"</span>, <span class="st">"Bedroom_AbvGr"</span>, <span class="st">"Year_Built"</span>, <span class="st">"Mo_Sold"</span>, <span class="st">"Lot_Area"</span>, <span class="st">"First_Flr_SF"</span>, <span class="st">"Second_Flr_SF"</span>, <span class="st">"Garage_Area"</span>, <span class="st">"Gr_Liv_Area"</span>, <span class="st">"TotRms_AbvGrd"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Full_Bath =</span> <span class="fu">as.factor</span>(Full_Bath), <span class="at">Half_Bath =</span> <span class="fu">as.factor</span>(Half_Bath), <span class="at">Fireplaces =</span> <span class="fu">as.factor</span>(Fireplaces))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>scaled_training <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(cols_to_scale), scale))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Registered S3 method overwritten by 'quantmod':
-  method            from
-  as.zoo.data.frame zoo </code></pre>
 </div>
+<div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(aTSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>nn_ames <span class="ot">&lt;-</span> <span class="fu">nnet</span>(Sale_Price <span class="sc">~</span> ., <span class="at">data =</span> training, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">linout =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'aTSA'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:tseries':
-
-    adf.test, kpss.test, pp.test</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:graphics':
-
-    identify</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'forecast'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:aTSA':
-
-    forecast</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>USAirlines <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/sjsimmo2/TimeSeries/master/usairlines.csv"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>passenger <span class="ot">&lt;-</span> <span class="fu">ts</span>(USAirlines<span class="sc">$</span>Passengers, <span class="at">start =</span> <span class="dv">1990</span>, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">subset</span>(passenger, <span class="at">end =</span> <span class="fu">length</span>(passenger) <span class="sc">-</span> <span class="dv">12</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">subset</span>(passenger, <span class="at">start =</span> <span class="fu">length</span>(passenger) <span class="sc">-</span> <span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-</section>
-<section id="neural-net-basics" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Neural Net Basics</h1>
-<p>Neural network models are models based on mathematical models of how the brain functions.</p>
-<p>They are organized in a network of <strong>neurons</strong> through <strong>layers</strong>. The input variables are considered the neurons on the <strong>bottom layer</strong>. The output variable is considered the neuron on the <strong>top layer</strong>.</p>
-<p>The layers in between are called <strong>hidden layers</strong> transfrom the input variables through activation functions to try and model the output variable.</p>
-<p><a href="#fig-basic-neural-net">Figure&nbsp;1</a> shows a basic neural net structure without a hidden layer.</p>
-<div id="fig-basic-neural-net" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/basic-neural-net.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Basic Neural Net Structure</figcaption>
-</figure>
-</div>
-<p>Once we add a hidden layer, we apply non-linear activation functions in new nodes that get combined into an output.</p>
-<div class="quarto-layout-panel">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/hidden-layer-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Hidden Layer Added</figcaption>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/hidden-to-output.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Combining the Hidden Layer Output</figcaption>
-</figure>
-</div>
-</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  116
+initial  value 79865952890167.062500 
+final  value 12750392495886.974609 
+converged</code></pre>
 </div>
 </div>
 </section>
-<section id="autoregressive-neural-networks" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Autoregressive Neural Networks</h1>
-<p>Neural network models used for forecasting in time series, just have lags of Y in the bottom layer along with other X variables.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/autoregressive-terms.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Autoregressive Terms</figcaption>
-</figure>
+<section id="optimize-number-of-hidden-nodes-and-decay" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="optimize-number-of-hidden-nodes-and-decay"><span class="header-section-number">3.2</span> Optimize Number of Hidden Nodes and Decay</h2>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
 </div>
-<section id="number-of-ar-lags" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="number-of-ar-lags"><span class="header-section-number">3.1</span> Number of AR Lags</h2>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'caret'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    lift</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tune_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">.size =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">.decay =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>nn_ames_caret <span class="ot">&lt;-</span> <span class="fu">train</span>(Sale_Price <span class="sc">~</span> ., <span class="at">data =</span> training, <span class="at">method =</span> <span class="st">"nnet"</span>, <span class="at">tuneGrid =</span> tune_grid, <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>), <span class="at">trace =</span> <span class="cn">FALSE</span>, <span class="at">linout =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in nominalTrainWorkflow(x = x, y = y, wts = weights, info = trainInfo,
+: There were missing values in resampled performance measures.</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>nn_ames_caret<span class="sc">$</span>bestTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  size decay
+2    3   0.5</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="variable-selection" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Variable Selection</h1>
+<p>Neural networks typically do not care about variable selection. All variables are used in a complicated and mixed way. If you want to do variable selectinon, you can examine weights for each variable, but this is not a clear selection technique.</p>
+</section>
+<section id="summary" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Summary</h1>
+<p><strong>Advantages:</strong></p>
 <ul>
-<li>Explore with correlation plots or automatic selection techniques</li>
-<li>Focus primarily on AR components of the model</li>
-<li>For seasonal data we typically include <strong>all</strong> lags up throguh one season unless correlation plots say you only need specific ones</li>
-<li><strong>Still want to make data stationary first</strong></li>
+<li>Usd for categorical / numerical target variables</li>
+<li>Capable of modeling complex nonlinear patterns</li>
+<li>No assumptions about the data distributions</li>
 </ul>
-<p>If you don’t have stationary data, the forecasts will still revert to overall mean far enough into the future.</p>
-</section>
-</section>
-<section id="implementing-neural-net-ar" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Implementing Neural Net AR</h1>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
-<span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-5-3" class="code-annotation-target"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a>nn_model <span class="ot">&lt;-</span> <span class="fu">nnetar</span>(<span class="fu">diff</span>(train, <span class="dv">12</span>), <span class="at">p =</span> <span class="dv">2</span>, <span class="at">P =</span> <span class="dv">3</span>)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-5-4" class="code-annotation-target"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a>nn_forecast <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(nn_model, <span class="at">h =</span> <span class="dv">12</span>)</span>
-<span id="annotated-cell-5-5"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(nn_forecast)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-annotation">
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="3" data-code-annotation="1"><code>p</code> refers to number of AR lags and <code>P</code> refers to number of seasonal AR lags. By default, the non-linear transformation used is the sigmoid function.</span>
-</dd>
-<dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
-<dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="4" data-code-annotation="2">The neural net only knows about our differenced data so we need to add back the last 12 observations to get the original scale.</span>
-</dd>
-</dl>
-</div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/neural-net-ar-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>In the background, R automatically adjusts the forecasts to be on the original scale in ARIMA models. However, with neural net models we need to manually adjust the forecasts.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pass_forecast <span class="ot">&lt;-</span> train[(<span class="fu">length</span>(train) <span class="sc">-</span> <span class="dv">11</span>)<span class="sc">:</span><span class="fu">length</span>(train)] <span class="sc">+</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(nn_model, <span class="at">h =</span> <span class="dv">12</span>)<span class="sc">$</span>mean[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>]</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(train, <span class="at">main =</span> <span class="st">"US Airline Passengers ARIMA Model Forecasts"</span>, <span class="at">xlab =</span> <span class="st">"Date"</span>, <span class="at">ylab =</span> <span class="st">"Passengers (Thousands)"</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1990</span>, <span class="dv">2009</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">30000</span>, <span class="dv">80000</span>))</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(pass_forecast, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fl">2007.25</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/neural-net-forecasts-1.png" class="img-fluid" width="672"></p>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nn_error <span class="ot">&lt;-</span> test <span class="sc">-</span> pass_forecast</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>nn_MAE <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(nn_error))</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>nn_MAPE <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(nn_error) <span class="sc">/</span> <span class="fu">abs</span>(test)) <span class="sc">*</span> <span class="fl">100.0</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(nn_MAE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1091.243</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(nn_MAPE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.6728</code></pre>
-</div>
-</div>
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>No insights for variable importance</li>
+<li>Extremely computationally intensive</li>
+<li>Tuning of parameters</li>
+<li>Prone to overfitting training data</li>
+</ul>
 
 
 </section>
