@@ -1,0 +1,95 @@
+---
+title: Model Agnostic Interpretability
+date: 11/16/2023
+---
+
+```{r}
+#| include: false
+
+library(AmesHousing)
+library(tidyverse)
+
+set.seed(4321)
+
+ames <- make_ordinal_ames() %>%
+    mutate(id = row_number())
+training <- ames %>% sample_frac(0.7)
+testing <- anti_join(ames, training, by = "id")
+
+training <- training %>%
+    select(Sale_Price, Bedroom_AbvGr, Year_Built, Mo_Sold, Lot_Area, Street, Central_Air, First_Flr_SF, Second_Flr_SF, Full_Bath, Half_Bath, Fireplaces, Garage_Area, Gr_Liv_Area, TotRms_AbvGrd)
+```
+
+People (especially clients) want to interpret and understand model behavior.
+
+Questions that drive this need:
+
+-   Why was someone's loan rejected?
+-   Why is this symptom occurring in this patient?
+-   Why is the stock price expected to decrease?
+
+Interpretations can be model and context dependent:
+
+-   **Model:** Variable importance in regression has different implication than variable importance in tree-based models
+-   **Context:** The effects of a change in a single variable on a target variable
+
+# Types of Model Interpretability
+
+![Local vs. Global Interpretability](images/local-vs-global.png){#fig-local-vs-global}
+
+**Local interpretability** focuses on a specific range of values to discuss specifically how the response changes with a variable. **Global interpretability** covers the general association of an input variable with a response variable.
+
+## Local Interpretability 
+
+-   ICE
+-   LIME
+-   Shapley Values
+
+## Global Interpretability
+
+-   Permutation Importance
+-   Partial Dependence
+-   ALE
+
+# Permutation Importance (Global)
+
+The general idea of **permutation importance** is showing how much worse the predictions of our model get if we input randomly shuffled data values for each variable.
+
+Rather than removing the variable, we are **removing the signal** from the variable. Random shuffling the values breaks the true relationship between the variable and the target.
+
+We repeat this process multiple times to see the average impact for each variable.
+
+We already saw this with the variable importance plots with the random forest model.
+
+```{r}
+library(iml)
+
+lm_ames <- lm(Sale_Price ~., data = training)
+linear_pred <- Predictor$new(lm_ames, data = training[, -1], y = training$Sale_Price, type = "response")
+
+plot(FeatureImp$new(linear_pred, loss = "mse"))
+```
+
+-   Notice that the p-values for this linear regression model correspond to the significance in terms of explanatory significance
+-   Variable importance is focused on predictive power
+
+# Individual Conditional Expectation (ICE, Local)
+
+The idea of **individual conditional expectation (ICE)** is to determine how predictions for each observation change if we vary the feature of interest.
+
+This method visualizes the dependence of an **individual prediction** on a given predictor variable. The use case of this is to drill down into a specific customer / business and understand how a change in a variable affects the resulting decision.
+
+-   Fix all other variables for a single observation while changing the variable of interest
+-   Plot the resulting predictions vs. the variable of interest
+
+## Process
+
+1.  Choose a variable of interest and single observation.
+2.  Replicate single observation, holding all other variables constant.
+3.  Fill in values for variable of interest across the entire range of the variable.
+4.  Use the model to predict each of these simulated observations.
+5.  Repeat for **all observations**.
+
+## Issues
+
+If our variable of interest is correlated with other inputs, some of the simulated data may be invalid.

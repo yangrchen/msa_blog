@@ -1,0 +1,14 @@
+{
+  "hash": "6dfc31271ed88fa1d9a2078eead419b9",
+  "result": {
+    "markdown": "---\ntitle: Model Agnostic Interpretability\ndate: 11/16/2023\n---\n\n\n\n\nPeople (especially clients) want to interpret and understand model behavior.\n\nQuestions that drive this need:\n\n-   Why was someone's loan rejected?\n-   Why is this symptom occurring in this patient?\n-   Why is the stock price expected to decrease?\n\nInterpretations can be model and context dependent:\n\n-   **Model:** Variable importance in regression has different implication than variable importance in tree-based models\n-   **Context:** The effects of a change in a single variable on a target variable\n\n# Types of Model Interpretability\n\n![Local vs. Global Interpretability](images/local-vs-global.png){#fig-local-vs-global}\n\n**Local interpretability** focuses on a specific range of values to discuss specifically how the response changes with a variable. **Global interpretability** covers the general association of an input variable with a response variable.\n\n## Local Interpretability \n\n-   ICE\n-   LIME\n-   Shapley Values\n\n## Global Interpretability\n\n-   Permutation Importance\n-   Partial Dependence\n-   ALE\n\n# Permutation Importance (Global)\n\nThe general idea of **permutation importance** is showing how much worse the predictions of our model get if we input randomly shuffled data values for each variable.\n\nRather than removing the variable, we are **removing the signal** from the variable. Random shuffling the values breaks the true relationship between the variable and the target.\n\nWe repeat this process multiple times to see the average impact for each variable.\n\nWe already saw this with the variable importance plots with the random forest model.\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

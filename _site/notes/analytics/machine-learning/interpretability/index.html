@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="dcterms.date" content="2023-11-14">
+<meta name="dcterms.date" content="2023-11-16">
 
-<title>Yang MSA - Naive Bayes Model</title>
+<title>Yang MSA - Model Agnostic Interpretability</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -97,8 +63,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -144,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Naive Bayes Model</h1>
+      <h1 class="title">Model Agnostic Interpretability</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analytics</div>
                 <div class="quarto-category">machine learning</div>
@@ -165,7 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">November 14, 2023</p>
+        <p class="date">November 16, 2023</p>
       </div>
     </div>
     
@@ -181,10 +145,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#assumption" id="toc-assumption" class="nav-link active" data-scroll-target="#assumption"><span class="header-section-number">1</span> Assumption</a></li>
-  <li><a href="#underlying-math" id="toc-underlying-math" class="nav-link" data-scroll-target="#underlying-math"><span class="header-section-number">2</span> Underlying Math</a></li>
-  <li><a href="#naive-bayes-implementation" id="toc-naive-bayes-implementation" class="nav-link" data-scroll-target="#naive-bayes-implementation"><span class="header-section-number">3</span> Naive Bayes Implementation</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">4</span> Summary</a></li>
+  <li><a href="#types-of-model-interpretability" id="toc-types-of-model-interpretability" class="nav-link active" data-scroll-target="#types-of-model-interpretability"><span class="header-section-number">1</span> Types of Model Interpretability</a>
+  <ul class="collapse">
+  <li><a href="#local-interpretability" id="toc-local-interpretability" class="nav-link" data-scroll-target="#local-interpretability"><span class="header-section-number">1.1</span> Local Interpretability</a></li>
+  <li><a href="#global-interpretability" id="toc-global-interpretability" class="nav-link" data-scroll-target="#global-interpretability"><span class="header-section-number">1.2</span> Global Interpretability</a></li>
+  </ul></li>
+  <li><a href="#permutation-importance-global" id="toc-permutation-importance-global" class="nav-link" data-scroll-target="#permutation-importance-global"><span class="header-section-number">2</span> Permutation Importance (Global)</a></li>
   </ul>
 </nav>
     </div>
@@ -194,106 +160,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>When we need to classify observations there are two difference sources of evidence:</p>
+<p>People (especially clients) want to interpret and understand model behavior.</p>
+<p>Questions that drive this need:</p>
 <ul>
-<li>Similarity to other observations based on certain metrics / variables</li>
-<li>Past decisions on classifications of observations like it</li>
+<li>Why was someone’s loan rejected?</li>
+<li>Why is this symptom occurring in this patient?</li>
+<li>Why is the stock price expected to decrease?</li>
 </ul>
-<p>The second approach is a Bayesian approach.</p>
-<p>In <a href="#fig-priors">Figure&nbsp;1</a>, we are establishing what our prior probabilities are based on current observations.</p>
-<div id="fig-priors" class="quarto-figure quarto-figure-center anchored">
+<p>Interpretations can be model and context dependent:</p>
+<ul>
+<li><strong>Model:</strong> Variable importance in regression has different implication than variable importance in tree-based models</li>
+<li><strong>Context:</strong> The effects of a change in a single variable on a target variable</li>
+</ul>
+<section id="types-of-model-interpretability" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Types of Model Interpretability</h1>
+<div id="fig-local-vs-global" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="images/priors.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Naive Bayes Priors</figcaption>
+<p><img src="images/local-vs-global.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Local vs.&nbsp;Global Interpretability</figcaption>
 </figure>
 </div>
-<p>If we introduce a new observation and take the predefined closest number of observations, then we can get conditional probabilities along with our knowledge of prior probabilities.</p>
-<div id="fig-conditionals" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/conditionals.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Naive Bayes Conditionals</figcaption>
-</figure>
-</div>
-<p>We then multiply the conditionals with the priors and scale the probabilities to sum up to 1. The higher probability wins.</p>
-<div id="fig-results" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/results.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Naive Bayes Results</figcaption>
-</figure>
-</div>
-<section id="assumption" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Assumption</h1>
-<p>One of the big assumptions of naive Bayes classification is that <strong>predictor variables are independent in their effects on the classification</strong>.</p>
+<p><strong>Local interpretability</strong> focuses on a specific range of values to discuss specifically how the response changes with a variable. <strong>Global interpretability</strong> covers the general association of an input variable with a response variable.</p>
+<section id="local-interpretability" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="local-interpretability"><span class="header-section-number">1.1</span> Local Interpretability</h2>
+<ul>
+<li>ICE</li>
+<li>LIME</li>
+<li>Shapley Values</li>
+</ul>
 </section>
-<section id="underlying-math" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Underlying Math</h1>
-<p><strong>Posterior probabilities</strong> are the predicted probability of success given values of variables for this observation. The <strong>prior probability</strong> is the probability that an observation has those variable values.</p>
-<p>Bayesian classifiers are based on Bayes’ Theorem. Naive Bayes assumes that the effect of the inputs are independent of one another:</p>
-<p>Recall Bayes’ Theorem:</p>
-<p><span class="math display">\[
-P(y_i | x_1, x_2, \cdots, x_p) = \frac{P(y_i)P(x_1, x_2, \cdots, x_p | y_i)}{P(x_1, x_2, \cdots, x_p)}
-\]</span></p>
-<p>If events are independent like Naive Bayes assumes then:</p>
-<p><span class="math display">\[
-P(A \cap B) = P(A) \cdot P(B)
-\]</span></p>
-<p><span class="math display">\[
-P(A \cap B|C) = P(A|C) \cdot P(B|C)
-\]</span></p>
-<div id="fig-example" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/medium-blue-example.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;4: Naive Bayes Example</figcaption>
-</figure>
-</div>
-<p>If certain values don’t occur for all levels of the outcome, then the probability will zero out. We use a Laplace correction to make sure that we can still estimate probabilities.</p>
-<div id="fig-laplace" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/laplace-correction.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;5: Laplace Correction</figcaption>
-</figure>
-</div>
+<section id="global-interpretability" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="global-interpretability"><span class="header-section-number">1.2</span> Global Interpretability</h2>
+<ul>
+<li>Permutation Importance</li>
+<li>Partial Dependence</li>
+<li>ALE</li>
+</ul>
 </section>
-<section id="naive-bayes-implementation" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Naive Bayes Implementation</h1>
-<p>The inputs to the Naive Bayes are the same between a classification target or a continuous target. However, the outputs change. We <strong>don’t</strong> want to use Naive Bayes for a continuous target.</p>
-<p>Inputs:</p>
-<ul>
-<li><strong>Categorical variables:</strong> Determine probability based on cross-tabulation of each variable with target variable</li>
-<li><strong>Numerical variables:</strong> Determine probability based on either values from a Normal distribution with same mean and std. dev as data or KDE of the data</li>
-</ul>
-<p>Outputs:</p>
-<ul>
-<li><strong>Classification target:</strong> Probability that each observation belongs to each category of target variable</li>
-<li><strong>Continuous target:</strong> Value of the target variable that is the highest probability. Treats the continuous target as a large number of categories. However, we can’t predict any continuous targets outside the range of our data.</li>
-</ul>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>nb_ames <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(Sale_Price <span class="sc">~</span> ., <span class="at">data =</span> training, <span class="at">laplace =</span> <span class="dv">0</span>, <span class="at">usekernel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
 </section>
-<section id="summary" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Summary</h1>
-<p><strong>Advantages:</strong></p>
-<ul>
-<li>Simple to implement</li>
-<li>Good at predictions</li>
-<li>Perform best with categorical variables / text</li>
-<li>Fast computational time</li>
-<li>Robust to noise and irrelevant variables</li>
-</ul>
-<p><strong>Disadvantages:</strong></p>
-<ul>
-<li>Independence assumption</li>
-<li>Careful about normality assumption for continuous variables</li>
-<li>Requires more memory storage than most variables</li>
-<li>Trust predicted categories more than probabilities</li>
-</ul>
+<section id="permutation-importance-global" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Permutation Importance (Global)</h1>
+<p>The general idea of <strong>permutation importance</strong> is showing how much worse the predictions of our model get if we input randomly shuffled data values for each variable.</p>
+<p>Rather than removing the variable, we are <strong>removing the signal</strong> from the variable. Random shuffling the values breaks the true relationship between the variable and the target.</p>
+<p>We repeat this process multiple times to see the average impact for each variable.</p>
+<p>We already saw this with the variable importance plots with the random forest model.</p>
 
 
 </section>

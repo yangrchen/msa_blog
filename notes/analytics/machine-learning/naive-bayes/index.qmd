@@ -3,6 +3,23 @@ title: Naive Bayes Model
 date: 11/14/2023
 ---
 
+```{r}
+#| include: false
+
+library(AmesHousing)
+library(tidyverse)
+
+set.seed(4321)
+
+ames <- make_ordinal_ames() %>%
+    mutate(id = row_number())
+training <- ames %>% sample_frac(0.7)
+testing <- anti_join(ames, training, by = "id")
+
+training <- training %>%
+    select(Sale_Price, Bedroom_AbvGr, Year_Built, Mo_Sold, Lot_Area, Street, Central_Air, First_Flr_SF, Second_Flr_SF, Full_Bath, Half_Bath, Fireplaces, Garage_Area, Gr_Liv_Area, TotRms_AbvGrd)
+```
+
 When we need to classify observations there are two difference sources of evidence:
 
 -   Similarity to other observations based on certain metrics / variables
@@ -53,3 +70,41 @@ $$
 If certain values don't occur for all levels of the outcome, then the probability will zero out. We use a Laplace correction to make sure that we can still estimate probabilities.
 
 ![Laplace Correction](images/laplace-correction.png){#fig-laplace}
+
+# Naive Bayes Implementation
+
+The inputs to the Naive Bayes are the same between a classification target or a continuous target. However, the outputs change. We **don't** want to use Naive Bayes for a continuous target.
+
+Inputs:
+
+-   **Categorical variables:** Determine probability based on cross-tabulation of each variable with target variable
+-   **Numerical variables:** Determine probability based on either values from a Normal distribution with same mean and std. dev as data or KDE of the data
+
+Outputs:
+
+-   **Classification target:** Probability that each observation belongs to each category of target variable
+-   **Continuous target:** Value of the target variable that is the highest probability. Treats the continuous target as a large number of categories. However, we can't predict any continuous targets outside the range of our data.
+
+```{r}
+set.seed(12345)
+library(e1071)
+
+nb_ames <- naiveBayes(Sale_Price ~ ., data = training, laplace = 0, usekernel = TRUE)
+```
+
+# Summary
+
+**Advantages:**
+
+-   Simple to implement
+-   Good at predictions
+-   Perform best with categorical variables / text
+-   Fast computational time
+-   Robust to noise and irrelevant variables
+
+**Disadvantages:**
+
+-   Independence assumption
+-   Careful about normality assumption for continuous variables
+-   Requires more memory storage than most variables
+-   Trust predicted categories more than probabilities
