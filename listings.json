@@ -2,6 +2,7 @@
   {
     "listing": "/notes/analytics/index.html",
     "items": [
+      "/notes/analytics/machine-learning/interpretability/index.html",
       "/notes/analytics/machine-learning/naive-bayes/index.html",
       "/notes/analytics/machine-learning/nnet/index.html",
       "/notes/analytics/machine-learning/tree-models/index.html",
