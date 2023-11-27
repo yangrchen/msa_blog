@@ -1,7 +1,7 @@
 ---
 title: Cox Regression Model
 date: 11/06/2023
-date-modified: 11/09/2023
+date-modified: 11/20/2023
 ---
 
 # Proportional Hazards
@@ -12,12 +12,14 @@ The hazard function is written as:
 
 $$
 \begin{align*}
-h(t) &= e^{\beta_0 + beta_1x_{i,1} + \cdots + \beta_k x_{i,k}} \\
+h(t) &= e^{\beta_0 + \beta_1x_{i,1} + \cdots + \beta_k x_{i,k}} \\
 & = h_0(t)e^{\beta_1x_{i,1} + \cdots + \beta_k x_{i,k}}
 \end{align*}
 $$
 
 -   $h_0(t)$ is the baseline hazard function
+
+The baseline hazard function is the **only** part of the equation that depends on time, $t$.
 
 The proportional hazard model models the log of the hazard directly:
 
@@ -27,7 +29,7 @@ $$
 
 Predictions shift the hazard rather than directly shifting the failure time like in the AFT model.
 
-The hazard ratio between two groups no longer depend son time. We assume that there is a **constant proportion** on hazards.
+The hazard ratio between two groups no longer depends on time. We assume that there is a **constant proportion** on hazards. That is, the effect of the covariate on the hazard rate has a constant ratio between groups or with single unit increases.
 
 $$
 \begin{align*}
@@ -56,7 +58,9 @@ In AFT and PH models, estimation depends on some distributional assumption aroun
 -   Second piece depends only on the covariates
     -   Treat as parameteric (know the form)
 
-Using this semiparameteric model approach, we can ignore ever estimating anything about the baseline hazard $h_0(t)$. Cox disregarded the first piece of the likelihood and maximized the second piece and estimate sare obtained by maximizing the **partial likelihood**--one piece depends on the predictors, not the entire thing.
+Using this semiparameteric model approach, we can ignore ever estimating anything about the baseline hazard $h_0(t)$. This means that the model does not assume any particular mathematical form for the baseline hazard rate. The Cox model can fit a wide range of hazard shapes without having to specify the underlying distribution of survival times and **we do not need to check for an appropriate distribution**.
+
+Estimates are obtained by maximizing the **partial likelihood**--one piece depends on the predictors, not the entire thing.
 
 ## Partial Likelihood Downfalls
 
@@ -134,18 +138,32 @@ $$
 \log h(t) = \beta_1x_{i,1} + \beta_2(t)x_{i,2}
 $$
 
+An example time-dependent coefficient could be a linear function:
+
+$$
+\beta_2(t) = \beta_2 + b \cdot \text{time}
+$$
+
 -   Time-dependent coefficients are functions of time, $t$.
--   If $\beta = 0$, then effect doesn't depend on time.
--   If $\beta \neq 0$, then effect does depend on time and PH assumptino is not satisfied.
+-   If $b = 0$, then effect doesn't depend on time.
+-   If $b \neq 0$, then effect does depend on time and PH assumption is not satisfied.
 
 ## Schoenfeld
 
 If coefficients, do **NOT** depend on time, then the PH model holds and graphs of the Schoenfeld residuals should be a horizontal line. 
 
-There is a test that has $H_0: \beta = 0$ and $H_a: \beta \neq 0$ such that we want to fail to reject **H_0** to assume there is no relationship with time. We prefer this test over the graphs--the graphs aren't necesssarily too informative.
+There is a test that has $H_0: \beta = 0$ and $H_a: \beta \neq 0$ such that we want to fail to reject **H_0** to assume there is no relationship with time. Schoenfeld residuals are best used for investigating relationships with time for individual predictors since they are calculated on a per variable basis.
 
 However, these residual tests should be done **after** model selection has occurred.
 
 You can also test out different transformations of time like the log of time. However, in your model you have to go with the same transformation for all variables, whichever you decide to move forward with.
 
 ## Interpretation
+
+An example time-varying coefficient can be:
+
+$$
+\beta_\text{age}(t) = 0.122 - 0.059 \cdot \log(\text{week})
+$$
+
+Initially, age has an increasing effect on the hazard up until week 7. Beyond week 7, the effect becomes negative and being older decreases the hazard.

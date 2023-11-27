@@ -267,6 +267,13 @@
       ],
       "Hash": "963ab8fbaf980a5b081ed40419081439"
     },
+    "Metrics": {
+      "Package": "Metrics",
+      "Version": "0.1.4",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "1fdc9b3adfe2e2f8f77c22a59cf322ec"
+    },
     "ModelMetrics": {
       "Package": "ModelMetrics",
       "Version": "1.2.2.2",
@@ -1973,6 +1980,24 @@
       ],
       "Hash": "99df65cfef20e525ed38c3d2577f7190"
     },
+    "iml": {
+      "Package": "iml",
+      "Version": "0.11.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "Formula",
+        "Metrics",
+        "R6",
+        "checkmate",
+        "data.table",
+        "future",
+        "future.apply",
+        "ggplot2",
+        "prediction"
+      ],
+      "Hash": "54a17f4a3d60889788b9072cec755ec9"
+    },
     "imputeTS": {
       "Package": "imputeTS",
       "Version": "3.3",
@@ -2759,6 +2784,19 @@
       "Source": "Repository",
       "Repository": "RSPM",
       "Hash": "a555924add98c99d2f411e37e7d25e9f"
+    },
+    "prediction": {
+      "Package": "prediction",
+      "Version": "0.3.14",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "data.table",
+        "stats",
+        "utils"
+      ],
+      "Hash": "0711ff44a086709b9b7441267ab303bf"
     },
     "prettyunits": {
       "Package": "prettyunits",

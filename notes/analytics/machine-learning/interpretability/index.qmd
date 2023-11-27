@@ -90,6 +90,114 @@ This method visualizes the dependence of an **individual prediction** on a given
 4.  Use the model to predict each of these simulated observations.
 5.  Repeat for **all observations**.
 
+![ICE Plot](images/ice-plot.png){#fig-ice-plot}
+
 ## Issues
 
 If our variable of interest is correlated with other inputs, some of the simulated data may be invalid.
+
+## Summary
+
+**Advantages:**
+
+-   Intuitive as one line represents predictions for one observation if we change the variable of interest
+-   Capable of showing changing relationships (different impact of variable across different observations)
+
+**Disadvantages:**
+
+-   Computationally expensive
+-   Hard to visualize with many observations
+-   Multicollinearity problems
+-   One variable at a time
+
+# Partial Dependence (Global)
+
+The general idea of **partial dependence** is to show what the model predicts on average when each observation has the value $k$ for that feature. 
+
+This method attempts to show marginal effect of inputs on the target variable through averaged effects over all possible values of a single variable. Consider this like averaging all the lines in the ICE plot.
+
+## Process
+
+1.  Choose a variable of interest.
+2.  Replicate the dataset, holding all variables constant **except**  the variable of interest.
+3.  Use model to generate predictions for all this simulated data and take the average of each prediction column corresponding to variable value.
+
+![Partial Dependence Plot](images/partial-dependence.png){#fig-partial-dependence}
+
+A primary issue with partial dependence is scale. The scale in response values may not be all that significant, but the plot make seem like there's a large effect. In addition, for the data comparing the entire range of a variable may not be reasonable (e.g. 2400 sq. ft. homes with a 0 garage area).
+
+# Accumulated Local Effects (ALE, Global)
+
+Accumulated tries to fix the partial dependence and ICE problems of unrealistic expectations by showing how model predictions change when I change the variable of interest to values within a small interval around their current values.
+
+ALE uses quantiles of the data to define a reasonable range. We use quantiles to get approximately the same number of observations in each group.
+
+For observations in each interval, determine how much their prediction would change if we replace the feature of interest with the upper and lower bounds of the interval, all other variables constant.
+
+![ALE Quantiles](images/ale-quantiles.png){#fig-ale-quantiles}
+
+Repeat for every observation in the interval and accumulate these changes and center them to form the ALE curve. The curve describes the main effect of the input variable **compared to the data's average prediction**.
+
+![ALE Curve](images/ale-curve.png){#fig-ale-curve}
+
+Looking at @fig-ale-curve, we can see that 0 is on the y-axis due to the centering. This represents an inflection point, allowing us to interpret our variables and the effect on the response in different directions.
+
+In practice, we look at both ALE and partial dependence to see if multicollinearity is an issue. If multicollinearity is an issue, the curves will look significantly different. However, for model interpretation we can go straight to ALE.
+
+# Local Interpretable Model-Agnostic Explanations (LIME, Local)
+
+Imagine we had a nonlinear relationship between a target and a predictor variable. If we zoom in really close to a point of interest, then the area looks like a straight line.
+
+![LIME Understanding](images/LIME-zoom.png){#fig-LIME-zoom}
+
+We can model straight lines with linear regression and understand the predictive model at **that exact point**. Across the entire dataset, we build out many different linear regressions for each point and interpret those models for the particular observation.
+
+## Process
+
+1.  Randomly generate values (Normally distributed) for each variable in the model.
+2.  Weight more heavily the fake observations that are near the real observation of interest.
+3.  Build a **weighted** linear regression model based on fake observations and observation of interest.
+4.  "Interpret" coefficients of variables from linear regression model.
+
+## Problems
+
+LIME is limited by the fact that you can only effectively build linear regression models where there's "enough" data for the number of variables you have. LIME is commonly used for small local models. In addition, the definition of "near the points of interest" is a **very big and unsolved problem** with LIME.
+
+## Interpretation
+
+LIME returns the coefficients of the local linear regression. We interpret these coefficients just as we normally do in linear regression (e.g. unit increase in this variable increases average by X amount) for **the specific observation**.
+
+# Shapley Values (Local)
+
+The general idea of Shapley values is we want to know how each variable contributed to the prediction of a single observation compared to the average prediction for the dataset.
+
+:::{layout-nrow=2}
+![Shapley Values Example](images/shapley-example.png){#fig-shapley-example}
+
+![Shapley Values Example Step](images/shapley-example-1.png){#fig-shapley-example-1}
+:::
+
+## Computation
+
+Shapley values are calculated through **game theory**. Shapley assigned a payout value for players depending on their contribution to the total payout across the coalition.
+
+Shapley value in ML is the average marginal contribution of a feature across all possible coalitions of variables. Compute the average change across all observations in the prediction that a set of variables experiences when the variable of interest is added.
+
+## Advantages and Disadvantages
+
+**Advantages:**
+
+-   Efficiency: Variable contributions must sum tot he difference of prediction fo point of interest compared to average
+-   Symmetry: Contributions of two variables should be the same if they contribute equally to all possible combinations of variables
+-   Dummy: A variable that does not change the predicted value, for any combinatino of variables, should have a Shapley value of 0
+-   Additivity: For a forest of trees, the Shapley value of the forest for a given observation should be the average of the Shapley values for each tree at that given point
+
+**Disadvantages:**
+
+ Some people look at distributions of all Shapley values across a variable to measure "overall impact" of a variable, but Shapley values are designed for **local interpretability**. Only thing you might be able to do is to see if all Shapley values are positive or negative.
+
+ If you have a nonlinear relationship, variables might contribute more than others at different points. Averaging across every observation might give a false notion of which variables are important if certain variables are more important in different cases.
+
+ ## Comparison to LIME
+
+ Shapley values are trying to show the variable's contribution / value to the observation. LIME is trying to show how the variable changes the average response for the observation.

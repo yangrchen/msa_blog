@@ -137,7 +137,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">November 9, 2023</p>
+        <p class="date-modified">November 20, 2023</p>
       </div>
     </div>
       
@@ -194,19 +194,20 @@ ul.task-list li input[type="checkbox"] {
 <p>The hazard function is written as:</p>
 <p><span class="math display">\[
 \begin{align*}
-h(t) &amp;= e^{\beta_0 + beta_1x_{i,1} + \cdots + \beta_k x_{i,k}} \\
+h(t) &amp;= e^{\beta_0 + \beta_1x_{i,1} + \cdots + \beta_k x_{i,k}} \\
 &amp; = h_0(t)e^{\beta_1x_{i,1} + \cdots + \beta_k x_{i,k}}
 \end{align*}
 \]</span></p>
 <ul>
 <li><span class="math inline">\(h_0(t)\)</span> is the baseline hazard function</li>
 </ul>
+<p>The baseline hazard function is the <strong>only</strong> part of the equation that depends on time, <span class="math inline">\(t\)</span>.</p>
 <p>The proportional hazard model models the log of the hazard directly:</p>
 <p><span class="math display">\[
 \log h(t) = \log h_0(t) + \beta_1x_{i,1} + \cdots + \beta_k x_{i,k}
 \]</span></p>
 <p>Predictions shift the hazard rather than directly shifting the failure time like in the AFT model.</p>
-<p>The hazard ratio between two groups no longer depend son time. We assume that there is a <strong>constant proportion</strong> on hazards.</p>
+<p>The hazard ratio between two groups no longer depends on time. We assume that there is a <strong>constant proportion</strong> on hazards. That is, the effect of the covariate on the hazard rate has a constant ratio between groups or with single unit increases.</p>
 <p><span class="math display">\[
 \begin{align*}
 h_i(t) &amp;= h_0(t)e^{\beta_1 x_{i,1} + \cdots + \beta_k x_{i,k}} \\
@@ -235,7 +236,8 @@ h_j(t) &amp;= h_0(t)e^{\beta_1 x_{j,1} + \cdots + \beta_k x_{j,k}} \\
 <li>Treat as parameteric (know the form)</li>
 </ul></li>
 </ul>
-<p>Using this semiparameteric model approach, we can ignore ever estimating anything about the baseline hazard <span class="math inline">\(h_0(t)\)</span>. Cox disregarded the first piece of the likelihood and maximized the second piece and estimate sare obtained by maximizing the <strong>partial likelihood</strong>–one piece depends on the predictors, not the entire thing.</p>
+<p>Using this semiparameteric model approach, we can ignore ever estimating anything about the baseline hazard <span class="math inline">\(h_0(t)\)</span>. This means that the model does not assume any particular mathematical form for the baseline hazard rate. The Cox model can fit a wide range of hazard shapes without having to specify the underlying distribution of survival times and <strong>we do not need to check for an appropriate distribution</strong>.</p>
+<p>Estimates are obtained by maximizing the <strong>partial likelihood</strong>–one piece depends on the predictors, not the entire thing.</p>
 <section id="partial-likelihood-downfalls" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="partial-likelihood-downfalls"><span class="header-section-number">3.1</span> Partial Likelihood Downfalls</h2>
 <p>Some information about parameters is lost due to partial likelihood estimation–inefficient estimates. Estimates still have desired properties:</p>
@@ -313,20 +315,29 @@ h_j(t) &amp;= h_0(t)e^{\beta_1 x_{j,1} + \cdots + \beta_k x_{j,k}} \\
 <p><span class="math display">\[
 \log h(t) = \beta_1x_{i,1} + \beta_2(t)x_{i,2}
 \]</span></p>
+<p>An example time-dependent coefficient could be a linear function:</p>
+<p><span class="math display">\[
+\beta_2(t) = \beta_2 + b \cdot \text{time}
+\]</span></p>
 <ul>
 <li>Time-dependent coefficients are functions of time, <span class="math inline">\(t\)</span>.</li>
-<li>If <span class="math inline">\(\beta = 0\)</span>, then effect doesn’t depend on time.</li>
-<li>If <span class="math inline">\(\beta \neq 0\)</span>, then effect does depend on time and PH assumptino is not satisfied.</li>
+<li>If <span class="math inline">\(b = 0\)</span>, then effect doesn’t depend on time.</li>
+<li>If <span class="math inline">\(b \neq 0\)</span>, then effect does depend on time and PH assumption is not satisfied.</li>
 </ul>
 <section id="schoenfeld" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="schoenfeld"><span class="header-section-number">8.1</span> Schoenfeld</h2>
 <p>If coefficients, do <strong>NOT</strong> depend on time, then the PH model holds and graphs of the Schoenfeld residuals should be a horizontal line.</p>
-<p>There is a test that has <span class="math inline">\(H_0: \beta = 0\)</span> and <span class="math inline">\(H_a: \beta \neq 0\)</span> such that we want to fail to reject <strong>H_0</strong> to assume there is no relationship with time. We prefer this test over the graphs–the graphs aren’t necesssarily too informative.</p>
+<p>There is a test that has <span class="math inline">\(H_0: \beta = 0\)</span> and <span class="math inline">\(H_a: \beta \neq 0\)</span> such that we want to fail to reject <strong>H_0</strong> to assume there is no relationship with time. Schoenfeld residuals are best used for investigating relationships with time for individual predictors since they are calculated on a per variable basis.</p>
 <p>However, these residual tests should be done <strong>after</strong> model selection has occurred.</p>
 <p>You can also test out different transformations of time like the log of time. However, in your model you have to go with the same transformation for all variables, whichever you decide to move forward with.</p>
 </section>
 <section id="interpretation" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="interpretation"><span class="header-section-number">8.2</span> Interpretation</h2>
+<p>An example time-varying coefficient can be:</p>
+<p><span class="math display">\[
+\beta_\text{age}(t) = 0.122 - 0.059 \cdot \log(\text{week})
+\]</span></p>
+<p>Initially, age has an increasing effect on the hazard up until week 7. Beyond week 7, the effect becomes negative and being older decreases the hazard.</p>
 
 
 </section>
