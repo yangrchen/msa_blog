@@ -1,7 +1,6 @@
 name: msa
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - python=3.11
   - numpy
@@ -18,4 +17,9 @@ dependencies:
   - statsforecast
   - seaborn
   - xgboost
-prefix: /opt/homebrew/Caskroom/miniconda/base/envs/msa
+  - ca-certificates
+  - certifi
+  - openssl
+  - python-graphviz
+  - gurobi
+prefix: /opt/homebrew/Caskroom/miniforge/base/envs/msa
