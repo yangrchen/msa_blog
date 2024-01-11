@@ -32,16 +32,12 @@ jobs:
         with:
           cache-version: 1
       
-      - name: Set up Python 3.11.5
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11.5
-      
       - name: Install Mamba dependencies
         uses: mamba-org/setup-micromamba@v1
         with:
           environment-file: environment.yml
           environment-name: build
+          init-shell: bash
           cache-environment: true
 
       - name: Render and Publish
