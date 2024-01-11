@@ -20,3 +20,26 @@ In R, we have the `smbinning` package and in Python we have the `scorecard` or `
 -   Modeling nonlinearities similar to decision trees.
 -   Dealing with outliers contianed in the smallest / largest group.
 -   Missing values tend to typically go in their own group. 
+
+## Initial Characteristic Analysis
+
+Need a starting point for the grouping / binning. We tend to use quantiles for this initial approach. The idea is to pre-bin the interval variables into a number of user-specified quantiles / buckets for fine detailed groupings. We can then aggregate the fine detailed groupings into a smaller number to produce coarse groupings using chi-squared tests to combine groups. Only groups next to each other are grouped.
+
+In R, we can use decision trees to select cut points for the variables. Specifically, we use conditional inference trees. CART methods have inherent bias as variables with more levels are more likely to be split on using Gini and entropy. CIT method adds an extra statistical step before splits occur using statistical tests of significance (Chi-square) to inform splits.
+
+Each time we split, we use statistical tests on our response from the chunks created from the last split. 
+
+![CIT Method](images/cit-method.png){#fig-cit-method}
+
+Cutoffs may be rough from decision tree combining. We can optionally override these generated groups to conform to business rules, but overrides may make groups suboptimal.
+
+# Weight of Evidence
+
+**Weight of evidence (WOE)** measures the strength of the attributes of a characteristic in separating good and bad accounts. WOE is based on comparing the proportion of goods to bads at each attribute level.
+
+$$
+WOE_i = \log(\frac{Dist.Good_i}{Dist.Bad_i})
+$$
+
+-   $Dist.Good_i = \frac{\text{# Good in group i}}{\text{Total # Good}}$
+-   $Dist.Bad_i = \frac{\text{# Bad in group i}}{\text{Total # Bad}}$

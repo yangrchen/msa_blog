@@ -37,8 +37,6 @@ jobs:
         with:
           environment-file: environment.yml
           environment-name: build
-          init-shell: bash
-          cache-environment: true
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
