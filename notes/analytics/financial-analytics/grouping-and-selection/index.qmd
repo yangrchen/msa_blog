@@ -1,0 +1,22 @@
+---
+title: Scorecard Variable Grouping and Selection
+date: 01/08/2023
+---
+
+# Variable Grouping
+
+Scorecards eng up with only just groups within a variable.
+
+**Objectives:**
+
+-   Eliminate weak characteristics or those that do not conform to good business logic.
+-   Group the strongest characteristics' attribute levels in order to produce a model in scorecard format.
+
+In R, we have the `smbinning` package and in Python we have the `scorecard` or `OptBinning` packages.
+
+**Goals:**
+
+-   Useful for understanding relationships.
+-   Modeling nonlinearities similar to decision trees.
+-   Dealing with outliers contianed in the smallest / largest group.
+-   Missing values tend to typically go in their own group. 

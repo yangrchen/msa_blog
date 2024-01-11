@@ -1,0 +1,86 @@
+---
+title: Linear Programming
+date: 01/11/2023
+---
+
+# Example Problem
+
+Dahlby Outfitters wants to introduce a new trail mix. Each ingredient
+contain amounts of vitamins, minerals, proteins, and calories (must
+contain at least the amount shown in table). Product needs to have
+certain minimal nutritional profile. Want to find the optimal mix that
+minimizes cost.
+
+![Example Information](images/example-info.png){#fig-example-info}
+
+```{python}
+from gurobipy import Model, GRB
+
+m = Model("Nutrition Example")
+
+# Create variables
+s = m.addVar(vtype=GRB.CONTINUOUS, lb=0, name="seeds")
+r = m.addVar(vtype=GRB.CONTINUOUS, lb=0, name="raisins")
+f = m.addVar(vtype=GRB.CONTINUOUS, lb=0, name="flakes")
+p = m.addVar(vtype=GRB.CONTINUOUS, lb=0, name="pecans")
+w = m.addVar(vtype=GRB.CONTINUOUS, lb=0, name="walnuts")
+
+# Add constraints
+m.addConstr(10 * s + 20 * r + 10 * f + 30 * p + 20 * w >= 20, "Vitamins")
+m.addConstr(5 * s + 7 * r + 4 * f + 9 * p + 2 * w >= 10, "Minerals")
+m.addConstr(1 * s + 4 * r + 10 * f + 2 * p + 1 * w >= 15, "Protein")
+m.addConstr(500 * s + 450 * r + 160 * f + 300 * p + 500 * w >= 600, "Calories")
+
+# Set objective
+m.setObjective(4 * s + 5 * r + 3 * f + 7 * p + 6 * w, GRB.MINIMIZE)
+
+m.optimize()
+
+for v in m.getVars():
+    print(f"{v.varName} {v.x}")
+print(f"Obj: {m.objVal}")
+```
+
+# Binding Constraints and Sensitivity
+
+A constraint is **binding** if the LHS of a constraint equals the RHS of the constraint. We can get this from Gurobi which labels these constraints as slack--the difference between the LHS and RHS:
+
+```{python}
+for c in m.getConstrs():
+    print(f"{c.ConstrName}: {c.Slack}")
+```
+
+How sensitive is the solution to changes in the parameter values in the constraints? This is referred to as **shadow price**.
+
+How sensitive is the solution to changes in the coefficients in the objective function? This is referred to as **reduced cost**.
+
+# Shadow Price
+
+In our previous furniture example, we had two binding constraints: fabrication and table demand.
+
+We want to see what happens when we incrase fabrication by 1 hour, keeping all else constant.
+
+The original fabrication is 1850 and the objective value is 8400. If we increase fabrication by 1 then the objective value is now 8404. As we increase fabrication by 1 hour then we will see a increase in profit by $4.
+
+If we were to change a constraint that is **not** binding, then our objective value does not change.
+
+The shadow price of a constraint indicates the amount by which the objective function value changes givena  unit increase or decrease in the RHS of the constraint, assuming all other parameters remain constant. Shadow prices only hold for linear optimizations and are always zero for nonbinding constraints.
+
+## Slack vs. Pi in Python
+
+If a constraint is binding (RHS = LHS), then the slack for the constraint is 0. Constraints with nonbinding constraints will have a nonzero value for slack. When the constraint is binding, then Pi will give the shadow price for that constraint.
+
+```{python}
+shadow_prices = m.getAttr("Pi")
+m.printAttr("Pi")
+```
+
+# Reduced Cost
+
+**Reduced cost** is the amount by which an objective function coefficient would have to improve (increase for maximization, decrease for minimization) before it would be possible for a corresponding variable to assume a positive value in the optimal solution.
+
+```{python}
+for v in m.getVars():
+    print(f"{v.VarName}: {v.RC}")
+```
+

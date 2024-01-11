@@ -1,0 +1,225 @@
+---
+title: Intro to Customer Analytics
+draft: true
+date: 11/27/2023
+---
+
+# Career Perspective
+
+Customer analytics from the marketing side tends to be:
+
+| Customer Analyst                | Data Scientist                           |
+|---------------------------------|------------------------------------------|
+| Shorter and iterative           | Longer and singular                      |
+| Creative                        |                                          |
+| Collaboration with the business | Collaboration with other data scientists |
+| Industry tool heavy             | Data tool heavy                          |
+| Generate insights               | Building production models               |
+
+# General Framework
+
+## Business-to-Consumer
+
+A simple pipeline: awareness, consideration, purchase.
+
+-   Consideration: Gain knowledge
+-   Purchase: Buy
+
+A more complex pipeline: Discover, Learn, Evaluate, Adopt, Expand / Renew.
+
+-   Discover: Find solutions
+-   Learn: Gain knowledge
+-   Evaluate: Start, try, test
+-   Adopt: 
+-   Expand / Renew:
+
+## Channels / Touchpoints
+
+How the user / account is reached:
+
+-   Organic: Right content to drive users / accounts?
+-   Paid: Are we targeting new new via paid social, search engine, display?
+-   Email: Are we growing our contact database and nurturing effectively?
+-   Events: Are our in person events and webinars converting?
+-   Trials: Are our freemium offerings leading to paid subscriptions?
+
+## B2C vs. B2B
+
+**Business-to-Customer (B2C):**
+
+-   Selling to user / customer
+-   Shorter sales cylces
+-   Goals are to build brand awareness and convert as quickly as possible
+-   Conversion occurring through site system, third party retailer, or Amazon
+
+**Business-to-Business (B2B):**
+
+-   Selling to an account consisting of many buying personas
+-   Longer sales cycles
+-   Early funnel goals are to build awareness, grow contact database, land inquiries
+-   Later funnel goals are to build "opportunity value" in the customer relationship management and convert to "closed won" revenue
+-   Conversion usually occurring via sales team to close deal
+
+# Traditional Desired Outcomes
+
+Optimize 4 V's often against finance targets or period over period targets:
+
+-   **Volume:** Target right audience to generate qualified, early stage traffic
+-   **Velocity:** Move users / accounts through the funnel at speed
+-   **ConVersion:** Maximize conversion through each step of the funnel
+-   **Value:** Increase revenue to return business value
+
+## Convergence with Product Analytics
+
+Distinction between B2C and B2B is narrowing with more focus towards "Product Outcomes"
+
+-   Product Led Growth (PLG) uses product as acquisition vehicle rather than a traditional sales funnel, using a trial or freemium to get users in the product ASAP
+-   Experiences start unauthenticated on websites, but often end authenticated in-product / in-app
+-   Marketing teams want to understand how their efforts compare to product outcomes
+-   Product teams want to understand the correlation between features added and product outcomes (usually usage, longer term retention)
+
+# Experimentation Process
+
+Experimentation is industry speak for a Randomized Control Trial (RCT). Each user is randomly assigne dto control or variation. Random assignment guards against for bias and spreads the variance of uncontrollable factors. Allows us to establish causation when tested against a control during the same time period.
+
+However, no experience will provide a positive return forever as user expectations and future interactions necessitate continual experimentation.
+
+## Visit Hierarchy + Sessionization
+
+-   **Hit:** Single instance of website request
+-   **Session:** Collection of hits in single session
+    -   Must time window ($X$) to see if the time between hits ($t$) should count as a single session or not
+-   **Visitor:** Collection of sessions unique to a single visitor ID
+    -   Sessions stitched together by ID where $t > X$
+
+## Data Generation + Collection
+
+1.  Page is requested when user attempts to load page
+2.  Browser reads source code and embedded JavaScript tags
+3.  All tags are executed (independently or executed by tag manager)
+4.  Analytics tags send tracking code (ID, referrer, locations, SKU, page name, URL parameter, etc)
+5.  Data is stored by third parties like Adobe or Google Analytics for later analysis
+
+# Testing Tools + Vendors
+
+In general the way experimentation tools will work:
+
+1.  Allows select page or site component to be tested
+2.  Allows target / segmentation to be set
+3.  Allows developers to create a variation that modifies the control using front-end JavaScript or a WYSIWYG (What You See Is What You Get)
+4.  Randomizes traffic assignment to the control and each variation
+5.  Summarizes the statistical results of each test
+
+## Client Side vs. Server Side Testing
+
+Client side changes the content sent by the companies server to the user in the browser, can maipulate elements that are already present, can result in flicker.
+
+Server side is where the companies server takes on the task os sending variations to each user, limitless in terms of test-able scope, no flicker.
+
+# A/B Testing
+
+Comparing control vs. some variation
+
+## Process
+
+The first step is to define the target through **prioritization**. Forecasting impact should drive decisions about where to test on the site.
+
+Waterfall analysis can help forecast potential impact by looking at:
+
+-   Revenue participation (what parts of the site are hit on buying journeys)
+-   Usability issues across page types (giving more weight to pages with a higher ceiling for improvement)
+
+### Qualitative Methods
+
+-   **Usability:** Use heatmapping, watch session replays or conduct live research to baseline how users are interacting with the current UI
+-   **Competitive Analysis:** Analyze competitor websites for distinguishing features then conduct research asking users how they feel on a relative basis
+
+### Economics Principles
+
+-   **Risk / Uncertainty:** Is there any anxiety around the purchase decision?
+-   **Usability and Site Design:** How much effort does it take to interact with the site interface to achieve your objective?
+-   **Financial Sensitivity to the Product:** Is user demand elastic to price and how would discount messaging be perceived?
+-   **Time Scarcity:** How long will it take to complete the action and how is the time commitment explained to the user?
+-   **Company and Product Differentiation:** Is it clear to the user why they should purchase from that particular company
+
+## Primary KPI
+
+Choosing a Single Primary KPI:
+
+-   Single KPI consists of one meaningful, predefined, standalone metric
+-   Balance choosing a KPI close to the change and one impactful to the business
+-   Signal will be stronger closer to the change, but that metric may not be meaningful
+
+We can have **binary** or **continuous** KPI types measuring either states or some measurable response.
+
+### Primary Audience + Post-test Segmentation
+
+We have to pre-define the primary audience:
+
+-   Select specific group to be included
+-   Solidify before test launch
+-   Used for final decision making purposes
+
+Post-test segmentation:
+
+-   Should help paint the picture of overall results
+-   Segmentation illustrates the difference in response across important groups
+
+### Sample Size for Stopping
+
+-   Stopping rule is the criteria at which the test should be stopped and results collected
+-   Establishing these criteria will ensure tests are not concluded with bias and that the results will be repeatable
+
+## Advantages + Disadvantages
+
+**Advantages:**
+
+-   Investigating and understanding strategic levers, page redesigns, low traffic
+-   Fewer assumptions
+-   Shorter test duration
+-   Requires lower traffic volumes
+-   Relatively inexpensive
+
+**Disadvantages:**
+
+-   Lumping changes causes you to lose precision over the factors
+
+# Multivariate Testing (MVT)
+
+There may be multiple components or factors that we are varying. MVT allows us to test multiple variations of multiple components.
+
+## Advantages + Disadvantages
+**Advantages:**
+
+-   Allows greater optimizations within a single test
+-   Insight into impact of specific attribute change
+
+**Disadvantages:**
+
+-   Higher LOE due to tech resources and analytics
+-   Longer test duration, more traffic
+-   In partial designs, winner might be "predicted" not empirically verified
+
+## Full vs. Partial Factorial
+
+**Full:**
+
+-   All permutations of factor levels are formed into variations and all are selected to be tested
+-   
+
+**Partial:**
+
+# Personalization
+
+Creating a site that bends to the unique needs of each user, rather than remaining static across the population, based on event or profile data. Performance is governed by effectiveness of the algorithms.
+
+Common algorithms:
+
+-   Trending
+-   Recently Expired
+-   Co-browser, Co-buy
+-   Similar Items
+-   Collaborative Filterings
+-   Clustering
+-   Decision Trees
+-   Multi-armed Bandits

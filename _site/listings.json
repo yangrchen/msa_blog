@@ -35,6 +35,7 @@
   {
     "listing": "/notes/analytics/index.html",
     "items": [
+      "/notes/analytics/optimization/introduction/index.html",
       "/notes/analytics/machine-learning/interpretability/index.html",
       "/notes/analytics/machine-learning/naive-bayes/index.html",
       "/notes/analytics/machine-learning/nnet/index.html",
@@ -78,7 +79,8 @@
       "/notes/analytics/linear-regression/SLR/index.html",
       "/notes/analytics/ANOVA/introduction/index.html",
       "/notes/analytics/EDA/statistical-inference/index.html",
-      "/notes/analytics/EDA/introduction/index.html"
+      "/notes/analytics/EDA/introduction/index.html",
+      "/notes/analytics/financial-analytics/credit-scoring/index.html"
     ]
   }
 ]

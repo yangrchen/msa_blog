@@ -1,0 +1,95 @@
+---
+title: Introduction to Optimization
+date: 01/08/2024
+---
+
+# Overview
+
+In the mathematical sciences, optimization is trying to find the maximum or minimum a function can take. The goal is to find out what values of the "decision variables" (input variables) optimize the function.
+
+## Terminology
+
+-   **Decision variables:** Input variables in which we can change to optimize a function.
+-   **Objective function:** Function in which we are trying to optimize. A function of the decision variables.
+-   **Constraints:** Functions of the decision variables that define the constraints of the problems.
+-   **Parameters:** Values inherent in the problem that we are not able to control.
+
+![Optimization Layout](images/optimization-layout.png){#fig-optim-layout}
+
+## Outputs from an Optimization
+
+-   No optimization exists.
+-   More than one solution exists.
+-   There exists one unique solution to the problem.
+-   Other possibilities, but these are the most recognized.
+
+## Types of Optmization Problems
+
+1.  **Linear programming:** Objective function and constraints are linear.
+2.  **Integer linear programming:** Objective function and constraints are linear, but decision variables MUST be integers.
+3.  **Mixed integer linear programming:** Same as ILP but only some decision variables are restricted to integers.
+4.  **Non-linear programming:** Objective functions and constraints are continuous, but not all are linear.
+
+# Linear Programming
+
+The **feasible region** is a region defined by our constraints. Think of this as the space of possible arrangements of our decision variables.
+
+Easiest solutions for solving a linear programming problem is the **simplex method**.
+
+## Example
+
+Decision variables:
+
+$$
+x_1, x_2
+$$
+
+Objective function:
+
+$$
+2x_1 + 3x_2
+$$
+
+Constraints:
+
+$$
+0 \leq x_1 \leq 3
+$$
+
+$$
+0 \leq x_2 \leq 3
+$$
+
+![Feasible Region Example](images/feasible-region.png){#fig-feasible-region}
+
+![Feasible Region with Simplex](images/simplex-example.png){#fig-simplex-example}
+
+```{python}
+from gurobipy import Model, GRB
+
+# Create a new model
+m = Model("mip1")
+
+# Create variables
+c = m.addVar(vtype=GRB.CONTINUOUS, lb=0, name="Desk")
+d = m.addVar(vtype=GRB.CONTINUOUS, lb=0, name="Desk")
+t = m.addVar(vtype=GRB.CONTINUOUS, lb=0, name="Table")
+
+# Set objective
+m.setObjective(15 * c + 24 * d + 18 * t, GRB.MAXIMIZE)
+
+# Add constraints
+m.addConstr(4 * c + 6 * d + 2 * t <= 1850, "c0")
+m.addConstr(3 * c + 5 * d + 7 * t <= 2400, "c1")
+m.addConstr(3 * c + 2 * d + 4 * t <= 1500, "c2")
+
+m.addConstr(c <= 360, "c3")
+m.addConstr(d <= 300, "c4")
+m.addConstr(t <= 100, "c5")
+
+m.optimize()
+
+for v in m.getVars():
+    print(f"{v.varName} {v.x}")
+print(f"Obj: {m.objVal}")
+```

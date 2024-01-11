@@ -1,0 +1,103 @@
+---
+title: Introduction to Credit Scoring & Data Preparation
+date: 01/08/2023
+---
+
+# Scorecards and Credit Scoring
+
+A **scorecard** is a common way of displaying patterns found in a binary response model. Typically, people use logistic regression models, but the main benefit is that a scorecard provides an intuitive way of presenting the regression coefficients.
+
+**Credit scoring** is the original use case. Credit scoring is trying to predict whether or not you will default on a loan--the number is just a representation of the underlying probability / likelihood.
+
+> Credit scoring is a statistical model that assigns a risk value to prospective or existing credit accounts.
+>
+> A credit scorecard is a statistical risk model that was put into a special format designed for ease of interpretation.
+
+Note that credit scoring is the underlying model itself. Credit scorecard is the interpretable layer that we add on so that people can understand.
+
+The credit scorecard format is very popular in the consumer credit world for a number of reasons:
+
+1.  People at all levels within an organization generally find it easy to understand and use.
+2.  Regulatory agencies are accustomed to credit risk models presented in this fashion.
+3.  Credit scorecards are straightforward to implement and monitor over time.
+
+![Scorecard Example](images/scorecard-example.png){#fig-scorecard-example}
+
+## Discrete vs. Continuous Time
+
+Credit scoring typically tries to understand the probability of a default on a customer (or business).
+
+Default is also dependent on time. We're interested in learning when someone will default.
+
+-   **Discrete:** Evaluating binary decisions on predetermined intervals of time.
+-   **Continuous:** Evaluating probability of default as it changes over continuous points in time (survival analysis).
+
+In discrete time, we typically pick multiple windows (models) to evaluate across.
+
+![Discrete Time Multiple](images/discrete-time-multiple.png){#fig-discrete-time-multiple}
+
+# Reject Inference
+
+**Reject inference** is the process of inferring status of the rejected applicants based on the accepted applicants model in an attempt to use their information to build a scorecard that is representative of all applicants. This is used to solve sample bias so that the development sample is similar to the population to which the scorecard will be applied.
+
+Currently, financial institutions are beginning to be required to maintain rejected application data to build out these samples with real data.
+
+# Data Collection and Cleaning
+
+Need to define the target variable first.
+
+-   **Old Approach:** 90 days past due (DPD) for everything
+-   **Current Approach:** 90 - 180 DPD based on types of loans, business sector, country regulations, etc.
+
+## Variable Selection
+
+There are several criteria which are used to evaluate which variables to select:
+
+-   Expected predictability power
+-   Business interpretation
+-   Reliability
+-   Legal issues
+-   Ease in collection
+-   Future availability
+
+## Feature Engineering
+
+-   Loan to value ratio
+-   Number of delinquent accounts
+-   Expense to income ratio
+-   Credit line utilization
+
+We also want to omit variables that are highly dependent and review / remove outliers:
+
+-   Variables clustering
+
+## Sample Size
+
+> There are no hard and fast rules, but the sample selected normally includes at least 1,000 good, 1,000 bad, and about 750 rejected applicants.
+
+There is no exact answer ont he correct sample size. Sample size depends on the overall size of the portfolio, the number of explanatory variables you are planning to use, and the number of defaults or claims filled.
+
+## Sample and Performance Window
+
+The sample must be characteristic of the population to which the scorecard will be applied.
+
+**Objective:**
+
+-   Gather data for accounts opened during a specific time frame.
+-   Monitor their performance for another specific length of time to determine if they were good or bad.
+
+**Problems:**
+
+-   Accounts opened recently are more similar to accounts that will be opened in the near future.
+-   Want to minimize the chances of misclassifying performance--acounts must be monitored long enough to not underestimate expected bad rates.
+
+![Sample and Performance Window Example](images/sample-performance-window-example.png){#fig-sample-performance-window-example}
+
+Based off of @fig-sample-performance-window-example, "Bads" level off about 14 months after loan origination. If the analysis is to be performed on March 2022, we select our **sample** from 12-16 months back and this will give an average of 14 months **performance window.**
+
+The exact length of the performance window depends on the product.
+
+-   Credit Cards: ~1-2 years
+-   Mortgages: ~3-5 years
+
+Sample window length can vary based on data availability as well.
