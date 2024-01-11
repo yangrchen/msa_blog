@@ -1,28 +1,8 @@
 [
   {
-    "listing": "/blog/index.html",
-    "items": [
-      "/blog/first_weeks/index.html"
-    ]
-  },
-  {
-    "listing": "/notes/communication/index.html",
-    "items": [
-      "/notes/communication/062623/index.html"
-    ]
-  },
-  {
-    "listing": "/notes/programming/index.html",
-    "items": [
-      "/notes/programming/git/primer/index.html",
-      "/notes/programming/python/practicum-prep/index.html",
-      "/notes/programming/R/r4ds/intro/index.html",
-      "/notes/programming/R/r4ds/intro_visualization/index.html"
-    ]
-  },
-  {
     "listing": "/notes/analytics/index.html",
     "items": [
+      "/notes/analytics/optimization/introduction/index.html",
       "/notes/analytics/machine-learning/interpretability/index.html",
       "/notes/analytics/machine-learning/naive-bayes/index.html",
       "/notes/analytics/machine-learning/nnet/index.html",
@@ -66,7 +46,16 @@
       "/notes/analytics/linear-regression/SLR/index.html",
       "/notes/analytics/ANOVA/introduction/index.html",
       "/notes/analytics/EDA/statistical-inference/index.html",
-      "/notes/analytics/EDA/introduction/index.html"
+      "/notes/analytics/EDA/introduction/index.html",
+      "/notes/analytics/optimization/linear-programming/index.html",
+      "/notes/analytics/financial-analytics/credit-scoring/index.html",
+      "/notes/analytics/financial-analytics/grouping-and-selection/index.html"
+    ]
+  },
+  {
+    "listing": "/blog/index.html",
+    "items": [
+      "/blog/first_weeks/index.html"
     ]
   },
   {
@@ -78,6 +67,21 @@
       "/notes/primer/confidence_intervals/index.html",
       "/notes/primer/probability/index.html",
       "/notes/primer/fundamental/index.html"
+    ]
+  },
+  {
+    "listing": "/notes/communication/index.html",
+    "items": [
+      "/notes/communication/062623/index.html"
+    ]
+  },
+  {
+    "listing": "/notes/programming/index.html",
+    "items": [
+      "/notes/programming/git/primer/index.html",
+      "/notes/programming/python/practicum-prep/index.html",
+      "/notes/programming/R/r4ds/intro/index.html",
+      "/notes/programming/R/r4ds/intro_visualization/index.html"
     ]
   }
 ]

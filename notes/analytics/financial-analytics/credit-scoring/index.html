@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="description" content="Notes on Python, R and fun little experiments using software!">
+<meta name="dcterms.date" content="2023-01-08">
 
-<title>Yang MSA - Programming</title>
+<title>Yang MSA - Introduction to Credit Scoring &amp; Data Preparation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,25 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<link href="../../favicon.ico" rel="icon">
-<script src="../../site_libs/quarto-listing/list.min.js"></script>
-<script src="../../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../favicon.ico" rel="icon">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -64,40 +62,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="../../../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -107,7 +74,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Yang MSA</span>
     </a>
   </div>
@@ -118,11 +85,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../notes/index.html" rel="" target="">
+    <a class="nav-link" href="../../../../notes/index.html" rel="" target="">
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../blog/index.html" rel="" target="">
+    <a class="nav-link" href="../../../../blog/index.html" rel="" target="">
  <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
@@ -140,15 +107,10 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Programming</h1>
-                  <div>
-        <div class="description">
-          Notes on Python, R and fun little experiments using software!
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">programming</div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Introduction to Credit Scoring &amp; Data Preparation</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">analytics</div>
               </div>
                   </div>
   </div>
@@ -163,177 +125,160 @@ ul.task-list li input[type="checkbox"] {
             </div>
     </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 8, 2023</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(4)</span></div><div class="category" data-category="programming">programming <span class="quarto-category-count">(4)</span></div><div class="category" data-category="python">python <span class="quarto-category-count">(1)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#scorecards-and-credit-scoring" id="toc-scorecards-and-credit-scoring" class="nav-link active" data-scroll-target="#scorecards-and-credit-scoring"><span class="header-section-number">1</span> Scorecards and Credit Scoring</a>
+  <ul class="collapse">
+  <li><a href="#discrete-vs.-continuous-time" id="toc-discrete-vs.-continuous-time" class="nav-link" data-scroll-target="#discrete-vs.-continuous-time"><span class="header-section-number">1.1</span> Discrete vs.&nbsp;Continuous Time</a></li>
+  </ul></li>
+  <li><a href="#reject-inference" id="toc-reject-inference" class="nav-link" data-scroll-target="#reject-inference"><span class="header-section-number">2</span> Reject Inference</a></li>
+  <li><a href="#data-collection-and-cleaning" id="toc-data-collection-and-cleaning" class="nav-link" data-scroll-target="#data-collection-and-cleaning"><span class="header-section-number">3</span> Data Collection and Cleaning</a>
+  <ul class="collapse">
+  <li><a href="#variable-selection" id="toc-variable-selection" class="nav-link" data-scroll-target="#variable-selection"><span class="header-section-number">3.1</span> Variable Selection</a></li>
+  <li><a href="#feature-engineering" id="toc-feature-engineering" class="nav-link" data-scroll-target="#feature-engineering"><span class="header-section-number">3.2</span> Feature Engineering</a></li>
+  <li><a href="#sample-size" id="toc-sample-size" class="nav-link" data-scroll-target="#sample-size"><span class="header-section-number">3.3</span> Sample Size</a></li>
+  <li><a href="#sample-and-performance-window" id="toc-sample-and-performance-window" class="nav-link" data-scroll-target="#sample-and-performance-window"><span class="header-section-number">3.4</span> Sample and Performance Window</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
+<section id="scorecards-and-credit-scoring" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Scorecards and Credit Scoring</h1>
+<p>A <strong>scorecard</strong> is a common way of displaying patterns found in a binary response model. Typically, people use logistic regression models, but the main benefit is that a scorecard provides an intuitive way of presenting the regression coefficients.</p>
+<p><strong>Credit scoring</strong> is the original use case. Credit scoring is trying to predict whether or not you will default on a loan–the number is just a representation of the underlying probability / likelihood.</p>
+<blockquote class="blockquote">
+<p>Credit scoring is a statistical model that assigns a risk value to prospective or existing credit accounts.</p>
+<p>A credit scorecard is a statistical risk model that was put into a special format designed for ease of interpretation.</p>
+</blockquote>
+<p>Note that credit scoring is the underlying model itself. Credit scorecard is the interpretable layer that we add on so that people can understand.</p>
+<p>The credit scorecard format is very popular in the consumer credit world for a number of reasons:</p>
+<ol type="1">
+<li>People at all levels within an organization generally find it easy to understand and use.</li>
+<li>Regulatory agencies are accustomed to credit risk models presented in this fashion.</li>
+<li>Credit scorecards are straightforward to implement and monitor over time.</li>
+</ol>
+<div id="fig-scorecard-example" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/scorecard-example.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Scorecard Example</figcaption>
+</figure>
+</div>
+<section id="discrete-vs.-continuous-time" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="discrete-vs.-continuous-time"><span class="header-section-number">1.1</span> Discrete vs.&nbsp;Continuous Time</h2>
+<p>Credit scoring typically tries to understand the probability of a default on a customer (or business).</p>
+<p>Default is also dependent on time. We’re interested in learning when someone will default.</p>
+<ul>
+<li><strong>Discrete:</strong> Evaluating binary decisions on predetermined intervals of time.</li>
+<li><strong>Continuous:</strong> Evaluating probability of default as it changes over continuous points in time (survival analysis).</li>
+</ul>
+<p>In discrete time, we typically pick multiple windows (models) to evaluate across.</p>
+<div id="fig-discrete-time-multiple" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/discrete-time-multiple.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Discrete Time Multiple</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="reject-inference" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Reject Inference</h1>
+<p><strong>Reject inference</strong> is the process of inferring status of the rejected applicants based on the accepted applicants model in an attempt to use their information to build a scorecard that is representative of all applicants. This is used to solve sample bias so that the development sample is similar to the population to which the scorecard will be applied.</p>
+<p>Currently, financial institutions are beginning to be required to maintain rejected application data to build out these samples with real data.</p>
+</section>
+<section id="data-collection-and-cleaning" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Data Collection and Cleaning</h1>
+<p>Need to define the target variable first.</p>
+<ul>
+<li><strong>Old Approach:</strong> 90 days past due (DPD) for everything</li>
+<li><strong>Current Approach:</strong> 90 - 180 DPD based on types of loans, business sector, country regulations, etc.</li>
+</ul>
+<section id="variable-selection" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="variable-selection"><span class="header-section-number">3.1</span> Variable Selection</h2>
+<p>There are several criteria which are used to evaluate which variables to select:</p>
+<ul>
+<li>Expected predictability power</li>
+<li>Business interpretation</li>
+<li>Reliability</li>
+<li>Legal issues</li>
+<li>Ease in collection</li>
+<li>Future availability</li>
+</ul>
+</section>
+<section id="feature-engineering" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="feature-engineering"><span class="header-section-number">3.2</span> Feature Engineering</h2>
+<ul>
+<li>Loan to value ratio</li>
+<li>Number of delinquent accounts</li>
+<li>Expense to income ratio</li>
+<li>Credit line utilization</li>
+</ul>
+<p>We also want to omit variables that are highly dependent and review / remove outliers:</p>
+<ul>
+<li>Variables clustering</li>
+</ul>
+</section>
+<section id="sample-size" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="sample-size"><span class="header-section-number">3.3</span> Sample Size</h2>
+<blockquote class="blockquote">
+<p>There are no hard and fast rules, but the sample selected normally includes at least 1,000 good, 1,000 bad, and about 750 rejected applicants.</p>
+</blockquote>
+<p>There is no exact answer ont he correct sample size. Sample size depends on the overall size of the portfolio, the number of explanatory variables you are planning to use, and the number of defaults or claims filled.</p>
+</section>
+<section id="sample-and-performance-window" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="sample-and-performance-window"><span class="header-section-number">3.4</span> Sample and Performance Window</h2>
+<p>The sample must be characteristic of the population to which the scorecard will be applied.</p>
+<p><strong>Objective:</strong></p>
+<ul>
+<li>Gather data for accounts opened during a specific time frame.</li>
+<li>Monitor their performance for another specific length of time to determine if they were good or bad.</li>
+</ul>
+<p><strong>Problems:</strong></p>
+<ul>
+<li>Accounts opened recently are more similar to accounts that will be opened in the near future.</li>
+<li>Want to minimize the chances of misclassifying performance–acounts must be monitored long enough to not underestimate expected bad rates.</li>
+</ul>
+<div id="fig-sample-performance-window-example" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/sample-performance-window-example.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Sample and Performance Window Example</figcaption>
+</figure>
+</div>
+<p>Based off of <a href="#fig-sample-performance-window-example">Figure&nbsp;3</a>, “Bads” level off about 14 months after loan origination. If the analysis is to be performed on March 2022, we select our <strong>sample</strong> from 12-16 months back and this will give an average of 14 months <strong>performance window.</strong></p>
+<p>The exact length of the performance window depends on the product.</p>
+<ul>
+<li>Credit Cards: ~1-2 years</li>
+<li>Mortgages: ~3-5 years</li>
+</ul>
+<p>Sample window length can vary based on data availability as well.</p>
 
 
+</section>
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="programming" data-listing-date-sort="1695168000000" data-listing-file-modified-sort="1705006752649" data-listing-date-modified-sort="1696896000000" data-listing-reading-time-sort="12">
-<div class="thumbnail">
-<p><a href="../../notes/programming/git/primer/index.html"> <p class="card-img-top"><img src="git/primer/images/vcs-type-diagrams.jpeg"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/programming/git/primer/index.html">
-<h3 class="no-anchor listing-title">
-Git Basics
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('programming'); return false;">
-programming
-</div>
-</div>
-<a href="../../notes/programming/git/primer/index.html">
-<div class="listing-description">
-You’ll need to have Git installed on your computer first before, well… using Git.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/programming/git/primer/index.html">
-<div class="listing-date">
-Sep 20, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="programming,python" data-listing-date-sort="1694649600000" data-listing-file-modified-sort="1705006752653" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
-<div class="thumbnail">
-<p><a href="../../notes/programming/python/practicum-prep/index.html"> <p class="card-img-top"><img src="python/practicum-prep/images/pandas.jpeg"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/programming/python/practicum-prep/index.html">
-<h3 class="no-anchor listing-title">
-Pandas Primer 1
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('programming'); return false;">
-programming
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('python'); return false;">
-python
-</div>
-</div>
-<a href="../../notes/programming/python/practicum-prep/index.html">
-<div class="listing-description">
-I won’t go into a lot of a detail…<code></code>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/programming/python/practicum-prep/index.html">
-<div class="listing-date">
-Sep 14, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="programming" data-listing-date-sort="1687824000000" data-listing-file-modified-sort="1705006752649" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
-<div class="thumbnail">
-<p><a href="../../notes/programming/R/r4ds/intro/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/programming/R/r4ds/intro/index.html">
-<h3 class="no-anchor listing-title">
-r4ds: Introduction
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('programming'); return false;">
-programming
-</div>
-</div>
-<a href="../../notes/programming/R/r4ds/intro/index.html">
-<div class="listing-description">
-These notes are based on the second edition of the R for Data Science book by Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/programming/R/r4ds/intro/index.html">
-<div class="listing-date">
-Jun 27, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="programming" data-listing-date-sort="1687824000000" data-listing-file-modified-sort="1705006752649" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
-<div class="thumbnail">
-<p><a href="../../notes/programming/R/r4ds/intro_visualization/index.html"> <p class="card-img-top"><img src="R/r4ds/intro_visualization/index_files/figure-html/unnamed-chunk-5-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="../../notes/programming/R/r4ds/intro_visualization/index.html">
-<h3 class="no-anchor listing-title">
-r4ds: Visualization Introduction
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('programming'); return false;">
-programming
-</div>
-</div>
-<a href="../../notes/programming/R/r4ds/intro_visualization/index.html">
-<div class="listing-description">
-The book focuses on utilizing <code>ggplot2</code> to build out data visualizations. The underlying system of the package is the <strong>grammar of graphics</strong> which builds up visuals through…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="../../notes/programming/R/r4ds/intro_visualization/index.html">
-<div class="listing-date">
-Jun 27, 2023
-</div>
-<div class="listing-author">
-Yang Chen
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

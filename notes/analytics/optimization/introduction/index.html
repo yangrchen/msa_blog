@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="dcterms.date" content="2023-10-13">
+<meta name="dcterms.date" content="2024-01-08">
 
-<title>Yang MSA - KNN and Other Ideas</title>
+<title>Yang MSA - Introduction to Optimization</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,10 +144,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">KNN and Other Ideas</h1>
+      <h1 class="title">Introduction to Optimization</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analytics</div>
-                <div class="quarto-category">data mining</div>
+                <div class="quarto-category">optimization</div>
               </div>
                   </div>
   </div>
@@ -165,7 +165,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 13, 2023</p>
+        <p class="date">January 8, 2024</p>
       </div>
     </div>
     
@@ -181,20 +181,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#k-nearest-neighbor" id="toc-k-nearest-neighbor" class="nav-link active" data-scroll-target="#k-nearest-neighbor"><span class="header-section-number">1</span> K-Nearest Neighbor</a>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a>
   <ul class="collapse">
-  <li><a href="#considerations" id="toc-considerations" class="nav-link" data-scroll-target="#considerations"><span class="header-section-number">1.1</span> Considerations</a></li>
-  <li><a href="#choosing-k" id="toc-choosing-k" class="nav-link" data-scroll-target="#choosing-k"><span class="header-section-number">1.2</span> Choosing <span class="math inline">\(k\)</span></a></li>
-  <li><a href="#advantages-and-disadvantages" id="toc-advantages-and-disadvantages" class="nav-link" data-scroll-target="#advantages-and-disadvantages"><span class="header-section-number">1.3</span> Advantages and Disadvantages</a></li>
+  <li><a href="#terminology" id="toc-terminology" class="nav-link" data-scroll-target="#terminology"><span class="header-section-number">1.1</span> Terminology</a></li>
+  <li><a href="#outputs-from-an-optimization" id="toc-outputs-from-an-optimization" class="nav-link" data-scroll-target="#outputs-from-an-optimization"><span class="header-section-number">1.2</span> Outputs from an Optimization</a></li>
+  <li><a href="#types-of-optmization-problems" id="toc-types-of-optmization-problems" class="nav-link" data-scroll-target="#types-of-optmization-problems"><span class="header-section-number">1.3</span> Types of Optmization Problems</a></li>
   </ul></li>
-  <li><a href="#multidimensional-scaling-mds" id="toc-multidimensional-scaling-mds" class="nav-link" data-scroll-target="#multidimensional-scaling-mds"><span class="header-section-number">2</span> Multidimensional Scaling (MDS)</a>
+  <li><a href="#linear-programming" id="toc-linear-programming" class="nav-link" data-scroll-target="#linear-programming"><span class="header-section-number">2</span> Linear Programming</a>
   <ul class="collapse">
-  <li><a href="#classical-mds" id="toc-classical-mds" class="nav-link" data-scroll-target="#classical-mds"><span class="header-section-number">2.1</span> Classical MDS</a></li>
-  <li><a href="#non-metric-mds" id="toc-non-metric-mds" class="nav-link" data-scroll-target="#non-metric-mds"><span class="header-section-number">2.2</span> Non-metric MDS</a></li>
-  <li><a href="#difference-between-pca-and-mds" id="toc-difference-between-pca-and-mds" class="nav-link" data-scroll-target="#difference-between-pca-and-mds"><span class="header-section-number">2.3</span> Difference between PCA and MDS</a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">2.1</span> Example</a></li>
   </ul></li>
-  <li><a href="#curse-of-dimensionality" id="toc-curse-of-dimensionality" class="nav-link" data-scroll-target="#curse-of-dimensionality"><span class="header-section-number">3</span> Curse of Dimensionality</a></li>
-  <li><a href="#ensemble-methods" id="toc-ensemble-methods" class="nav-link" data-scroll-target="#ensemble-methods"><span class="header-section-number">4</span> Ensemble Methods</a></li>
   </ul>
 </nav>
     </div>
@@ -204,153 +200,140 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="k-nearest-neighbor" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> K-Nearest Neighbor</h1>
-<p>We want to identify several cases that are most similar to a given observation. We can also use the information from “neighbors” to classify/predict the new observation.</p>
-<div id="fig-knn" class="quarto-figure quarto-figure-center anchored">
+<section id="overview" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Overview</h1>
+<p>In the mathematical sciences, optimization is trying to find the maximum or minimum a function can take. The goal is to find out what values of the “decision variables” (input variables) optimize the function.</p>
+<section id="terminology" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="terminology"><span class="header-section-number">1.1</span> Terminology</h2>
+<ul>
+<li><strong>Decision variables:</strong> Input variables in which we can change to optimize a function.</li>
+<li><strong>Objective function:</strong> Function in which we are trying to optimize. A function of the decision variables.</li>
+<li><strong>Constraints:</strong> Functions of the decision variables that define the constraints of the problems.</li>
+<li><strong>Parameters:</strong> Values inherent in the problem that we are not able to control.</li>
+</ul>
+<div id="fig-optim-layout" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="images/knn.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: K-Nearest Neighbors</figcaption>
+<p><img src="images/optimization-layout.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Optimization Layout</figcaption>
 </figure>
 </div>
-<section id="considerations" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="considerations"><span class="header-section-number">1.1</span> Considerations</h2>
+</section>
+<section id="outputs-from-an-optimization" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="outputs-from-an-optimization"><span class="header-section-number">1.2</span> Outputs from an Optimization</h2>
 <ul>
-<li>How should I measure nearness?
-<ul>
-<li>Numeric attributes?</li>
-<li>Ordinal attributes?</li>
-<li>Categorical attributes?</li>
-<li>How to combine all attributes?</li>
-</ul></li>
-<li>How should I combine the results of neighbors?
-<ul>
-<li>Classification
-<ul>
-<li>Majority rules?</li>
-<li>Weight votes by nearness?</li>
-</ul></li>
-<li>Prediction
-<ul>
-<li>Mean</li>
-<li>Median<br>
-</li>
-</ul></li>
-</ul></li>
-<li>How many neighbors should I use?</li>
+<li>No optimization exists.</li>
+<li>More than one solution exists.</li>
+<li>There exists one unique solution to the problem.</li>
+<li>Other possibilities, but these are the most recognized.</li>
 </ul>
 </section>
-<section id="choosing-k" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="choosing-k"><span class="header-section-number">1.2</span> Choosing <span class="math inline">\(k\)</span></h2>
-<p>Smaller values of <span class="math inline">\(k\)</span> lead to higher variance which tends toward overfitting. Larger values of <span class="math inline">\(k\)</span> leadto higher bias which tends toward underfitting.</p>
-<p>Common practice: use <span class="math inline">\(k = \sqrt{n}\)</span> where <span class="math inline">\(n\)</span> is the number of training examples.</p>
-<p>Best practice to tune this parameter with a validation set or with cross-validation.</p>
+<section id="types-of-optmization-problems" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="types-of-optmization-problems"><span class="header-section-number">1.3</span> Types of Optmization Problems</h2>
+<ol type="1">
+<li><strong>Linear programming:</strong> Objective function and constraints are linear.</li>
+<li><strong>Integer linear programming:</strong> Objective function and constraints are linear, but decision variables MUST be integers.</li>
+<li><strong>Mixed integer linear programming:</strong> Same as ILP but only some decision variables are restricted to integers.</li>
+<li><strong>Non-linear programming:</strong> Objective functions and constraints are continuous, but not all are linear.</li>
+</ol>
 </section>
-<section id="advantages-and-disadvantages" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="advantages-and-disadvantages"><span class="header-section-number">1.3</span> Advantages and Disadvantages</h2>
-<p>Advantages:</p>
-<ul>
-<li>Easy to explain, intuitive, understandable</li>
-<li>Applicable to any type of data</li>
-<li>Makes no assumptions about the underlying distribution of the data</li>
-<li>Large/representative training set is only assumption</li>
-</ul>
-<p>Disadvantages:</p>
-<ul>
-<li>Computationally expensive in classification phase</li>
-<li>Requires storage for the training set</li>
-<li>Results dependent on choice of distance function, combinatino function, and number of neighbors, <span class="math inline">\(k\)</span></li>
-<li>Susceptible to noise</li>
-<li>Require lots of data preprocessing and consideration for distance metrics</li>
-<li>Does not produce a model and so it does not help us understand how features are related to classes</li>
-</ul>
-<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
-<div class="tab-content" data-group="language">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="cell">
+</section>
+<section id="linear-programming" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Linear Programming</h1>
+<p>The <strong>feasible region</strong> is a region defined by our constraints. Think of this as the space of possible arrangements of our decision variables.</p>
+<p>Easiest solutions for solving a linear programming problem is the <strong>simplex method</strong>.</p>
+<section id="example" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="example"><span class="header-section-number">2.1</span> Example</h2>
+<p>Decision variables:</p>
+<p><span class="math display">\[
+x_1, x_2
+\]</span></p>
+<p>Objective function:</p>
+<p><span class="math display">\[
+2x_1 + 3x_2
+\]</span></p>
+<p>Constraints:</p>
+<p><span class="math display">\[
+0 \leq x_1 \leq 3
+\]</span></p>
+<p><span class="math display">\[
+0 \leq x_2 \leq 3
+\]</span></p>
+<div id="fig-feasible-region" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/feasible-region.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Feasible Region Example</figcaption>
+</figure>
+</div>
+<div id="fig-simplex-example" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/simplex-example.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Feasible Region with Simplex</figcaption>
+</figure>
+</div>
+<div class="cell" data-execution_count="1">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(class)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7515</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/breast_cancer.Rdata"</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>perm <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">699</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>BC_randomOrder <span class="ot">&lt;-</span> BCdata[perm,]</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> BC_randomOrder[<span class="dv">1</span><span class="sc">:</span><span class="fu">floor</span>(<span class="fl">0.75</span> <span class="sc">*</span> <span class="dv">699</span>), <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">7</span>)]</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> BC_randomOrder[(<span class="fu">floor</span>(<span class="fl">0.75</span> <span class="sc">*</span> <span class="dv">599</span>) <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="dv">699</span>, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">7</span>)]</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>train_x <span class="ot">&lt;-</span> <span class="fu">subset</span>(train, <span class="at">select=</span><span class="sc">-</span>Target)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>train_y <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(train<span class="sc">$</span>Target)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>test_x <span class="ot">&lt;-</span> <span class="fu">subset</span>(test, <span class="at">select=</span><span class="sc">-</span>Target)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>test_y <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(test<span class="sc">$</span>Target)</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gurobipy <span class="im">import</span> Model, GRB</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new model</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> Model(<span class="st">"mip1"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create variables</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> m.addVar(vtype<span class="op">=</span>GRB.CONTINUOUS, lb<span class="op">=</span><span class="dv">0</span>, name<span class="op">=</span><span class="st">"Desk"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> m.addVar(vtype<span class="op">=</span>GRB.CONTINUOUS, lb<span class="op">=</span><span class="dv">0</span>, name<span class="op">=</span><span class="st">"Desk"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> m.addVar(vtype<span class="op">=</span>GRB.CONTINUOUS, lb<span class="op">=</span><span class="dv">0</span>, name<span class="op">=</span><span class="st">"Table"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Set objective</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>m.setObjective(<span class="dv">15</span> <span class="op">*</span> c <span class="op">+</span> <span class="dv">24</span> <span class="op">*</span> d <span class="op">+</span> <span class="dv">18</span> <span class="op">*</span> t, GRB.MAXIMIZE)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Add constraints</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>m.addConstr(<span class="dv">4</span> <span class="op">*</span> c <span class="op">+</span> <span class="dv">6</span> <span class="op">*</span> d <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> t <span class="op">&lt;=</span> <span class="dv">1850</span>, <span class="st">"c0"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>m.addConstr(<span class="dv">3</span> <span class="op">*</span> c <span class="op">+</span> <span class="dv">5</span> <span class="op">*</span> d <span class="op">+</span> <span class="dv">7</span> <span class="op">*</span> t <span class="op">&lt;=</span> <span class="dv">2400</span>, <span class="st">"c1"</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>m.addConstr(<span class="dv">3</span> <span class="op">*</span> c <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> d <span class="op">+</span> <span class="dv">4</span> <span class="op">*</span> t <span class="op">&lt;=</span> <span class="dv">1500</span>, <span class="st">"c2"</span>)</span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>predict_test <span class="ot">&lt;-</span> <span class="fu">knn</span>(train_x, test_x, train_y, <span class="at">k =</span> <span class="dv">5</span>)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(predict_test <span class="sc">==</span> test_y) <span class="sc">/</span> <span class="fu">length</span>(test_y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>m.addConstr(c <span class="op">&lt;=</span> <span class="dv">360</span>, <span class="st">"c3"</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>m.addConstr(d <span class="op">&lt;=</span> <span class="dv">300</span>, <span class="st">"c4"</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>m.addConstr(t <span class="op">&lt;=</span> <span class="dv">100</span>, <span class="st">"c5"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>m.optimize()</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> v <span class="kw">in</span> m.getVars():</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>v<span class="sc">.</span>varName<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>v<span class="sc">.</span>x<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Obj: </span><span class="sc">{</span>m<span class="sc">.</span>objVal<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.96</code></pre>
+<pre><code>Restricted license - for non-production use only - expires 2025-11-24
+Gurobi Optimizer version 11.0.0 build v11.0.0rc2 (mac64[arm] - Darwin 23.2.0 23C71)
+
+CPU model: Apple M2 Pro
+Thread count: 12 physical cores, 12 logical processors, using up to 12 threads
+
+Optimize a model with 6 rows, 3 columns and 12 nonzeros
+Model fingerprint: 0x59066be2
+Coefficient statistics:
+  Matrix range     [1e+00, 7e+00]
+  Objective range  [2e+01, 2e+01]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+02, 2e+03]
+Presolve removed 3 rows and 0 columns
+Presolve time: 0.00s
+Presolved: 3 rows, 3 columns, 9 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6650000e+04   8.046875e+02   0.000000e+00      0s
+       1    8.4000000e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 1 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  8.400000000e+03
+Desk 0.0
+Desk 275.0
+Table 100.0
+Obj: 8400.0</code></pre>
 </div>
 </div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>train_x <span class="op">=</span> r.train_x</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>train_y <span class="op">=</span> r.train_y</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>test_x <span class="op">=</span> r.test_x</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>test_y <span class="op">=</span> r.test_y</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">5</span>).fit(train_x, train_y)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> knn.predict(test_x)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Accuracy with k = 5: "</span>, accuracy_score(test_y, y_pred) <span class="op">*</span> <span class="fl">100.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Accuracy with k = 5:  96.0</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="multidimensional-scaling-mds" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Multidimensional Scaling (MDS)</h1>
-<p>MDS is a technique for visualizing high-dimensional data by projecting it into a lower-dimensional space. It is a non-linear dimensionality reduction technique similar to PCA.</p>
-<p>To perform MDS, we need a dissimilarity matrix (or distance matrix).</p>
-<section id="classical-mds" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="classical-mds"><span class="header-section-number">2.1</span> Classical MDS</h2>
-<p>Classical MDS is a method for finding a low-dimensional representation of the data that preserves the distances between points as well as possible.</p>
-</section>
-<section id="non-metric-mds" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="non-metric-mds"><span class="header-section-number">2.2</span> Non-metric MDS</h2>
-<p>Non-metric MDS is a method for finding a low-dimensional representation of the data that preserves the rank order of the distances between points as well as possible. Think about “squashing pictures” to make them fit on a page.</p>
-</section>
-<section id="difference-between-pca-and-mds" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="difference-between-pca-and-mds"><span class="header-section-number">2.3</span> Difference between PCA and MDS</h2>
-<p>PCA is more focused on dimensions themselves (wants to explain maximum variance) where MDS is more focused on relations among scaled objects.</p>
-<p>To visualize data, we may prefer MDS over PCA because MDS preserves the distances between points. However, if the data will be used for analysis then PCA should be used.</p>
-</section>
-</section>
-<section id="curse-of-dimensionality" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Curse of Dimensionality</h1>
-<p>When we have a large number of predictors, finding the true signal is difficult. Can be hidden in all of the dimensions. In training, it could look like the model is getting better, but in reality we are just adding noise.</p>
-</section>
-<section id="ensemble-methods" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Ensemble Methods</h1>
-<p>You have a number of models and you combine their predictions–this is <strong>ensemble</strong>.</p>
-<p>Let’s say we create a decision tree, logistic model, and KNN model. We can combine the predictions from these models to create a final prediction by averaging or weight-averaging the probabilities. This is called <strong>model averaging</strong>. We could also do majority rules or proportion voting.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
