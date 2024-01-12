@@ -5,7 +5,7 @@ date: 01/08/2023
 
 # Variable Grouping
 
-Scorecards eng up with only just groups within a variable.
+Scorecards end up with only just groups within a variable.
 
 **Objectives:**
 
@@ -43,3 +43,54 @@ $$
 
 -   $Dist.Good_i = \frac{\text{# Good in group i}}{\text{Total # Good}}$
 -   $Dist.Bad_i = \frac{\text{# Bad in group i}}{\text{Total # Bad}}$
+
+We're looking for big differences in WOE between groups. With interval variables we are looking for monotonic changes within an attribute. Going back and forth between positive and negative values of WOE typically signal variables have trouble separating good vs. bad. However, this is not always required it it makes business sense--credit card utilization for example.
+
+![WOE Example](images/woe-example.png){#fig-woe-example}
+
+WOE from @fig-woe-example is essentially looking at the difference between the proportion of bads and proportion of goods on a natural log scale. We can see that there is a monotonically increasing difference up until the missing category. As we move up through the different categories, there is a greater proportion of goods.
+
+-   WOE approximately 0 implies % of good is approximately equal to % of bad so group doesn't separate good vs. bad well.
+-   WOE positive implies group identifies people who are good.
+-   WOE negative implies group identifies people who are bad.
+
+After the binning, quasi-complete separation can still be a problem. We can use adjusted WOE to account for possible quasi-complete separation:
+
+$$
+\text{Adjusted} WOE_i = \log(\frac{Dist.Good_i + \eta_1}{Dist.Bad_i + \eta_2})
+$$
+
+-   $\eta_1$ and $\eta_2$ parameters are smoothing parameters that correct for potential overfitting and protect against quasi-complete separation
+-   Most software just set $\eta_1 = \eta_2$ and has one parameter
+
+# Information Value
+
+Across all the categories in this variable, how good do we separate out the 1's and 0's? **Information value** measures the ability of the characteristic to separate goods vs. bads.
+
+$$
+IV = \sum_{i=1}^{L} (Dist.Good_i - Dist.Bad_i) \cdot \log(\frac{Dist.Good_i}{Dist.Bad_i})
+$$
+
+Overall, bigger is better with information value. Some rules of thumb:
+
+-   $IV < 0.02$: Not predictive
+-   $0.02 < IV < 0.1$: Weak predictor
+-   $0.1 < IV < 0.25$: Medium predictor
+-   $0.25 < IV$: Strong predictor
+
+IV allows us to do variable selection since we are aggregating groups across the entire variable. Using the cutoffs, we can select variables that we should include in our model.
+
+In the world of credit modeling, a hard cutoff for selecting variables is greater than 0.1.
+
+Keep in mind that in R all variables that we are binning must be encoded as factors. `smbinning` will point out which variables it believes shouldn't be binned due to not enough unique values or any variables which have no significant splits.
+
+A caveat to the cutoffs is $IV > 0.5$. At this point, we might believe the variable is over-predicting. An overpredicting example: All previous mortgage decisions have been made only on bureau score so of course bureau score is highly predictive--variable becomes significant. A common practice is to create two models--one with bureau score, one without--and ensemble.
+
+# Gini Statistic
+
+**Gini statistic** is an optional technique that tries to answer the same questions as IV--which variables are strong enough to enter the scorecard model?
+
+IV is more in line with WOE calculation and used more often.
+
+-   Range is 0 to 100.
+-   Bigger is better.

@@ -1,0 +1,111 @@
+---
+title: Scorecard Creation
+date: 01/12/2023
+---
+
+The initial scorecard model is typically based on a logistic regression model:
+
+$$
+\text{logit}(p) = \log(\frac{p}{1 - p}) = \beta_0 + \beta_1x_1 + \cdots + \beta_kx_k
+$$
+
+What is the motivation behind doing all the variable selection and calculations we did to setup this model?
+
+Instead of using the original variables for the model, scorecard models have the binned variables as their foundation.
+
+Two approaches:
+
+1.  Traditional approach: Use WOE scores as new variables.
+2.  Another approach: Use binned variables as new variables.
+
+# Traditional Approach
+
+![Traditional Approach](images/woe-score-feature.png){#fig-traditional-approach}
+
+-   Inputs are still treated as **continuous**.
+-   All variables are now on the same scale.
+-   Model coefficients are desired output for the scorecard.
+-   Coefficients serve as measures of variable importance.
+-   Reduce the number of variables since we no longer have to encode many levels.
+
+In R, the `smbinning` package can automatically give us the bin column, but we need to calculate the WOE column manually.
+
+```{.r}
+for (i in 1:nrow(train)) {
+    bin_name <- "bureau_score_bin"
+    bin <- substr(train[[bin_name]][i], 2, 2)
+    woe_name <- "bureau_score_WOE"
+
+    if (bin == 0) {
+        # Bin 0 represents the missing bin so we lookup the second to last row in the table
+        bin <- dim(result_all_sig$bureau_score$ivtable[1] - 1)
+        train[[woe_name]][i] <- result_all_sig$bureau_score$ivtable[bin, "WoE"]
+    } else {
+        # Otherwise lookup the WOE of the bin
+        train[[woe_name]][i] <- result_all_sig$bureau_score$ivtable[bin, "WoE"]
+    }
+}
+```
+
+Since variables are treated as continuous, we only have one p-value that we need to consider for each variable after fitting the model.
+
+# Another Approach
+
+In the second approach, we focus on using the bins themselves.
+
+-   Inputs are still treated as categorical.
+-   Need LRT to evaluate p-values.
+-   Model coefficients are desired output for the scorecard.
+-   Larger number of variables due to tons of categorical variables.
+-   Scorecard creation preprogrammed into a lot of packages.
+-   Do not have the ability to compare variables from variable importance.
+
+```{.r}
+initial_score2 <- glm(data = train, bad ~ tot_derog_bin + 
+                                        tot_tr_bin + 
+                                        age_oldest_tr_bin +  
+                                        tot_rev_line_bin + 
+                                        rev_util_bin + 
+                                        bureau_score_bin + 
+                                        down_pyt_bin + 
+                                        ltv_bin, 
+                    weights = train$weight, family = "binomial")
+```
+
+# Model Evaluation
+
+-   Variable significance: Review using "standard" output of logistic regression, but don't forget business logic.
+-   Overall performance of model: AUC is the most popular criterion.
+-   This is only a **preliminary scorecard**. Final scorecard is created after reject inference is performed.
+
+```{.r}
+smbinning.metrics(dataset = train, prediction = "pred", actualclass = "bad", report = 1)
+smbinning.metrics(dataset = train, prediction = "pred", actualclass = "bad", report = "ks")
+smbinning.metrics(dataset = train, prediction = "pred", actualclass = "bad", report = "auc")
+```
+
+# Scaling the Scorecard
+
+The relationship between odds and scores is represented by a linear function.
+
+$$
+\text{Score} = \text{Offset} + \text{Factor} \cdot \log(odds)
+$$
+
+If the scorecard is developed using "odds at a certain score" and "points to double the odds" (PDO), factor and offset can be calculated through an additional equation:
+
+$$
+\text{Score} + \text{PDO} = \text{Offset} + \text{Factor} \cdot \log(2 \times odds)
+$$
+
+$$
+\text{PDO} = \text{Factor} \cdot \log(2)
+$$
+
+$$
+\text{Factor} = \frac{\text{PDO}}{\log(2)}
+$$
+
+$$
+\text{Offset} = \text{Score} - \text{Factor} \cdot \log(odds)
+$$

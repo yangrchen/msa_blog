@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="dcterms.date" content="2023-01-08">
+<meta name="dcterms.date" content="2023-01-12">
 
-<title>Yang MSA - Scorecard Variable Grouping and Selection</title>
+<title>Yang MSA - Scorecard Creation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -110,7 +144,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Scorecard Variable Grouping and Selection</h1>
+      <h1 class="title">Scorecard Creation</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analytics</div>
               </div>
@@ -130,7 +164,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 8, 2023</p>
+        <p class="date">January 12, 2023</p>
       </div>
     </div>
     
@@ -146,13 +180,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#variable-grouping" id="toc-variable-grouping" class="nav-link active" data-scroll-target="#variable-grouping"><span class="header-section-number">1</span> Variable Grouping</a>
-  <ul class="collapse">
-  <li><a href="#initial-characteristic-analysis" id="toc-initial-characteristic-analysis" class="nav-link" data-scroll-target="#initial-characteristic-analysis"><span class="header-section-number">1.1</span> Initial Characteristic Analysis</a></li>
-  </ul></li>
-  <li><a href="#weight-of-evidence" id="toc-weight-of-evidence" class="nav-link" data-scroll-target="#weight-of-evidence"><span class="header-section-number">2</span> Weight of Evidence</a></li>
-  <li><a href="#information-value" id="toc-information-value" class="nav-link" data-scroll-target="#information-value"><span class="header-section-number">3</span> Information Value</a></li>
-  <li><a href="#gini-statistic" id="toc-gini-statistic" class="nav-link" data-scroll-target="#gini-statistic"><span class="header-section-number">4</span> Gini Statistic</a></li>
+  <li><a href="#traditional-approach" id="toc-traditional-approach" class="nav-link active" data-scroll-target="#traditional-approach"><span class="header-section-number">1</span> Traditional Approach</a></li>
+  <li><a href="#another-approach" id="toc-another-approach" class="nav-link" data-scroll-target="#another-approach"><span class="header-section-number">2</span> Another Approach</a></li>
+  <li><a href="#model-evaluation" id="toc-model-evaluation" class="nav-link" data-scroll-target="#model-evaluation"><span class="header-section-number">3</span> Model Evaluation</a></li>
+  <li><a href="#scaling-the-scorecard" id="toc-scaling-the-scorecard" class="nav-link" data-scroll-target="#scaling-the-scorecard"><span class="header-section-number">4</span> Scaling the Scorecard</a></li>
   </ul>
 </nav>
     </div>
@@ -162,94 +193,100 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="variable-grouping" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Variable Grouping</h1>
-<p>Scorecards end up with only just groups within a variable.</p>
-<p><strong>Objectives:</strong></p>
-<ul>
-<li>Eliminate weak characteristics or those that do not conform to good business logic.</li>
-<li>Group the strongest characteristics’ attribute levels in order to produce a model in scorecard format.</li>
-</ul>
-<p>In R, we have the <code>smbinning</code> package and in Python we have the <code>scorecard</code> or <code>OptBinning</code> packages.</p>
-<p><strong>Goals:</strong></p>
-<ul>
-<li>Useful for understanding relationships.</li>
-<li>Modeling nonlinearities similar to decision trees.</li>
-<li>Dealing with outliers contianed in the smallest / largest group.</li>
-<li>Missing values tend to typically go in their own group.</li>
-</ul>
-<section id="initial-characteristic-analysis" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="initial-characteristic-analysis"><span class="header-section-number">1.1</span> Initial Characteristic Analysis</h2>
-<p>Need a starting point for the grouping / binning. We tend to use quantiles for this initial approach. The idea is to pre-bin the interval variables into a number of user-specified quantiles / buckets for fine detailed groupings. We can then aggregate the fine detailed groupings into a smaller number to produce coarse groupings using chi-squared tests to combine groups. Only groups next to each other are grouped.</p>
-<p>In R, we can use decision trees to select cut points for the variables. Specifically, we use conditional inference trees. CART methods have inherent bias as variables with more levels are more likely to be split on using Gini and entropy. CIT method adds an extra statistical step before splits occur using statistical tests of significance (Chi-square) to inform splits.</p>
-<p>Each time we split, we use statistical tests on our response from the chunks created from the last split.</p>
-<div id="fig-cit-method" class="quarto-figure quarto-figure-center anchored">
+<p>The initial scorecard model is typically based on a logistic regression model:</p>
+<p><span class="math display">\[
+\text{logit}(p) = \log(\frac{p}{1 - p}) = \beta_0 + \beta_1x_1 + \cdots + \beta_kx_k
+\]</span></p>
+<p>What is the motivation behind doing all the variable selection and calculations we did to setup this model?</p>
+<p>Instead of using the original variables for the model, scorecard models have the binned variables as their foundation.</p>
+<p>Two approaches:</p>
+<ol type="1">
+<li>Traditional approach: Use WOE scores as new variables.</li>
+<li>Another approach: Use binned variables as new variables.</li>
+</ol>
+<section id="traditional-approach" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Traditional Approach</h1>
+<div id="fig-traditional-approach" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="images/cit-method.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: CIT Method</figcaption>
+<p><img src="images/woe-score-feature.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Traditional Approach</figcaption>
 </figure>
 </div>
-<p>Cutoffs may be rough from decision tree combining. We can optionally override these generated groups to conform to business rules, but overrides may make groups suboptimal.</p>
+<ul>
+<li>Inputs are still treated as <strong>continuous</strong>.</li>
+<li>All variables are now on the same scale.</li>
+<li>Model coefficients are desired output for the scorecard.</li>
+<li>Coefficients serve as measures of variable importance.</li>
+<li>Reduce the number of variables since we no longer have to encode many levels.</li>
+</ul>
+<p>In R, the <code>smbinning</code> package can automatically give us the bin column, but we need to calculate the WOE column manually.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(train)) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    bin_name <span class="ot">&lt;-</span> <span class="st">"bureau_score_bin"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    bin <span class="ot">&lt;-</span> <span class="fu">substr</span>(train[[bin_name]][i], <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    woe_name <span class="ot">&lt;-</span> <span class="st">"bureau_score_WOE"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (bin <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Bin 0 represents the missing bin so we lookup the second to last row in the table</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        bin <span class="ot">&lt;-</span> <span class="fu">dim</span>(result_all_sig<span class="sc">$</span>bureau_score<span class="sc">$</span>ivtable[<span class="dv">1</span>] <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        train[[woe_name]][i] <span class="ot">&lt;-</span> result_all_sig<span class="sc">$</span>bureau_score<span class="sc">$</span>ivtable[bin, <span class="st">"WoE"</span>]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Otherwise lookup the WOE of the bin</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        train[[woe_name]][i] <span class="ot">&lt;-</span> result_all_sig<span class="sc">$</span>bureau_score<span class="sc">$</span>ivtable[bin, <span class="st">"WoE"</span>]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Since variables are treated as continuous, we only have one p-value that we need to consider for each variable after fitting the model.</p>
 </section>
+<section id="another-approach" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Another Approach</h1>
+<p>In the second approach, we focus on using the bins themselves.</p>
+<ul>
+<li>Inputs are still treated as categorical.</li>
+<li>Need LRT to evaluate p-values.</li>
+<li>Model coefficients are desired output for the scorecard.</li>
+<li>Larger number of variables due to tons of categorical variables.</li>
+<li>Scorecard creation preprogrammed into a lot of packages.</li>
+<li>Do not have the ability to compare variables from variable importance.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>initial_score2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="at">data =</span> train, bad <span class="sc">~</span> tot_derog_bin <span class="sc">+</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                                        tot_tr_bin <span class="sc">+</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                                        age_oldest_tr_bin <span class="sc">+</span>  </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                        tot_rev_line_bin <span class="sc">+</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                                        rev_util_bin <span class="sc">+</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                                        bureau_score_bin <span class="sc">+</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                                        down_pyt_bin <span class="sc">+</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                                        ltv_bin, </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">weights =</span> train<span class="sc">$</span>weight, <span class="at">family =</span> <span class="st">"binomial"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="weight-of-evidence" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Weight of Evidence</h1>
-<p><strong>Weight of evidence (WOE)</strong> measures the strength of the attributes of a characteristic in separating good and bad accounts. WOE is based on comparing the proportion of goods to bads at each attribute level.</p>
+<section id="model-evaluation" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Model Evaluation</h1>
+<ul>
+<li>Variable significance: Review using “standard” output of logistic regression, but don’t forget business logic.</li>
+<li>Overall performance of model: AUC is the most popular criterion.</li>
+<li>This is only a <strong>preliminary scorecard</strong>. Final scorecard is created after reject inference is performed.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">smbinning.metrics</span>(<span class="at">dataset =</span> train, <span class="at">prediction =</span> <span class="st">"pred"</span>, <span class="at">actualclass =</span> <span class="st">"bad"</span>, <span class="at">report =</span> <span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">smbinning.metrics</span>(<span class="at">dataset =</span> train, <span class="at">prediction =</span> <span class="st">"pred"</span>, <span class="at">actualclass =</span> <span class="st">"bad"</span>, <span class="at">report =</span> <span class="st">"ks"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">smbinning.metrics</span>(<span class="at">dataset =</span> train, <span class="at">prediction =</span> <span class="st">"pred"</span>, <span class="at">actualclass =</span> <span class="st">"bad"</span>, <span class="at">report =</span> <span class="st">"auc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="scaling-the-scorecard" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Scaling the Scorecard</h1>
+<p>The relationship between odds and scores is represented by a linear function.</p>
 <p><span class="math display">\[
-WOE_i = \log(\frac{Dist.Good_i}{Dist.Bad_i})
+\text{Score} = \text{Offset} + \text{Factor} \cdot \log(odds)
 \]</span></p>
-<ul>
-<li><span class="math inline">\(Dist.Good_i = \frac{\text{# Good in group i}}{\text{Total # Good}}\)</span></li>
-<li><span class="math inline">\(Dist.Bad_i = \frac{\text{# Bad in group i}}{\text{Total # Bad}}\)</span></li>
-</ul>
-<p>We’re looking for big differences in WOE between groups. With interval variables we are looking for monotonic changes within an attribute. Going back and forth between positive and negative values of WOE typically signal variables have trouble separating good vs.&nbsp;bad. However, this is not always required it it makes business sense–credit card utilization for example.</p>
-<div id="fig-woe-example" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/woe-example.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: WOE Example</figcaption>
-</figure>
-</div>
-<p>WOE from <a href="#fig-woe-example">Figure&nbsp;2</a> is essentially looking at the difference between the proportion of bads and proportion of goods on a natural log scale. We can see that there is a monotonically increasing difference up until the missing category. As we move up through the different categories, there is a greater proportion of goods.</p>
-<ul>
-<li>WOE approximately 0 implies % of good is approximately equal to % of bad so group doesn’t separate good vs.&nbsp;bad well.</li>
-<li>WOE positive implies group identifies people who are good.</li>
-<li>WOE negative implies group identifies people who are bad.</li>
-</ul>
-<p>After the binning, quasi-complete separation can still be a problem. We can use adjusted WOE to account for possible quasi-complete separation:</p>
+<p>If the scorecard is developed using “odds at a certain score” and “points to double the odds” (PDO), factor and offset can be calculated through an additional equation:</p>
 <p><span class="math display">\[
-\text{Adjusted} WOE_i = \log(\frac{Dist.Good_i + \eta_1}{Dist.Bad_i + \eta_2})
+\text{Score} + \text{PDO} = \text{Offset} + \text{Factor} \cdot \log(2 \times odds)
 \]</span></p>
-<ul>
-<li><span class="math inline">\(\eta_1\)</span> and <span class="math inline">\(\eta_2\)</span> parameters are smoothing parameters that correct for potential overfitting and protect against quasi-complete separation</li>
-<li>Most software just set <span class="math inline">\(\eta_1 = \eta_2\)</span> and has one parameter</li>
-</ul>
-</section>
-<section id="information-value" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Information Value</h1>
-<p>Across all the categories in this variable, how good do we separate out the 1’s and 0’s? <strong>Information value</strong> measures the ability of the characteristic to separate goods vs.&nbsp;bads.</p>
 <p><span class="math display">\[
-IV = \sum_{i=1}^{L} (Dist.Good_i - Dist.Bad_i) \cdot \log(\frac{Dist.Good_i}{Dist.Bad_i})
+\text{PDO} = \text{Factor} \cdot \log(2)
 \]</span></p>
-<p>Overall, bigger is better with information value. Some rules of thumb:</p>
-<ul>
-<li><span class="math inline">\(IV &lt; 0.02\)</span>: Not predictive</li>
-<li><span class="math inline">\(0.02 &lt; IV &lt; 0.1\)</span>: Weak predictor</li>
-<li><span class="math inline">\(0.1 &lt; IV &lt; 0.25\)</span>: Medium predictor</li>
-<li><span class="math inline">\(0.25 &lt; IV\)</span>: Strong predictor</li>
-</ul>
-<p>IV allows us to do variable selection since we are aggregating groups across the entire variable. Using the cutoffs, we can select variables that we should include in our model.</p>
-<p>In the world of credit modeling, a hard cutoff for selecting variables is greater than 0.1.</p>
-<p>Keep in mind that in R all variables that we are binning must be encoded as factors. <code>smbinning</code> will point out which variables it believes shouldn’t be binned due to not enough unique values or any variables which have no significant splits.</p>
-<p>A caveat to the cutoffs is <span class="math inline">\(IV &gt; 0.5\)</span>. At this point, we might believe the variable is over-predicting. An overpredicting example: All previous mortgage decisions have been made only on bureau score so of course bureau score is highly predictive–variable becomes significant. A common practice is to create two models–one with bureau score, one without–and ensemble.</p>
-</section>
-<section id="gini-statistic" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Gini Statistic</h1>
-<p><strong>Gini statistic</strong> is an optional technique that tries to answer the same questions as IV–which variables are strong enough to enter the scorecard model?</p>
-<p>IV is more in line with WOE calculation and used more often.</p>
-<ul>
-<li>Range is 0 to 100.</li>
-<li>Bigger is better.</li>
-</ul>
+<p><span class="math display">\[
+\text{Factor} = \frac{\text{PDO}}{\log(2)}
+\]</span></p>
+<p><span class="math display">\[
+\text{Offset} = \text{Score} - \text{Factor} \cdot \log(odds)
+\]</span></p>
 
 
 </section>
