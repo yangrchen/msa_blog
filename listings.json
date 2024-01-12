@@ -1,5 +1,11 @@
 [
   {
+    "listing": "/blog/index.html",
+    "items": [
+      "/blog/first_weeks/index.html"
+    ]
+  },
+  {
     "listing": "/notes/analytics/index.html",
     "items": [
       "/notes/analytics/optimization/introduction/index.html",
@@ -47,15 +53,10 @@
       "/notes/analytics/ANOVA/introduction/index.html",
       "/notes/analytics/EDA/statistical-inference/index.html",
       "/notes/analytics/EDA/introduction/index.html",
+      "/notes/analytics/financial-analytics/scorecard/index.html",
       "/notes/analytics/optimization/linear-programming/index.html",
       "/notes/analytics/financial-analytics/credit-scoring/index.html",
       "/notes/analytics/financial-analytics/grouping-and-selection/index.html"
-    ]
-  },
-  {
-    "listing": "/blog/index.html",
-    "items": [
-      "/blog/first_weeks/index.html"
     ]
   },
   {
