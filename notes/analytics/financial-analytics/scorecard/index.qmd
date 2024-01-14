@@ -1,6 +1,6 @@
 ---
 title: Scorecard Creation
-date: 01/12/2023
+date: 01/12/2024
 ---
 
 The initial scorecard model is typically based on a logistic regression model:

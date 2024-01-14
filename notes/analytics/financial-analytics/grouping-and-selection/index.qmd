@@ -1,6 +1,6 @@
 ---
 title: Scorecard Variable Grouping and Selection
-date: 01/08/2023
+date: 01/08/2024
 ---
 
 # Variable Grouping

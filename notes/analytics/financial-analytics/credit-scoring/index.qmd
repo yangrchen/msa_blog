@@ -1,6 +1,6 @@
 ---
 title: Introduction to Credit Scoring & Data Preparation
-date: 01/08/2023
+date: 01/08/2024
 ---
 
 # Scorecards and Credit Scoring

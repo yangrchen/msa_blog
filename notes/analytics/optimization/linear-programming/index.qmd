@@ -1,6 +1,6 @@
 ---
 title: Linear Programming
-date: 01/11/2023
+date: 01/11/2024
 ---
 
 # Example Problem
