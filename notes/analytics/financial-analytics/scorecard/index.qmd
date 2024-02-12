@@ -1,6 +1,7 @@
 ---
 title: Scorecard Creation
 date: 01/12/2024
+date-modified: 01/22/2024
 ---
 
 The initial scorecard model is typically based on a logistic regression model:
@@ -86,7 +87,7 @@ smbinning.metrics(dataset = train, prediction = "pred", actualclass = "bad", rep
 
 # Scaling the Scorecard
 
-The relationship between odds and scores is represented by a linear function.
+The relationship between odds and scores is represented by a linear function. Points to double the odds (PDO) represents how big of a step we want to make to get to the next score. Starting scores that represent odds are pre-selected and are arbitrary.
 
 $$
 \text{Score} = \text{Offset} + \text{Factor} \cdot \log(odds)
@@ -109,3 +110,166 @@ $$
 $$
 \text{Offset} = \text{Score} - \text{Factor} \cdot \log(odds)
 $$
+
+Recall that $\log(odds)$ is the same equation in logistic regression! This is why logistic regression is so often used in scorecard models. However, as long as you can get a probability from any classification model you can calculate the odds so the underlying model is agnostic.
+
+## Points Allocation (Traditional Approach)
+
+The points allocated to attribute $i$ of characteristic $j$ are computed as follows:
+
+$$
+Points_{i,j} = -(WOE_{i,j} \cdot \hat{\beta}_j + \frac{\hat{\beta}_0}{L}) \cdot \text{Factor} + \frac{\text{Offset}}{L}
+$$
+
+-   $WOE_{i,j}:$ Weight of evidence for attribute $i$ of characteristic $j$
+-   $\hat{\beta}_j$: Regression coefficient for characteristic $j$
+-   $\hat{\beta}_0$: Intercept term from model
+-  $L$: Total number of characteristics
+-  Points typically rounded to nearest integer
+
+Variables that are the weakest will get the fewest points whereas variables that are the strongest will get more points.
+
+```{.r}
+pdo <- 20
+score <- 600
+odds <- 50
+fact <- pdo / log(2)
+os <- score - fact * log(odds)
+var_names <- names(initial_score$coefficients[-1])
+
+for (i in var_names) {
+    beta <- initial_score$coefficients[i]
+    beta0 <- initial_score$coefficients["(Intercept)"]
+    nvar <- length(var_names)
+    WOE_var <- train[[i]]
+    points_name <- paste(str_sub(i, end = -4), "points", sep = "")
+
+    train[[points_name]] <- -(WOE_var * beta + (beta0 / nvar)) * fact + os / nvar
+}
+```
+
+## Points Allocation (Another Approach)
+
+While much easier to code, the secondary points allocation approach does not use WOE. Instead, it uses the binned variables and you cannot gain a notion of variable importance.
+
+```{.r}
+bin_model <- smbinning.scaling(initial_score2, pdo = 20, score = 600, odds = 50)
+train_bin <- smbinning.scoring.gen(bin_model, dataset = train)
+```
+
+# Reject Inference
+
+Recall: **Reject inference** is the process of inferring the status of rejected applicants based on the accepted applicants model in an attempt to use their information to build a scorecard that is representative of the entire applicant population. The purpose is to solve sample bias so that development sample is similar to the population to which the scorecard will be applied.
+
+There are three main approaches:
+
+1.  Hard Cutoff Augmentation
+2.  Parceling Augmentation
+3.  Fuzzy Augmentation
+
+## Hard Cutoff Augmentation
+
+1.  Build a scorecard model using the known good / bad population (accepted applications).
+2.  Score the rejected applications with this model to obtain each rejected application's probability of default and their score on the scorecard model.
+3.  Create weighted cases for the rejected applications--weight applied is the "rejection rate"  which adjusts the number of sampled rejected to accurately reflect the number of rejects from population.
+4.  Set a cutoff score level above which application is deemed good and below applicants deemed bad.
+5.  Add inferred goods and bads with known goods and bads and rebuild scorecard.
+
+```{.r}
+rejects_scored$pred <- predict(initial_score, newdata = rejected_scored, type = "response")
+
+rejects$bad <- as.numeric(rejects_scored$pred > 0.0545)
+rejects$weight <- ifelse(rejects$bad == 1, 2.80, 0.59)
+rejects$good <- abs(rejects$bad - 1)
+
+comb_hard <- rbind(accepts, rejects)
+```
+
+The cutoff point comes from Youden's index calculation.
+
+## Parceling Augmentation
+
+1.  Build a scorecard model using the known good / bad population (accepted applications).
+2.  Score the rejected applications with this model to obtain each rejected applicant's probability of default and their score on the scorecard model.
+3.  Create weighted cases for the rejected applicants--weight applied is the "rejection rate" which adjusts the number of sampled rejected to accurately reflect the number of rejects from population.
+4.  Define score ranges manually or automatically with simple bucketing.
+5.  The inferred good / bad status of the rejected applicants will be assigned **randomly** and proportional to the number of goods and bads in the accepted population within each score range.
+6.  If desired, apply the event rate increase factor to P(bad) to increaes the proportion of bads among the rejects (oversampling with rejects).
+7.  Add the inferred goods and bads back in with the known goods and bads and rebuild the scorecard.
+
+![Parceling Augmentation Example](images/parceling-aug-example.png){#fig-parceling-aug-example}
+
+In @fig-parceling-aug-example, we found no applicants within the first score range that were accepted so we infer that the rejects in the same score range are bad. Within the next score range, we can calculate a proportion based on the accepted applicants and infer the inferred bad proportion based on the number of rejects in that score range.
+
+```{.r}
+parc <- seq(500, 725, 25)
+
+accepts_scored$Score_parc <- cut(accepts_scored$Score, breaks = parc)
+rejects_scored$Score_parc <- cut(rejects_scored$Score, breaks = parc)
+
+table(accepts_scored$Score_parc, accepts_scored$bad)
+
+parc_perc <- table(accepts_scored$Score_parc, accepts_scored$bad)[, 2] /
+                rowSums(table(accepts_scored$Score_parc, accepts_scored$bad))
+
+rejects$bad <- 0
+
+# Applicants were rejected for a reason and our model may not be able to account for the full rejection factors
+# The rejection bump is used assuming the reject applicants are inherently different than the accepted applicants. We bump up their default rate by an increased factor.
+rej_bump <- 1.25
+
+# For every parcel and every reject observation in each parcel
+# Randomly assign the the row to be either 0 or 1 based on random uniform number
+for (i in 1:(length(parc) - 1)) {
+    for (j in 1:length(rejects_scored$Score)) {
+        if ((rejects_scored$Score[j] > parc[i]) &
+            (rejects_scored$Score[j] <= parc[i + 1]) &
+            (runif(n = 1, min = 0, max = 1) < (rej_bump * parc_perc[i]))) {
+                rejects$bad[j] <- 1
+            }
+    }
+}
+
+table(rejects_scored$Score_parc, rejects$bad)
+rejects$weight <- ifelse(rejects$bad == 1, 2.80, 0.59)
+rejects$good <- abs(rejects$bad - 1)
+
+comb_parc <- rbind(accepts, rejects)
+```
+
+## Fuzzy Augmentation (Devil + Angel Approach)
+
+1.  Build a scorecard model using known good / bad population (accepted applications).
+2.  Score the rejected applications with this model to obtain each rejected applicant's probability of being god, P(Good), and probability of being bad, P(Bad).
+3.  **Do not assign a reject to a good / bad class**--create two weighted cases for each rejected applicant using P(Good) and P(Bad).
+4.  Multiply P(Good) and P(Bad) by the user-specific rejection rate to form frequency variables.
+5.  For each rejected applicant, create **two observations**--one observation has a frequency variable (rejection weight $\times$ P(Good)) and a target variable of 0; other observation has a frequency variable (rejection weight $\times$ P(Bad)) and a target variable of 1.
+6.  Add inferred goods and bads back in with the known goods and bads and rebuild the scorecard.
+
+```{.r}
+rejects_scored$pred <- predict(initial_score, newdata = rejects_scored, type = "response")
+
+rejects_g <- rejects
+rejects_b <- rejects
+
+rejects_g$bad <- 0
+rejects_g$weight <- (1 - rejects_scored$pred) * 2.80
+rejects_g$good <- 1
+
+rejects_b$bad <- 1
+rejects_b$weight <- (rejects_scored$pred) * 0.59
+rejects_b$good <- 0
+
+comb_fuzz <- rbind(accepts, rejects_g, rejects_b)
+```
+
+# Final Scorecard Creation
+
+To build the final scorecard model, we repeat the process for the initial scorecard creation except the analysis is performed **after reject inference**.
+
+## Defining Cutoff
+
+A new score should be better than the last in terms of one of the following:
+
+-   Lower bad rate for the same approval rate.
+-   Higher approval rate while holding the bad rate constant.

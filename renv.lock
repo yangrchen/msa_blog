@@ -129,6 +129,16 @@
       ],
       "Hash": "1a43175d291899a4b2965b5d8db260e0"
     },
+    "FNN": {
+      "Package": "FNN",
+      "Version": "1.1.4",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "eaabdc7938aa3632a28273f53a0d226d"
+    },
     "FactoMineR": {
       "Package": "FactoMineR",
       "Version": "2.9",
@@ -2107,6 +2117,20 @@
       ],
       "Hash": "266a20443ca13c65688b2116d5220f76"
     },
+    "kernlab": {
+      "Package": "kernlab",
+      "Version": "0.9-32",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "graphics",
+        "methods",
+        "stats"
+      ],
+      "Hash": "d7d6a7cb690ac73eeced99e1ed9d6cdb"
+    },
     "km.ci": {
       "Package": "km.ci",
       "Version": "0.5-6",
@@ -2134,6 +2158,25 @@
         "yaml"
       ],
       "Hash": "9775eb076713f627c07ce41d8199d8f6"
+    },
+    "ks": {
+      "Package": "ks",
+      "Version": "1.14.2",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "FNN",
+        "KernSmooth",
+        "Matrix",
+        "R",
+        "kernlab",
+        "mclust",
+        "mgcv",
+        "multicool",
+        "mvtnorm",
+        "pracma"
+      ],
+      "Hash": "1782bbb79e4d66ed67012910204953f6"
     },
     "labeling": {
       "Package": "labeling",
@@ -2398,6 +2441,20 @@
       ],
       "Hash": "c166f04bd2bbd830ab34b7329104c019"
     },
+    "mclust": {
+      "Package": "mclust",
+      "Version": "6.0.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "graphics",
+        "stats",
+        "utils"
+      ],
+      "Hash": "6381ce71e9498075fbeb229fd3180f62"
+    },
     "memoise": {
       "Package": "memoise",
       "Version": "2.0.1",
@@ -2473,6 +2530,17 @@
         "grid"
       ],
       "Hash": "a453bb54107d6ff5fb4280729e15a023"
+    },
+    "multicool": {
+      "Package": "multicool",
+      "Version": "1.0.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "Rcpp",
+        "methods"
+      ],
+      "Hash": "70ac26dd3561ea535a6e6c755c35939b"
     },
     "munsell": {
       "Package": "munsell",
@@ -2778,6 +2846,20 @@
       ],
       "Hash": "ceb5c2a59ba33d42d051285a3e8a5118"
     },
+    "pracma": {
+      "Package": "pracma",
+      "Version": "2.4.4",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "graphics",
+        "stats",
+        "utils"
+      ],
+      "Hash": "44bc172d47d1ea0a638d9f299e321203"
+    },
     "praise": {
       "Package": "praise",
       "Version": "1.0.0",
@@ -2956,7 +3038,7 @@
     },
     "quantmod": {
       "Package": "quantmod",
-      "Version": "0.4.23",
+      "Version": "0.4.25",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
@@ -2968,7 +3050,7 @@
         "xts",
         "zoo"
       ],
-      "Hash": "4e22df5a2501e5f538a380c14ea852a4"
+      "Hash": "d64914f80e2e0bec895a2c5740b21040"
     },
     "quantreg": {
       "Package": "quantreg",

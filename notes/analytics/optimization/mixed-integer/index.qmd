@@ -1,0 +1,64 @@
+---
+title: Mixed and Integer Linear Programming
+date: 01/19/2024
+---
+
+In **integer linear programming (ILP)** the objective function and constraints are linear but decision variables must be integers. In **mixed integer linear programming (MILP)** only some decision variables are restricted to integers.
+
+Rounding with LP to solve ILP problems can sometimes produce suboptimal solutions. In order to move from LP to ILP problems we need to use a different algorithm: branch and cut.
+
+```{python}
+from gurobipy import Model, GRB
+
+m = Model("Chairs")
+
+c = m.addVar(vtype=GRB.INTEGER, ub=360, name="Chair")
+d = m.addVar(vtype=GRB.INTEGER, ub=300, name="Desk")
+t = m.addVar(vtype=GRB.INTEGER, ub=100, name="Table")
+
+m.setObjective(15 * c + 24 * d + 18 * t, GRB.MAXIMIZE)
+m.addConstr(4 * c + 6 * d + 2 * t <= 1850, "Fabrication")
+m.addConstr(3 * c + 5 * d + 7 * t <= 2400, "Assembly")
+m.addConstr(3 * c + 2 * d + 4 * t <= 1500, "Shipping")
+
+m.optimize()
+
+for v in m.getVars():
+    print(f"{v.varName}: {v.x}")
+```
+
+# Binary Choice Models
+
+**Binary choice models** are a form of ILP with a further restriction on variables to be binary (0, 1).
+
+Two common binary choice models:
+
+-   **Capital budget problem:** Companies that want to have projects within a given year but are only allocated budget to do a subset of these projects. How do we choose the most optimal subset of projects?
+-   **Set covering problem:** Need to make sure an area is "covered" by available units. Example: How many EMS stations are needed to cover Metropolis City?
+
+:::{.callout-caution}
+In Gurobi, with binary choice models there can be a misleading "solution count 2" in the output. There is really only one.
+
+![Gurobi Caution](images/gurobi-binary-caution.png){#fig-gurobi-caution}
+:::
+
+## Set Covering
+
+Metropolis City is divided into 9 districts and there are 7 potential sites for emergency vehicles. Sites can reach some districts, but not others, in the required 3 minutes response time. Location of these sites MUST cover all districts and we would like the have the least amount of sites that can accomplish this.
+
+![Set Covering Example](images/set-covering-example.png){#fig-set-covering-example}
+
+![Set Covering Setup](images/set-covering-setup.png){#fig-set-covering-setup}
+
+## Logical Relationships
+
+Binary variables can also be used to model if-then-else situations.
+
+Five common relationships:
+
+-   At least $m$ items.
+-   At most $n$ items.
+-   Exactly $k$ items.
+-   Mutually exclusive items.
+-   Contingency based items.
+

@@ -1,0 +1,265 @@
+---
+title: Main Concepts of Simulation
+date: 01/29/2024
+date-modified: 02/05/2024
+---
+
+# Varying Inputs
+
+Up until this point we have been assuming an unrealistic view of the real world--certainty. Inputs and coefficients in a problem are rarely fixed quantities in the real world.
+
+# Monte Carlo Simulations
+
+**Simulations** help us determine not only the full array of outcomes of a given decision, but the probabilities of these outcomes occurring.
+
+![Monte Carlo Simulation](images/monte-carlo-simulations.png){#fig-monte-carlo}
+
+## What-If Analysis
+
+Each input inside of a model is assigned a range of possible values--**probability distribution of the inputs**.
+
+We analyze what happens to the decision from our model under all of these possible scenarios. Simulation analysis describes not only the outcomes of certain decisions, but also the probability distribution of those outcomes.
+
+## Outcome Distribution
+
+After the simulation analysis, the focus then turns to the probability distribution of the outcomes.
+
+Describe the characteristics of this new distribtuion--mean, variance, skewness, kurtosis, percentiles, etc.
+
+## Selecting Distributions
+
+When designing your simulations the biggest choice comes from the decision of the distribution on the inputs that vary.
+
+1.  Common Probability Distribution
+2.  Historical (Empirical) Distribution
+3.  Hypothesized Future Distribution
+
+```{r}
+r <- rnorm(n = 10000, mean = 0.0879, sd = 0.1475)
+P0 <- 1000
+P1 <- P0 * (1 + r)
+
+hist(P1, breaks = 50, main = "One Year Value Distribution", xlab = "Final Value")
+abline(v = 1000, col = "red", lwd = 2)
+mtext("Initial Inv.", at = 1000, cl = "red")
+```
+
+# Distribution Selection
+
+## Common Probability Distributions
+
+Common discrete distributions:
+
+1.  Uniform Distribution
+2.  Poisson Distribution
+
+Common continuous distributions:
+
+1.  Continuous Uniform Distribution
+2.  Triangular Distribution
+3.  Student's t-Distribution
+4.  Lognormal Distribution
+5.  Normal Distribution
+6.  Exponential Distribution
+7.  Chi-Square Distribution
+8.  Beta Distribution
+
+There is also a triangle distribution that takes three parameters:
+
+-   What do you think is the worst outcome?
+-   What do you expect to happen?
+-   What do you think is the best outcome?
+
+## Historical (Empirical) Distributions
+
+If you are unsure of the distribution of the data you are trying to simulate, you can estimate is using **kernel density estimation**.
+
+Kernel density is a non-parametric method of estimating distributions of data through smoothing our of data values.
+
+$$
+\hat{f}(x) = \frac{1}{nh}\sum_{i=1}^{n} \kappa \left( \frac{x - x_i}{h} \right)
+$$
+
+-   $h$ is the bandwidth
+
+If we use a Normal kernel, then we essentially create a Normal distribution around the density of each point and we sum up the distributions to build the density curve. Using KDE, we build variability around our data to fill out the possible other values of our distribution.
+
+```{r}
+library(quantmod)
+tickers <- "^GSPC"
+
+# Retrieves the stock data associated with the tickers
+getSymbols(tickers)
+
+# Calculate yearly period returns on the closing price
+gspc_r <- periodReturn(GSPC$GSPC.Close, period = "yearly")
+
+# Plot the distribution of the returns
+hist(gspc_r, main = "Historical S&P500", xlab = "S&P500 Annual Returns")
+```
+
+```{r}
+# Calculate the kernel density along with the optimal bandwidth value
+density_GSPC <- density(gspc_r)
+density_GSPC
+```
+
+```{r}
+library(ks)
+
+# Random kernel density estimation, with n = 1000 sample size
+est_GSPC <- rkde(fhat = kde(gspc_r, h = density_GSPC$bw), n = 1000)
+hist(est_GSPC, breaks = 50, main = "KDE of Historical S&P500", xlab = "S&P500 Annual Returns")
+```
+
+```{r}
+r <- est_GSPC
+P0 <- 1000
+P1 <- P0 * (1 + r)
+```
+
+Once you have the Kernel density function, you can sample from this density function. 
+
+1.  If you have large sample sizes, your bandwidth can be smaller and your estimates more accurate.
+2.  If you have small sample sizes, your bandwidth increases and estimates are more smoothed.
+
+## Hypothesized Future Distribution
+
+You might know of an upcoming change that will occur so that the past information is not going to be the future distribution.
+
+Example: The volatility of the market is forecasted to increase, so instead of a standard deviation of 14.75% it is 18.25%.
+
+In these situations, you select any distribution of choice.
+
+# Compounding and Correlations
+
+Complication arises when you are simulating multiple inputs changing at the same time. Even when the distributions of these inputs are the same, final result cna still be hard to mathematically calculate--benefit of simulation.
+
+1.  When a constant is added to a random variable then the distribution is the same, only shifted by the constant.
+2.  The addition of many distributions that are the same is rarely the same shape of distribution--exception would be **independent** Normal distributions.
+3.  The product of many distributions that are the same is rarely the same shape of distribution--exception would be **independent** lognormal distributions.
+
+## Example
+
+You want to invest $1,000 in the US stock market for thirty years. You invest in a mutual fund that tries to produce the same return as the S&P500 Index.
+
+$$
+P_t = P_0 * (1 + r_{0,1})(1 + r{1,2})(1 + r_{2,3})\cdots(1 + r_{t-1,t})
+$$
+
+-   Assume annual returns follow a Normal distribution with historical mean of 8.79% and std. dev of 14.75% every year.
+
+```{r}
+# Create an initial vector that can store 10000 simulations
+P30 <- rep(0, 10000)
+for (i in 1:10000) {
+    # Start with our initial $1,000 investment
+    P0 <- 1000
+
+    # Sample a rate from the random Normal distribution
+    r <- rnorm(n = 1, mean = 0.0879, sd = 0.1475)
+
+    Pt <- P0 * (1 + r)
+
+    # For the next 30 years, draw from a random Normal and calculate the returns
+    for (j in 1:29) {
+        r <- rnorm(n = 1, mean = 0.0879, sd = 0.1475)
+        Pt <- Pt * (1 + r)
+    }
+    P30[i] <- Pt
+}
+
+hist(P30, breaks = 50, main = "30 Year Value Distribution", xlab = "Final Value")
+abline(v = 1000, col = "red", lwd = 2)
+mtext("Initial Inv.", at = 1000)
+```
+
+## Correlated Inputs
+
+Not all inputs are independent of each other. Need to simulate random variables that have correlation with each other.
+
+### Example
+
+You want to invest $1,000 in the US stock market or US Treasury bond for thirty years. You invest a certain percentage in a mutual fund that tries to produce the same return as the S&P500 Index and the rest in US Treasury bonds.
+
+Treasury bonds perceived as safer investment so when stock market does poorly more people invest in bonds--negatively correlated.
+
+$$
+\begin{align*}
+&P_{t,S} = P_{0,S} * (1 + r_{0,1})(1 + r_{1,2})(1 + r_{2,3})\cdots(1 + r_{t-1,t}) \\
+&P_{t,B} = P_{0,B} * (1 + r_{0,1})(1 + r_{1,2})(1 + r_{2,3})\cdots(1 + r_{t-1,t}) \\
+&P_t = P_{t,S} + P_{t,B}
+\end{align*}
+$$
+
+-   Assume mutual fund N(8.79%, 14.75%)
+-   Assume Treasury Bond Normal(4.00%, 7.00%)
+-   Assume correlation of -0.2
+
+In this example, the correlation is Pearson's correlation between the two variables.
+
+One way to "add" correlation to data is to multiple correlation into the data through matrix multiplication.
+
+![Adding Correlation](images/adding-correlation.png){#fig-adding-correlation}
+
+For multiple variables at the same time, we can use the variance matrix:
+
+![Adding Correlation Multiple](images/adding-correlation-multi.png){#fig-adding-correlation-multi}
+
+
+```{r}
+value_r <- rep(0, 10000)
+R <- matrix(data = cbind(1, -0.2, -0.2, 1), nrow = 2)
+U <- t(chol(R))
+perc_B <- 0.5
+perc_S <- 0.5
+initial <- 1000
+
+standardize <- function(x) {
+    x.std <- (x - mean(x)) / sd(x)
+    return(x.std)
+}
+
+destandardize <- function(x.std, x) {
+    x.old <- (x.std * sd(x)) + mean(x)
+    return(x.old)
+}
+```
+
+```{r}
+for (j in 1:10000) {
+    S_r <- rnorm(n = 30, mean = 0.0879, sd = 0.1475)
+    B_r <- rnorm(n = 30, mean = 0.04, sd = 0.07)
+    both_r <- cbind(standardize(S_r), standardize(B_r))
+
+    # Matrix multiply our decomposition with the standardized columns
+    SB_r <- U %*% t(both_r)
+    SB_r <- t(SB_r)
+
+    final_SB_r <- cbind(destandardize(SB_r[, 1], S_r), destandardize(SB_r[, 2], B_r))
+
+    Pt_B <- initial * perc_B
+    Pt_S <- initial * perc_S
+
+    for (i in 1:30) {
+        Pt_B <- Pt_B * (1 + final_SB_r[i, 2])
+        Pt_S <- Pt_S * (1 + final_SB_r[i, 1])
+    }
+    value_r[j] <- Pt_B + Pt_S
+}
+```
+
+# How Many and How Long?
+
+The possible number of outcomes for a simulation output variable is basically infinite. We need to get a "sampling" of these values. The accuracy of the estimates depends on the number of simulated values so we need to decide how many simulations to run.
+
+Confidence interval theory in statistics reveals a relationship between accuracy and the number of simulations. Imagine you are interested in the mean value of the output distribution from your simulation.
+
+$$
+MoE(\bar{x}) = t \cdot \frac{s}{\sqrt{n}}
+$$
+
+-   $s$ is the standard deviation from simulated values
+-   $n$ is the number of simulated values
+
+Based on the formula, to double the accuracy we need to approximately **quadruple the number of scenarios**.

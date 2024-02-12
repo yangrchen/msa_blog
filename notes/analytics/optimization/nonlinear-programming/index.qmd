@@ -1,0 +1,56 @@
+---
+title: Nonlinear Optimization
+date: 01/29/2024
+---
+
+In nonlinear optimization, the objective function and constraints are continuous but not all are linear.
+
+Examples of nonlinear relationships:
+
+-   $y = ax^b$
+-   $z = axy$
+
+Many algorithms use gradients to solve the optimization:
+
+-   Conjugate gradient method
+-   Newton method with line search
+-   Trust region
+
+The problem with gradient descent is that in cases with both local and global minima, there is no guarantee that a single run will produce the correct answer.
+
+The best method is to try many different starting pointis to get an idea of how good our answer actually is.
+
+# Portfolio Optimization
+
+A **portfolio** is a collection of assets where the investor chooses the investment amount of each investment in the portfolio.
+
+Portfolio performance is typpically measured by total value of the portfolio at the end of a period of time.
+
+To determine how much to allocate in each part of a portfolio, two things must be considered--risk and return.
+
+## Risk vs. Return
+
+**Return** is the growth in value of an asset. **Risk** is the variability / volatility associated with the returns on the stock.
+
+One way of estimating return is calculating the percentage growth:
+
+$$
+\frac{Recent - Previous}{Previous} \cdot 100
+$$
+
+-   In a portfolio we have numerous stocks, each with their own return, $r_1, r_2, r_3, \cdots, r_k$
+-   Return of the whole portfolio will depend on the amount in each stock, $p_1, p_2, p_3, \cdots, p_k$
+
+The return for the portfolio: $p_1r_1 + p_2r_2 + p_3r_3 + \cdots + p_kr_k$
+
+Risk of a portfolio is the variation. Individual assets have their own variability, $\sigma_{11}$ for variance of asset 1.
+
+Using statistics, we define $Cov(aY_1 + bY_2):$
+
+$$
+Cov(aY_1 + bY_2) = a^2V(Y_1) + b^2V(Y_2) + 2abCov(Y_1, Y_2)
+$$
+
+We want to find $Cov(p_1r_1 + p_2r_2 + p_3r_3 + p_4r_4 + p_5r_5)$.
+
+![Risk in Matrix Form](images/risk-matrix-form.png){#fig-risk-matrix}
