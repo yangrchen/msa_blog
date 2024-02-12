@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.549">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -82,7 +82,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -91,6 +97,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -100,16 +107,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="../../../../styles.css">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Yang MSA</span>
     </a>
@@ -121,22 +155,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../../notes/index.html" rel="" target="">
- <span class="menu-text">Notes</span></a>
+    <a class="nav-link" href="../../../../notes/index.html"> 
+<span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../blog/index.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/yangrchen" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/yangrchen"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -168,6 +202,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </div>
     </div>
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">January 22, 2024</p>
+      </div>
+    </div>
       
     </div>
     
@@ -183,12 +223,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#traditional-approach" id="toc-traditional-approach" class="nav-link active" data-scroll-target="#traditional-approach"><span class="header-section-number">1</span> Traditional Approach</a></li>
   <li><a href="#another-approach" id="toc-another-approach" class="nav-link" data-scroll-target="#another-approach"><span class="header-section-number">2</span> Another Approach</a></li>
   <li><a href="#model-evaluation" id="toc-model-evaluation" class="nav-link" data-scroll-target="#model-evaluation"><span class="header-section-number">3</span> Model Evaluation</a></li>
-  <li><a href="#scaling-the-scorecard" id="toc-scaling-the-scorecard" class="nav-link" data-scroll-target="#scaling-the-scorecard"><span class="header-section-number">4</span> Scaling the Scorecard</a></li>
+  <li><a href="#scaling-the-scorecard" id="toc-scaling-the-scorecard" class="nav-link" data-scroll-target="#scaling-the-scorecard"><span class="header-section-number">4</span> Scaling the Scorecard</a>
+  <ul class="collapse">
+  <li><a href="#points-allocation-traditional-approach" id="toc-points-allocation-traditional-approach" class="nav-link" data-scroll-target="#points-allocation-traditional-approach"><span class="header-section-number">4.1</span> Points Allocation (Traditional Approach)</a></li>
+  <li><a href="#points-allocation-another-approach" id="toc-points-allocation-another-approach" class="nav-link" data-scroll-target="#points-allocation-another-approach"><span class="header-section-number">4.2</span> Points Allocation (Another Approach)</a></li>
+  </ul></li>
+  <li><a href="#reject-inference" id="toc-reject-inference" class="nav-link" data-scroll-target="#reject-inference"><span class="header-section-number">5</span> Reject Inference</a>
+  <ul class="collapse">
+  <li><a href="#hard-cutoff-augmentation" id="toc-hard-cutoff-augmentation" class="nav-link" data-scroll-target="#hard-cutoff-augmentation"><span class="header-section-number">5.1</span> Hard Cutoff Augmentation</a></li>
+  <li><a href="#parceling-augmentation" id="toc-parceling-augmentation" class="nav-link" data-scroll-target="#parceling-augmentation"><span class="header-section-number">5.2</span> Parceling Augmentation</a></li>
+  <li><a href="#fuzzy-augmentation-devil-angel-approach" id="toc-fuzzy-augmentation-devil-angel-approach" class="nav-link" data-scroll-target="#fuzzy-augmentation-devil-angel-approach"><span class="header-section-number">5.3</span> Fuzzy Augmentation (Devil + Angel Approach)</a></li>
+  </ul></li>
+  <li><a href="#final-scorecard-creation" id="toc-final-scorecard-creation" class="nav-link" data-scroll-target="#final-scorecard-creation"><span class="header-section-number">6</span> Final Scorecard Creation</a>
+  <ul class="collapse">
+  <li><a href="#defining-cutoff" id="toc-defining-cutoff" class="nav-link" data-scroll-target="#defining-cutoff"><span class="header-section-number">6.1</span> Defining Cutoff</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
+
 
 
 
@@ -206,10 +261,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <section id="traditional-approach" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Traditional Approach</h1>
-<div id="fig-traditional-approach" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/woe-score-feature.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Traditional Approach</figcaption>
+<div id="fig-traditional-approach" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-traditional-approach-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/woe-score-feature.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-traditional-approach-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Traditional Approach
+</figcaption>
 </figure>
 </div>
 <ul>
@@ -270,7 +329,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="scaling-the-scorecard" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Scaling the Scorecard</h1>
-<p>The relationship between odds and scores is represented by a linear function.</p>
+<p>The relationship between odds and scores is represented by a linear function. Points to double the odds (PDO) represents how big of a step we want to make to get to the next score. Starting scores that represent odds are pre-selected and are arbitrary.</p>
 <p><span class="math display">\[
 \text{Score} = \text{Offset} + \text{Factor} \cdot \log(odds)
 \]</span></p>
@@ -287,8 +346,167 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><span class="math display">\[
 \text{Offset} = \text{Score} - \text{Factor} \cdot \log(odds)
 \]</span></p>
+<p>Recall that <span class="math inline">\(\log(odds)\)</span> is the same equation in logistic regression! This is why logistic regression is so often used in scorecard models. However, as long as you can get a probability from any classification model you can calculate the odds so the underlying model is agnostic.</p>
+<section id="points-allocation-traditional-approach" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="points-allocation-traditional-approach"><span class="header-section-number">4.1</span> Points Allocation (Traditional Approach)</h2>
+<p>The points allocated to attribute <span class="math inline">\(i\)</span> of characteristic <span class="math inline">\(j\)</span> are computed as follows:</p>
+<p><span class="math display">\[
+Points_{i,j} = -(WOE_{i,j} \cdot \hat{\beta}_j + \frac{\hat{\beta}_0}{L}) \cdot \text{Factor} + \frac{\text{Offset}}{L}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(WOE_{i,j}:\)</span> Weight of evidence for attribute <span class="math inline">\(i\)</span> of characteristic <span class="math inline">\(j\)</span></li>
+<li><span class="math inline">\(\hat{\beta}_j\)</span>: Regression coefficient for characteristic <span class="math inline">\(j\)</span></li>
+<li><span class="math inline">\(\hat{\beta}_0\)</span>: Intercept term from model</li>
+<li><span class="math inline">\(L\)</span>: Total number of characteristics</li>
+<li>Points typically rounded to nearest integer</li>
+</ul>
+<p>Variables that are the weakest will get the fewest points whereas variables that are the strongest will get more points.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pdo <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>score <span class="ot">&lt;-</span> <span class="dv">600</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>odds <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>fact <span class="ot">&lt;-</span> pdo <span class="sc">/</span> <span class="fu">log</span>(<span class="dv">2</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>os <span class="ot">&lt;-</span> score <span class="sc">-</span> fact <span class="sc">*</span> <span class="fu">log</span>(odds)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>var_names <span class="ot">&lt;-</span> <span class="fu">names</span>(initial_score<span class="sc">$</span>coefficients[<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> var_names) {</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> initial_score<span class="sc">$</span>coefficients[i]</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    beta0 <span class="ot">&lt;-</span> initial_score<span class="sc">$</span>coefficients[<span class="st">"(Intercept)"</span>]</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    nvar <span class="ot">&lt;-</span> <span class="fu">length</span>(var_names)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    WOE_var <span class="ot">&lt;-</span> train[[i]]</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    points_name <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">str_sub</span>(i, <span class="at">end =</span> <span class="sc">-</span><span class="dv">4</span>), <span class="st">"points"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    train[[points_name]] <span class="ot">&lt;-</span> <span class="sc">-</span>(WOE_var <span class="sc">*</span> beta <span class="sc">+</span> (beta0 <span class="sc">/</span> nvar)) <span class="sc">*</span> fact <span class="sc">+</span> os <span class="sc">/</span> nvar</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="points-allocation-another-approach" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="points-allocation-another-approach"><span class="header-section-number">4.2</span> Points Allocation (Another Approach)</h2>
+<p>While much easier to code, the secondary points allocation approach does not use WOE. Instead, it uses the binned variables and you cannot gain a notion of variable importance.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>bin_model <span class="ot">&lt;-</span> <span class="fu">smbinning.scaling</span>(initial_score2, <span class="at">pdo =</span> <span class="dv">20</span>, <span class="at">score =</span> <span class="dv">600</span>, <span class="at">odds =</span> <span class="dv">50</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>train_bin <span class="ot">&lt;-</span> <span class="fu">smbinning.scoring.gen</span>(bin_model, <span class="at">dataset =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="reject-inference" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Reject Inference</h1>
+<p>Recall: <strong>Reject inference</strong> is the process of inferring the status of rejected applicants based on the accepted applicants model in an attempt to use their information to build a scorecard that is representative of the entire applicant population. The purpose is to solve sample bias so that development sample is similar to the population to which the scorecard will be applied.</p>
+<p>There are three main approaches:</p>
+<ol type="1">
+<li>Hard Cutoff Augmentation</li>
+<li>Parceling Augmentation</li>
+<li>Fuzzy Augmentation</li>
+</ol>
+<section id="hard-cutoff-augmentation" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="hard-cutoff-augmentation"><span class="header-section-number">5.1</span> Hard Cutoff Augmentation</h2>
+<ol type="1">
+<li>Build a scorecard model using the known good / bad population (accepted applications).</li>
+<li>Score the rejected applications with this model to obtain each rejected application’s probability of default and their score on the scorecard model.</li>
+<li>Create weighted cases for the rejected applications–weight applied is the “rejection rate” which adjusts the number of sampled rejected to accurately reflect the number of rejects from population.</li>
+<li>Set a cutoff score level above which application is deemed good and below applicants deemed bad.</li>
+<li>Add inferred goods and bads with known goods and bads and rebuild scorecard.</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rejects_scored<span class="sc">$</span>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(initial_score, <span class="at">newdata =</span> rejected_scored, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>rejects<span class="sc">$</span>bad <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(rejects_scored<span class="sc">$</span>pred <span class="sc">&gt;</span> <span class="fl">0.0545</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>rejects<span class="sc">$</span>weight <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(rejects<span class="sc">$</span>bad <span class="sc">==</span> <span class="dv">1</span>, <span class="fl">2.80</span>, <span class="fl">0.59</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>rejects<span class="sc">$</span>good <span class="ot">&lt;-</span> <span class="fu">abs</span>(rejects<span class="sc">$</span>bad <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>comb_hard <span class="ot">&lt;-</span> <span class="fu">rbind</span>(accepts, rejects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The cutoff point comes from Youden’s index calculation.</p>
+</section>
+<section id="parceling-augmentation" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="parceling-augmentation"><span class="header-section-number">5.2</span> Parceling Augmentation</h2>
+<ol type="1">
+<li>Build a scorecard model using the known good / bad population (accepted applications).</li>
+<li>Score the rejected applications with this model to obtain each rejected applicant’s probability of default and their score on the scorecard model.</li>
+<li>Create weighted cases for the rejected applicants–weight applied is the “rejection rate” which adjusts the number of sampled rejected to accurately reflect the number of rejects from population.</li>
+<li>Define score ranges manually or automatically with simple bucketing.</li>
+<li>The inferred good / bad status of the rejected applicants will be assigned <strong>randomly</strong> and proportional to the number of goods and bads in the accepted population within each score range.</li>
+<li>If desired, apply the event rate increase factor to P(bad) to increaes the proportion of bads among the rejects (oversampling with rejects).</li>
+<li>Add the inferred goods and bads back in with the known goods and bads and rebuild the scorecard.</li>
+</ol>
+<div id="fig-parceling-aug-example" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-parceling-aug-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/parceling-aug-example.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parceling-aug-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Parceling Augmentation Example
+</figcaption>
+</figure>
+</div>
+<p>In <a href="#fig-parceling-aug-example" class="quarto-xref">Figure&nbsp;2</a>, we found no applicants within the first score range that were accepted so we infer that the rejects in the same score range are bad. Within the next score range, we can calculate a proportion based on the accepted applicants and infer the inferred bad proportion based on the number of rejects in that score range.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>parc <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">500</span>, <span class="dv">725</span>, <span class="dv">25</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>accepts_scored<span class="sc">$</span>Score_parc <span class="ot">&lt;-</span> <span class="fu">cut</span>(accepts_scored<span class="sc">$</span>Score, <span class="at">breaks =</span> parc)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>rejects_scored<span class="sc">$</span>Score_parc <span class="ot">&lt;-</span> <span class="fu">cut</span>(rejects_scored<span class="sc">$</span>Score, <span class="at">breaks =</span> parc)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(accepts_scored<span class="sc">$</span>Score_parc, accepts_scored<span class="sc">$</span>bad)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>parc_perc <span class="ot">&lt;-</span> <span class="fu">table</span>(accepts_scored<span class="sc">$</span>Score_parc, accepts_scored<span class="sc">$</span>bad)[, <span class="dv">2</span>] <span class="sc">/</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                <span class="fu">rowSums</span>(<span class="fu">table</span>(accepts_scored<span class="sc">$</span>Score_parc, accepts_scored<span class="sc">$</span>bad))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>rejects<span class="sc">$</span>bad <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Applicants were rejected for a reason and our model may not be able to account for the full rejection factors</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># The rejection bump is used assuming the reject applicants are inherently different than the accepted applicants. We bump up their default rate by an increased factor.</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>rej_bump <span class="ot">&lt;-</span> <span class="fl">1.25</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># For every parcel and every reject observation in each parcel</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Randomly assign the the row to be either 0 or 1 based on random uniform number</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(parc) <span class="sc">-</span> <span class="dv">1</span>)) {</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(rejects_scored<span class="sc">$</span>Score)) {</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> ((rejects_scored<span class="sc">$</span>Score[j] <span class="sc">&gt;</span> parc[i]) <span class="sc">&amp;</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>            (rejects_scored<span class="sc">$</span>Score[j] <span class="sc">&lt;=</span> parc[i <span class="sc">+</span> <span class="dv">1</span>]) <span class="sc">&amp;</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>            (<span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">1</span>) <span class="sc">&lt;</span> (rej_bump <span class="sc">*</span> parc_perc[i]))) {</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>                rejects<span class="sc">$</span>bad[j] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(rejects_scored<span class="sc">$</span>Score_parc, rejects<span class="sc">$</span>bad)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>rejects<span class="sc">$</span>weight <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(rejects<span class="sc">$</span>bad <span class="sc">==</span> <span class="dv">1</span>, <span class="fl">2.80</span>, <span class="fl">0.59</span>)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>rejects<span class="sc">$</span>good <span class="ot">&lt;-</span> <span class="fu">abs</span>(rejects<span class="sc">$</span>bad <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>comb_parc <span class="ot">&lt;-</span> <span class="fu">rbind</span>(accepts, rejects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="fuzzy-augmentation-devil-angel-approach" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="fuzzy-augmentation-devil-angel-approach"><span class="header-section-number">5.3</span> Fuzzy Augmentation (Devil + Angel Approach)</h2>
+<ol type="1">
+<li>Build a scorecard model using known good / bad population (accepted applications).</li>
+<li>Score the rejected applications with this model to obtain each rejected applicant’s probability of being god, P(Good), and probability of being bad, P(Bad).</li>
+<li><strong>Do not assign a reject to a good / bad class</strong>–create two weighted cases for each rejected applicant using P(Good) and P(Bad).</li>
+<li>Multiply P(Good) and P(Bad) by the user-specific rejection rate to form frequency variables.</li>
+<li>For each rejected applicant, create <strong>two observations</strong>–one observation has a frequency variable (rejection weight <span class="math inline">\(\times\)</span> P(Good)) and a target variable of 0; other observation has a frequency variable (rejection weight <span class="math inline">\(\times\)</span> P(Bad)) and a target variable of 1.</li>
+<li>Add inferred goods and bads back in with the known goods and bads and rebuild the scorecard.</li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rejects_scored<span class="sc">$</span>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(initial_score, <span class="at">newdata =</span> rejects_scored, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>rejects_g <span class="ot">&lt;-</span> rejects</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>rejects_b <span class="ot">&lt;-</span> rejects</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>rejects_g<span class="sc">$</span>bad <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>rejects_g<span class="sc">$</span>weight <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> rejects_scored<span class="sc">$</span>pred) <span class="sc">*</span> <span class="fl">2.80</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>rejects_g<span class="sc">$</span>good <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>rejects_b<span class="sc">$</span>bad <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>rejects_b<span class="sc">$</span>weight <span class="ot">&lt;-</span> (rejects_scored<span class="sc">$</span>pred) <span class="sc">*</span> <span class="fl">0.59</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>rejects_b<span class="sc">$</span>good <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>comb_fuzz <span class="ot">&lt;-</span> <span class="fu">rbind</span>(accepts, rejects_g, rejects_b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="final-scorecard-creation" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Final Scorecard Creation</h1>
+<p>To build the final scorecard model, we repeat the process for the initial scorecard creation except the analysis is performed <strong>after reject inference</strong>.</p>
+<section id="defining-cutoff" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="defining-cutoff"><span class="header-section-number">6.1</span> Defining Cutoff</h2>
+<p>A new score should be better than the last in terms of one of the following:</p>
+<ul>
+<li>Lower bad rate for the same approval rate.</li>
+<li>Higher approval rate while holding the bad rate constant.</li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -371,10 +589,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -384,8 +601,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -398,6 +624,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -441,6 +786,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -466,6 +812,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -526,6 +898,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

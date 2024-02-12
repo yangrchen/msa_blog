@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.549">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -82,7 +82,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -91,6 +97,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -100,16 +107,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="../../../../styles.css">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Yang MSA</span>
     </a>
@@ -121,22 +155,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../../notes/index.html" rel="" target="">
- <span class="menu-text">Notes</span></a>
+    <a class="nav-link" href="../../../../notes/index.html"> 
+<span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../blog/index.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/yangrchen" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/yangrchen"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -228,8 +262,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># | include: false</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -241,10 +276,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="decision-tree-review" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Decision Tree Review</h1>
 <p>Decision trees are built by recursively splitting the data into successively purer subsets of data using measures of purity–Gini, entropy, misclassifcation error rate.</p>
-<div id="fig-dt-review-splits" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/dt-review-splits.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Selecting the Split</figcaption>
+<div id="fig-dt-review-splits" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dt-review-splits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/dt-review-splits.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dt-review-splits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Selecting the Split
+</figcaption>
 </figure>
 </div>
 </section>
@@ -254,10 +293,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="bootstrapping" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="bootstrapping"><span class="header-section-number">2.1</span> Bootstrapping</h2>
 <p>Take random samples of data <em>with replacement</em> that are the same size as the original dataset. Some observations will not be sampled which are referred to as <strong>out-of-bag observations</strong>.</p>
-<div id="fig-bootstrapping-example" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/bootstrapping-example.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Bootstrapping for 10 Observations</figcaption>
+<div id="fig-bootstrapping-example" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bootstrapping-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/bootstrapping-example.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bootstrapping-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Bootstrapping for 10 Observations
+</figcaption>
 </figure>
 </div>
 <p>The out-of-bag observations can be used as a validation set. However, there is no guarantee what the size of each validation set will be.</p>
@@ -281,10 +324,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Aggregate these rules into a voting ensemble.</li>
 <li>Test performance of the voting ensemble on the whole dataset.</li>
 </ol>
-<div id="fig-bagging-example" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/bagging-example.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Bagging Example</figcaption>
+<div id="fig-bagging-example" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bagging-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/bagging-example.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bagging-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Bagging Example
+</figcaption>
 </figure>
 </div>
 </section>
@@ -317,20 +364,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="tab-content" data-group="language">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="3" data-code-cell="annotated-cell-2" data-code-annotation="1"><code>ntree</code> is the number of trees</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="3" data-code-annotation="1"><code>ntree</code> is the number of trees</span>
 </dd>
-<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="4" data-code-cell="annotated-cell-2" data-code-annotation="2"><code>importance</code> is a flag to allow for variable importance</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="4" data-code-annotation="2"><code>importance</code> is a flag to allow for variable importance</span>
 </dd>
 </dl>
 </div>
@@ -354,31 +401,39 @@ Attaching package: 'randomForest'</code></pre>
 
     margin</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>rf_ames <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(</span>
-<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a>    Sale_Price <span class="sc">~</span> ., <span class="at">data =</span> training_df, </span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-2-3" class="code-annotation-target"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">500</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2" onclick="event.preventDefault();">2</a><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-2-4" class="code-annotation-target"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a>rf_ames <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(</span>
+<span id="annotated-cell-9-2"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a>    Sale_Price <span class="sc">~</span> ., <span class="at">data =</span> training_df, </span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-9-3" class="code-annotation-target"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">500</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-9-4" class="code-annotation-target"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rf_ames, <span class="at">main =</span> <span class="st">"Number of Trees Compared to MSE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/MSE-plot-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/MSE-plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>To get variable importance we can use <code>varImpPlot</code>:</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(rf_ames, <span class="at">sort =</span> <span class="cn">TRUE</span>, <span class="at">n.var =</span> <span class="dv">10</span>, <span class="at">main =</span> <span class="st">"Top 10 Variable Importance"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/var-importance-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/var-importance-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <ul>
@@ -388,7 +443,7 @@ Attaching package: 'randomForest'</code></pre>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -406,7 +461,7 @@ Attaching package: 'randomForest'</code></pre>
 </div>
 <p>We can plot the average decrease in impurity in the nodes of the tree:</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
@@ -424,7 +479,11 @@ Attaching package: 'randomForest'</code></pre>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/py-var-importance-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/py-var-importance-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -437,7 +496,7 @@ Attaching package: 'randomForest'</code></pre>
 <p>We use validation (out-of-bag samples) to tune along with number of trees. We are measuring the total amount of error across all the samples we did not take.</p>
 <p>For each <code>mtry</code>, the same bootstrap samples are used to give each attempt a fair shot.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tuneRF</span>(<span class="at">x =</span> training_df[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">y =</span> training_df[, <span class="dv">1</span>], <span class="at">plot =</span> <span class="cn">TRUE</span>, <span class="at">ntreeTry =</span> <span class="dv">500</span>, <span class="at">stepFactor =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -452,7 +511,11 @@ mtry = 2    OOB error = 908679993
 -0.06230596 0.05 </code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/tuning-rf-3.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/tuning-rf-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  mtry  OOBError
@@ -470,7 +533,7 @@ mtry = 2    OOB error = 908679993
 <li>Compare variables to random variable (newer way)</li>
 </ul>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>training_df <span class="ot">&lt;-</span> training_df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">random =</span> <span class="fu">rnorm</span>(<span class="dv">2051</span>))</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -480,7 +543,11 @@ mtry = 2    OOB error = 908679993
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(rf_ames, <span class="at">sort =</span> <span class="cn">TRUE</span>, <span class="at">n.var =</span> <span class="dv">15</span>, <span class="at">main =</span> <span class="st">"Look for Variables Below Random Variable"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/random-variable-selection-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/random-variable-selection-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The idea is that any variables that are below the completely random variable do not perform as well overall.</p>
@@ -508,29 +575,41 @@ mtry = 2    OOB error = 908679993
 <p>Most machine learning models are not interpretable in the classical sense. The relationships modeled are <strong>not linear</strong> so the interpretations are much more complicated than a typical regression.</p>
 <p>Similar to GAMs however, we can get a general idea of overall pattern for a predictor variable compared to a target using <strong>partial dependence plots</strong>.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">partialPlot</span>(rf_ames, training_df, Year_Built)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/partial-dependence-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/partial-dependence-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
-<details open="">
+</div>
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">partialPlot</span>(rf_ames, training_df, Garage_Area)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/partial-dependence-2.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/partial-dependence-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
 <section id="boosting" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Boosting</h1>
 <p><strong>Boosting</strong> is similar to bagging in that we are still taking bootstrapped samples from the dataset. However, unlike bagging, observations are <strong>not sampled randomly</strong>. Boosting assigns weight to each trianing observation and uses the weight as a sampling distribution. In particular, we assign higher weight to the observations that are <strong>harder to classify</strong>.</p>
-<div id="fig-boosting-probability" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/boosting-probability.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;4: Probability of Selection Observation</figcaption>
+<div id="fig-boosting-probability" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-boosting-probability-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/boosting-probability.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-boosting-probability-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Probability of Selection Observation
+</figcaption>
 </figure>
 </div>
 <p>Boosting is trying to learn from its mistakes by selecting the observations that it gets wrong more often. Bagging will build the ensemble model <strong>simultaneously</strong>, but since each model in boosting informs the next we have to build models <strong>sequentially</strong>.</p>
@@ -540,10 +619,14 @@ mtry = 2    OOB error = 908679993
 <li>Start with equal weights for each observation</li>
 <li>Update weights each round based on the classification error</li>
 </ol>
-<div id="fig-three-boosting-rounds" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/three-boosting-rounds.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;5: Three Boosting Rounds</figcaption>
+<div id="fig-three-boosting-rounds" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-three-boosting-rounds-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/three-boosting-rounds.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-three-boosting-rounds-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Three Boosting Rounds
+</figcaption>
 </figure>
 </div>
 </section>
@@ -592,10 +675,14 @@ y = f_1(x) + \eta f_2(x) + \eta f_3(x) + \cdots + \eta f_k(x) + \epsilon_k
 <h2 data-number="7.2" class="anchored" data-anchor-id="gradient-boosted-trees"><span class="header-section-number">7.2</span> Gradient Boosted Trees</h2>
 <p>Gradient boosting yields an <strong>additive ensemble model</strong>. There is no averaging of individual models. Predictions from each model are summed together for final prediction.</p>
 <p>The key to gradient boosting is using weak learners (shallow trees). Although each learner would make poor predictions on their own, their addition provides good predictions.</p>
-<div id="fig-weak-learner-ensemble" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/weak-learner-ensemble.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;6: Weak Learner Ensemble</figcaption>
+<div id="fig-weak-learner-ensemble" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-weak-learner-ensemble-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/weak-learner-ensemble.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-weak-learner-ensemble-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Weak Learner Ensemble
+</figcaption>
 </figure>
 </div>
 </section>
@@ -604,10 +691,14 @@ y = f_1(x) + \eta f_2(x) + \eta f_3(x) + \cdots + \eta f_k(x) + \epsilon_k
 <h1 data-number="8"><span class="header-section-number">8</span> Gradient Descent</h1>
 <p>Models are optimized to some form of <strong>loss function</strong>. For example, linear regression and decision trees typically look at minimizing SSE. The SSE represents the overall loss of the model. To find the model with the lowest loss function, we can use <strong>gradient descent</strong>.</p>
 <p>Gradient descent iteratively updates parameters in order to minimize the loss function by moving int he direction of “steepest descent”.</p>
-<div id="fig-gradient-descent" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/gradient-descent.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;7: Gradient Descent</figcaption>
+<div id="fig-gradient-descent" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gradient-descent-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/gradient-descent.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gradient-descent-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Gradient Descent
+</figcaption>
 </figure>
 </div>
 <p>Step size is updated at each step by multiplying the gradient by a <strong>learning rate</strong>. Without a learning rate, wem igth take steps too big or too small (too long to optimize).</p>
@@ -644,7 +735,7 @@ y = f_1(x) + \eta f_2(x) + \eta f_3(x) + \cdots + \eta f_k(x) + \epsilon_k
 <div class="tab-content" data-group="language">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(xgboost)</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -658,7 +749,7 @@ y = f_1(x) + \eta f_2(x) + \eta f_3(x) + \cdots + \eta f_k(x) + \epsilon_k
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> xgboost <span class="im">import</span> XGBRegressor</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -690,39 +781,39 @@ y = f_1(x) + \eta f_2(x) + \eta f_3(x) + \cdots + \eta f_k(x) + \epsilon_k
 </div>
 </div>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
-<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-3"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {</span>
-<span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"n_estimators"</span>: <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">5</span>, <span class="dv">51</span>, <span class="dv">5</span>)),</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-2-5" class="code-annotation-target"><a href="#annotated-cell-2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"eta"</span>: [<span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>, <span class="fl">0.25</span>, <span class="fl">0.3</span>],</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-2-6" class="code-annotation-target"><a href="#annotated-cell-2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"max_depth"</span>: <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>)),</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-2-7" class="code-annotation-target"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"subsample"</span>: [<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>]</span>
-<span id="annotated-cell-2-8"><a href="#annotated-cell-2-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="annotated-cell-2-9"><a href="#annotated-cell-2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-10"><a href="#annotated-cell-2-10" aria-hidden="true" tabindex="-1"></a>xgb <span class="op">=</span> XGBRegressor()</span>
-<span id="annotated-cell-2-11"><a href="#annotated-cell-2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-12"><a href="#annotated-cell-2-12" aria-hidden="true" tabindex="-1"></a>grid_search <span class="op">=</span> GridSearchCV(estimator<span class="op">=</span>xgb, param_grid<span class="op">=</span>param_grid, cv <span class="op">=</span> <span class="dv">10</span>)</span>
-<span id="annotated-cell-2-13"><a href="#annotated-cell-2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># grid_search.fit(X_train, y_train)</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-23"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-23-1"><a href="#annotated-cell-23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
+<span id="annotated-cell-23-2"><a href="#annotated-cell-23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-23-3"><a href="#annotated-cell-23-3" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-23-4" class="code-annotation-target"><a href="#annotated-cell-23-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"n_estimators"</span>: <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">5</span>, <span class="dv">51</span>, <span class="dv">5</span>)),</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-23-5" class="code-annotation-target"><a href="#annotated-cell-23-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"eta"</span>: [<span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>, <span class="fl">0.25</span>, <span class="fl">0.3</span>],</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-23-6" class="code-annotation-target"><a href="#annotated-cell-23-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"max_depth"</span>: <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>)),</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-23-7" class="code-annotation-target"><a href="#annotated-cell-23-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"subsample"</span>: [<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>]</span>
+<span id="annotated-cell-23-8"><a href="#annotated-cell-23-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-23-9"><a href="#annotated-cell-23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-23-10"><a href="#annotated-cell-23-10" aria-hidden="true" tabindex="-1"></a>xgb <span class="op">=</span> XGBRegressor()</span>
+<span id="annotated-cell-23-11"><a href="#annotated-cell-23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-23-12"><a href="#annotated-cell-23-12" aria-hidden="true" tabindex="-1"></a>grid_search <span class="op">=</span> GridSearchCV(estimator<span class="op">=</span>xgb, param_grid<span class="op">=</span>param_grid, cv <span class="op">=</span> <span class="dv">10</span>)</span>
+<span id="annotated-cell-23-13"><a href="#annotated-cell-23-13" aria-hidden="true" tabindex="-1"></a><span class="co"># grid_search.fit(X_train, y_train)</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-annotation">
-<dl>
-<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-23" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="4" data-code-cell="annotated-cell-2" data-code-annotation="1"><code>n_estimators</code> is the number of trees we will use</span>
+<span data-code-cell="annotated-cell-23" data-code-lines="4" data-code-annotation="1"><code>n_estimators</code> is the number of trees we will use</span>
 </dd>
-<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-23" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="5" data-code-cell="annotated-cell-2" data-code-annotation="2"><code>eta</code> is the regularization parameter</span>
+<span data-code-cell="annotated-cell-23" data-code-lines="5" data-code-annotation="2"><code>eta</code> is the regularization parameter</span>
 </dd>
-<dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-23" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-lines="6" data-code-cell="annotated-cell-2" data-code-annotation="3"><code>max_depth</code> is the maximum depth of our trees</span>
+<span data-code-cell="annotated-cell-23" data-code-lines="6" data-code-annotation="3"><code>max_depth</code> is the maximum depth of our trees</span>
 </dd>
-<dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
+<dt data-target-cell="annotated-cell-23" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-lines="7" data-code-cell="annotated-cell-2" data-code-annotation="4"><code>subsample</code> is the fraction of our data that we use in stochastic gradient descent</span>
+<span data-code-cell="annotated-cell-23" data-code-lines="7" data-code-annotation="4"><code>subsample</code> is the fraction of our data that we use in stochastic gradient descent</span>
 </dd>
 </dl>
 </div>
@@ -739,7 +830,7 @@ y = f_1(x) + \eta f_2(x) + \eta f_3(x) + \cdots + \eta f_k(x) + \epsilon_k
 <li><strong>Frequency</strong>: Percentage of splits in the whole ensemble that use this variable</li>
 </ol>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set.seed(12345)</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># xgb_ames &lt;- xgboost(data = train_x, label = train_y, subsample = 1, nrounds = 24, eta = 0.25, max_depth = 5)</span></span>
@@ -747,7 +838,7 @@ y = f_1(x) + \eta f_2(x) + \eta f_3(x) + \cdots + \eta f_k(x) + \epsilon_k
 </details>
 </div>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># xgb.ggplot.importance(xgb.importance(feature_names = colnames(train_x), model = xgb_ames))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -861,10 +952,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -874,8 +964,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -888,6 +987,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -931,6 +1149,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -956,6 +1175,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1016,6 +1261,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

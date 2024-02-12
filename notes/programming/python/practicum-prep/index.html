@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.549">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -82,7 +82,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -91,6 +97,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -103,16 +110,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="../../../../styles.css">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Yang MSA</span>
     </a>
@@ -124,22 +158,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../../notes/index.html" rel="" target="">
- <span class="menu-text">Notes</span></a>
+    <a class="nav-link" href="../../../../notes/index.html"> 
+<span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../blog/index.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/yangrchen" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/yangrchen"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -225,10 +259,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/pandas.jpeg" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">All Python Data Scientists Currently</figcaption>
+<figcaption>All Python Data Scientists Currently</figcaption>
 </figure>
 </div>
 <section id="setup" class="level1 unnumbered">
@@ -239,13 +274,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-n</span> python-eda</span>
+<div class="sourceCode" id="cb1" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-n</span> python-eda</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate python-eda</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install python=3.11 numpy pandas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll then import all the packages we’ll need to run our delicious code!</p>
 <div class="cell" data-execution_count="1">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -267,7 +302,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1 data-number="2"><span class="header-section-number">2</span> Series</h1>
 <p>Series is a one-dimensional <em>array-like</em> object with a sequence of values having the <strong>same type</strong> and an array of data labels called the <strong>index</strong>.</p>
 <div class="cell" data-execution_count="2">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>series <span class="op">=</span> pd.Series([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>])</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>series</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -283,7 +318,7 @@ dtype: int64</code></pre>
 <h2 data-number="2.1" class="anchored" data-anchor-id="indexing-into-series"><span class="header-section-number">2.1</span> Indexing into Series</h2>
 <p>Notice how by default each entry in the series is labeled from 0 to <span class="math inline">\(n - 1\)</span>. This is the index. We can set our own index for the Series and retrieve values using the index:</p>
 <div class="cell" data-execution_count="3">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>series <span class="op">=</span> pd.Series([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], index<span class="op">=</span>[<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>])</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(series)</span>
@@ -303,7 +338,7 @@ dtype: int64</code></pre>
 </div>
 <p>The index is ordered according to the data, so we can also slice using the index. Unlike Python lists, both ends are inclusive:</p>
 <div class="cell" data-execution_count="4">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(series[<span class="st">'a'</span>:<span class="st">'b'</span>])</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -322,7 +357,7 @@ Series([], dtype: int64)</code></pre>
 <h2 data-number="2.2" class="anchored" data-anchor-id="series-are-similar-to-numpy-arrays"><span class="header-section-number">2.2</span> Series Are Similar to Numpy Arrays!</h2>
 <p>You can use Boolean arrays and do vectorized operations like scalar multiplication just like with <code>numpy</code> arrays.</p>
 <div class="cell" data-execution_count="5">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>series <span class="op">=</span> pd.Series(np.arange(<span class="dv">9</span>))</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -364,7 +399,7 @@ dtype: int64
 <h2 data-number="2.3" class="anchored" data-anchor-id="converting-python-dictionaries-to-series"><span class="header-section-number">2.3</span> Converting Python Dictionaries to Series</h2>
 <p>We can provide a dictionary as a Series which automatically converts the dictionary keys into the index:</p>
 <div class="cell" data-execution_count="6">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {<span class="st">"Apples"</span>: <span class="dv">2</span>, <span class="st">"Bananas"</span>: <span class="dv">5</span>, <span class="st">"Oranges"</span>: <span class="dv">18</span>}</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>series <span class="op">=</span> pd.Series(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -372,7 +407,7 @@ dtype: int64
 </div>
 <p>And then back into a dictionary with the <code>to_dict</code> method:</p>
 <div class="cell" data-execution_count="7">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>series.to_dict()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -385,7 +420,7 @@ dtype: int64
 <h2 data-number="2.4" class="anchored" data-anchor-id="series-in-data-analysis"><span class="header-section-number">2.4</span> Series in Data Analysis</h2>
 <p>Checking for missing values:</p>
 <div class="cell" data-execution_count="8">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>series <span class="op">=</span> pd.Series(d, index <span class="op">=</span> [<span class="st">"Apples"</span>, <span class="st">"Bananas"</span>, <span class="st">"Mangoes"</span>])</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(series.isna())</span>
@@ -404,7 +439,7 @@ dtype: bool</code></pre>
 </div>
 <p>When you add Series together, it automatically aligns the labels together and NAs the values where the indexes are not the same.</p>
 <div class="cell" data-execution_count="9">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {<span class="st">"Apples"</span>: <span class="dv">60</span>, <span class="st">"Bananas"</span>: <span class="dv">20</span>, <span class="st">"Durian"</span>: <span class="dv">10</span>, <span class="st">"Avocados"</span>: <span class="dv">10</span>}</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>series2 <span class="op">=</span> pd.Series(d)</span>
@@ -425,7 +460,7 @@ dtype: float64</code></pre>
 <h2 data-number="2.5" class="anchored" data-anchor-id="series-name"><span class="header-section-number">2.5</span> Series Name</h2>
 <p>A Series index and its data values have a special <code>name</code> attribute which integrates with other functionality in <code>pandas</code>:</p>
 <div class="cell" data-execution_count="10">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>series.name <span class="op">=</span> <span class="st">"count"</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>series.index.name <span class="op">=</span> <span class="st">"fruit"</span></span>
@@ -446,7 +481,7 @@ Name: count, dtype: float64</code></pre>
 <p>A DataFrame is a tabular form data structure. It contains an ordered, named collection of columns which can have different types. Think of DataFrames in the same way that you think of structured datasets or even R dataframes!</p>
 <p>A DataFrame has a row and column index. How does this relate to series? Essentially, a DataFrame is a dictionary of Series that share the same index.</p>
 <div class="cell" data-execution_count="11">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_student"</span>: [<span class="va">True</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>],</span>
@@ -459,7 +494,7 @@ Name: count, dtype: float64</code></pre>
 <section id="viewing-the-first-n-rows-last-n-rows" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="viewing-the-first-n-rows-last-n-rows"><span class="header-section-number">3.1</span> Viewing the First N Rows, Last N Rows</h2>
 <div class="cell" data-execution_count="12">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head(n))</span>
@@ -479,7 +514,7 @@ Name: count, dtype: float64</code></pre>
 <h2 data-number="3.2" class="anchored" data-anchor-id="specifying-columns"><span class="header-section-number">3.2</span> Specifying Columns</h2>
 <p>Just like Series, you can specify the names of columns. If the column names exist, then the DataFrame will be ordered by the order you specified them. Otherwise, the column will be inserted with NA values.</p>
 <div class="cell" data-execution_count="13">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.DataFrame(data, columns <span class="op">=</span> [<span class="st">"name"</span>, <span class="st">"score"</span>, <span class="st">"is_student"</span>])</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -535,7 +570,7 @@ Name: count, dtype: float64</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="14">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.DataFrame(data, columns<span class="op">=</span>[<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"is_student"</span>])</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -595,7 +630,7 @@ Name: count, dtype: float64</code></pre>
 <h2 data-number="3.3" class="anchored" data-anchor-id="retrieving-columns"><span class="header-section-number">3.3</span> Retrieving Columns</h2>
 <p>To retrieve columns, use dictionary-like notation or use the dot notation.</p>
 <div class="cell" data-execution_count="15">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">"is_student"</span>])</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.is_student)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -633,7 +668,7 @@ Dot Notation
 <h2 data-number="3.4" class="anchored" data-anchor-id="modifying-columns-adding-columns"><span class="header-section-number">3.4</span> Modifying Columns, Adding Columns</h2>
 <p>You can change column values by assigning a new value. If you assign a Series, then the labels will be aligned to the DataFrame’s index and insert NA where index values are not present:</p>
 <div class="cell" data-execution_count="16">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"score"</span>] <span class="op">=</span> <span class="fl">1.</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -689,7 +724,7 @@ Dot Notation
 </div>
 </div>
 <div class="cell" data-execution_count="17">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>val <span class="op">=</span> pd.Series([<span class="dv">2</span>, <span class="dv">2</span>], index<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">4</span>])</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"score"</span>] <span class="op">=</span> val</span>
@@ -747,7 +782,7 @@ Dot Notation
 </div>
 <p>Note that any column retrieved from a DataFrame is a view on the data, not a copy. Any modifications to this Series will be reflected in the DataFrame.</p>
 <div class="cell" data-execution_count="18">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>score <span class="op">=</span> df[<span class="st">"score"</span>]</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>score[<span class="dv">0</span>] <span class="op">=</span> <span class="fl">1.</span></span>
@@ -819,7 +854,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <h2 data-number="3.5" class="anchored" data-anchor-id="transpose"><span class="header-section-number">3.5</span> Transpose</h2>
 <p>To transpose the data:</p>
 <div class="cell" data-execution_count="19">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df.T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -887,7 +922,7 @@ Caution
 <h2 data-number="3.6" class="anchored" data-anchor-id="dataframe-column-and-index-names"><span class="header-section-number">3.6</span> DataFrame Column and Index Names</h2>
 <p>Just like Series, you can name the index and columns of the DataFrame:</p>
 <div class="cell" data-execution_count="20">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df.index.name <span class="op">=</span> <span class="st">"student"</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>df.columns.name <span class="op">=</span> <span class="st">"information"</span></span>
@@ -955,7 +990,7 @@ Caution
 <h1 data-number="4"><span class="header-section-number">4</span> Indexes</h1>
 <p>Index objects hold axis labels and other metadata (like axis names). Any labels you use to construct a Series or DataFrame are converted to an Index.</p>
 <div class="cell" data-execution_count="21">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df.index</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -965,7 +1000,7 @@ Caution
 </div>
 <p>Index objects are immutable, but they can be accessed like arrays and behave more like fixed sets:</p>
 <div class="cell" data-execution_count="22">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> pd.Index(np.arange(<span class="dv">4</span>))</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -978,7 +1013,7 @@ Caution
 </div>
 </div>
 <div class="cell" data-execution_count="23">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>labels2 <span class="op">=</span> pd.Index([<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>])</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(labels.difference(labels2))</span>
@@ -996,7 +1031,7 @@ True</code></pre>
 <h2 data-number="5.1" class="anchored" data-anchor-id="reindex"><span class="header-section-number">5.1</span> Reindex</h2>
 <p>We can modify the Index of a Series or DataFrame using <code>reindex</code>:</p>
 <div class="cell" data-execution_count="24">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>series2 <span class="op">=</span> series.reindex([<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>, <span class="st">'d'</span>])</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>series2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1011,7 +1046,7 @@ dtype: float64</code></pre>
 </div>
 <p>We can also fill interpolate values when reindexing with a small subset of labels:</p>
 <div class="cell" data-execution_count="25">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>series <span class="op">=</span> pd.Series([<span class="st">"blue"</span>, <span class="st">"purple"</span>, <span class="st">"yellow"</span>], index<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>])</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>series.reindex(np.arange(<span class="dv">6</span>), method<span class="op">=</span><span class="st">"ffill"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1030,7 +1065,7 @@ dtype: object</code></pre>
 <section id="drop-values" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="drop-values"><span class="header-section-number">5.2</span> Drop Values</h2>
 <div class="cell" data-execution_count="26">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>series <span class="op">=</span> pd.Series(np.arange(<span class="fl">5.0</span>), index<span class="op">=</span>[<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"d"</span>, <span class="st">"e"</span>])</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>series_drop <span class="op">=</span> series.drop(<span class="st">"c"</span>)</span>
@@ -1047,7 +1082,7 @@ dtype: float64</code></pre>
 </div>
 <p>Within a DataFrame, we can drop from the rows or the columns using the <code>axis</code> argument:</p>
 <div class="cell" data-execution_count="27">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    np.arange(<span class="dv">16</span>).reshape((<span class="dv">4</span>, <span class="dv">4</span>)),</span>
@@ -1108,7 +1143,7 @@ dtype: float64</code></pre>
 </div>
 <p>To drop from rows:</p>
 <div class="cell" data-execution_count="28">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df.drop([<span class="st">'Colorado'</span>, <span class="st">'Ohio'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -1149,7 +1184,7 @@ dtype: float64</code></pre>
 </div>
 <p>To drop from columns:</p>
 <div class="cell" data-execution_count="29">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>df.drop([<span class="st">'two'</span>], axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -1205,7 +1240,7 @@ dtype: float64</code></pre>
 <h3 data-number="5.3.1" class="anchored" data-anchor-id="indexing"><span class="header-section-number">5.3.1</span> Indexing</h3>
 <p>The preferred way to select data by Index labels is by using the special <code>loc</code> operator:</p>
 <div class="cell" data-execution_count="30">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>series <span class="op">=</span> pd.Series(np.arange(<span class="fl">4.0</span>), index<span class="op">=</span>[<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"d"</span>])</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1232,7 +1267,7 @@ Book Note
 </div>
 </div>
 <div class="cell" data-execution_count="31">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>series <span class="op">=</span> pd.Series([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], index<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>])</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>series2 <span class="op">=</span> pd.Series([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], index<span class="op">=</span>[<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>])</span>
@@ -1260,7 +1295,7 @@ Series.__getitem__ treating keys as positions is deprecated. In a future version
 <p>Note how in the first indexing call the result is executed according to the actual value of the labels, not the integer position. In the second call, the result is executed according to the integer position because the Index is not integer-based. <code>loc</code> removes this ambiguity by throwing an error if the Index does not contain integers.</p>
 <p>We can also do integer-based indexing using <code>iloc</code>:</p>
 <div class="cell" data-execution_count="32">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>series2.iloc[<span class="dv">0</span>:<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -1288,7 +1323,7 @@ Book Note
 <h3 data-number="5.3.2" class="anchored" data-anchor-id="filtering"><span class="header-section-number">5.3.2</span> Filtering</h3>
 <p>The most common and convenient way to do filtering in <code>pandas</code> is to supply a Boolean array. We can also rows that meet a certain condition using Boolean arrays:</p>
 <div class="cell" data-execution_count="33">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>df[df <span class="op">&lt;</span> <span class="dv">5</span>] <span class="op">=</span> <span class="dv">9999</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1348,7 +1383,7 @@ Book Note
 <h3 data-number="5.3.3" class="anchored" data-anchor-id="selection-with-loc-and-iloc"><span class="header-section-number">5.3.3</span> Selection with <code>loc</code> and <code>iloc</code></h3>
 <p>Now here’s the juicy part. Remember our SQL lab with Python? Remember having to write several sets of brackets to get the rows and then the columns. <code>loc</code> and <code>iloc</code> allow you to do both at the same time similar to how we select values in R dataframes:</p>
 <div class="cell" data-execution_count="34">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting specific indexes</span></span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>df.loc[[<span class="st">'Colorado'</span>, <span class="st">'New York'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1389,7 +1424,7 @@ Book Note
 </div>
 </div>
 <div class="cell" data-execution_count="35">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting a specific index and two specific columns</span></span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>df.loc[<span class="st">"Colorado"</span>, [<span class="st">"two"</span>, <span class="st">"three"</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1402,7 +1437,7 @@ Name: Colorado, dtype: int64</code></pre>
 </div>
 <p>And now with <code>iloc</code>:</p>
 <div class="cell" data-execution_count="36">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting indexes based on integer position</span></span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>df.iloc[[<span class="dv">2</span>, <span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1443,7 +1478,7 @@ Name: Colorado, dtype: int64</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="37">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting a specific index and three specific columns using integers</span></span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>df.iloc[<span class="dv">2</span>, [<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1457,7 +1492,7 @@ Name: Utah, dtype: int64</code></pre>
 </div>
 <p>We can use Boolean arrays with <code>loc</code> but not <code>iloc</code>. Here is an example with our SQL lab:</p>
 <div class="cell" data-execution_count="38">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1538,7 +1573,7 @@ Name: Utah, dtype: int64</code></pre>
 </div>
 <p>If we need to select a specific value by row and column label:</p>
 <div class="cell" data-execution_count="39">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>df.at[<span class="dv">211</span>, <span class="st">"ProductName"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -1548,7 +1583,7 @@ Name: Utah, dtype: int64</code></pre>
 </div>
 <p>Or by integer position:</p>
 <div class="cell" data-execution_count="40">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>df.iat[<span class="dv">211</span>, <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -1565,7 +1600,7 @@ Name: Utah, dtype: int64</code></pre>
 <p>At a high level, <code>pandas</code> allows us to <em>apply</em> custom functions that can accept array-like arguments to entire columns or rows. Now wait, can’t we just use for-loops for this? We could, but it wouldn’t take advantage of the computational speed-ups we get by utilizing <code>numpy</code> and vectorized operations.</p>
 <p>Here is a demonstration of applying normalization to all the values in our data:</p>
 <div class="cell" data-execution_count="41">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"x"</span>: {<span class="st">"Yang"</span>: <span class="fl">1.0</span>, <span class="st">"Yin"</span>: <span class="fl">3.0</span>, <span class="st">"Jupiter"</span>: <span class="fl">6.0</span>},</span>
@@ -1615,7 +1650,7 @@ Name: Utah, dtype: int64</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="42">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalize(x):</span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (x <span class="op">-</span> x.mean()) <span class="op">/</span> x.std()</span>
@@ -1745,10 +1780,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1758,8 +1792,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1772,6 +1815,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1815,6 +1977,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1840,6 +2003,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1900,6 +2089,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

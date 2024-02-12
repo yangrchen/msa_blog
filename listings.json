@@ -1,13 +1,12 @@
 [
   {
-    "listing": "/blog/index.html",
-    "items": [
-      "/blog/first_weeks/index.html"
-    ]
-  },
-  {
     "listing": "/notes/analytics/index.html",
     "items": [
+      "/notes/analytics/simulation-risk/risk-management/index.html",
+      "/notes/analytics/simulation-risk/simulation-assessment/index.html",
+      "/notes/analytics/optimization/nonlinear-programming/index.html",
+      "/notes/analytics/simulation-risk/introduction/index.html",
+      "/notes/analytics/optimization/mixed-integer/index.html",
       "/notes/analytics/financial-analytics/scorecard/index.html",
       "/notes/analytics/optimization/linear-programming/index.html",
       "/notes/analytics/financial-analytics/credit-scoring/index.html",
@@ -68,6 +67,12 @@
       "/notes/primer/confidence_intervals/index.html",
       "/notes/primer/probability/index.html",
       "/notes/primer/fundamental/index.html"
+    ]
+  },
+  {
+    "listing": "/blog/index.html",
+    "items": [
+      "/blog/first_weeks/index.html"
     ]
   },
   {
