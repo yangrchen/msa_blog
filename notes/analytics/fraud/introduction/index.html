@@ -148,7 +148,27 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#uncommon" id="toc-uncommon" class="nav-link active" data-scroll-target="#uncommon"><span class="header-section-number">0.1</span> Uncommon</a></li>
+  <li><a href="#well-considered-concealed" id="toc-well-considered-concealed" class="nav-link" data-scroll-target="#well-considered-concealed"><span class="header-section-number">0.2</span> Well Considered / Concealed</a></li>
+  <li><a href="#evolving-over-time" id="toc-evolving-over-time" class="nav-link" data-scroll-target="#evolving-over-time"><span class="header-section-number">0.3</span> Evolving Over Time</a></li>
+  <li><a href="#carefully-organized" id="toc-carefully-organized" class="nav-link" data-scroll-target="#carefully-organized"><span class="header-section-number">0.4</span> Carefully Organized</a></li>
+  <li><a href="#many-forms" id="toc-many-forms" class="nav-link" data-scroll-target="#many-forms"><span class="header-section-number">0.5</span> Many Forms</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation"><span class="header-section-number">0.6</span> Motivation</a></li>
+  <li><a href="#fraud-detection-prevention" id="toc-fraud-detection-prevention" class="nav-link" data-scroll-target="#fraud-detection-prevention"><span class="header-section-number">1</span> Fraud Detection &amp; Prevention</a>
+  <ul class="collapse">
+  <li><a href="#fraud-maturity" id="toc-fraud-maturity" class="nav-link" data-scroll-target="#fraud-maturity"><span class="header-section-number">1.1</span> Fraud Maturity</a></li>
+  </ul></li>
+  <li><a href="#analytical-fraud-solutions" id="toc-analytical-fraud-solutions" class="nav-link" data-scroll-target="#analytical-fraud-solutions"><span class="header-section-number">2</span> Analytical Fraud Solutions</a>
+  <ul class="collapse">
+  <li><a href="#advantages" id="toc-advantages" class="nav-link" data-scroll-target="#advantages"><span class="header-section-number">2.1</span> Advantages</a></li>
+  </ul></li>
+  <li><a href="#fraud-data" id="toc-fraud-data" class="nav-link" data-scroll-target="#fraud-data"><span class="header-section-number">3</span> Fraud Data</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
@@ -166,8 +186,137 @@ ul.task-list li input[type="checkbox"] {
 <li>Carefully organized</li>
 <li>Many forms</li>
 </ol>
+<section id="uncommon" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="uncommon"><span class="header-section-number">0.1</span> Uncommon</h2>
+<p>Identifying fraud can be extremely difficult because fraud is a rare event.</p>
+<ul>
+<li>5% or less target</li>
+<li>Limited number of <strong>known</strong> fraud</li>
+<li>Undersampling, oversampling, SMOTE, etc.</li>
+</ul>
+</section>
+<section id="well-considered-concealed" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="well-considered-concealed"><span class="header-section-number">0.2</span> Well Considered / Concealed</h2>
+<ul>
+<li>In non-fraud data sets, observations are indifferent to be analyzed and discovered.</li>
+<li>In fraud data sets, observations are trying to not be analyzed of discovered–blending in.</li>
+</ul>
+</section>
+<section id="evolving-over-time" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="evolving-over-time"><span class="header-section-number">0.3</span> Evolving Over Time</h2>
+<p>Models have short shelf lives and must be adapted often.</p>
+</section>
+<section id="carefully-organized" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="carefully-organized"><span class="header-section-number">0.4</span> Carefully Organized</h2>
+<p>Fraud is often organized crime.</p>
+<ul>
+<li>No independence</li>
+<li>Copycat</li>
+<li>Homophily: “Birds of a feather flock together.”</li>
+</ul>
+</section>
+<section id="many-forms" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="many-forms"><span class="header-section-number">0.5</span> Many Forms</h2>
+<ul>
+<li>Fraud is ever changing and comes in a variety of forms.</li>
+<li>The technology, economic, and social structures of today provide more and more opportunities for fraudulent activities to occur.</li>
+</ul>
+</section>
+<section id="motivation" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="motivation"><span class="header-section-number">0.6</span> Motivation</h2>
+<div id="fig-fraud-triangle" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fraud-triangle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/fraud-triangle.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fraud-triangle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Fraud Triangle
+</figcaption>
+</figure>
+</div>
+<p>Pressure relates to someone being under circumstances that make them feel like they have to act on crimes to resolve something.</p>
+<p>Opportunity comes in by being in a position where someone has access to committing fraud.</p>
+<p>Rationalization relates to someone’s ability to reason about why an opportunity can or should be acted on.</p>
+</section>
+<section id="fraud-detection-prevention" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Fraud Detection &amp; Prevention</h1>
+<ul>
+<li><strong>Detection:</strong> Observing <strong>known</strong> fraudulent observations to determine patterns that may assist in finding other fraudulent observations.</li>
+<li><strong>Prevention:</strong> Observing behavior and identifying suspicious actions that might be fraudulent–lead to further investigation and identification of new fraudulent observations.</li>
+</ul>
+<section id="fraud-maturity" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="fraud-maturity"><span class="header-section-number">1.1</span> Fraud Maturity</h2>
+<p>New / young fraud analytics solutions are based on <strong>business rules</strong>.</p>
+<p>IF:</p>
+<ul>
+<li>Amount of claim above threshold OR</li>
+<li>Severe accident, but no police report OR</li>
+<li>Severe injury, but no doctor report</li>
+</ul>
+<p>THEN:</p>
+<ul>
+<li>Flag as suspicious AND</li>
+<li>Alert SIU</li>
+</ul>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Simple</li>
+<li>Easy to implement</li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Expensive</li>
+<li>Difficult to maintain and manage</li>
+<li>Fraudsters discover rules</li>
+<li>Completely historical</li>
+</ul>
+</section>
+</section>
+<section id="analytical-fraud-solutions" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Analytical Fraud Solutions</h1>
+<p>Analytical solutions are typically used at the evidence of fraud stage. Our responsbility is to help identify potential cases that should be investigated–not to necesssarily catch fraud.</p>
+<section id="advantages" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="advantages"><span class="header-section-number">2.1</span> Advantages</h2>
+<ol type="1">
+<li>Precision
+<ul>
+<li>Increased detection power</li>
+<li>More information used in decisions</li>
+<li>More fraudsters investigated</li>
+</ul></li>
+<li>Efficiency in operations
+<ul>
+<li>Automated processing of claims</li>
+<li>Ranked cases for investigators</li>
+</ul></li>
+<li>Efficiency in costs
+<ul>
+<li>Cheaper in long-run to maintain</li>
+<li>Quicker identification</li>
+<li>Higher investigative returns</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="fraud-data" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Fraud Data</h1>
+<p>There are 3 common scenarios when it comes to fraud detection data:</p>
+<ol type="1">
+<li>No previous data on fraudulent cases.</li>
+<li>Previous data on fraudulent cases, but can not use it.
+<ul>
+<li>Organizational structure prohibits exchange of information.</li>
+<li>Retrieving data is too time consuming or expensive.</li>
+<li>Fraudulent transactions can not be mapped to master database of important information.<br>
+</li>
+</ul></li>
+<li>Previous data on fraudulent cases that is fully integrated into company databases and structure.</li>
+</ol>
+<p>Even if fraud data exists, a majority of the fraud data has a typical value of “Unknown.”</p>
+<p>While a claim that has never been investigated is most likely not fraud compared to fraud, it is still impossible to correctly label.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
