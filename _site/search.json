@@ -3526,5 +3526,145 @@
     "title": "Main Concepts of Simulation",
     "section": "4.2 Correlated Inputs",
     "text": "4.2 Correlated Inputs\nNot all inputs are independent of each other. Need to simulate random variables that have correlation with each other.\n\n4.2.1 Example\nYou want to invest $1,000 in the US stock market or US Treasury bond for thirty years. You invest a certain percentage in a mutual fund that tries to produce the same return as the S&P500 Index and the rest in US Treasury bonds.\nTreasury bonds perceived as safer investment so when stock market does poorly more people invest in bonds–negatively correlated.\n\\[\n\\begin{align*}\n&P_{t,S} = P_{0,S} * (1 + r_{0,1})(1 + r_{1,2})(1 + r_{2,3})\\cdots(1 + r_{t-1,t}) \\\\\n&P_{t,B} = P_{0,B} * (1 + r_{0,1})(1 + r_{1,2})(1 + r_{2,3})\\cdots(1 + r_{t-1,t}) \\\\\n&P_t = P_{t,S} + P_{t,B}\n\\end{align*}\n\\]\n\nAssume mutual fund N(8.79%, 14.75%)\nAssume Treasury Bond Normal(4.00%, 7.00%)\nAssume correlation of -0.2\n\nIn this example, the correlation is Pearson’s correlation between the two variables.\nOne way to “add” correlation to data is to multiple correlation into the data through matrix multiplication.\n\n\n\n\n\n\nFigure 2: Adding Correlation\n\n\n\nFor multiple variables at the same time, we can use the variance matrix:\n\n\n\n\n\n\nFigure 3: Adding Correlation Multiple\n\n\n\n\n\nCode\nvalue_r &lt;- rep(0, 10000)\nR &lt;- matrix(data = cbind(1, -0.2, -0.2, 1), nrow = 2)\nU &lt;- t(chol(R))\nperc_B &lt;- 0.5\nperc_S &lt;- 0.5\ninitial &lt;- 1000\n\nstandardize &lt;- function(x) {\n    x.std &lt;- (x - mean(x)) / sd(x)\n    return(x.std)\n}\n\ndestandardize &lt;- function(x.std, x) {\n    x.old &lt;- (x.std * sd(x)) + mean(x)\n    return(x.old)\n}\n\n\n\n\nCode\nfor (j in 1:10000) {\n    S_r &lt;- rnorm(n = 30, mean = 0.0879, sd = 0.1475)\n    B_r &lt;- rnorm(n = 30, mean = 0.04, sd = 0.07)\n    both_r &lt;- cbind(standardize(S_r), standardize(B_r))\n\n    # Matrix multiply our decomposition with the standardized columns\n    SB_r &lt;- U %*% t(both_r)\n    SB_r &lt;- t(SB_r)\n\n    final_SB_r &lt;- cbind(destandardize(SB_r[, 1], S_r), destandardize(SB_r[, 2], B_r))\n\n    Pt_B &lt;- initial * perc_B\n    Pt_S &lt;- initial * perc_S\n\n    for (i in 1:30) {\n        Pt_B &lt;- Pt_B * (1 + final_SB_r[i, 2])\n        Pt_S &lt;- Pt_S * (1 + final_SB_r[i, 1])\n    }\n    value_r[j] &lt;- Pt_B + Pt_S\n}"
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html",
+    "title": "Introduction to Risk Management",
+    "section": "",
+    "text": "Risk and uncertainty are related, but different than each other. Risk is something that someone bears. Risk is the outcome of uncertainty. Once you have an uncertain event and you can put some distribution to it, you can measure the risk associated with that event.\nJust because there is uncertainty, there could very well be no risk: Flipping a coin with no care for the outcome.\n\n\n\nThe known: Guaranteed event\nThe unknown: Events that carry risk that will be reduced / eliminated over time as the event gets closer.\nThe unknowable: Events that carry risk that may not change over time as the event gets closer.\n\n\n\n\n\n\n\n\n\n\nFigure 1: Point Estimates"
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#levels-of-uncertainty",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#levels-of-uncertainty",
+    "title": "Introduction to Risk Management",
+    "section": "",
+    "text": "The known: Guaranteed event\nThe unknown: Events that carry risk that will be reduced / eliminated over time as the event gets closer.\nThe unknowable: Events that carry risk that may not change over time as the event gets closer."
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/simulation-assessment/index.html",
+    "href": "notes/analytics/simulation-risk/simulation-assessment/index.html",
+    "title": "Theory and Model Assessment Through Simulation",
+    "section": "",
+    "text": "A closed form solution to a mathematical / statistical distribution problem means tha tyou can mathematicaly calculate the distribution.\nReal world data can be very complicated and changing based on many different inputs which each have their own distribution. Simulation can reveal and approximation of these output distributions.\n\n\nAssume you do not know the Central Limit Theorem, but you want to understand the sampling distribution of sample means. You take samples of size 10, 50, 100 from the following three population distributions and calculate the sample means:\n\nNormal Distribution\nUniform Distribution\nExponential Distribution\n\nWhat is the sampling distribution of sample means from each of these distributions and sample sizes?\n\n\nCode\nsample_size &lt;- 10\nsim_size &lt;- 10000\n\nX1 &lt;- matrix(\n    data = rnorm(n = sample_size * sim_size, mean = 2, sd = 5),\n    nrow = sim_size,\n    ncol = sample_size,\n    byrow = TRUE,\n)\nX2 &lt;- matrix(\n    data = runif(n = sample_size * sim_size, min = 5, max = 105),\n    nrow = sim_size,\n    ncol = sample_size,\n    byrow = TRUE,\n)\nX3 &lt;- matrix(\n    data = (rexp(n = sample_size * sim_size) + 3),\n    nrow = sim_size,\n    ncol = sample_size,\n    byrow = TRUE,\n)\n\nmean_X1 &lt;- apply(X1, 1, mean)\nmean_X2 &lt;- apply(X2, 1, mean)\nmean_X3 &lt;- apply(X3, 1, mean)\n\n\n\n\n\nWhat if you leave out a variable in a linear regressio that should have been in the model? From the primer, we learned that it would change the variance and bias of the coefficients in the model depending on if the variable left out was correlated.\nWhat if you wanted to know how bad it could get?\n\n\nBuild the following regression model:\n\\[\nY = -13 + 1.21X_1 + 3.45X_2 + \\epsilon\n\\]\n\nAssume errors are Normal with mean 0 and standard deviation 1.5\nAssume the predictors follow standard Normal distributions\n\nBuild 10,000 linear regressions (each of sample size 50) and record the coefficients from the regression model when one of the variables is omitted.\nLook at the following:\n\nDistribution of coefficient in the model\n\nWhat if the omitted variable isn’t correlated with the others? Unbiased, more variance\nWhat if the omitted variable is correlated with the others? Biased, more variance\n\nHow many times did you incorrectly NOT reject the null hypothesis on the coefficient in each of these scenarios?\n\n\n\n\n\n\n\nFigure 1: Omitted Variable Bias\n\n\n\nIn Figure 1, the second chart shows that \\(X_1\\) is trying to account for the information that \\(X_2\\) had since \\(X_2\\) was dropped. The third chart shows that \\(X_1\\) has a wider standard error which now covers 0–\\(X_1\\) might not be as important to the model after all!\n\n\n\n\n\n\nFigure 2: Omitted Variable Bias 2\n\n\n\nIn Figure 2, the third chart shows that we are now more likely to incorrectly fail to reject the null hypothesis on the \\(X_1\\) coefficient."
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/simulation-assessment/index.html#example-central-limit-theorem",
+    "href": "notes/analytics/simulation-risk/simulation-assessment/index.html#example-central-limit-theorem",
+    "title": "Theory and Model Assessment Through Simulation",
+    "section": "",
+    "text": "Assume you do not know the Central Limit Theorem, but you want to understand the sampling distribution of sample means. You take samples of size 10, 50, 100 from the following three population distributions and calculate the sample means:\n\nNormal Distribution\nUniform Distribution\nExponential Distribution\n\nWhat is the sampling distribution of sample means from each of these distributions and sample sizes?\n\n\nCode\nsample_size &lt;- 10\nsim_size &lt;- 10000\n\nX1 &lt;- matrix(\n    data = rnorm(n = sample_size * sim_size, mean = 2, sd = 5),\n    nrow = sim_size,\n    ncol = sample_size,\n    byrow = TRUE,\n)\nX2 &lt;- matrix(\n    data = runif(n = sample_size * sim_size, min = 5, max = 105),\n    nrow = sim_size,\n    ncol = sample_size,\n    byrow = TRUE,\n)\nX3 &lt;- matrix(\n    data = (rexp(n = sample_size * sim_size) + 3),\n    nrow = sim_size,\n    ncol = sample_size,\n    byrow = TRUE,\n)\n\nmean_X1 &lt;- apply(X1, 1, mean)\nmean_X2 &lt;- apply(X2, 1, mean)\nmean_X3 &lt;- apply(X3, 1, mean)"
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/simulation-assessment/index.html#omitted-variable-bias",
+    "href": "notes/analytics/simulation-risk/simulation-assessment/index.html#omitted-variable-bias",
+    "title": "Theory and Model Assessment Through Simulation",
+    "section": "",
+    "text": "What if you leave out a variable in a linear regressio that should have been in the model? From the primer, we learned that it would change the variance and bias of the coefficients in the model depending on if the variable left out was correlated.\nWhat if you wanted to know how bad it could get?\n\n\nBuild the following regression model:\n\\[\nY = -13 + 1.21X_1 + 3.45X_2 + \\epsilon\n\\]\n\nAssume errors are Normal with mean 0 and standard deviation 1.5\nAssume the predictors follow standard Normal distributions\n\nBuild 10,000 linear regressions (each of sample size 50) and record the coefficients from the regression model when one of the variables is omitted.\nLook at the following:\n\nDistribution of coefficient in the model\n\nWhat if the omitted variable isn’t correlated with the others? Unbiased, more variance\nWhat if the omitted variable is correlated with the others? Biased, more variance\n\nHow many times did you incorrectly NOT reject the null hypothesis on the coefficient in each of these scenarios?\n\n\n\n\n\n\n\nFigure 1: Omitted Variable Bias\n\n\n\nIn Figure 1, the second chart shows that \\(X_1\\) is trying to account for the information that \\(X_2\\) had since \\(X_2\\) was dropped. The third chart shows that \\(X_1\\) has a wider standard error which now covers 0–\\(X_1\\) might not be as important to the model after all!\n\n\n\n\n\n\nFigure 2: Omitted Variable Bias 2\n\n\n\nIn Figure 2, the third chart shows that we are now more likely to incorrectly fail to reject the null hypothesis on the \\(X_1\\) coefficient."
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/simulation-assessment/index.html#example-fake-data",
+    "href": "notes/analytics/simulation-risk/simulation-assessment/index.html#example-fake-data",
+    "title": "Theory and Model Assessment Through Simulation",
+    "section": "2.1 Example: Fake Data",
+    "text": "2.1 Example: Fake Data\nRandomly generated 8 variables that follow a Normal distribution with mean of 0 and standard deviation of 8.\nDefined relationship with target variable:\n\\[\ny = 5 + 2x_2 - 3x_8 + \\epsilon\n\\]\n\n\nCode\nfake &lt;- data.frame(matrix(rnorm(n = 100 * 8), nrow = 100, ncol = 8)) # Create 8 columns for 8 different predictors\nerr &lt;- rnorm(n = 100, mean = 0, sd = 8) # Create 100 error terms for each observation we have\nY &lt;- 5 + 2 * fake$X2 - 3 * fake$X8 + err # Establish the response variable\nfake &lt;- cbind(fake, err, Y)\n\nsim &lt;- 1000\n\nY_shuffle &lt;- matrix(0, nrow = 100, ncol = sim) # Establish our shuffled target simulations\n\n# For each simulation, shuffle the indices of the actual Y's and assign them to the columns of Y_shuffle\nfor (i in 1:sim) {\n    uniform &lt;- runif(100)\n    Y_shuffle[, i] &lt;- Y[order(uniform)]\n}\n\nY_shuffle &lt;- data.frame(Y_shuffle)\ncolnames(Y_shuffle) &lt;- paste(\"Y.\", seq(1:sim), sep = \"\")\n\nfake &lt;- data.frame(fake, Y_shuffle)\n\nr_sq_a &lt;- rep(0, sim)\nfor (i in 1:sim) {\n    r_sq_a[i] &lt;- summary(lm(fake[, 10 + i] ~ fake$X1 + fake$X2 + fake$X3 + fake$X4 + fake$X5 + fake$X6 + fake$X7 + fake$X8))$adj.r.squared\n}\ntrue_rsq_a &lt;- summary(lm(fake$Y ~ fake$X1 + fake$X2 + fake$X3 + fake$X4 + fake$X5 + fake$X6 + fake$X7 + fake$X8))$adj.r.squared\n\n\n\n\nCode\nhist(r_sq_a, true_rsq_a, breaks = 50, col = \"blue\", main = \"Distribution of Adjusted R-Squared Values\", xlab = \"Adjusted R-Squared\")\nabline(v = true_rsq_a, col = \"red\", lwd = 2)\nmtext(\"True Model\", at = true_rsq_a, col = \"red\")\n\n\n\n\n\n\n\n\n\nTarget shuffling is meant to be done on an entire process, not just the final model. You want every variable to have a chance so this means target shuffling on the train-test split, every model considered, etc. You should automate this process to do this. At the very least, run target shuffling on the model selection process."
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#problems-with-point-estimates",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#problems-with-point-estimates",
+    "title": "Introduction to Risk Management",
+    "section": "",
+    "text": "Figure 1: Point Estimates"
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#scenario-analysis",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#scenario-analysis",
+    "title": "Introduction to Risk Management",
+    "section": "2.1 Scenario Analysis",
+    "text": "2.1 Scenario Analysis\nPeople started accounting for possible extreme values (variability) in their estimation of some of the inputs.\n\n\n\n\n\n\nFigure 2: Scenario Analysis 1\n\n\n\nFigure 2 shows a simple scenario analysis by accounting for three different outcomes. Outcomes are too variable in this type of analysis and it doesn’t account for interdependencies.\nAn extension to this is tornado analysis where you look at the best and worst case scenarios for each of the inputs and look at the highest impact for every input. Find which input impacts us the most.\n\n\n\n\n\n\nFigure 3: Tornado Chart\n\n\n\nSensitivity analysis captures marginal costs by analyzing things like “What will happen if fixed costs increase by $1?” This is great at capturing sensitivities in our inputs."
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#simulation-approach",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#simulation-approach",
+    "title": "Introduction to Risk Management",
+    "section": "2.2 Simulation Approach",
+    "text": "2.2 Simulation Approach\nMonte Carlo simulation allows us to account for all of the possible changes in all our input variables and the possible correlations between them. The final output is a probability distribution of all possible outcomes.\n\n\nCode\nlibrary(triangle)\nn_sim &lt;- 10000\n\nunits &lt;- rtriangle(n_sim, a = 500, b = 2000, c = 1500)\nvar_cost &lt;- 1 + 0.004 * units + rnorm(n_sim, mean = 0, sd = sqrt(0.8))\nfixed_cost &lt;- 2500\nprice &lt;- rtriangle(n_sim, a = 8, b = 11, c = 10)\n\nnet_revenue &lt;- (price - var_cost) * units - fixed_cost\n\nhist(net_revenue, breaks = 50, main = \"Sampling Distribution of Net Revenue\", xlab = \"Net Revenue\")\n\n\n\n\n\n\n\n\n\nA parametric Monte Carlo simulation requires specific distributional parameters before a simulation can begin. A nonparametric Monte Carlo simulation uses raw historical data to estimate the distribution and no distributional parameters are required for the simulation to run."
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#statistics-of-risk",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#statistics-of-risk",
+    "title": "Introduction to Risk Management",
+    "section": "3.1 Statistics of Risk",
+    "text": "3.1 Statistics of Risk\n\nVariance\nSkewness\nKurtosis (catastrophic, extreme tail events)"
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#common-risk-measures",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#common-risk-measures",
+    "title": "Introduction to Risk Management",
+    "section": "3.2 Common Risk Measures",
+    "text": "3.2 Common Risk Measures\n\nProbability of Occurrence: Probability of failure of a project, probabilty of default, migration probabilities.\nStandard Deviation / Variance / Coefficient of Variation: Two-sided measures, sufficient only under normality or maybe symmetry.\nSemi-standard Deviation: Measure of dispersion for the values falling below the mean.\n\n\\[\n\\sigma_{semi} = \\sqrt{\\frac{1}{T} \\sum_{t=1}^{T} \\min(X_t - \\hat{X}, 0)^2}\n\\]\n\nVolatility: Standard deviation of an asset’s logarithmic returns.\n\n\\[\n\\sigma_{volatility} = \\sqrt{\\frac{1}{T} \\sum_{t=1}^{T} \\ln(\\frac{X_t}{X_{t-1}})^2}\n\\]\n\nValue at Risk (VaR): The amount of money at risk given a particular time period at a particular probability of loss.\n\n1 year 99.9% VaR is $10,000\nThere is a 99.9% chance you will lose at least $10,000 in 1 year\n\nExpected Shortfall (ES): Average amount you will lose in the worst case scenarios.\n\n1 year 99.9% ES is $15,000\nIn the worst 0.1% of scenarios, the average amount of money you will lose in one year is $15,000."
+  },
+  {
+    "objectID": "notes/analytics/customer-analytics/index.html",
+    "href": "notes/analytics/customer-analytics/index.html",
+    "title": "Customer Analytics",
+    "section": "",
+    "text": "Customer analytics analyzes a company’s customer data and behaviours to try to identify, attract, and retain the most profitable types of customers. The aim is to create an accurate view of the company’s customer base and decide which strategies can best retain / grow this base.\nCustomer analytics begins with the capture of raw data and ends with business decisions. One definition of the stages of customer analytics is the following:"
+  },
+  {
+    "objectID": "notes/analytics/customer-analytics/index.html#digital-analytics-funnel",
+    "href": "notes/analytics/customer-analytics/index.html#digital-analytics-funnel",
+    "title": "Customer Analytics",
+    "section": "1.1 Digital Analytics Funnel",
+    "text": "1.1 Digital Analytics Funnel\nIndividuals explore a website or purchase items in stages. Marketing uses the concept of a funnel to enumerate these stages:\n\nAcquisition: Building awareness and acquiring user interest.\nBehaviour: User engagement with your website or business.\nConversion: A user becoming a customer through a transaction with your business."
+  },
+  {
+    "objectID": "notes/analytics/customer-analytics/index.html#universal-analytics-ua-vs.-google-analytics-4-ga4",
+    "href": "notes/analytics/customer-analytics/index.html#universal-analytics-ua-vs.-google-analytics-4-ga4",
+    "title": "Customer Analytics",
+    "section": "1.2 Universal Analytics (UA) vs. Google Analytics 4 (GA4)",
+    "text": "1.2 Universal Analytics (UA) vs. Google Analytics 4 (GA4)\nUA uses a hierarchy of account, property view. An account represents one or more websites, a property is a section of a website, and a view was a combination of a filter and a visualization of some or all of the data associated with a property. Properties have unique sub-IDs to allow you to treat them as independent data sources.\nWith GA4 the hierarchy is account, property, data stream. Data stream represents a source of raw data to be fed into a property. This allows GA4 to separate events on a website and capture a wider variety of events."
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#value-at-risk-var",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#value-at-risk-var",
+    "title": "Introduction to Risk Management",
+    "section": "3.3 Value at Risk (VaR)",
+    "text": "3.3 Value at Risk (VaR)\nThe VaR calculation is aimed at making a statement of the following form: We are 99% certain that we will not lose more than $10,000 in the next 3 days.\nVaR is the maximum amount at risk to be list over a period of time at a particular level of confidence. This measure is associated with a percentile (quantile) of a distribution.\n\n\n\n\n\n\nFigure 4: Visualizing VaR - Right Tail\n\n\n\nMain steps:\n\nIdentify the variable of interest (asset value, portfolio value, credit losses, insurance claims, etc.).\nIdentify the key risk factors that impact the variable of interest (assets prices, interest rates, duration, volatility, default probabilities, etc.).\nPerform deviations in the risk factors to calculate the impact in the variable of interest."
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#expected-shortfall",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#expected-shortfall",
+    "title": "Introduction to Risk Management",
+    "section": "3.4 Expected Shortfall",
+    "text": "3.4 Expected Shortfall\nOne drawback of VaR is that it ignores the distribution of a portfolio’s return beyond its VaR.\nExample: The 99.9% VaR for an investment in stock A is $100k. The 99.9% VaR for an investment in stock B is $100K. For Stock A, the loss can be up to $250K and for Stock B the loss canb e up to $950K. The quantiles can be the same, but the shapes of the distributions can be very different and VaR ignores the magnitude of the worst returns beyond the quantile point.\nAnother drawback is that VaR may not capture diversification under non-normality. VaR fails to satisfy the subadditivity property:\n\\[\nRisk(A + B) \\leq Risk(A) + Risk(B)\n\\]\n\nThe VaR of a portfolio with two securities may be larger than the sum of the VaR’s of the securities in the portfolio.\n\nThe Conditional Value at Risk (CVaR) or Expected Shortfall (ES) is a measure that doesn’t have the two drawbacks of VaR. Given a confidence level and a time horizon, a portfolio’s CVaR is the expected loss one suffer given that a “bad” event occurs.\n\n\n\n\n\n\nFigure 5: Visualizing CVaR (ES) - Left Tail"
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#basic-notation",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#basic-notation",
+    "title": "Introduction to Risk Management",
+    "section": "4.1 Basic Notation",
+    "text": "4.1 Basic Notation\n\nReturn (\\(r_t\\)): Return at a period \\(t\\) (holding an asset from period \\(t - 1\\) to period \\(t\\))\nPrice (\\(P_t\\)): Price at a given time period \\(t\\)\nLag Price (\\(P_{t-1}\\)): Price at time period \\(t - 1\\)\nDividend (\\(D_t\\)): Dividend payment at time period \\(t\\)\n\nFor small time periods, we typically ignore dividend."
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#arithmetic-return",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#arithmetic-return",
+    "title": "Introduction to Risk Management",
+    "section": "4.2 Arithmetic Return",
+    "text": "4.2 Arithmetic Return\n\\[\n\\begin{align*}\nr_t &= \\frac{P_t + D_t - P_{t-1}}{P_{t-1}} \\\\\n&= \\frac{P_t - P_{t-1}}{P_{t-1}}\n\\end{align*}\n\\]\nIf \\(r_1 = 5\\%\\) and \\(r_2 = -5\\%\\), what is the total return of the two days? It’s not zero because a percentage of an increased number does not give back the same absolute amount at the original price.\n\\[\nr_{0,2} = \\frac{P_2 - P_0}{P_0} = \\cdots = \\frac{P_1}{P_0} r_2 + r_1\n\\]"
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#geometric-return",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#geometric-return",
+    "title": "Introduction to Risk Management",
+    "section": "4.3 Geometric Return",
+    "text": "4.3 Geometric Return\n\\[\n\\begin{align*}\nR_t &= \\ln(\\frac{P_t + D_t}{P_{t-1}}) \\\\\n&= \\ln(\\frac{P_t}{P_{t-1}}) = \\ln(P_t) - \\ln(P_{t-1})\n\\end{align*}\n\\]\nHow do we get \\(R_{0,2}\\) as a function of \\(R_1\\) and \\(R_2\\)?\n\\[\nR_{0,2} = \\ln(\\frac{P_2}{P_0}) = \\ln(\\frac{P_2}{P_1} \\cdot \\frac{P_1}{P_0}) = \\ln(\\frac{P_2}{P_1}) + \\ln(\\frac{P_1}{P_0}) = R_2 + R_1\n\\]\nWith arithmetic returns, we have to multiply individual returns with the specific timeframe. However, with geometric returns we would just have to sum up the returns themselves."
+  },
+  {
+    "objectID": "notes/analytics/simulation-risk/risk-management/index.html#delta-normal-approach",
+    "href": "notes/analytics/simulation-risk/risk-management/index.html#delta-normal-approach",
+    "title": "Introduction to Risk Management",
+    "section": "5.1 Delta-Normal Approach",
+    "text": "5.1 Delta-Normal Approach\nSuppose the that value, \\(V\\), of an asset is a functino of a Normally distributed risk factor, \\(RF\\).\n\\[\nV = \\beta_0 + \\beta_1RF\n\\]\nIf \\(RF\\) is normally distributed, then \\(V\\) would be as well. What is the 2.5% VaR on any Normal distribution?\n\n\n\n\n\n\nFigure 6: Normal Distribution\n\n\n\nRemember that the VaR is just a quantile at a certain time interval. If the relationship is Normal, then we’re just getting quantiles from a Normal distribution.\n\n5.1.1 Non-Linear Relationships\n\\[\nV = \\beta_0 + \\beta_1RF^2\n\\]\nFinding the extreme of a Normally distributed value and squaring that does not equal the extreme value for the squared risk factor.\n\n\n\n\n\n\nFigure 7: Delta Example\n\n\n\nSmall changes of the risk factor result in small changes of the value–approximate this using the slope (derivative).\nUsing a Taylor-Series expansion:\n\\[\ndV = \\frac{\\partial V}{\\partial RF} \\cdot dRF + \\frac{1}{2} \\cdot \\frac{\\partial^2 V}{\\partial RF^2} \\cdot dRF^2 + \\cdots\n\\]\nHowever, the Delta-Normal approach assumes that only the first derivative is actually important.\n\\[\ndV = \\frac{\\partial V}{\\partial RF}\\vert_{RF_0} \\cdot dRF\n\\]\n\\[\n\\Delta V = \\delta_0 \\cdot \\Delta RF\n\\]\nChange in value of the portfolio is a constant (\\(\\delta_0\\)) times the change in the risk factor.\nWhat is the distribution of the change in \\(RF\\)?\n\\[\n\\Delta RF = RF_t - RF_{t-1}\n\\]\nDifference of Normal distributions is also a Normal distribution. Therefore, the change in \\(V\\), \\(\\Delta V\\) also follows a Normal distribution.\nThe worst loss for \\(V\\) is attained for an extreme value of \\(RF\\). \\(RF\\) is Normally distributed, so use the standard deviation of \\(RF\\) and an \\(\\alpha\\) level to calculate the VaR of \\(V\\).\n\n\n5.1.2 Example\nSuppose that the variable of interest is a portfolio consisting of \\(N\\) units in a certain stock, \\(S\\).\nThe price of the stock at time \\(t\\) is denoted by \\(P_t\\).\nValue of the portfolio: \\(N \\cdot P_t\\). Change in the portfolio value is \\(N \\cdot \\Delta P_t\\).\nAssume that the price of the stock is a random walk:\n\\[\nP_t = P_{t-1} + \\epsilon_t\n\\]\n\n\n\n\n\n\nFigure 8: Variance-Covariance\n\n\n\n\n\n\n\n\n\nFigure 9: Two Position Example 1\n\n\n\n\n\n\n\n\n\nFigure 10: Two Position Example 2\n\n\n\nNote that in Figure 9, \\(\\text{Cov}(X, Y) = \\text{Corr}(X, Y) \\cdot \\sigma_x \\cdot \\sigma_y\\). Correlation of returns is 2"
   }
 ]

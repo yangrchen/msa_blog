@@ -1,5 +1,325 @@
 ---
 title: Introduction to Risk Management
 date: 02/12/2024
+date-modified: 02/23/2024
 ---
 
+# Risk vs. Uncertainty
+
+Risk and uncertainty are related, but different than each other. Risk is something that someone bears. Risk is the **outcome of uncertainty**. Once you have an uncertain event and you can put some distribution to it, you can measure the risk associated with that event.
+
+Just because there is uncertainty, there could very well be no risk: Flipping a coin with no care for the outcome.
+
+## Levels of Uncertainty
+
+1.  The **known**: Guaranteed event
+2.  The **unknown**: Events that carry risk that will be reduced / eliminated over time as the event gets closer.
+3.  The **unknowable**: Events that carry risk that may not change over time as the event gets closer.
+
+## Problems with Point Estimates
+
+![Point Estimates](images/point-estimates.png){#fig-point-est}
+
+# Dealing with Risk
+
+## Scenario Analysis
+
+People started accounting for possible extreme values (variability) in their estimation of some of the inputs.
+
+![Scenario Analysis 1](images/scenario-analysis-1.png){#fig-scenario-analysis-1}
+
+@fig-scenario-analysis-1 shows a simple scenario analysis by accounting for three different outcomes. Outcomes are too variable in this type of analysis and it doesn't account for interdependencies.
+
+An extension to this is **tornado analysis** where you look at the best and worst case scenarios for each of the inputs and look at the highest impact for every input. Find which input impacts us the most.
+
+![Tornado Chart](images/tornado-chart.png){#fig-tornado-chart}
+
+**Sensitivity analysis** captures marginal costs by analyzing things like "What will happen if fixed costs increase by $1?" This is great at capturing sensitivities in our inputs.
+
+## Simulation Approach
+
+**Monte Carlo** simulation allows us to account for all of the possible changes in all our input variables and the possible correlations between them. The final output is a **probability distribution of all possible outcomes**.
+
+```{r}
+library(triangle)
+n_sim <- 10000
+
+units <- rtriangle(n_sim, a = 500, b = 2000, c = 1500)
+var_cost <- 1 + 0.004 * units + rnorm(n_sim, mean = 0, sd = sqrt(0.8))
+fixed_cost <- 2500
+price <- rtriangle(n_sim, a = 8, b = 11, c = 10)
+
+net_revenue <- (price - var_cost) * units - fixed_cost
+
+hist(net_revenue, breaks = 50, main = "Sampling Distribution of Net Revenue", xlab = "Net Revenue")
+```
+
+A parametric Monte Carlo simulation requires specific distributional parameters before a simulation can begin. A nonparametric Monte Carlo simulation uses raw historical data to estimate the distribution and no distributional parameters are required for the simulation to run.
+
+# Key Risk Measures
+
+Risk is an uncertainty that affects a system in an unknown fashion and brings great fluctuation in value and outcome. **Risk is the outcome of uncertainty** and fluctations can be measured in a probabilistic sense.
+
+Risk has a **time horizon**. Risk measurement has to be **set against a benchmark**.
+
+## Statistics of Risk
+
+-   Variance
+-   Skewness
+-   Kurtosis (catastrophic, extreme tail events)
+
+## Common Risk Measures
+
+-   Probability of Occurrence: Probability of failure of a project, probabilty of default, migration probabilities.
+-   Standard Deviation / Variance / Coefficient of Variation: Two-sided measures, sufficient only under normality or maybe symmetry.
+-   Semi-standard Deviation: Measure of dispersion for the values falling below the mean.
+
+$$
+\sigma_{semi} = \sqrt{\frac{1}{T} \sum_{t=1}^{T} \min(X_t - \hat{X}, 0)^2}
+$$
+
+-   Volatility: Standard deviation of an asset's logarithmic returns.
+
+$$
+\sigma_{volatility} = \sqrt{\frac{1}{T} \sum_{t=1}^{T} \ln(\frac{X_t}{X_{t-1}})^2}
+$$
+
+-   Value at Risk (VaR): The amount of money at risk given a particular time period at a particular probability of loss.
+    -   1 year 99.9% VaR is $10,000
+    -   There is a 99.9% chance you will lose at least $10,000 in 1 year
+-   Expected Shortfall (ES): Average amount you will lose in the worst case scenarios.
+    -   1 year 99.9% ES is $15,000
+    -   In the worst 0.1% of scenarios, the average amount of money you will lose in one year is $15,000.
+
+## Value at Risk (VaR)
+
+The VaR calculation is aimed at making a statement of the following form: We are 99% certain that we will not lose more than $10,000 in the next 3 days.
+
+VaR is the maximum amount at risk to be list **over a period of time** at a **particular level of confidence**. This measure is associated with a percentile (quantile) of a distribution.
+
+![Visualizing VaR - Right Tail](images/visualizing-var.png){#fig-visual-var-right}
+
+Main steps:
+
+1.  Identify the variable of interest (asset value, portfolio value, credit losses, insurance claims, etc.).
+2.  Identify the key risk factors that impact the variable of interest (assets prices, interest rates, duration, volatility, default probabilities, etc.).
+3.  Perform deviations in the risk factors to calculate the impact in the variable of interest.
+
+## Expected Shortfall
+
+One drawback of VaR is that it ignores the distribution of a portfolio's return beyond its VaR.
+
+Example: The 99.9% VaR for an investment in stock A is $100k. The 99.9% VaR for an investment in stock B is $100K. For Stock A, the loss can be up to $250K and for Stock B the loss canb e up to $950K. The quantiles can be the same, but the shapes of the distributions can be very different and VaR ignores the magnitude of the worst returns beyond the quantile point.
+
+Another drawback is that VaR may not capture diversification under non-normality. VaR fails to satisfy the **subadditivity property**:
+
+$$
+Risk(A + B) \leq Risk(A) + Risk(B)
+$$
+
+-   The VaR of a portfolio with two securities may be larger than the sum of the VaR's of the securities in the portfolio.
+
+The **Conditional Value at Risk (CVaR)** or **Expected Shortfall (ES)** is a measure that doesn't have the two drawbacks of VaR. Given a confidence level and a time horizon, a portfolio's CVaR is the **expected loss** one suffer given that a "bad" event occurs.
+
+![Visualizing CVaR (ES) - Left Tail](images/visualizing-cvar.png){#fig-visual-cvar-left}
+
+# Calculating Returns
+
+There are 2 main methods for calculating returns:
+
+-   Arithmetic return
+-   Geometric return 
+
+## Basic Notation
+
+-   Return ($r_t$): Return at a period $t$ (holding an asset from period $t - 1$ to period $t$)
+-   Price ($P_t$): Price at a given time period $t$
+-   Lag Price ($P_{t-1}$): Price at time period $t - 1$
+-   Dividend ($D_t$): Dividend payment at time period $t$
+
+For small time periods, we typically ignore dividend.
+
+## Arithmetic Return
+
+$$
+\begin{align*}
+r_t &= \frac{P_t + D_t - P_{t-1}}{P_{t-1}} \\
+&= \frac{P_t - P_{t-1}}{P_{t-1}}
+\end{align*}
+$$
+
+If $r_1 = 5\%$ and $r_2 = -5\%$, what is the total return of the two days? It's not zero because a percentage of an increased number does not give back the same absolute amount at the original price.
+
+$$
+r_{0,2} = \frac{P_2 - P_0}{P_0} = \cdots = \frac{P_1}{P_0} r_2 + r_1
+$$
+
+## Geometric Return
+
+$$
+\begin{align*}
+R_t &= \ln(\frac{P_t + D_t}{P_{t-1}}) \\
+&= \ln(\frac{P_t}{P_{t-1}}) = \ln(P_t) - \ln(P_{t-1})
+\end{align*}
+$$
+
+How do we get $R_{0,2}$ as a function of $R_1$ and $R_2$?
+
+$$
+R_{0,2} = \ln(\frac{P_2}{P_0}) = \ln(\frac{P_2}{P_1} \cdot \frac{P_1}{P_0}) = \ln(\frac{P_2}{P_1}) + \ln(\frac{P_1}{P_0}) = R_2 + R_1
+$$
+
+With arithmetic returns, we have to multiply individual returns with the specific timeframe. However, with geometric returns we would just have to sum up the returns themselves.
+
+# Estimation and CI for Value at Risk and Expected Shortfall
+
+Recall that there are 3 main approaches to VaR estimation:
+
+1.  Delta-Normal or Variance-Covariance Approach
+2.  Historical Simulation (variety of approaches)
+3.  Monte Carlo Simulation
+
+## Delta-Normal Approach
+
+Suppose the that value, $V$, of an asset is a functino of a Normally distributed risk factor, $RF$.
+
+$$
+V = \beta_0 + \beta_1RF
+$$
+
+If $RF$ is normally distributed, then $V$ would be as well. What is the 2.5% VaR on any Normal distribution?
+
+![Normal Distribution](images/normal-dist.png){#fig-normal-dist}
+
+Remember that the VaR is just a quantile at a certain time interval. If the relationship is Normal, then we're just getting quantiles from a Normal distribution.
+
+### Non-Linear Relationships
+
+$$
+V = \beta_0 + \beta_1RF^2
+$$
+
+Finding the extreme of a Normally distributed value and squaring that **does not equal** the extreme value for the squared risk factor.
+
+![Delta Example](images/delta.png){#fig-delta}
+
+Small changes of the risk factor result in small changes of the value--approximate this using the slope (derivative).
+
+Using a Taylor-Series expansion:
+
+$$
+dV = \frac{\partial V}{\partial RF} \cdot dRF + \frac{1}{2} \cdot \frac{\partial^2 V}{\partial RF^2} \cdot dRF^2 + \cdots
+$$
+
+However, the Delta-Normal approach assumes that only the first derivative is actually important. 
+
+$$
+dV = \frac{\partial V}{\partial RF}\vert_{RF_0} \cdot dRF
+$$
+
+$$
+\Delta V = \delta_0 \cdot \Delta RF
+$$
+
+Change in value of the portfolio is a constant ($\delta_0$) times the change in the risk factor.
+
+What is the distribution of the change in $RF$?
+
+$$
+\Delta RF = RF_t - RF_{t-1}
+$$
+
+Difference of Normal distributions is also a Normal distribution. Therefore, the change in $V$, $\Delta V$ also follows a Normal distribution.
+
+The worst loss for $V$ is attained for an extreme value of $RF$. $RF$ is Normally distributed, so use the standard deviation of $RF$ and an $\alpha$ level to calculate the VaR of $V$.
+
+### Example
+
+Suppose that the variable of interest is a portfolio consisting of $N$ units in a certain stock, $S$.
+
+The price of the stock at time $t$ is denoted by $P_t$.
+
+Value of the portfolio: $N \cdot P_t$. Change in the portfolio value is $N \cdot \Delta P_t$.
+
+Assume that the price of the stock is a random walk:
+
+$$
+P_t = P_{t-1} + \epsilon_t
+$$
+
+![Variance-Covariance](images/variance-covariance.png){#fig-var-cov}
+
+![Two Position Example 1](images/two-position.png){#fig-two-position}
+
+![Two Position Example 2](images/two-position-2.png){#fig-two-position-2}
+
+Note that in @fig-two-position, $\text{Cov}(X, Y) = \text{Corr}(X, Y) \cdot \sigma_x \cdot \sigma_y$. Correlation of returns is just Pearson's correlation between the return values.
+
+```{r}
+tickers = c("AAPL", "MSFT")
+
+getSymbols(tickers)
+
+stocks <- cbind(last(AAPL[, 4], '500 days'), last(MSFT[, 4], '500 days'))
+
+stocks$msft_r <- ROC(stocks$MSFT.Close)
+stocks$aapl_r <- ROC(stocks$AAPL.Close)
+```
+
+```{r}
+var.msft <- var(stocks$msft_r, na.rm=TRUE)
+var.aapl <- var(stocks$aapl_r, na.rm=TRUE)
+cov.m.a <- cov(stocks$msft_r, stocks$aapl_r, use="pairwise.complete.obs")
+cor.m.a <- cor(stocks$msft_r, stocks$aapl_r, use="pairwise.complete.obs")
+
+AAPL.inv <- 100000
+MSFT.inv <- 200000
+
+var.port <- (MSFT.inv / (MSFT.inv + AAPL.inv))^2 * var.msft +
+            (AAPL.inv / (MSFT.inv + AAPL.inv))^2 * var.aapl +
+            2 * (AAPL.inv / (MSFT.inv + AAPL.inv)) *
+            (MSFT.inv / (MSFT.inv + AAPL.inv)) * cov.m.a
+
+VaR.DN.port <- (AAPL.inv + MSFT.inv) * qnorm(0.99) * sqrt(var.port)
+dollar(VaR.DN.port)
+```
+
+Under the assumption of Normality, we can get the following relationship between 1-day and n-day VaR:
+
+$$
+VaR_N = \sqrt{N} \cdot VaR_1
+$$
+
+The general relation between $a$ and $b$ periods VaR is:
+
+$$
+VaR_a = \sqrt{\frac{a}{b}} \cdot VaR_b
+$$
+
+## Historical Simulation
+
+Historical simulation is a non-parameteric methodology based solely on historical data. If history suggest that only 1% of the time Apple's daily returns were below 4%, what do you think the VaR at a 99% confidence should be?
+
+### Example: Single Position Portfolio
+
+-   $100,000 invested in Apple today.
+-   You have 500 observations on Apple's daily returns. You want to compute the daily VaR of your portfolio at the 99% confidence level.
+-   The 99% VaR will be a loss value that will not be exceeded 99% of the time or the loss will be exceeded only 1% of the time
+-   Our aim is to find the 1% quantile of our data!
+
+### Assumptions
+
+1.  The past will repeat itself.
+2.  The historical period covered is long enough to get a good representation of "tail" events.
+
+## Stressed VaR (and ES)
+
+Instead of basing calculations on the movements in market variables over the last $n$ days, we can base calculations on movements during a period in the past that would have been particularly bad for the current portfolio. This produces measures known as **stressed VaR** and **stressed ES**.
+
+![Stressed VaR: Two Position Portfolio](images/stressed-var.png){#fig-stressed-var}
+
+# Monte Carlo Simulation
+
+Using a Monte Carlo simulation, we can estimate the VaR through the simulation of results of statistical / mathematical models. Simulate the value of the portfolio using some statistical / financial moel that explains the behavior of the random variables of interest.
+
+If we have "enough" simulations then we have simulated the distribution of the portfolio's value.

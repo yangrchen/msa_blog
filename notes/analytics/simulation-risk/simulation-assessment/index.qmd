@@ -137,3 +137,5 @@ hist(r_sq_a, true_rsq_a, breaks = 50, col = "blue", main = "Distribution of Adju
 abline(v = true_rsq_a, col = "red", lwd = 2)
 mtext("True Model", at = true_rsq_a, col = "red")
 ```
+
+Target shuffling is meant to be done on an entire process, not just the final model. You want every variable to have a chance so this means target shuffling on the train-test split, every model considered, etc. You should automate this process to do this. At the very least, run target shuffling on the model selection process.

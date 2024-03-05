@@ -1,0 +1,15 @@
+---
+title: Introduction to Fraud
+date: 03/05/2024
+---
+
+In analytics, fraud can be defined as uncommon, well-considered, imperceptibly conceals, time-evolving and often carefully organized crime which appears in many types of forms.
+
+There are 5 main characteristics of fraud we can extract from this definition:
+
+1.  Uncommon / rare
+2.  Well considered and concealed
+3.  Evolving over time
+4.  Carefully organized
+5.  Many forms
+
