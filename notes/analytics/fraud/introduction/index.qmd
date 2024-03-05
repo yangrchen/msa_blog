@@ -13,3 +13,107 @@ There are 5 main characteristics of fraud we can extract from this definition:
 4.  Carefully organized
 5.  Many forms
 
+## Uncommon
+
+Identifying fraud can be extremely difficult because fraud is a rare event.
+
+-   5% or less target
+-   Limited number of **known** fraud
+-   Undersampling, oversampling, SMOTE, etc.
+
+## Well Considered / Concealed
+
+-   In non-fraud data sets, observations are indifferent to be analyzed and discovered. 
+-   In fraud data sets, observations are trying to not be analyzed of discovered--blending in.
+
+## Evolving Over Time
+
+Models have short shelf lives and must be adapted often.
+
+## Carefully Organized
+
+Fraud is often organized crime.
+
+-   No independence
+-   Copycat
+-   Homophily: "Birds of a feather flock together."
+
+## Many Forms
+
+-   Fraud is ever changing and comes in a variety of forms.
+-   The technology, economic, and social structures of today provide more and more opportunities for fraudulent activities to occur.
+
+## Motivation
+
+![Fraud Triangle](images/fraud-triangle.png){#fig-fraud-triangle}
+
+Pressure relates to someone being under circumstances that make them feel like they have to act on crimes to resolve something.
+
+Opportunity comes in by being in a position where someone has access to committing fraud.
+
+Rationalization relates to someone's ability to reason about why an opportunity can or should be acted on.
+
+# Fraud Detection & Prevention
+
+-   **Detection:** Observing **known** fraudulent observations to determine patterns that may assist in finding other fraudulent observations.
+-   **Prevention:** Observing behavior and identifying suspicious actions that might be fraudulent--lead to further investigation and identification of new fraudulent observations.
+
+## Fraud Maturity
+
+New / young fraud analytics solutions are based on **business rules**.
+
+IF:
+
+-   Amount of claim above threshold OR
+-   Severe accident, but no police report OR
+-   Severe injury, but no doctor report
+
+THEN:
+
+-   Flag as suspicious AND
+-   Alert SIU 
+
+**Advantages:**
+
+-   Simple
+-   Easy to implement
+
+**Disadvantages:**
+
+-   Expensive
+-   Difficult to maintain and manage
+-   Fraudsters discover rules
+-   Completely historical
+
+# Analytical Fraud Solutions
+
+Analytical solutions are typically used at the evidence of fraud stage. Our responsbility is to help identify potential cases that should be investigated--not to necesssarily catch fraud.
+
+## Advantages
+
+1.  Precision
+    -   Increased detection power
+    -   More information used in decisions
+    -   More fraudsters investigated
+2.  Efficiency in operations
+    -   Automated processing of claims
+    -   Ranked cases for investigators
+3.  Efficiency in costs
+    -   Cheaper in long-run to maintain
+    -   Quicker identification
+    -   Higher investigative returns
+
+# Fraud Data
+
+There are 3 common scenarios when it comes to fraud detection data:
+
+1.  No previous data on fraudulent cases.
+2.  Previous data on fraudulent cases, but can not use it.
+    -   Organizational structure prohibits exchange of information.
+    -   Retrieving data is too time consuming or expensive.
+    -   Fraudulent transactions can not be mapped to master database of important information.      
+3.  Previous data on fraudulent cases that is fully integrated into company databases and structure.
+
+Even if fraud data exists, a majority of the fraud data has a typical value of "Unknown."
+
+While a claim that has never been investigated is most likely not fraud compared to fraud, it is still impossible to correctly label.
