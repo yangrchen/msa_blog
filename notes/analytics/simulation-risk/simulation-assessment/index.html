@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.549">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -182,6 +182,7 @@ window.Quarto = {
                                 <div class="quarto-categories">
                 <div class="quarto-category">analytics</div>
                 <div class="quarto-category">simulation</div>
+                <div class="quarto-category">risk</div>
               </div>
                   </div>
   </div>
@@ -404,6 +405,7 @@ y = 5 + 2x_2 - 3x_8 + \epsilon
 </div>
 </div>
 </div>
+<p>Target shuffling is meant to be done on an entire process, not just the final model. You want every variable to have a chance so this means target shuffling on the train-test split, every model considered, etc. You should automate this process to do this. At the very least, run target shuffling on the model selection process.</p>
 
 
 </section>
