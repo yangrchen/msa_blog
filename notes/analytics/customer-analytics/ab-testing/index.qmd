@@ -1,0 +1,103 @@
+---
+title: A-B Testing
+date: 03/11/2024
+---
+
+A-B testing is a way to determine whether changing a property of an environment makes it better or worse based on a **specific evaluation metric**. A-B testing is form of basic randomized controlled experimentation, but in its current form it is often run online, in real time, and on a much larger scale in terms of participants and experiments.
+
+1.  Decide what you want to test, and construct two versions of the test environment: A and B.
+2.  Determine how you will evaluate performance.
+3.  Randomly assign two sets of users to Version A and Version B of the environment.
+4.  Run the experiment, asking users to operate in their version of the environment.
+5.  Statistically evaluate the performance of the two sets of users to determine if there was a significant difference between the two envvironments.
+
+With all experiments, randomization is critical. This ensures that users are not grouped based on some criteria that might influence their preferences.
+
+# Sample Size Estimation
+
+Two types of experiments are considered: **dichotomous**, where the outcome of interest is binary (yes/no, success/failure, etc.), or **continuous**, where the outcome of interest is the mean difference of an outcome variable between two groups--the difference in average number of clicks between A and B.
+
+We can describe experiments in terms of the null hypothesis ($H_0$) and alternative hypothesis ($H_a$). We also include the false positive (Type I error) false negative (Type II error), true positive, and true negative proportions based on $H_0$ and $H_a$.
+
+![Alpha-Beta Table](images/alpha-beta.png){#fig-alpha-beta}
+
+## Dichotomous
+
+For a proportional metric, we need the significance level $\alpha$, a power level $P$ and the two proportions $\mu_1$ and $\mu_2$ from groups A and B that result in the desired level of improvement $\mu_2 - \mu_1$.
+
+-   $\alpha$ is the probabilty of rejecting $H_0$ when it is actually true
+-   $\beta$ is the probability of rejecting $H_a$ when it is actually true
+-   $P = 1 - \beta$ is the probability of accepting the null hypothesis when it is actually true. A minimum $P$ is normally 0.8 or higher.
+
+:::{.callout-important}
+# Reducing Type II Errors
+
+Reducing the probability of committing a Type II error increases the probability of committing a Type I error and vice versa. Because of this, we need to maintain a balance between $\alpha$ and $\beta$.
+:::
+
+$$
+n_A = n_B = c \cdot \frac{\mu_1(1 - \mu_1) + \mu_2(1 - \mu_2)}{(\mu_1 - \mu_2)^2}
+$$
+
+-   $c = 7.9$ or $c = 10.5$ for the standard power levels of $P = 80\%$ or $P = 90\%$ and $\alpha = 0.05$. $c$ is based on the CDF $f(\frac{\alpha}{2}, \beta) = (\phi(\frac{\alpha}{2}) + \phi(\beta))^2$.
+-   $\phi$ is the CDF of a standard normal distribution. $\phi$ is based on the Z-score.
+
+$$
+\phi(x) = p(Z \leq x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{x} \exp \left(-\frac{u^2}{2}\right)du
+$$
+
+## Continuous
+
+We need a significance level $\alpha$, power level $P$, a desired response difference $\mu_2 - \mu_1$, and a common (combined group) standard deviation $\sigma$.
+
+$$
+n_A = n_B = \frac{2c}{\delta^2} + 1
+$$
+
+-   $\delta = \frac{|\mu_2 - \mu_1|}{\sigma}$
+
+# A-B Analysis
+
+Once results are obtained from an A-B test, they are analyzed to search for significant differences. $H_0$ that there is no significant difference in the performance metric between two groups $A$ and $B$ is $p_B - p_A = 0$ for dichotomous (proportional) metrics and $\bar{p}_A = \bar{p}_B$ for continuous metrics.
+
+Proportional significance can be measured in Python with `statsmodels.stats.proportion.proportions_ztest()` and in R with `prop.test()`. For continuous metrics use `scipy.stats.ttest_ind()` or `t.test()` in Python and R
+
+## Effects Size
+
+**Effects size** states how strongly the independent variables affect the dependent variable. For t-test studies, Cohen's $d$ is often used to measure effect size. Cohen's $d$ calculates the ratio of mean difference between groups to pooled standard deviation:
+
+$$
+d = \frac{|\mu_1 - \mu_2|}{\sigma_p}
+$$
+
+$$
+\sigma_p = \sqrt{\frac{(n_1 - 1)\sigma_1^2 + (n_2 - 1)\sigma_2^2}{n_1 + n_2 - 2}}
+$$
+
+-   $d = 0.2$ is considered small
+-   $d = 0.5$ is considered medium
+-   $d = 0.8$ is considered large
+
+It is often useful to complete the analysis by including both significance and effect size. For example, changing this property results in a significant change between groups, with a small/medium/large effect on the measured result or KPI.
+
+# Multivariate Testing
+
+Multivariate testing (MVT) uses many variations of a design, called **factors**, tested simultaneously. MVT is more complicated than A-B testing, but can be more efficient, since it allows multiple factors to be tests in parallel rather than sequentially. It also provides information about how combinations of factors perform: Image 1 works well with Headline 1 but not Headline 2.
+
+If we define a factor being present as +1 and a factor being absent as -1, we can present MVT designs as a table of experiments of **treatments** and the associated factors and factor interactions being tested.
+
+![Experiment Table](images/experiment-table.png){#fig-exp-table}
+
+When two vectors' dot product is 0 they are orthogonal. If we consider the factor columns, a balanced factor of designs occurs when they are orthogonal.
+
+The effect of any factor is calculated as the difference between the mean in response between rows of A at +1 and -1:
+
+$$
+\hat{x}_A = \hat{x}_{A+1} - \hat{x}_{A-1}
+$$
+
+The effect of the interaction between factors is calculated similarly as $\hat{x}_{AB} = \hat{x}_{AB+1} - \hat{x}_{AB-1}$. The key advantage of a balanced design is that you can add mroe (two-level) factors without increasing the required sample size. An $n$-factor design has $2^n$ rows, 1 overall mean, $n$ main effects, $2^{n-1}$ interactions, and $2^n$ treatments.
+
+## Choosing an Experiment Subset
+
+As the number of factors increase, the number of treatments increases rapidly and the number of interactions increases exponentially.

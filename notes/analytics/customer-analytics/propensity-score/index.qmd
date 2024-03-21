@@ -1,0 +1,97 @@
+---
+title: Propensity Score Matching
+date: 03/13/2024
+---
+
+Although randomized controlled trials (RCTs) are the "gold standard" for assessing changes in an environment, they may not be possible.
+
+-   Ethics
+-   Costs
+-   Lack of known participant properties
+-   Sample size
+
+In these situations, we use **propensity score matching** to match pairs of participants that are similar, placing one in group A and one in group B. Propensity score matching also helps to account for confounding factors when we are unsure if there are between two groups.
+
+Participants are defined by multiple attributes. Rather than choosing through random selection, we can choose two participants that are "similar" to one another and place one in group A and one in group B. We use random selection where the correct attributes are not available.
+
+Propensity scoring is calculated from observational data about participants. We split participants based on two participants having common observable characteristics. Rather than using the participant attributes directly, we calculate a propensity score for each particpant. A propensity score is a value where the "score" of a participant is determined as a function of the covariates.
+
+The standard method to reduce our covariates to a single value is to fit a logistic regression model to the covariates, then use the model to convert covariates to a single logit value. 
+
+1.  Randomly divide participants into group A and group B, like in A-B testing.
+2.  Choose which vcovariate attributes you will use to calculate a participant's propensity score.
+3.  Fit a logistic regression model using the selected covariates.
+4.  Use the score the compute a propensity score for each participant $p_i$.
+5.  Order participants in both groups by their propensity scores.
+6.  For each participant $p_i$, find their nearest neighbor $n_i$ in the opposite group. If $n_i$ is farther than a threshold value, do not include $p_i$ in the follow-on analysis.
+7.  Store the pair $(p_i, n_i)$ as a matched pair.
+8.  Once all participants are paired or removed, search for significance over the pairs' proportional differences $|\mu_{p_i} - \mu_{n_i}|$.
+
+# PSM Code
+
+```{python}
+import random
+import matplotlib.pyplot as plt 
+from sklearn.metrics import roc_curve, roc_auc_score
+from sklearn.datasets import make_classification
+import seaborn as sns
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import auc
+from sklearn.neighbors import NearestNeighbors
+from IPython.display import display
+import numpy as np
+import pandas as pd
+
+# Generate noisy data
+X, y = make_classification(
+    n_samples=1000,
+    n_features=4,
+    n_redundant=0,
+    n_classes=2,
+    n_clusters_per_class=1,
+    class_sep=2,
+    flip_y=0.2,
+    weights=[0.5, 0.5],
+)
+
+# Create min-max scaler, normalize data to usage ratios
+scaler = MinMaxScaler()
+normalized_data = scaler.fit_transform(X)
+
+data = pd.DataFrame(normalized_data, columns=["A", "B", "C", "D"])
+data["renewal_status"] = y
+data["treatment"] = (data["A"] >= 0.4) * 1
+
+# Select covariates for PSM
+covariates = ["B", "C", "D"]
+
+X = data[covariates]
+y = data["treatment"]
+
+# Fit logit to get coefficients for covariates
+logit = LogisticRegression()
+logit.fit(X, y)
+
+PS = logit.predict_proba(X)[:, 1]
+false_positive_rate, true_positive_rate, th = roc_curve(y, PS)
+
+# Match treated and control individuals based on propensity score
+treated_indices = data[data["treatment"] == 1].index
+control_indices = data[data["treatment"] == 0].index
+
+nbrs = NearestNeighbors(n_neighbors=1, algorithm="ball_tree").fit(
+    np.reshape(PS[control_indices], (-1, 1))
+)
+distances, indices = nbrs.kneighbors(
+    np.reshape(PS[treated_indices], (-1, 1))
+)
+print(indices)
+```
+
+The code implements PSM to test whether a four-product dataset will generate higher renewal rates when the usage of the first product A is greater than 40%.
+
+1.  Create random data with four products A, B, C, D; a binary column indicating whether a customer renewed their subscription `renewal_status`, and a binary column identifying customers with product A usage over 40%.
+2.  Select covariates B, C, and D and fit a logit to produce an outcome treatment variable to predict whether a customer will have a usage for product A above or below 40%.
+3.  Given the logit probabilities, we pair customers in the control and treatment groups with similar probabilities using k-nearest neighbors.
+4.  We compare the mean renewal rate for control and treatment groups to determine the predicted renewal rate when product A usage is above 40%.

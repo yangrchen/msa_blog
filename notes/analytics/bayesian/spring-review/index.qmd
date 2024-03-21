@@ -1,0 +1,110 @@
+---
+title: Bayesian Statistics Review
+date: 03/11/2024
+---
+
+$$
+P(p|Y) = \frac{P(Y|p) P(p)}{P(Y)}
+$$
+
+-   $P(p|Y)$ is the posterior distribution
+-   $P(Y|p)$ is the sampling distribution
+-   $P(p)$ is the prior distribution
+-   $P(Y)$ is the marginal distribution of $Y$
+
+The goal is to determine a posterior distribution using the prior distribution along with the collected data.
+
+We focus on characteristics of the data to decide distributions:
+
+-   What is the support? What values can this data take on?
+-   Is it dicrete or continuous?
+
+# Common Distributions
+
+-   **Binomial**: Counting number of successes
+-   **Poisson, Negative Binomial**: Count data (number of customers in a day)
+-   **Gamma, Inv-Gamma**: Only positive, continuous data
+-   **Normal**: Continuous data
+
+## Common Priors
+
+-   **Binomial**: Only have $p$ (proportion), Beta distribution
+-   **Poisson**: Only have $\lambda$ (mean) which is positive, Gamma distribution
+-   **Gamma**: Have both $\alpha$ and $\beta$ which are positive, use Gamma for both
+-   **Normal**: $\mu$ and $\sigma$ where $\mu$ is all real values and $\sigma$ is only positive, use Normal for $\mu$ and Inv-Gamma for $\sigma$
+
+# Steps in Bayesian Statistics
+
+-   Decide what type of data is being collected to decide sampling distribution
+-   Figure out parameters in the sampling distribution
+-   Put information into STAN to simulate distributions of parameters
+-   Make sure you have convergence of chains for posterior distribution
+-   Use posterior distribution to answer questions
+
+With Bayesian statistics, we now have probability intervals instead of confidence intervals to estimate our parameters of interest.
+
+# Python Example
+
+```{python}
+import pymc as pm
+import numpy as np
+import matplotlib.pyplot as plt
+import logging
+
+logger = logging.getLogger("pymc")
+logger.setLevel(logging.WARNING)
+
+# Define data
+N = 100
+y = np.concatenate((np.ones((40,)), np.zeros((60,))))
+
+# Define model
+model = pm.Model()
+
+with model:
+    # Prior distribution
+    p = pm.Beta("p", alpha=1, beta=1)  # Beta(1, 1) prior for p
+
+    likelihood = pm.Bernoulli("likelihood", p=p, observed=y)
+
+    # Sample posterior
+    trace = pm.sample(1000, tune=500, random_seed=12976)
+
+print(pm.summary(trace))
+```
+
+```{python}
+y = np.concatenate(
+    (
+        np.ones(
+            6,
+        ),
+        np.zeros(
+            3,
+        ),
+    )
+)
+
+model = pm.Model()
+
+with model:
+    # Prior distribution
+    p = pm.Beta("p", alpha=2, beta=9)
+
+    likelihood = pm.Bernoulli("likelihood", p=p, observed=y)
+
+    # Sample posterior
+    trace = pm.sample(10000, tune=5000, random_seed=12976)
+
+print(pm.summary(trace))
+```
+
+```{python}
+np.quantile(trace.posterior.p, [0.05, 0.95])
+```
+
+```{python}
+import matplotlib.pyplot as plt
+# plt.hist(trace.posterior.p)
+plt.hist(trace.posterior.p.to_numpy().flatten(), bins=100)
+```

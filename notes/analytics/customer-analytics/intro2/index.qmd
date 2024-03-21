@@ -1,0 +1,34 @@
+---
+title: Customer Analytics
+date: 02/19/2024
+---
+
+Customer analytics analyzes a company's customer data and behaviours to try to identify, attract, and retain the most profitable types of customers. The aim is to create an accurate view of the company's customer base and decide which strategies can best retain / grow this base.
+
+Customer analytics begins with the capture of raw data and ends with business decisions. One definition of the stages of customer analytics is the following:
+
+-   **Collection**: Obtain raw data from marketing tools, CRM systems, or external sources: This could include demographics, purchase history, social media presence, engagement with advertisements, and so on.
+-   **Organization**: Convert the data into a format that will facilitate the types of analysis needed to provide insights to support the desired business decisions.
+-   **Analysis**: Perform appropriate analysis on the organized data to produce the insights needed to direct the business in its decisions. Examples include modeling different types of customers, sales prediction, effects of price changes, and so on.
+
+# Google Analytics
+
+Google Analytics is a digital analytics platform which is free. It is a tool within Google's Marketing Platform that collects data on users visiting the website and allows for that data to be converted into reports to develop business strategies.
+
+## Digital Analytics Funnel
+
+Individuals explore a website or purchase items in stages. Marketing uses the concept of a funnel to enumerate these stages:
+
+1.  **Acquisition**: Building awareness and acquiring user interest.
+2.  **Behaviour**: User engagement with your website or business.
+3.  **Conversion**: A user becoming a customer through a transaction with your business.
+
+## Universal Analytics (UA) vs. Google Analytics 4 (GA4)
+
+UA uses a hierarchy of account, property view. An account represents one or more websites, a property is a section of a website, and a view was a combination of a filter and a visualization of some or all of the data associated with a property. Properties have unique sub-IDs to allow you to treat them as independent data sources.
+
+With GA4 the hierarchy is account, property, data stream. Data stream represents a source of raw data to be fed into a property. This allows GA4 to separate events on a website and capture a wider variety of events.
+
+# Google Tag Manager
+
+Google Tag Manager is the recommended method for collecting data to be analyzed in Google Analytics. Google Tag Manager is a tag management system that can detect and store **events** within a website. These can be events like page views, clicks, scrolling, entering or exiting the site, etc. The events can be sent to a separate analytics package for further analysis and presentation.

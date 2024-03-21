@@ -1,9 +1,8 @@
 name: msa
 channels:
   - conda-forge
-  - gurobi
 dependencies:
-  - python=3.11
+  - python=3.11.5
   - numpy
   - matplotlib
   - scikit-learn
@@ -23,4 +22,8 @@ dependencies:
   - openssl
   - python-graphviz
   - gurobi
+  - polars
+  - openpyxl
+  - pymc
+  - pandas-datareader
 prefix: /opt/homebrew/Caskroom/miniforge/base/envs/msa

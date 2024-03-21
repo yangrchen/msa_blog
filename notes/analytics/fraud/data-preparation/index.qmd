@@ -1,0 +1,236 @@
+---
+title: Data Preparation
+date: 03/08/2024
+date-modified: 03/19/2024
+---
+
+# Feature Engineering (Transactional Data)
+
+Often times, the goal is to turn a long dataset into a wide dataset where all the transactions are aggregated up to the ID level.
+
+![Transactional Data](images/transactional-data.png){#fig-transactional-data}
+
+## Advantages
+
+-   Highly detailed
+-   Captures individual behavior
+-   Strong target correlation possible
+
+## Challenges
+
+-   Highly detailed
+-   Difficult to obtain
+-   Difficult to process
+
+When it comes to aggregating the transactional data, think beyond just the **center** of the data like the median or mean. Consider the quantiles (0.5, 0.95) as well to see the tail ends of the distribution.
+
+We can also consider separate profiles for different account types based on the business context. There might be significant differences between the account types and their aggregated values.
+
+![Input Possibilities: Profiles](images/profiles.png){#fig-profiles}
+
+## Process Transactions
+
+Here are the steps you need to take to process transactional data:
+
+1.  Select your data.
+2.  Sort your data by ID and date.
+3.  Augment your data.
+4.  Process by ID.
+5.  Finalize.
+
+### Transaction-Derived Inputs
+
+-   Mean of last five transactions
+-   Standard deviation of transactions in last 14 days
+-   Largest transaction per week
+-   Slope of line fit to number of transactions per week--maybe you only care if the slope is positive or negative 
+
+# Recency and Frequency
+
+Two of the most important things in fraud detection are **recency** and **frequency** of transaction.
+
+-   Recency: Time in between transactions
+-   Frequency: How often transactions occur
+
+![Recency Example](images/recency-ex.png){#fig-recency-ex}
+
+## Recency
+
+Time in between transactions.
+
+Some easy features:
+
+-   Time in between transactions
+-   Time since last transaction
+
+## Frequency
+
+How often transactions occur.
+
+Some easy features:
+
+-   How many transactions total
+-   How many transactions per group
+-   Ratio of frequency by group to days active
+
+![Frequency Example](images/frequency-ex.png){#fig-frequency-ex}
+
+# Transforming Categories
+
+Cardinality for categorical variables can be extremely high (1000's of levels). We have a few strategies that we can take for transforming categorical variables. 
+
+Dummy encoding can work for low number of categories. Thresholding combines levels with lower counts together into an "Other" category.
+
+Target-based enumeration creates an ordinal input by sorting the ratios between the number of observations in a category to the number of 1's in the category.
+
+![Target-based Enumeration](images/target-based-enum.png){#fig-target-based-enum}
+
+Weight of Evidence turns the categorical input into a numeric input by taking target-based enumeration a step further--calculate the log of $\frac{p_i}{1 - p_i}$.
+
+If you have zip codes, you can approximate the distance from a claimant's address to the adjuster's location using only zip codes.
+
+![Zip Code Transformation](images/zip-code-transformation.png){#fig-zip-code-transformation}
+
+# Network Features
+
+Statisticians typically view society as a collection of individuals who have distinct, measureable characteristics. Otherwise, a collection of observations with dependent and independent variables.
+
+Data structure is typically rectangular in nature. However, **sociometry** views society as a collection of individuals and their social, economic, or cultural ties. The importance is not only on individual's characteristics, but also on the patterns of an individual's interactions with other individuals. Interactions themselves are just as important as who the individual connects to.
+
+## Social Networks
+
+Sociometrics use **graph networks** to visualize social networks. These graphs reveal a structure to the data that can not be seen by basic summary statistics. We refer to each individual as **nodes** and each node could be connected by **links** (edges).
+
+![Social Networks](images/social-networks.png){#fig-social-networks}
+
+Links can be different sizes to summarize strength of connection and they can also be directional.
+
+## Data Structure
+
+Data structure is typically square in nature and entries don't hav to be limited to binary.
+
+![Graph Data Structure](images/graph-data-structure.png){#fig-graph-data-struct}
+
+Some other differences from traditional data structures:
+
+-   No independence of observations.
+-   Samples are rarely desired--try for population of a known network.
+-   Individuals don't only have to be linked through other individuals.
+    -   Example: Schools in a school district
+
+There are many concerns with **sparseness** of data. Typically, we focus on subgroups for a population of interest. These subgroups might have loose connections between one another as well.
+
+## Social Structure and Modern Adaptations
+
+Several problems have been addressed by these methods:
+
+-   Spread of disease
+-   Marketing of products
+-   Fraud detection
+
+In terms of social structure, there are many different summaries and calculations obtained from sociograms.
+
+-   Subgroups
+-   Centers and Closeness
+-   Brokers and Bridges
+-   Diffusion and Adoption
+
+## Subgroups
+
+Social networks typically contain dense pockets of individuals. If a subgroup is completely separated from the rest of the network, then it is a **cohesive subgroup**.
+
+This can help in the identification of individuals with similar characteristics.
+
+![Subgroups](images/subgroups.png){#fig-subgroups}
+
+### Degree of Connection
+
+Degree of connection is the number of connections that a node has.
+
+In @fig-subgroups, Tina has a degree of 3.
+
+### Degree Centrality
+
+Networks consist of $N$ nodes and $n$ links. The maximum degree of each node is $N - 1$. Degree centrality "standardizes" the degree of a node.
+
+$$
+C_D = \frac{\text{degree}}{N - 1}
+$$
+
+### Average Degree of Graph
+
+Networks consist of $N$ nodes and $n$ links. The average degree of the graph, $\langle k \rangle$:
+
+$$
+\langle k \rangle = \frac{2n}{N}
+$$
+
+On average, people are connected to about $\langle k \rangle$ individuals. In practice, we would want to do statistical tests for the difference from the average.
+
+### Density of Graph
+
+The density of the graph is the proportion of the number of links actually in the graph compared to the maximum number of links possible in the graph.
+
+$$
+\Delta = \frac{2n}{N(N - 1)}
+$$
+
+There is a $\Delta$ that any one person is connected to another. This is a probability measure.
+
+### Degree of Separation
+
+The degree of connection is one way to measure the center of a network. Degree of separation is another measure. Degree of connection only focuses on the links for a certain individual, while degree of separation focuses on the value of those links.
+
+The degree of separation is always the shortest path in the graph.
+
+### Closeness Centrality
+
+Closeness centrality is a measure of how well everyone in a network can connected to every other member of the network.
+
+$$
+C_C = \frac{N - 1}{\sum_{i=1}^{N - 1} DOS_i}
+$$
+
+### Eigenvector Centrality
+
+A node is high in eigenvector centrality if it is connected to many other nodes who are themselves well connected.
+
+A node's centrality is dependent on the centrality of adjacent nodes.
+
+These nodes would be considered influential.
+
+Eigenvector centrality for each node is calculated as the proportional eigenvector values of the eigenvector with the largest eigenvalue.
+
+## Bridge and Connections
+
+Not only are number of links important, but the kind of link is extremely important as well.
+
+Linked with individuals who are linked themselves is not as strong as links with individuals who are not linked together. Links within a subgroup yield little new information compared to links with other subgroups.
+
+A **bridge** is a link whose removal increases the number of isolated nodes.
+
+![Bridge](images/bridges.png){#fig-bridges}
+
+Bridges are important because they are a potential bottleneck of information. Individuals are connected to these bridges are called **brokers** because they facilitate information between two sides of the bridge.
+
+By eliminating either the bridge or the broker, the spread of information across the network becomes limited.
+
+![Broker Elimination](images/broker-elimination.png){#fig-broker-elimination}
+
+## Diffusion and Adoption
+
+Diffusion and adoption add a sense of time to a sociogram. How long does it take for the entire network to adopt an idea based on initial location?
+
+![Location Matters](images/location-matters.png){#fig-location-matters}
+
+### Proximity
+
+Proximity is the idea that the closer you are to the initial location, the more likely you are to adopt the idea.
+
+Tina represents a strong connection between two sides of the graph. If Tina is in a separate office as the left side, it may take longer to adopt an idea.
+
+### Prestige and Social Conformity
+
+Individuals who epitomize social norms and values of a group that are perceived by others to be valuable have **prestige**.
+
+Social conformity allows people to validate their own sense of self-worth in a group.

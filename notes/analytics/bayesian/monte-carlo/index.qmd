@@ -1,0 +1,82 @@
+---
+title: Markov Chain Monte Carlo
+date: 03/19/2024
+---
+
+# Markov Chain Monte Carlo (MCMC)
+
+A **trace plot** shows the value at each index of a simulated distribution.
+
+![Trace Plot](images/trace-plot.png){#fig-trace-plot}
+
+In @fig-trace-plot, the trace plot is what we consider to be a stationary distribution. To generate trace plots, we use Markov Chain Monte Carlo (MCMC) methods. Initially, we start with a random value and are trying to simulate the posterior distribution. For each value in the MCMC only depends on the previous value and we are looking for the chain to converge to a stationary distribution.
+
+In a trace plot, the chain starts with a burn-in period to try to find the posterior distribution once it converges. If the chain does not converge, we will see a trace plot that looks like @fig-nonconvergence.
+
+![Nonconvergence](images/nonconvergence.png){#fig-nonconvergence}
+
+## Fixes
+
+-   **Improper posterior or bad prior**: New prior distribution
+-   **Hasn't converged**: Let the chain run longer
+-   **Chain continues to increase**: Potentially a bad starting point so provide a new starting point or change prior
+-   **Too much autocorrelation in chain**: Thin the chain
+
+```{python}
+import pymc as pm
+import numpy as np
+
+with pm.Model() as binomial_model:
+    p = pm.Beta("p", alpha=1, beta=1)
+    y_obs = pm.Binomial("y_obs", n=100, p=p, observed=40)
+    trace = pm.sample(
+        draws=6000,
+        tune=3000,
+        chains=4,
+        init="adapt_diag",
+        random_seed=98763,
+        return_inferencedata=True,
+    )
+
+pm.plot_trace(trace, var_names=["p"], compact=False, legend=True);
+```
+
+# Estimate Value at Risk
+
+We are interested in estimating VaR for Apple stock (AAPL) in rate of change (ROC) for one day. Let's assume rate of change $(R_t)$ follows a Normal distribution with mean $\mu$ and standard deviation $\sigma$. 
+
+We need to assign a distribution to $\mu$ and $\sigma^2$:
+
+-   Assume $\mu$ is distributed as Normal(0, 100)
+-   Assume $\sigma^2$ is distributed as Inv-Gamma(0.001, 0.001)
+-   Once we get a posterior for $\mu$ and $\sigma^2$, we can use this to get the first quantile
+
+```{python}
+import pandas as pd
+import pandas_datareader.data as web
+import scipy.stats as stats
+
+ticker = "AAPL"
+
+start_date = "2022-01-01"
+end_date = "2024-3-7"
+
+data = web.DataReader(ticker, "stooq", start_date, end_date)
+
+data["AAPL_r"] = data["Close"].pct_change()
+
+stocks = data[["Close", "AAPL_r"]].tail(500)
+
+n = len(stocks)
+y = stocks["AAPL_r"].values
+
+with pm.Model() as model:
+    mu = pm.Normal("mu", mu=0, sigma=100)
+    sigma2 = pm.InverseGamma("sigma2", alpha=0.001, beta=0.001)
+
+    y_like = pm.Normal("y_like", mu=mu, sigma=pm.math.sqrt(sigma2), observed=y)
+
+    trace = pm.sample(draws=1000, tune=500, chains=4)
+
+pm.plot_trace(trace);
+```

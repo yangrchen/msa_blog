@@ -1,0 +1,118 @@
+---
+title: Anomaly Models
+date: 03/19/2024
+date-modified: 03/21/2024
+---
+
+# Non-statistical Methods
+
+**Benford's Law** states that certain numbers do not occur uniformly despite what we might think. For example, the first digit of house/building numbers in addresses or the first digit of transaction amounts.
+
+$$
+P(d_1) = \log_{10}(1 + \frac{1}{d_1})
+$$
+
+In fraud detection, fraud transactions typically involve inventing new numbers of changing real transactions into real ones. Fraud detection typicallly uses the first two digits in Benford's Law.
+
+$$
+P(d_1d_2) = \log_{10}(1 + \frac{1}{d_1d_2})
+$$
+
+# Univariate Analysis
+
+Basic fraud systems look for abnormal observations from a statistical standpoint.
+
+## Z-Scores
+
+$$
+z_i = \frac{x_i - \bar{x}}{s}
+$$
+
+Z-scores work best with symmetric distributions. However, they are not robust to outliers.
+
+Instead, we might prefer to use robust statistics.
+
+## Robust Z-Scores
+
+$$
+z_{R,i} = \frac{x_i - \text{median}(x)}{\text{MAD}(x)}
+$$
+
+-   $\text{MAD}(x) = k \cdot \text{median}(|x_i - \text{median}(x)|)$
+-   $k$ is the adjustment factor per distribution. For the Normal distribution this is 1.4826.
+
+If variance is the mean of all the distances from the mean, then MAD is the median of all the distances from the median.
+
+In practice, robust statistics should be preferred over traditional statistics. However, it might not be as intuitive to explain a median versus an average to a non-technical audience.
+
+## 1.5 IQR Rule
+
+-   Works best for symmetric distributions
+-   Severely skewed distributions tend to report large number of outliers
+-   Use adjusted boxplot instead as it is more robust to skewed distributions
+
+# Multivariate Analysis
+
+Outliers in one dimension are possibly restrictive.
+
+In multivariate outlier detection, a few methods include:
+
+1.  Mahalanobis Distances
+2.  Robust Mahalanobis Distances
+3.  k-Nearest Neighbors (kNN)
+4.  Local Outlier Factor (LOF)
+5.  Isolation Forests
+6.  Classifier-adjusted Density Estimation
+
+## Mahalanobis Distances
+
+Generalization of z-scores to multi-dimensional space.
+
+-   Replace univariate mean with multivariate mean
+-   Replace standard deviation with covariance matrix
+
+$$
+D_M = \sqrt{(x - \mu)^T \Sigma^{-1} (x - \mu)}
+$$
+
+-   $\Sigma$ summarizes the spread across all our features
+
+## Robust Mahalanobis Distances
+
+Mahalanobis distances use mean and covariance matrix influenced by outliers. Use robust calculations of mean vector and covariance matrix instead:
+
+$$
+D_M = \sqrt{(x - \mu_{MCD})^T \Sigma_{MCD}^{-1} (x - \mu_{MCD})}
+$$
+
+MCD is the Minimum Covariance Determinant.
+
+-   Find $h < n$ observations that have MCD (the tightest cloud)
+-   Typically $h = 0.75 \cdot n$
+-   Problem: How to find the right $h$ observations?
+
+## k-Nearest Neighbors (kNN)
+
+We want to find points that are far from their $k$ neighbors. Measure **average** distance from a point to each of the $k$ closest neighbors.
+
+![kNN](images/knn.png){#fig-knn}
+
+## Local Outlier Factor (LOF)
+
+kNN is good at detecting global outliers, but not local outliers. LOF measures the ratio of the average **density** of the kNN of an observation to the density of the observation itself.
+
+Density is the inverse of the average distance from the observation to all of its $k$ neighbors.
+
+In @fig-observation-density, we find the density of the selected observation based on the average distance to its $k$ neighbors.
+
+![Observation Density](images/observation-density.png){#fig-observation-density}
+
+In @fig-knn-density, we find the density of all the $k$ neighbors of the selected observation based on the average distance to all of their $k$ neighbors.
+
+![kNN Density](images/knn-density.png){#fig-knn-density}
+
+If the original circle is bigger than its neighboring circles, then the observation is considered an outlier.
+
+## Isolation Forests
+
+Isolations forests are a tree-based algorithm to isolate observations. 

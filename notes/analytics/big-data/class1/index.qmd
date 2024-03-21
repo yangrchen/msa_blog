@@ -1,0 +1,47 @@
+---
+title: Introduction to Big Data (Dan Zaratsian)
+date: 03/05/2024
+---
+
+# Current Trends in AI/ML
+
+1.  Dynamic AI/ML Skill & Role Requirements
+2.  Generative AI
+3.  AutoML & Low-code ML
+4.  Specialization
+
+# Dynamic Skill Requirements
+
+## Proprietary Software
+
+-   SAS
+-   Snowflake
+-   Databricks
+-   Dataiku
+
+## Open Source Frameworks
+
+-   TensorFlow
+-   Apache Spark
+-   Hive
+-   LangChain
+-   Kafka
+-   Airflow
+-   MongoDB
+
+## Cloud Services
+
+Big transition from open source to managed services. Evolution of deeply technical services turned into managed services and wrapped in software to make them easier to use.
+
+## Skill Graph
+
+![Skill Requirements](images/skill-requirements.png){#fig-skill-reqs}
+
+Don't need to build a perfect model. Goal is to get the data system integrated, deployed, and providing business value.
+
+## Generative AI
+
+-   Use it for Dev (with review)
+-   Use it as an API (integrated into ML workflows and apps)
+-   Experiment with frameworks, models, embeddings, etc.
+-   Monitor emerging use cases
