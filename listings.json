@@ -1,17 +1,5 @@
 [
   {
-    "listing": "/blog/index.html",
-    "items": [
-      "/blog/first_weeks/index.html"
-    ]
-  },
-  {
-    "listing": "/notes/communication/index.html",
-    "items": [
-      "/notes/communication/062623/index.html"
-    ]
-  },
-  {
     "listing": "/notes/primer/index.html",
     "items": [
       "/notes/primer/categorical_data/index.html",
@@ -23,10 +11,31 @@
     ]
   },
   {
+    "listing": "/notes/communication/index.html",
+    "items": [
+      "/notes/communication/062623/index.html"
+    ]
+  },
+  {
+    "listing": "/blog/index.html",
+    "items": [
+      "/blog/first_weeks/index.html"
+    ]
+  },
+  {
     "listing": "/notes/analytics/index.html",
     "items": [
+      "/notes/analytics/fraud/supervised-models/index.html",
+      "/notes/analytics/bayesian/monte-carlo/index.html",
+      "/notes/analytics/fraud/anomaly-models/index.html",
+      "/notes/analytics/customer-analytics/propensity-score/index.html",
+      "/notes/analytics/bayesian/spring-review/index.html",
+      "/notes/analytics/customer-analytics/ab-testing/index.html",
+      "/notes/analytics/fraud/data-preparation/index.html",
+      "/notes/analytics/big-data/class1/index.html",
       "/notes/analytics/fraud/introduction/index.html",
       "/notes/analytics/customer-analytics/index.html",
+      "/notes/analytics/customer-analytics/intro2/index.html",
       "/notes/analytics/simulation-risk/risk-management/index.html",
       "/notes/analytics/simulation-risk/simulation-assessment/index.html",
       "/notes/analytics/optimization/nonlinear-programming/index.html",
