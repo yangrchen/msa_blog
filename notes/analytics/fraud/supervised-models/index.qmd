@@ -1,0 +1,141 @@
+---
+title: Fraud Supervised Models
+date: 03/22/2024
+---
+
+# Obtaining Labeled Data
+
+## Fraud Data
+
+Recall the three common scenarios when it comes to fraud detection data sets:
+
+1.  No previous data on fraudulent cases.
+2.  Previous data on fraud cases, but not in electronic form.
+3.  Previous data on fraud cases that is fully integrated into databases.
+
+In the first two scenarios there are two paths from here:
+
+1.  Wait for SIU to investigate anomalies and slowly gather data over time.
+2.  Bring in SME's to help with continuing modeling process.
+
+## Anomaly Models
+
+Multiple models may be used to detect anomalies and then compared to have a unified list of suspected anomalies.
+
+Once you have your suspected anomalies, subject matter experts will look through the suspected anomalies for cases that appear to be fraudulent. Tag these cases based on expert domain knowledge and treat these suspected groups as if they had commited fraud and other groups as if they have not.
+
+Ideally, we should also have subject matter experts identify a small set of legitimate claims in non-anomaly data.
+
+## Unsupervised Learning
+
+Patterns should exist between fraudulent transactions. Unsupervised learning can be used to identify these patterns.
+
+-   K-means Clustering
+-   Self-Organizing Maps (SOM)
+-   Kohonen Vector Quantization (KVQ)
+
+### Clustering Techniques
+
+How many clusters should be calculated? Too few clusters and you won't have any small isolated situations. Too many clusters and you won't know which groups are the small isolated groups. Approximately 2-3% of claims are fraudulent and we don't want clusters that are too big.
+
+## Tagging Suspected Observations
+
+In our models, we are actually predicting domain expert classifications instead of actual fraud. If domain experts are knowledgeable, then these classifications will be highly associated with fraudulent cases.
+
+As investigations occur and actual fraudulent claims are caught, these suspected fraud clusters are replaced with actual fraud data to help model future events.
+
+# Sampling Concerns
+
+Fraud is often a rare event. To correct for this, we can use oversampling, undersampling, or synthetic sampling.
+
+## Oversampling
+
+-   Duplicate current fraud cases in training set to balance better with non-fraud cases.
+-   Kep test set as original population proportion.
+
+## Undersampling
+
+-   Randomly sample current non-fraud cases to keep in the training set to balance with fraud cases.
+-   Keep test set as original population proportion.
+
+## Synthetic Minority Oversampling Technique (SMOTE)
+
+1.  Pick a fraud observation and isolate the other fraud cases.
+2.  Take the observation and randomly choose one of the kNNs that are also fraud. 
+3.  Create synthetic sample by taking the difference between the two and multiplying by a random number between 0 and 1.
+4.  Repeat for every fraud case a certain number of times to get balanced samples.
+
+Note that SMOTE does not work for categorical variables. For categorical variables, we can select random categories, most common categories, or use a different technique.
+
+```{.r}
+complete <- complete.cases(train)
+num_names <- names(train)[sapply(train, is.numeric)]
+inputs <- train[num_names]
+inputs <- inputs[complete,]
+target <- as.numeric(train[complete, 120])
+
+smote_sam <- SMOTE(X = inputs, target = target,
+                    K = 5,
+                    dup_size = 10)
+train_s <- smote_sam$data
+train_s$Fraud <- as.numeric(train_s$class) - 1
+```
+
+# Supervised Fraud Models
+
+The model will classify individuals into one of two groups--suspected fraud or not. However, often times we are looking for a ranking of individuals based on their likelihood of being fraudulent.
+
+## Scoring
+
+Models will produce a score for each individual between 0 and 1. A cut-off value is derived for the score where anything above the cut-off is suspected of fraud and anything below is not. Cut-off values are best determined through time and cost calculations.
+
+## Types of Models
+
+-   Decision Trees: Problem of repeating identified clusters.
+-   Logistic Regression: Problems with certain interactions causing quasi-complete separation.
+-   Neural Networks: Problems with interpretability and use by investigators. Needs interpretable layer on top.
+-   Random Forests: Problems with interpretability and use by investigators. Needs interpretable layer on top.
+-   Gradient Boosting: Problems with interpretability and use by investigators. Needs interpretable layer on top.
+-   Etc.
+
+## Logistic / Probit Regression
+
+Both logistic and probit regressions are predicting the probability of an event occurring. They are based on different underlying distributions for the probability curve.
+
+Recall the equation for the logistic regression curve:
+
+$$
+p = \frac{1}{1 + e^{-(\beta_0 + \beta_1x_1 + \beta_2x_2 + \ldots + \beta_kx_k)}}
+$$
+
+Here is the equation for the probit regression curve:
+
+$$
+\begin{align*}
+p &= \phi(\beta_0 + \beta_1x_1 + \beta_2x_2 + \ldots + \beta_kx_k) \\
+&= \int_{-\infty}^{\beta_0 + \beta_1x_1 + \beta_2x_2 + \ldots + \beta_kx_k} \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}t^2}dt
+\end{align*}
+$$
+
+The assumptions for each of these models is essentially the same.
+
+# Supervised Not-Fraud Models
+
+Regardless of the industry, two things are important for any fraud detection:
+
+1.  **Detection**: Observing known fraudulent observations to determine patterns that may assist in finding other fraudulent observations.
+2.  **Prevention**: Observing behavior and identifying suspicious actions that might be fraudulent--lead to further investigation and identification of new fraudulent observations.
+
+Predicting previous known cases of not-fraud works for prevention of new fraud.
+
+![Predicting Fraud](images/predicting-fraud.png){#fig-predicting-fraud}
+
+![Predicting Not Fraud](images/predicting-not-fraud.png){#fig-predicting-not-fraud}
+
+# Model Evaluation
+
+## Balancing Unbalanced Costs
+
+Even the best fraud models catch about 25-35% of fraud initially. Models should be evaluated more on costs/savings than accuracy in fraud models.
+
+![Balancing Unbalanced Costs](images/balancing-unbalanced-costs.png){#fig-balancing-unbalanced-costs}

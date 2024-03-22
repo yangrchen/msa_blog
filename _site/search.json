@@ -3917,6 +3917,104 @@
     "href": "notes/analytics/fraud/anomaly-models/index.html#isolation-forests",
     "title": "Anomaly Models",
     "section": "3.5 Isolation Forests",
-    "text": "3.5 Isolation Forests\nIsolations forests are a tree-based algorithm to isolate observations."
+    "text": "3.5 Isolation Forests\nIsolations forests is a tree-based algorithm to isolate observations. An isolation tree randomly slices the data until it can isolate each observation. The easier it is to isolate someone, the more likely they are an outlier.\n\nIsolation score is inversely related to number of needed splits to isolate observation.\nBounded between 0 and 1.\nCloser to 1 means more likely an anomaly.\nCloser to 0 means less likely an anomaly.\nAll observations ~0.5 means no real anomalies.\n\n\n\n\n\n\n\nFigure 4: Isolation Tree\n\n\n\nSince isolation trees are based on random splits on random dimensions, outlier might get lucky. An isolation forest is a combination of many isolation trees with averaged scores. We are looking for convergence of scores for optimal number of trees.\nInterpretability is a problem with isolation forests. It is difficult to explain why an observation is an outlier when all splits are random."
+  },
+  {
+    "objectID": "notes/analytics/fraud/anomaly-models/index.html#classifier-adjusted-density-estimation",
+    "href": "notes/analytics/fraud/anomaly-models/index.html#classifier-adjusted-density-estimation",
+    "title": "Anomaly Models",
+    "section": "3.6 Classifier-Adjusted Density Estimation",
+    "text": "3.6 Classifier-Adjusted Density Estimation"
+  },
+  {
+    "objectID": "notes/analytics/fraud/anomaly-models/index.html#classifier-adjusted-density-estimation-cade",
+    "href": "notes/analytics/fraud/anomaly-models/index.html#classifier-adjusted-density-estimation-cade",
+    "title": "Anomaly Models",
+    "section": "3.6 Classifier-Adjusted Density Estimation (CADE)",
+    "text": "3.6 Classifier-Adjusted Density Estimation (CADE)\n\nLabel all original data as not outliers.\nCreate new observations (same \\(n\\) as data), but features are all uniformly distributed. The idea here is to completely change the distribution of the features so that we can pick up original observations that stand out as unusual.\nLabel all new data as outliers, merge old and new data.\nUse classification model to predict “outliers”.\nScore original data. If the predicted probability is high, then the observation is an outlier.\n\nThe probability cutoff is arbitrary and depends on the resources and time that you have at an organization.\ndf &lt;- data.frame(Time = ins$Time_Between_CL_R,\n                CovLimit = ins$Cov_Limit_Claim / 1000)\ntrans_uni &lt;- function(x, len = length(x)) {\n    if (is.integer(x)) {\n        sample(min(x):max(x), len, replace = TRUE)\n    } else if (is.numeric(x)) {\n        runif(len, min(x), max(x))\n    } else if (is.factor(x)) {\n        factor(sample(levels(x), len, replace = TRUE))\n    } else {\n        sample(unique(x), len, replace = TRUE)\n    }\n}\n\ncade &lt;- function(df, n_tree) {\n    actual &lt;- df\n    rand &lt;- as.data.frame(lapply(actual, trans_uni))\n\n    actual$y &lt;- 0\n    rand$y &lt;- 1\n\n    data &lt;- rbind(actual, rand)\n    tree &lt;- randomForest(as.factor(y) ~ ., data = data, ntree = n_tree)\n\n    # Classifier probabilities\n    df$prob &lt;- predict(tree, newdata = df, type = \"prob\")[, 2]\n    df$odds &lt;- df$prob / (1 - df$prob)\n\n    df\n}\n\nins_cade &lt;- cade(df = df, n_tree = 500)"
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html",
+    "href": "notes/analytics/fraud/supervised-models/index.html",
+    "title": "Fraud Supervised Models",
+    "section": "",
+    "text": "Recall the three common scenarios when it comes to fraud detection data sets:\n\nNo previous data on fraudulent cases.\nPrevious data on fraud cases, but not in electronic form.\nPrevious data on fraud cases that is fully integrated into databases.\n\nIn the first two scenarios there are two paths from here:\n\nWait for SIU to investigate anomalies and slowly gather data over time.\nBring in SME’s to help with continuing modeling process.\n\n\n\n\nMultiple models may be used to detect anomalies and then compared to have a unified list of suspected anomalies.\nOnce you have your suspected anomalies, subject matter experts will look through the suspected anomalies for cases that appear to be fraudulent. Tag these cases based on expert domain knowledge and treat these suspected groups as if they had commited fraud and other groups as if they have not.\nIdeally, we should also have subject matter experts identify a small set of legitimate claims in non-anomaly data.\n\n\n\nPatterns should exist between fraudulent transactions. Unsupervised learning can be used to identify these patterns.\n\nK-means Clustering\nSelf-Organizing Maps (SOM)\nKohonen Vector Quantization (KVQ)\n\n\n\nHow many clusters should be calculated? Too few clusters and you won’t have any small isolated situations. Too many clusters and you won’t know which groups are the small isolated groups. Approximately 2-3% of claims are fraudulent and we don’t want clusters that are too big.\n\n\n\n\nIn our models, we are actually predicting domain expert classifications instead of actual fraud. If domain experts are knowledgeable, then these classifications will be highly associated with fraudulent cases.\nAs investigations occur and actual fraudulent claims are caught, these suspected fraud clusters are replaced with actual fraud data to help model future events."
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html#fraud-data",
+    "href": "notes/analytics/fraud/supervised-models/index.html#fraud-data",
+    "title": "Fraud Supervised Models",
+    "section": "",
+    "text": "Recall the three common scenarios when it comes to fraud detection data sets:\n\nNo previous data on fraudulent cases.\nPrevious data on fraud cases, but not in electronic form.\nPrevious data on fraud cases that is fully integrated into databases.\n\nIn the first two scenarios there are two paths from here:\n\nWait for SIU to investigate anomalies and slowly gather data over time.\nBring in SME’s to help with continuing modeling process."
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html#anomaly-models",
+    "href": "notes/analytics/fraud/supervised-models/index.html#anomaly-models",
+    "title": "Fraud Supervised Models",
+    "section": "",
+    "text": "Multiple models may be used to detect anomalies and then compared to have a unified list of suspected anomalies.\nOnce you have your suspected anomalies, subject matter experts will look through the suspected anomalies for cases that appear to be fraudulent. Tag these cases based on expert domain knowledge and treat these suspected groups as if they had commited fraud and other groups as if they have not.\nIdeally, we should also have subject matter experts identify a small set of legitimate claims in non-anomaly data."
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html#unsupervised-learning",
+    "href": "notes/analytics/fraud/supervised-models/index.html#unsupervised-learning",
+    "title": "Fraud Supervised Models",
+    "section": "",
+    "text": "Patterns should exist between fraudulent transactions. Unsupervised learning can be used to identify these patterns.\n\nK-means Clustering\nSelf-Organizing Maps (SOM)\nKohonen Vector Quantization (KVQ)\n\n\n\nHow many clusters should be calculated? Too few clusters and you won’t have any small isolated situations. Too many clusters and you won’t know which groups are the small isolated groups. Approximately 2-3% of claims are fraudulent and we don’t want clusters that are too big."
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html#tagging-suspected-observations",
+    "href": "notes/analytics/fraud/supervised-models/index.html#tagging-suspected-observations",
+    "title": "Fraud Supervised Models",
+    "section": "",
+    "text": "In our models, we are actually predicting domain expert classifications instead of actual fraud. If domain experts are knowledgeable, then these classifications will be highly associated with fraudulent cases.\nAs investigations occur and actual fraudulent claims are caught, these suspected fraud clusters are replaced with actual fraud data to help model future events."
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html#oversampling",
+    "href": "notes/analytics/fraud/supervised-models/index.html#oversampling",
+    "title": "Fraud Supervised Models",
+    "section": "2.1 Oversampling",
+    "text": "2.1 Oversampling\n\nDuplicate current fraud cases in training set to balance better with non-fraud cases.\nKep test set as original population proportion."
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html#undersampling",
+    "href": "notes/analytics/fraud/supervised-models/index.html#undersampling",
+    "title": "Fraud Supervised Models",
+    "section": "2.2 Undersampling",
+    "text": "2.2 Undersampling\n\nRandomly sample current non-fraud cases to keep in the training set to balance with fraud cases.\nKeep test set as original population proportion."
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html#synthetic-minority-oversampling-technique-smote",
+    "href": "notes/analytics/fraud/supervised-models/index.html#synthetic-minority-oversampling-technique-smote",
+    "title": "Fraud Supervised Models",
+    "section": "2.3 Synthetic Minority Oversampling Technique (SMOTE)",
+    "text": "2.3 Synthetic Minority Oversampling Technique (SMOTE)\n\nPick a fraud observation and isolate the other fraud cases.\nTake the observation and randomly choose one of the kNNs that are also fraud.\nCreate synthetic sample by taking the difference between the two and multiplying by a random number between 0 and 1.\nRepeat for every fraud case a certain number of times to get balanced samples.\n\nNote that SMOTE does not work for categorical variables. For categorical variables, we can select random categories, most common categories, or use a different technique.\ncomplete &lt;- complete.cases(train)\nnum_names &lt;- names(train)[sapply(train, is.numeric)]\ninputs &lt;- train[num_names]\ninputs &lt;- inputs[complete,]\ntarget &lt;- as.numeric(train[complete, 120])\n\nsmote_sam &lt;- SMOTE(X = inputs, target = target,\n                    K = 5,\n                    dup_size = 10)\ntrain_s &lt;- smote_sam$data\ntrain_s$Fraud &lt;- as.numeric(train_s$class) - 1"
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html#scoring",
+    "href": "notes/analytics/fraud/supervised-models/index.html#scoring",
+    "title": "Fraud Supervised Models",
+    "section": "3.1 Scoring",
+    "text": "3.1 Scoring\nModels will produce a score for each individual between 0 and 1. A cut-off value is derived for the score where anything above the cut-off is suspected of fraud and anything below is not. Cut-off values are best determined through time and cost calculations."
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html#types-of-models",
+    "href": "notes/analytics/fraud/supervised-models/index.html#types-of-models",
+    "title": "Fraud Supervised Models",
+    "section": "3.2 Types of Models",
+    "text": "3.2 Types of Models\n\nDecision Trees: Problem of repeating identified clusters.\nLogistic Regression: Problems with certain interactions causing quasi-complete separation.\nNeural Networks: Problems with interpretability and use by investigators. Needs interpretable layer on top.\nRandom Forests: Problems with interpretability and use by investigators. Needs interpretable layer on top.\nGradient Boosting: Problems with interpretability and use by investigators. Needs interpretable layer on top.\nEtc."
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html#logistic-probit-regression",
+    "href": "notes/analytics/fraud/supervised-models/index.html#logistic-probit-regression",
+    "title": "Fraud Supervised Models",
+    "section": "3.3 Logistic / Probit Regression",
+    "text": "3.3 Logistic / Probit Regression\nBoth logistic and probit regressions are predicting the probability of an event occurring. They are based on different underlying distributions for the probability curve.\nRecall the equation for the logistic regression curve:\n\\[\np = \\frac{1}{1 + e^{-(\\beta_0 + \\beta_1x_1 + \\beta_2x_2 + \\ldots + \\beta_kx_k)}}\n\\]\nHere is the equation for the probit regression curve:\n\\[\n\\begin{align*}\np &= \\phi(\\beta_0 + \\beta_1x_1 + \\beta_2x_2 + \\ldots + \\beta_kx_k) \\\\\n&= \\int_{-\\infty}^{\\beta_0 + \\beta_1x_1 + \\beta_2x_2 + \\ldots + \\beta_kx_k} \\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{1}{2}t^2}dt\n\\end{align*}\n\\]\nThe assumptions for each of these models is essentially the same."
+  },
+  {
+    "objectID": "notes/analytics/fraud/supervised-models/index.html#balancing-unbalanced-costs",
+    "href": "notes/analytics/fraud/supervised-models/index.html#balancing-unbalanced-costs",
+    "title": "Fraud Supervised Models",
+    "section": "5.1 Balancing Unbalanced Costs",
+    "text": "5.1 Balancing Unbalanced Costs\nEven the best fraud models catch about 25-35% of fraud initially. Models should be evaluated more on costs/savings than accuracy in fraud models.\n\n\n\n\n\n\nFigure 3: Balancing Unbalanced Costs"
   }
 ]

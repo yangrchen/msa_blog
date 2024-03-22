@@ -62,7 +62,7 @@ In multivariate outlier detection, a few methods include:
 3.  k-Nearest Neighbors (kNN)
 4.  Local Outlier Factor (LOF)
 5.  Isolation Forests
-6.  Classifier-adjusted Density Estimation
+6.  Classifier-Adjusted Density Estimation (CADE)
 
 ## Mahalanobis Distances
 
@@ -115,4 +115,61 @@ If the original circle is bigger than its neighboring circles, then the observat
 
 ## Isolation Forests
 
-Isolations forests are a tree-based algorithm to isolate observations. 
+Isolations forests is a tree-based algorithm to isolate observations. An isolation tree randomly slices the data until it can isolate each observation. The easier it is to isolate someone, the more likely they are an outlier.
+
+-   Isolation score is inversely related to number of needed splits to isolate observation.
+-   Bounded between 0 and 1.
+-   Closer to 1 means more likely an anomaly.
+-   Closer to 0 means less likely an anomaly.
+-   All observations ~0.5 means no real anomalies.
+
+![Isolation Tree](images/isolation-tree.png){#fig-isolation-tree}
+
+Since isolation trees are based on random splits on random dimensions, outlier might get lucky. An isolation forest is a combination of many isolation trees with averaged scores. We are looking for convergence of scores for optimal number of trees.
+
+Interpretability is a problem with isolation forests. It is difficult to explain why an observation is an outlier when all splits are random.
+
+## Classifier-Adjusted Density Estimation (CADE)
+
+1.  Label all original data as not outliers.
+2.  Create new observations (same $n$ as data), but features are all uniformly distributed. The idea here is to completely change the distribution of the features so that we can pick up original observations that stand out as unusual.
+3.  Label all new data as outliers, merge old and new data.
+4.  Use classification model to predict "outliers".
+5.  Score original data. If the predicted probability is high, then the observation is an outlier.
+
+The probability cutoff is arbitrary and depends on the resources and time that you have at an organization.
+
+```{.r}
+df <- data.frame(Time = ins$Time_Between_CL_R,
+                CovLimit = ins$Cov_Limit_Claim / 1000)
+trans_uni <- function(x, len = length(x)) {
+    if (is.integer(x)) {
+        sample(min(x):max(x), len, replace = TRUE)
+    } else if (is.numeric(x)) {
+        runif(len, min(x), max(x))
+    } else if (is.factor(x)) {
+        factor(sample(levels(x), len, replace = TRUE))
+    } else {
+        sample(unique(x), len, replace = TRUE)
+    }
+}
+
+cade <- function(df, n_tree) {
+    actual <- df
+    rand <- as.data.frame(lapply(actual, trans_uni))
+
+    actual$y <- 0
+    rand$y <- 1
+
+    data <- rbind(actual, rand)
+    tree <- randomForest(as.factor(y) ~ ., data = data, ntree = n_tree)
+
+    # Classifier probabilities
+    df$prob <- predict(tree, newdata = df, type = "prob")[, 2]
+    df$odds <- df$prob / (1 - df$prob)
+
+    df
+}
+
+ins_cade <- cade(df = df, n_tree = 500)
+```

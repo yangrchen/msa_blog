@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yang Chen">
-<meta name="dcterms.date" content="2024-03-19">
+<meta name="dcterms.date" content="2024-03-22">
 
-<title>Yang MSA - Anomaly Models</title>
+<title>Yang MSA - Fraud Supervised Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -104,35 +104,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -178,7 +149,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Anomaly Models</h1>
+      <h1 class="title">Fraud Supervised Models</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analytics</div>
                 <div class="quarto-category">fraud</div>
@@ -199,16 +170,10 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">March 19, 2024</p>
+        <p class="date">March 22, 2024</p>
       </div>
     </div>
     
-      <div>
-      <div class="quarto-title-meta-heading">Modified</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date-modified">March 21, 2024</p>
-      </div>
-    </div>
       
     </div>
     
@@ -221,21 +186,26 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#non-statistical-methods" id="toc-non-statistical-methods" class="nav-link active" data-scroll-target="#non-statistical-methods"><span class="header-section-number">1</span> Non-statistical Methods</a></li>
-  <li><a href="#univariate-analysis" id="toc-univariate-analysis" class="nav-link" data-scroll-target="#univariate-analysis"><span class="header-section-number">2</span> Univariate Analysis</a>
+  <li><a href="#obtaining-labeled-data" id="toc-obtaining-labeled-data" class="nav-link active" data-scroll-target="#obtaining-labeled-data"><span class="header-section-number">1</span> Obtaining Labeled Data</a>
   <ul class="collapse">
-  <li><a href="#z-scores" id="toc-z-scores" class="nav-link" data-scroll-target="#z-scores"><span class="header-section-number">2.1</span> Z-Scores</a></li>
-  <li><a href="#robust-z-scores" id="toc-robust-z-scores" class="nav-link" data-scroll-target="#robust-z-scores"><span class="header-section-number">2.2</span> Robust Z-Scores</a></li>
-  <li><a href="#iqr-rule" id="toc-iqr-rule" class="nav-link" data-scroll-target="#iqr-rule"><span class="header-section-number">2.3</span> 1.5 IQR Rule</a></li>
+  <li><a href="#fraud-data" id="toc-fraud-data" class="nav-link" data-scroll-target="#fraud-data"><span class="header-section-number">1.1</span> Fraud Data</a></li>
+  <li><a href="#anomaly-models" id="toc-anomaly-models" class="nav-link" data-scroll-target="#anomaly-models"><span class="header-section-number">1.2</span> Anomaly Models</a></li>
+  <li><a href="#unsupervised-learning" id="toc-unsupervised-learning" class="nav-link" data-scroll-target="#unsupervised-learning"><span class="header-section-number">1.3</span> Unsupervised Learning</a>
+  <ul class="collapse">
+  <li><a href="#clustering-techniques" id="toc-clustering-techniques" class="nav-link" data-scroll-target="#clustering-techniques"><span class="header-section-number">1.3.1</span> Clustering Techniques</a></li>
   </ul></li>
-  <li><a href="#multivariate-analysis" id="toc-multivariate-analysis" class="nav-link" data-scroll-target="#multivariate-analysis"><span class="header-section-number">3</span> Multivariate Analysis</a>
+  <li><a href="#tagging-suspected-observations" id="toc-tagging-suspected-observations" class="nav-link" data-scroll-target="#tagging-suspected-observations"><span class="header-section-number">1.4</span> Tagging Suspected Observations</a></li>
+  </ul></li>
+  <li><a href="#sampling-concerns" id="toc-sampling-concerns" class="nav-link" data-scroll-target="#sampling-concerns"><span class="header-section-number">2</span> Sampling Concerns</a>
   <ul class="collapse">
-  <li><a href="#mahalanobis-distances" id="toc-mahalanobis-distances" class="nav-link" data-scroll-target="#mahalanobis-distances"><span class="header-section-number">3.1</span> Mahalanobis Distances</a></li>
-  <li><a href="#robust-mahalanobis-distances" id="toc-robust-mahalanobis-distances" class="nav-link" data-scroll-target="#robust-mahalanobis-distances"><span class="header-section-number">3.2</span> Robust Mahalanobis Distances</a></li>
-  <li><a href="#k-nearest-neighbors-knn" id="toc-k-nearest-neighbors-knn" class="nav-link" data-scroll-target="#k-nearest-neighbors-knn"><span class="header-section-number">3.3</span> k-Nearest Neighbors (kNN)</a></li>
-  <li><a href="#local-outlier-factor-lof" id="toc-local-outlier-factor-lof" class="nav-link" data-scroll-target="#local-outlier-factor-lof"><span class="header-section-number">3.4</span> Local Outlier Factor (LOF)</a></li>
-  <li><a href="#isolation-forests" id="toc-isolation-forests" class="nav-link" data-scroll-target="#isolation-forests"><span class="header-section-number">3.5</span> Isolation Forests</a></li>
-  <li><a href="#classifier-adjusted-density-estimation-cade" id="toc-classifier-adjusted-density-estimation-cade" class="nav-link" data-scroll-target="#classifier-adjusted-density-estimation-cade"><span class="header-section-number">3.6</span> Classifier-Adjusted Density Estimation (CADE)</a></li>
+  <li><a href="#oversampling" id="toc-oversampling" class="nav-link" data-scroll-target="#oversampling"><span class="header-section-number">2.1</span> Oversampling</a></li>
+  <li><a href="#undersampling" id="toc-undersampling" class="nav-link" data-scroll-target="#undersampling"><span class="header-section-number">2.2</span> Undersampling</a></li>
+  <li><a href="#synthetic-minority-oversampling-technique-smote" id="toc-synthetic-minority-oversampling-technique-smote" class="nav-link" data-scroll-target="#synthetic-minority-oversampling-technique-smote"><span class="header-section-number">2.3</span> Synthetic Minority Oversampling Technique (SMOTE)</a></li>
+  </ul></li>
+  <li><a href="#supervised-fraud-models" id="toc-supervised-fraud-models" class="nav-link" data-scroll-target="#supervised-fraud-models"><span class="header-section-number">3</span> Supervised Fraud Models</a>
+  <ul class="collapse">
+  <li><a href="#scoring" id="toc-scoring" class="nav-link" data-scroll-target="#scoring"><span class="header-section-number">3.1</span> Scoring</a></li>
+  <li><a href="#types-of-models" id="toc-types-of-models" class="nav-link" data-scroll-target="#types-of-models"><span class="header-section-number">3.2</span> Types of Models</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -247,195 +217,103 @@ window.Quarto = {
 
 
 
-<section id="non-statistical-methods" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Non-statistical Methods</h1>
-<p><strong>Benford’s Law</strong> states that certain numbers do not occur uniformly despite what we might think. For example, the first digit of house/building numbers in addresses or the first digit of transaction amounts.</p>
-<p><span class="math display">\[
-P(d_1) = \log_{10}(1 + \frac{1}{d_1})
-\]</span></p>
-<p>In fraud detection, fraud transactions typically involve inventing new numbers of changing real transactions into real ones. Fraud detection typicallly uses the first two digits in Benford’s Law.</p>
-<p><span class="math display">\[
-P(d_1d_2) = \log_{10}(1 + \frac{1}{d_1d_2})
-\]</span></p>
-</section>
-<section id="univariate-analysis" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Univariate Analysis</h1>
-<p>Basic fraud systems look for abnormal observations from a statistical standpoint.</p>
-<section id="z-scores" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="z-scores"><span class="header-section-number">2.1</span> Z-Scores</h2>
-<p><span class="math display">\[
-z_i = \frac{x_i - \bar{x}}{s}
-\]</span></p>
-<p>Z-scores work best with symmetric distributions. However, they are not robust to outliers.</p>
-<p>Instead, we might prefer to use robust statistics.</p>
-</section>
-<section id="robust-z-scores" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="robust-z-scores"><span class="header-section-number">2.2</span> Robust Z-Scores</h2>
-<p><span class="math display">\[
-z_{R,i} = \frac{x_i - \text{median}(x)}{\text{MAD}(x)}
-\]</span></p>
-<ul>
-<li><span class="math inline">\(\text{MAD}(x) = k \cdot \text{median}(|x_i - \text{median}(x)|)\)</span></li>
-<li><span class="math inline">\(k\)</span> is the adjustment factor per distribution. For the Normal distribution this is 1.4826.</li>
-</ul>
-<p>If variance is the mean of all the distances from the mean, then MAD is the median of all the distances from the median.</p>
-<p>In practice, robust statistics should be preferred over traditional statistics. However, it might not be as intuitive to explain a median versus an average to a non-technical audience.</p>
-</section>
-<section id="iqr-rule" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="iqr-rule"><span class="header-section-number">2.3</span> 1.5 IQR Rule</h2>
-<ul>
-<li>Works best for symmetric distributions</li>
-<li>Severely skewed distributions tend to report large number of outliers</li>
-<li>Use adjusted boxplot instead as it is more robust to skewed distributions</li>
-</ul>
-</section>
-</section>
-<section id="multivariate-analysis" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Multivariate Analysis</h1>
-<p>Outliers in one dimension are possibly restrictive.</p>
-<p>In multivariate outlier detection, a few methods include:</p>
+<section id="obtaining-labeled-data" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Obtaining Labeled Data</h1>
+<section id="fraud-data" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="fraud-data"><span class="header-section-number">1.1</span> Fraud Data</h2>
+<p>Recall the three common scenarios when it comes to fraud detection data sets:</p>
 <ol type="1">
-<li>Mahalanobis Distances</li>
-<li>Robust Mahalanobis Distances</li>
-<li>k-Nearest Neighbors (kNN)</li>
-<li>Local Outlier Factor (LOF)</li>
-<li>Isolation Forests</li>
-<li>Classifier-Adjusted Density Estimation (CADE)</li>
+<li>No previous data on fraudulent cases.</li>
+<li>Previous data on fraud cases, but not in electronic form.</li>
+<li>Previous data on fraud cases that is fully integrated into databases.</li>
 </ol>
-<section id="mahalanobis-distances" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="mahalanobis-distances"><span class="header-section-number">3.1</span> Mahalanobis Distances</h2>
-<p>Generalization of z-scores to multi-dimensional space.</p>
-<ul>
-<li>Replace univariate mean with multivariate mean</li>
-<li>Replace standard deviation with covariance matrix</li>
-</ul>
-<p><span class="math display">\[
-D_M = \sqrt{(x - \mu)^T \Sigma^{-1} (x - \mu)}
-\]</span></p>
-<ul>
-<li><span class="math inline">\(\Sigma\)</span> summarizes the spread across all our features</li>
-</ul>
-</section>
-<section id="robust-mahalanobis-distances" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="robust-mahalanobis-distances"><span class="header-section-number">3.2</span> Robust Mahalanobis Distances</h2>
-<p>Mahalanobis distances use mean and covariance matrix influenced by outliers. Use robust calculations of mean vector and covariance matrix instead:</p>
-<p><span class="math display">\[
-D_M = \sqrt{(x - \mu_{MCD})^T \Sigma_{MCD}^{-1} (x - \mu_{MCD})}
-\]</span></p>
-<p>MCD is the Minimum Covariance Determinant.</p>
-<ul>
-<li>Find <span class="math inline">\(h &lt; n\)</span> observations that have MCD (the tightest cloud)</li>
-<li>Typically <span class="math inline">\(h = 0.75 \cdot n\)</span></li>
-<li>Problem: How to find the right <span class="math inline">\(h\)</span> observations?</li>
-</ul>
-</section>
-<section id="k-nearest-neighbors-knn" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="k-nearest-neighbors-knn"><span class="header-section-number">3.3</span> k-Nearest Neighbors (kNN)</h2>
-<p>We want to find points that are far from their <span class="math inline">\(k\)</span> neighbors. Measure <strong>average</strong> distance from a point to each of the <span class="math inline">\(k\)</span> closest neighbors.</p>
-<div id="fig-knn" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-knn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/knn.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-knn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: kNN
-</figcaption>
-</figure>
-</div>
-</section>
-<section id="local-outlier-factor-lof" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="local-outlier-factor-lof"><span class="header-section-number">3.4</span> Local Outlier Factor (LOF)</h2>
-<p>kNN is good at detecting global outliers, but not local outliers. LOF measures the ratio of the average <strong>density</strong> of the kNN of an observation to the density of the observation itself.</p>
-<p>Density is the inverse of the average distance from the observation to all of its <span class="math inline">\(k\)</span> neighbors.</p>
-<p>In <a href="#fig-observation-density" class="quarto-xref">Figure&nbsp;2</a>, we find the density of the selected observation based on the average distance to its <span class="math inline">\(k\)</span> neighbors.</p>
-<div id="fig-observation-density" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-observation-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/observation-density.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-observation-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Observation Density
-</figcaption>
-</figure>
-</div>
-<p>In <a href="#fig-knn-density" class="quarto-xref">Figure&nbsp;3</a>, we find the density of all the <span class="math inline">\(k\)</span> neighbors of the selected observation based on the average distance to all of their <span class="math inline">\(k\)</span> neighbors.</p>
-<div id="fig-knn-density" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-knn-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/knn-density.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-knn-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: kNN Density
-</figcaption>
-</figure>
-</div>
-<p>If the original circle is bigger than its neighboring circles, then the observation is considered an outlier.</p>
-</section>
-<section id="isolation-forests" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="isolation-forests"><span class="header-section-number">3.5</span> Isolation Forests</h2>
-<p>Isolations forests is a tree-based algorithm to isolate observations. An isolation tree randomly slices the data until it can isolate each observation. The easier it is to isolate someone, the more likely they are an outlier.</p>
-<ul>
-<li>Isolation score is inversely related to number of needed splits to isolate observation.</li>
-<li>Bounded between 0 and 1.</li>
-<li>Closer to 1 means more likely an anomaly.</li>
-<li>Closer to 0 means less likely an anomaly.</li>
-<li>All observations ~0.5 means no real anomalies.</li>
-</ul>
-<div id="fig-isolation-tree" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-isolation-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/isolation-tree.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-isolation-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Isolation Tree
-</figcaption>
-</figure>
-</div>
-<p>Since isolation trees are based on random splits on random dimensions, outlier might get lucky. An isolation forest is a combination of many isolation trees with averaged scores. We are looking for convergence of scores for optimal number of trees.</p>
-<p>Interpretability is a problem with isolation forests. It is difficult to explain why an observation is an outlier when all splits are random.</p>
-</section>
-<section id="classifier-adjusted-density-estimation-cade" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="classifier-adjusted-density-estimation-cade"><span class="header-section-number">3.6</span> Classifier-Adjusted Density Estimation (CADE)</h2>
+<p>In the first two scenarios there are two paths from here:</p>
 <ol type="1">
-<li>Label all original data as not outliers.</li>
-<li>Create new observations (same <span class="math inline">\(n\)</span> as data), but features are all uniformly distributed. The idea here is to completely change the distribution of the features so that we can pick up original observations that stand out as unusual.</li>
-<li>Label all new data as outliers, merge old and new data.</li>
-<li>Use classification model to predict “outliers”.</li>
-<li>Score original data. If the predicted probability is high, then the observation is an outlier.</li>
+<li>Wait for SIU to investigate anomalies and slowly gather data over time.</li>
+<li>Bring in SME’s to help with continuing modeling process.</li>
 </ol>
-<p>The probability cutoff is arbitrary and depends on the resources and time that you have at an organization.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Time =</span> ins<span class="sc">$</span>Time_Between_CL_R,</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">CovLimit =</span> ins<span class="sc">$</span>Cov_Limit_Claim <span class="sc">/</span> <span class="dv">1000</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>trans_uni <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">len =</span> <span class="fu">length</span>(x)) {</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.integer</span>(x)) {</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sample</span>(<span class="fu">min</span>(x)<span class="sc">:</span><span class="fu">max</span>(x), len, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">is.numeric</span>(x)) {</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">runif</span>(len, <span class="fu">min</span>(x), <span class="fu">max</span>(x))</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">is.factor</span>(x)) {</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">levels</span>(x), len, <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sample</span>(<span class="fu">unique</span>(x), len, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>cade <span class="ot">&lt;-</span> <span class="cf">function</span>(df, n_tree) {</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    actual <span class="ot">&lt;-</span> df</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    rand <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">lapply</span>(actual, trans_uni))</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    actual<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    rand<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(actual, rand)</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    tree <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(<span class="fu">as.factor</span>(y) <span class="sc">~</span> ., <span class="at">data =</span> data, <span class="at">ntree =</span> n_tree)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Classifier probabilities</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(tree, <span class="at">newdata =</span> df, <span class="at">type =</span> <span class="st">"prob"</span>)[, <span class="dv">2</span>]</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>odds <span class="ot">&lt;-</span> df<span class="sc">$</span>prob <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> df<span class="sc">$</span>prob)</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    df</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>ins_cade <span class="ot">&lt;-</span> <span class="fu">cade</span>(<span class="at">df =</span> df, <span class="at">n_tree =</span> <span class="dv">500</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="anomaly-models" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="anomaly-models"><span class="header-section-number">1.2</span> Anomaly Models</h2>
+<p>Multiple models may be used to detect anomalies and then compared to have a unified list of suspected anomalies.</p>
+<p>Once you have your suspected anomalies, subject matter experts will look through the suspected anomalies for cases that appear to be fraudulent. Tag these cases based on expert domain knowledge and treat these suspected groups as if they had commited fraud and other groups as if they have not.</p>
+<p>Ideally, we should also have subject matter experts identify a small set of legitimate claims in non-anomaly data.</p>
+</section>
+<section id="unsupervised-learning" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="unsupervised-learning"><span class="header-section-number">1.3</span> Unsupervised Learning</h2>
+<p>Patterns should exist between fraudulent transactions. Unsupervised learning can be used to identify these patterns.</p>
+<ul>
+<li>K-means Clustering</li>
+<li>Self-Organizing Maps (SOM)</li>
+<li>Kohonen Vector Quantization (KVQ)</li>
+</ul>
+<section id="clustering-techniques" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="clustering-techniques"><span class="header-section-number">1.3.1</span> Clustering Techniques</h3>
+<p>How many clusters should be calculated? Too few clusters and you won’t have any small isolated situations. Too many clusters and you won’t know which groups are the small isolated groups. Approximately 2-3% of claims are fraudulent and we don’t want clusters that are too big.</p>
+</section>
+</section>
+<section id="tagging-suspected-observations" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="tagging-suspected-observations"><span class="header-section-number">1.4</span> Tagging Suspected Observations</h2>
+<p>In our models, we are actually predicting domain expert classifications instead of actual fraud. If domain experts are knowledgeable, then these classifications will be highly associated with fraudulent cases.</p>
+<p>As investigations occur and actual fraudulent claims are caught, these suspected fraud clusters are replaced with actual fraud data to help model future events.</p>
+</section>
+</section>
+<section id="sampling-concerns" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Sampling Concerns</h1>
+<p>Fraud is often a rare event. To correct for this, we can use oversampling, undersampling, or synthetic sampling.</p>
+<section id="oversampling" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="oversampling"><span class="header-section-number">2.1</span> Oversampling</h2>
+<ul>
+<li>Duplicate current fraud cases in training set to balance better with non-fraud cases.</li>
+<li>Kep test set as original population proportion.</li>
+</ul>
+</section>
+<section id="undersampling" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="undersampling"><span class="header-section-number">2.2</span> Undersampling</h2>
+<ul>
+<li>Randomly sample current non-fraud cases to keep in the training set to balance with fraud cases.</li>
+<li>Keep test set as original population proportion.</li>
+</ul>
+</section>
+<section id="synthetic-minority-oversampling-technique-smote" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="synthetic-minority-oversampling-technique-smote"><span class="header-section-number">2.3</span> Synthetic Minority Oversampling Technique (SMOTE)</h2>
+<ol type="1">
+<li>Pick a fraud observation and isolate the other fraud cases.</li>
+<li>Take the observation and randomly choose one of the kNNs that are also fraud.</li>
+<li>Create synthetic sample by taking the difference between the two and multiplying by a random number between 0 and 1.</li>
+<li>Repeat for every fraud case a certain number of times to get balanced samples.</li>
+</ol>
+<p>Note that SMOTE does not work for categorical variables. For categorical variables, we can select random categories, most common categories, or use a different technique.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>complete <span class="ot">&lt;-</span> <span class="fu">complete.cases</span>(train)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>num_names <span class="ot">&lt;-</span> <span class="fu">names</span>(train)[<span class="fu">sapply</span>(train, is.numeric)]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>inputs <span class="ot">&lt;-</span> train[num_names]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>inputs <span class="ot">&lt;-</span> inputs[complete,]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(train[complete, <span class="dv">120</span>])</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>smote_sam <span class="ot">&lt;-</span> <span class="fu">SMOTE</span>(<span class="at">X =</span> inputs, <span class="at">target =</span> target,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">K =</span> <span class="dv">5</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">dup_size =</span> <span class="dv">10</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>train_s <span class="ot">&lt;-</span> smote_sam<span class="sc">$</span>data</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>train_s<span class="sc">$</span>Fraud <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(train_s<span class="sc">$</span>class) <span class="sc">-</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="supervised-fraud-models" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Supervised Fraud Models</h1>
+<p>The model will classify individuals into one of two groups–suspected fraud or not. However, often times we are looking for a ranking of individuals based on their likelihood of being fraudulent.</p>
+<section id="scoring" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="scoring"><span class="header-section-number">3.1</span> Scoring</h2>
+<p>Models will produce a score for each individual between 0 and 1. A cut-off value is derived for the score where anything above the cut-off is suspected of fraud and anything below is not. Cut-off values are best determined through time and cost calculations.</p>
+</section>
+<section id="types-of-models" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="types-of-models"><span class="header-section-number">3.2</span> Types of Models</h2>
+<ul>
+<li>Decision Trees: Problem of repeating identified clusters.</li>
+<li>Logistic Regression: Problems with certain interactions causing quasi-complete separation.</li>
+<li>Neural Networks: Problems with interpretability and use by investigators. Needs interpretable layer on top.</li>
+<li>Random Forests: Problems with interpretability and use by investigators. Needs interpretable layer on top.</li>
+<li>Gradient Boosting: Problems with interpretability and use by investigators. Needs interpretable layer on top.</li>
+<li>Etc.</li>
+</ul>
 
 
 </section>

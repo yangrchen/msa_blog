@@ -1,6 +1,7 @@
 name: msa
 channels:
   - conda-forge
+  - gurobi
 dependencies:
   - python=3.11.5
   - numpy
